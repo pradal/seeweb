@@ -1,0 +1,23 @@
+{% extends "admin_layout.html" %}
+{% block nav_bar2 %}
+<a href="{{ request.route_url('users_admin') }}">all</a>
+{% endblock %}
+
+{% block content %}
+<form action="{{ request.route_url('user_edit', uid=user.email) }}" method='POST'>
+{% if create %}
+<input type='submit' value='save_new' name='save_new'>
+<input type='submit' value='cancel' name='cancel'>
+{% else %}
+<input type='submit' value='save' name='save'>
+<input type='submit' value='default' name='default'>
+<input type='submit' value='delete' name='delete'>
+{% endif %}
+<br>
+User name:<input type='text' name='display_name' placeholder='{{ user.display_name }}'>
+<br>
+Email:<input type='text' name='email' placeholder='{{ user.email }}'>
+
+</form>
+{% endblock %}
+

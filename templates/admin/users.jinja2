@@ -1,0 +1,22 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+  <h2>{% if search_pattern == "" %}All {% endif %}Users{% if search_pattern != "" %} starting with: '{{ search_pattern[:-1] }}'{% endif %}</h2>
+
+  <a href="{{ request.route_url('users_admin') }}">all</a>
+  <form action="{{ request.route_url('users_admin') }}" method="post" name="search">
+    <p>
+        Please enter query: <br>
+        <input type="text" name="query">
+    </p>
+    <p><input type="submit" value="Search"></p>
+  </form>
+
+  <ul>
+  <li><a href="{{ request.route_url('user_edit', uid='None') }}">Add new user</a>
+  {% for user in users %}
+    <li><a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.display_name }}: {{ user.email }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}
+

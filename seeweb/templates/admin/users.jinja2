@@ -14,7 +14,9 @@
   <ul>
   <li><a href="{{ request.route_url('user_edit', uid='None') }}">Add new user</a>
   {% for user in users %}
-    <li><a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.display_name }}: {{ user.email }}</a>
+    <li>
+        <img src="http://www.gravatar.com/avatar/{{ user.md5() }}" />
+        <a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.display_name }}: {{ user.email }}</a>
     </li>
   {% endfor %}
   </ul>

@@ -1,3 +1,4 @@
+import hashlib
 from sqlalchemy import (Column, ForeignKey, Index, Integer,
                         PrimaryKeyConstraint, String, Table)
 from sqlalchemy.orm import relationship
@@ -27,5 +28,7 @@ class User(Base):
                                                            self.display_name,
                                                            self.email)
 
+    def md5(self):
+        return hashlib.md5(self.email.strip().lower()).hexdigest()
 
 Index('user_index', User.display_name, unique=True, mysql_length=255)

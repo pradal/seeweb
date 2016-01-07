@@ -20,8 +20,8 @@ def main(global_config, **settings):
     config.add_route('home', '/')
 
     # admin
-    # config.add_route('users_admin', "admin/users")
-    # config.add_route('user_edit', "admin/user/{uid}")
+    config.add_route('users_admin', "admin/users")
+    config.add_route('user_edit', "admin/user/{uid}")
     # config.add_route('packages_admin', "admin/packages")
 
     config.scan()

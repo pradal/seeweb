@@ -27,4 +27,4 @@ lib64
 # user defined
 
 *.sqlite
-
+data/*

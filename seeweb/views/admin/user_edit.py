@@ -50,7 +50,7 @@ def view(request):
             request.session.flash("User %s deleted" % usr.display_name,
                                   'success')
             return HTTPFound(location=request.route_url('users_admin'))
-        elif 'save' in request.params:
+        elif 'update' in request.params:
             # edit user display_name
             display_name = request.params['display_name']
             if len(display_name) > 0:

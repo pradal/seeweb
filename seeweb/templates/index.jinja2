@@ -12,29 +12,20 @@
       <div class="col-md-2">
         <img class="logo img-responsive" src="{{ request.static_url('seeweb:static/pyramid.png') }}" alt="SEE web framework">
       </div>
-      <div class="col-md-10">
-        <div class="content">
+      <div class="col-md-10 content">
           <h1><span class="font-semi-bold">See</span> <span class="smaller">Science Everyone Everywhere</span></h1>
-          <p class="lead">Welcome to <span class="font-normal">{{ project }}</span>, a door to a better view on the world around :)</p>
-          <div class="tasks">
-            <ul>
-              <li><i class="glyphicon glyphicon-cloud icon-muted"></i><a href="{{ request.route_url('home') }}">toto</a></li>
-            </ul>
-          </div>
-        </div>
+          <p class="lead">Welcome to <span class="font-normal">SEE community</span>, a door to a better view on the world around :)</p>
       </div>
     </div>
-    <div class="row">
-      <div class="links">
+    <div class="row tasks">
         <ul>
-          <li><i class="glyphicon glyphicon-bookmark icon-muted"></i><a href="{{ request.route_url('users_admin') }}">admin/users</a></li>
+          <li><i class="glyphicon glyphicon-cloud"></i><a href="{{ request.route_url('home') }}">toto</a></li>
         </ul>
-      </div>
     </div>
-    <div class="row">
-      <div class="copyright">
-        Copyright &copy; revesansparole
-      </div>
+    <div class="row links">
+        <ul>
+          <li><i class="glyphicon glyphicon-bookmark"></i><a href="{{ request.route_url('users_admin') }}">admin/users</a></li>
+        </ul>
     </div>
 </div>
 {% endblock %}

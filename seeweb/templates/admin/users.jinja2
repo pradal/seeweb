@@ -1,8 +1,12 @@
 {% extends "admin_layout.html" %}
-{% block content %}
-  <h2>{% if search_pattern == "" %}All {% endif %}Users{% if search_pattern != "" %} starting with: '{{ search_pattern[:-1] }}'{% endif %}</h2>
+{% block body %}
+    {% if search_pattern == "" %}
+    <h1>All Users</h1>
+    {% else %}
+    <h1>Users starting with: '{{ search_pattern[:-1] }}'</h1>
+    <a href="{{ request.route_url('users_admin') }}">all</a>
+    {% endif %}
 
-  <a href="{{ request.route_url('users_admin') }}">all</a>
   <form action="{{ request.route_url('users_admin') }}" method="post" name="search">
     <p>
         Please enter query: <br>
@@ -12,13 +16,12 @@
   </form>
 
   <ul>
-  <li><a href="{{ request.route_url('user_edit', uid='None') }}">Add new user</a>
-  {% for user in users %}
+    {% for user in users %}
     <li>
-        <img src="http://www.gravatar.com/avatar/{{ user.md5() }}" />
+        <!-- <img src="http://www.gravatar.com/avatar/{{ user.md5() }}" /> -->
         <a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.display_name }}: {{ user.email }}</a>
     </li>
-  {% endfor %}
+    {% endfor %}
   </ul>
 {% endblock %}
 

@@ -26,3 +26,33 @@ p {
 .font-bold {
   font-weight: 700;
 }
+
+#navbar {
+  background: #000000;
+  color: #bbbbbb;
+  padding: 1px 0 1px 0;
+}
+
+#navbar ul.admin {
+  float: right;
+}
+
+#navbar ul li {
+  list-style: none;
+  display: inline;
+  margin: 0 10px;
+}
+
+#navbar ul li a {
+  color: #bbbbbb;
+  text-decoration: none;
+}
+
+#navbar ul li a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  font-size: 0.9em;
+  color: #f2b7bd;
+}

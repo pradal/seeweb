@@ -1,26 +1,26 @@
-{% macro input_edit(val) -%}
-<input type='text' name='display_name' {% if create %}placeholder{% else %}value{% endif %}='{{ val }}'>
+{% macro input_edit(name, val) -%}
+<input type='text' name='{{ name }}' {% if create %}placeholder{% else %}value{% endif %}='{{ val }}'>
 {%- endmacro %}
 
 {% extends "admin_layout.html" %}
-{% block nav_bar2 %}
-<a href="{{ request.route_url('users_admin') }}">all</a>
+{% block navbar2 %}
+<li><a href="{{ request.route_url('users_admin') }}">all</a></li>
 {% endblock %}
 
-{% block content %}
+{% block body %}
 <form action="{{ request.route_url('user_edit', uid=user.email) }}" method='POST'>
 {% if create %}
 <input type='submit' value='save_new' name='save_new'>
 <input type='submit' value='cancel' name='cancel'>
 {% else %}
-<input type='submit' value='save' name='save'>
+<input type='submit' value='update' name='update'>
 <input type='submit' value='default' name='default'>
 <input type='submit' value='delete' name='delete'>
 {% endif %}
 <br>
-User name:{{ input_edit(user.display_name) }}
+User name:{{ input_edit('display_name', user.display_name) }}
 <br>
-Email:{{ input_edit(user.email) }}'
+Email:{{ input_edit('email', user.email) }}
 
 </form>
 {% endblock %}

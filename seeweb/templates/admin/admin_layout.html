@@ -5,14 +5,8 @@
   {% endblock css2 %}
 {% endblock css %}
 
-{% block nav_bar %}
-    <a href="{{ request.route_url('home') }}">Home</a>
-    {% block nav_bar2 %}
-    {% endblock %}
-{% endblock %}
-
-{% block body %}
-    <h1>Admin</h1>
-    {% block content %}
+{% block navbar %}
+    <li><a href="{{ request.route_url('home') }}">Home2</a></li>
+    {% block navbar2 %}
     {% endblock %}
 {% endblock %}

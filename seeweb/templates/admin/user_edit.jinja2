@@ -3,9 +3,6 @@
 {%- endmacro %}
 
 {% extends "admin_layout.html" %}
-{% block navbar2 %}
-<li><a href="{{ request.route_url('users_admin') }}">all</a></li>
-{% endblock %}
 
 {% block body %}
 <form action="{{ request.route_url('user_edit', uid=user.email) }}" method='POST'>

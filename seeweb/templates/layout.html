@@ -36,7 +36,12 @@
     <div id="navbar" class="row">
         <ul class="admin">
             <li><a href="">lang</a></li>
-            <li><a href="">login</a></li>
+            {% if request.session["userid"] == None %}
+                <li><a href="{{ request.route_url('user_login') }}">login</a></li>
+            {% else %}
+                <li><a href="{{ request.route_url('user_home') }}">My page</a></li>
+                <li><a href="{{ request.route_url('user_logout') }}">logout</a></li>
+            {% endif %}
         </ul>
         <ul class="links">
             <li><a href="{{ request.route_url('home') }}">Home</a></li>

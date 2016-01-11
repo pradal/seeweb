@@ -19,6 +19,12 @@ def main(global_config, **settings):
     # public
     config.add_route('home', '/')
 
+    # user
+    config.add_route('user_home', 'user')
+    config.add_route('user_login', 'user_login')
+    config.add_route('user_logout', 'user_logout')
+    config.add_route('user_register', 'user_register')
+
     # admin
     config.add_route('users_admin', "admin/users")
     config.add_route('user_edit', "admin/user/{uid}")

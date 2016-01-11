@@ -43,7 +43,7 @@ def view(request):
 
         if 'default' in request.params:
             # reload default values for this user
-            # actually does nothing
+            # actually already done
             pass
         elif 'delete' in request.params:
             session.delete(usr)

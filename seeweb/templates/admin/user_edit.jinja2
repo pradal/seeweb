@@ -9,19 +9,18 @@
 
 {% block body %}
 <form action="{{ request.route_url('user_edit', uid=user.email) }}" method='POST'>
-{% if create %}
-<input type='submit' value='save_new' name='save_new'>
-<input type='submit' value='cancel' name='cancel'>
-{% else %}
-<input type='submit' value='update' name='update'>
-<input type='submit' value='default' name='default'>
-<input type='submit' value='delete' name='delete'>
-{% endif %}
-<br>
-User name:{{ input_edit('display_name', user.display_name) }}
-<br>
-Email:{{ input_edit('email', user.email) }}
-
+    {% if create %}
+        <input type='submit' value='save_new' name='save_new'>
+        <input type='submit' value='cancel' name='cancel'>
+    {% else %}
+        <input type='submit' value='update' name='update'>
+        <input type='submit' value='default' name='default'>
+        <input type='submit' value='delete' name='delete'>
+    {% endif %}
+    <br>
+    User name:{{ input_edit('display_name', user.display_name) }}
+    <br>
+    Email:{{ input_edit('email', user.email) }}
 </form>
 {% endblock %}
 

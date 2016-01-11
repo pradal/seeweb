@@ -16,5 +16,10 @@ def view(request):
         search_pattern = ""
 
     users = query.all()
+    for i, user in enumerate(users):
+        if i % 2 == 0:
+            user.parity = "even"
+        else:
+            user.parity = "odd"
 
     return {'users': users, 'search_pattern': search_pattern}

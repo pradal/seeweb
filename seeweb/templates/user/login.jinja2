@@ -1,0 +1,23 @@
+{% extends "user_layout.html" %}
+
+{% block body %}
+<form action="{{ request.route_url('user_login') }}" method='POST'>
+    <div class="row">
+        <p>login</p>
+        <input type='text' name='email' placeholder='email'>
+    </div>
+    <div class="row">
+        <p>password</p>
+        <input type='text' name='password'>
+    </div>
+    <div class="row">
+        No account yet?
+        <a href="{{ request.route_url('user_register') }}">Register</a>
+    </div>
+    <div class="row">
+    <input type='submit' value='ok' name='ok'>
+    <input type='submit' value='cancel' name='cancel'>
+    </div>
+</form>
+{% endblock %}
+

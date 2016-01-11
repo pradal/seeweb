@@ -1,0 +1,22 @@
+{% extends "user_layout.html" %}
+
+{% block body %}
+<h1>Register</h1>
+<form action="{{ request.route_url('user_register') }}" method='POST'>
+    <div class="row">
+        <p>login</p>
+        <input type='text' name='email' placeholder='email'>
+        <p>login</p>
+        <input type='text' name='display_name' placeholder='jdupond'>
+    </div>
+    <div class="row">
+        <p>password</p>
+        <input type='text' name='password'>
+    </div>
+    <div class="row">
+    <input type='submit' value='ok' name='ok'>
+    <input type='submit' value='cancel' name='cancel'>
+    </div>
+</form>
+{% endblock %}
+

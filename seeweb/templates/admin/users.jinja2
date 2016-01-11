@@ -15,13 +15,22 @@
     <p><input type="submit" value="Search"></p>
   </form>
 
-  <ul>
-    {% for user in users %}
-    <li>
-        <!-- <img src="http://www.gravatar.com/avatar/{{ user.md5() }}" /> -->
-        <a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.display_name }}: {{ user.email }}</a>
-    </li>
-    {% endfor %}
-  </ul>
+    <div class="users">
+        {% for user in users %}
+            <div class="row {{ user.parity }}">
+                <!-- avatar
+                <div class="col-md-2">
+                    <img src="http://www.gravatar.com/avatar/{{ user.md5() }}" />
+                </div> -->
+                <!-- name -->
+                <div class="col-md-4">
+                    <a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.display_name }}</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ request.route_url('user_edit', uid=user.email) }}">{{ user.email }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 

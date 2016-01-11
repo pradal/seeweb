@@ -39,7 +39,7 @@
             {% if request.session["userid"] == None %}
                 <li><a href="{{ request.route_url('user_login') }}">login</a></li>
             {% else %}
-                <li><a href="{{ request.route_url('user_home') }}">My page</a></li>
+                <li><a href="{{ request.route_url('user_home', uid=request.session['userid']) }}">My page</a></li>
                 <li><a href="{{ request.route_url('user_logout') }}">logout</a></li>
             {% endif %}
         </ul>

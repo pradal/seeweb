@@ -11,7 +11,7 @@ def view(request):
     query = session.query(User)
     if 'query' in request.params:
         search_pattern = "%s%%" % request.params['query']
-        query = query.filter(User.display_name.like(search_pattern))
+        query = query.filter(User.username.like(search_pattern))
     else:
         search_pattern = ""
 

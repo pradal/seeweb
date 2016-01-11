@@ -5,7 +5,6 @@ from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 from ..models import Base, DBSession
-# from seeweb.models.project import Project
 from seeweb.models.user import User
 
 
@@ -33,29 +32,12 @@ def main(argv=sys.argv):
     with transaction.manager:
         session = DBSession()
 
-        # pjts = {}
-        users = {}
-
-        # for i in range(5):
-        #     name = "project%d" % i
-        #     pjt = Project(name=name)
-        #     session.add(pjt)
-        #     pjts[name] = pjt
+        users = []
 
         for i in range(4):
-            name = "user%d" % i
-            usr = User(email="%s@gmail.com" % name, display_name=name)
+            username = "user%d" % i
+            usr = User(username=username,
+                       email="%s@gmail.com" % username,
+                       name="toto %s" % username)
             session.add(usr)
-            users[name] = usr
-
-        # usr = users['user0']
-        # usr.projects.append(pjts['project0'])
-        # usr.projects.append(pjts['project1'])
-        #
-        # usr = users['user1']
-        # usr.projects.append(pjts['project1'])
-        # usr.projects.append(pjts['project2'])
-        #
-        # usr = users['user2']
-        # usr.projects.append(pjts['project3'])
-        # usr.projects.append(pjts['project4'])
+            users.append(usr)

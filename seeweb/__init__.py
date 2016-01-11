@@ -20,10 +20,11 @@ def main(global_config, **settings):
     config.add_route('home', '/')
 
     # user
-    config.add_route('user_home', 'user')
     config.add_route('user_login', 'user_login')
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
+
+    config.add_route('user_home', '{uid}')
 
     # user
     config.add_route('project_home', 'project')

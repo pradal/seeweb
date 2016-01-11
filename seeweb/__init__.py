@@ -25,6 +25,9 @@ def main(global_config, **settings):
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
 
+    # user
+    config.add_route('project_home', 'project')
+
     # admin
     config.add_route('users_admin', "admin/users")
     config.add_route('user_edit', "admin/user/{uid}")

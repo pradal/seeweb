@@ -5,10 +5,7 @@
   {% endblock css2 %}
 {% endblock css %}
 
-{% block side %}
-<ul class="nav nav-pills .nav-stacked">
-    <li role="presentation"><a href="{{ request.route_url('home') }}">Home2</a></li>
-    {% block side2 %}
-    {% endblock %}
-</ul>
-{% endblock %}
+{% block body %}
+  {% block user_body %}
+  {% endblock user_body %}
+{% endblock body %}

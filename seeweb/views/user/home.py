@@ -17,4 +17,6 @@ def index(request):
                               'warning')
         return HTTPFound(location=request.route_url('home'))
 
-    return {"user": user, "allow_edit": uid == current_uid}
+    tab = int(request.params.get("tab", 0))
+
+    return {"user": user, "tab": tab, "allow_edit": uid == current_uid}

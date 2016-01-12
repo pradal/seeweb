@@ -2,3 +2,16 @@ body {
   color: #000000;
   background: #aa0000;
 }
+
+div.summary img {
+    width: 100%;
+}
+
+ul.nav-tabs {
+    margin-bottom: 1em;
+}
+
+.pjt-summary {
+    margin: 0 1em 1em 1em;
+    border-bottom: 1px solid #dddddd;
+}

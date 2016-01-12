@@ -5,6 +5,7 @@ from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 from ..models import Base, DBSession
+from seeweb.models.project import Project
 from seeweb.models.user import User
 
 
@@ -36,12 +37,25 @@ def main(argv=sys.argv):
 
         for i in range(4):
             username = "user%d" % i
-            usr = User(username=username,
-                       email="%s@gmail.com" % username,
-                       name="toto %s" % username,
-                       public_profile=False)
-            session.add(usr)
-            users.append(usr)
+            user = User(username=username,
+                        email="%s@gmail.com" % username,
+                        name="toto %s" % username,
+                        public_profile=False)
+            session.add(user)
+            users.append(user)
 
         users[0].public_profile = True
         session.add(users[0])
+
+        projects = []
+
+        for i in range(5):
+            name = "pjt%d" % i
+            project = Project(name=name,
+                              owner="user0",
+                              public=False)
+            session.add(project)
+            projects.append(project)
+
+        projects[0].public = True
+        session.add(projects[0])

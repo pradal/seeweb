@@ -19,20 +19,21 @@ def main(global_config, **settings):
     # public
     config.add_route('home', '/')
 
+    # admin
+    config.add_route('users_admin', "admin/users")
+    config.add_route('user_edit', "admin/user/{uid}")
+    config.add_route('projects_admin', "admin/projects")
+
+    # project
+
     # user
     config.add_route('user_login', 'user_login')
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
 
+    # specific routes
+    config.add_route('project_home', '{uid}/{pid}')
     config.add_route('user_home', '{uid}')
-
-    # user
-    config.add_route('project_home', 'project')
-
-    # admin
-    config.add_route('users_admin', "admin/users")
-    config.add_route('user_edit', "admin/user/{uid}")
-    # config.add_route('packages_admin', "admin/packages")
 
     config.scan()
 

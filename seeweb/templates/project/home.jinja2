@@ -7,5 +7,13 @@
         <h1>{{ project.name }}</h1>
       </div>
     </div>
+    <div class="row">
+        {% if allow_edit %}
+        <form action="{{ request.route_url('home') }}" method='POST'>
+            <input type='submit' value='edit' name='edit'>
+        </form>
+        {% endif %}
+        <p>{% if project.public %}Public{% else %}Private{% endif %}
+    </div>
 </div>
 {% endblock %}

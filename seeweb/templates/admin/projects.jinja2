@@ -1,0 +1,33 @@
+{% extends "admin_layout.html" %}
+{% block body %}
+    {% if search_pattern == "" %}
+    <h1>All Projects</h1>
+    {% else %}
+    <h1>Users starting with: '{{ search_pattern[:-1] }}'</h1>
+    <a href="{{ request.route_url('projects_admin') }}">all</a>
+    {% endif %}
+
+  <form action="{{ request.route_url('projects_admin') }}" method="post" name="search">
+    <p>
+        Please enter query: <br>
+        <input type="text" name="query">
+    </p>
+    <p><input type="submit" value="Search"></p>
+  </form>
+
+    <div class="projects">
+        {% for project in projects %}
+            <div class="row {{ project.parity }}">
+                <!-- name -->
+                <div class="col-md-4">
+                    <a href="{{ request.route_url('home') }}">{{ project.name }}</a>
+                </div>
+                <!-- owner -->
+                <div class="col-md-6">
+                    <a href="{{ request.route_url('home') }}">{{ project.owner }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+

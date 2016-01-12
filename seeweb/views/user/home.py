@@ -16,12 +16,11 @@ def index(request):
         request.session.flash("User %s does not exists" % uid, 'warning')
         return HTTPFound(location=request.route_url('home'))
 
+    user, = users
     current_uid = get_current_uid(request)
-    if uid != current_uid:
+    if (not user.public_profile) and (uid != current_uid):
         request.session.flash("Access to %s not granted for you" % uid,
                               'warning')
         return HTTPFound(location=request.route_url('home'))
 
-    user, = users
-
-    return {"user": user}
+    return {"user": user, "allow_edit": uid == current_uid}

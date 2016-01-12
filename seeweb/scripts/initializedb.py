@@ -38,6 +38,10 @@ def main(argv=sys.argv):
             username = "user%d" % i
             usr = User(username=username,
                        email="%s@gmail.com" % username,
-                       name="toto %s" % username)
+                       name="toto %s" % username,
+                       public_profile=False)
             session.add(usr)
             users.append(usr)
+
+        users[0].public_profile = True
+        session.add(users[0])

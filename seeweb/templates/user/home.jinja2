@@ -13,5 +13,13 @@
         <h2>{{ user.email }}</h2>
       </div>
     </div>
+    <div class="row">
+        {% if allow_edit %}
+        <form action="{{ request.route_url('user_edit', uid=user.username) }}" method='POST'>
+            <input type='submit' value='edit' name='edit'>
+        </form>
+        {% endif %}
+        <p>{% if user.public_profile %}Public{% else %}Private{% endif %}
+    </div>
 </div>
 {% endblock %}

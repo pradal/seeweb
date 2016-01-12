@@ -1,5 +1,5 @@
 import hashlib
-from sqlalchemy import (Column, ForeignKey, Index, Integer,
+from sqlalchemy import (Boolean, Column, ForeignKey, Index, Integer,
                         PrimaryKeyConstraint, String, Table)
 from sqlalchemy.orm import relationship
 from models import Base
@@ -11,6 +11,8 @@ class User(Base):
     username = Column(String(255), unique=True, primary_key=True)
     name = Column(String(255))
     email = Column(String(255), nullable=False)
+
+    public_profile = Column(Boolean)
 
     def __repr__(self):
         return "<User(id='%s', name='%s', email='%s')>" % (self.username,

@@ -9,18 +9,12 @@ from seeweb.models.project import Project
 def view(request):
     session = DBSession()
     query = session.query(Project)
-    if 'query' in request.params:
+    if 'query' in request.params and "all" not in request.params:
         search_pattern = "%s%%" % request.params['query']
         query = query.filter(Project.name.like(search_pattern))
     else:
         search_pattern = ""
 
     projects = query.all()
-    print "projects", projects
-    for i, project in enumerate(projects):
-        if i % 2 == 0:
-            project.parity = "even"
-        else:
-            project.parity = "odd"
 
     return {'projects': projects, 'search_pattern': search_pattern}

@@ -2,15 +2,3 @@ body {
   color: #000000;
   background: #bc84ff;
 }
-
-.row .even {
-    background: #ffffff;
-}
-
-.row .odd {
-    background: #aaaaaa;
-}
-
-.users a {
-    color: #000000;
-}

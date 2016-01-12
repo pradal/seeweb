@@ -9,17 +9,12 @@ from seeweb.models.user import User
 def view(request):
     session = DBSession()
     query = session.query(User)
-    if 'query' in request.params:
+    if 'query' in request.params and "all" not in request.params:
         search_pattern = "%s%%" % request.params['query']
         query = query.filter(User.username.like(search_pattern))
     else:
         search_pattern = ""
 
     users = query.all()
-    for i, user in enumerate(users):
-        if i % 2 == 0:
-            user.parity = "even"
-        else:
-            user.parity = "odd"
 
     return {'users': users, 'search_pattern': search_pattern}

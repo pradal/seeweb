@@ -1,15 +1,23 @@
 {% extends "templates/layout.html" %}
+
 {% block css %}
-  <link href="{{request.static_url('seeweb:static/admin_theme.css')}}" rel="stylesheet">
-  {% block css2 %}
-  {% endblock css2 %}
+    <link href="{{request.static_url('seeweb:static/admin_theme.css')}}"
+          rel="stylesheet">
+    {% block css2 %}
+    {% endblock css2 %}
 {% endblock css %}
 
 {% block side %}
-<ul class="nav nav-pills .nav-stacked nav-sidebar">
-  <li role="presentation" {% if users is defined %}class="active"{% endif %}><a href="{{ request.route_url('admin_users') }}">Users</a></li>
-  <li role="presentation" {% if projects is defined %}class="active"{% endif %}><a href="{{ request.route_url('admin_projects') }}">Projects</a></li>
+<ul class="nav nav-pills nav-stacked nav-sidebar">
+    <li role="presentation" {% if users is defined %}class="active" {% endif %}>
+        <a href="{{ request.route_url('admin_users') }}">Users</a>
+    </li>
+    <li role="presentation" {% if projects is defined %}class="active" {% endif
+        %}>
+        <a href="{{ request.route_url('admin_projects') }}">Projects</a>
+    </li>
     {% block side2 %}
     {% endblock %}
 </ul>
 {% endblock %}
+

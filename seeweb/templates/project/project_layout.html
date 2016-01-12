@@ -5,8 +5,10 @@
   {% endblock css2 %}
 {% endblock css %}
 
-{% block navbar %}
-    <li><a href="{{ request.route_url('home') }}">Home3</a></li>
-    {% block navbar2 %}
+{% block side %}
+<ul class="nav nav-pills .nav-stacked">
+    <li role="presentation"><a href="{{ request.route_url('home') }}">Home3</a></li>
+    {% block side2 %}
     {% endblock %}
+</ul>
 {% endblock %}

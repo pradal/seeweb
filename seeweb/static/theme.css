@@ -56,3 +56,11 @@ p {
   font-size: 0.9em;
   color: #f2b7bd;
 }
+
+form.form-signin {
+    width: 300px;
+}
+
+form.form-signin input {
+    margin: 0 0 0.2em 0;
+}

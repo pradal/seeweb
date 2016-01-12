@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+    <form class="form-signin" action="{{ request.route_url('user_register') }}" method='POST'>
+        <h2 class="form-signin-heading">New user registration</h2>
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="login" name="username" required autofocus>
+        <input type="text" id="name" class="form-control" placeholder="full name" name="name" required>
+        <input type="text" id="email" class="form-control" placeholder="email" name="email" required>
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Password" name="password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="edit_after"> Edit profile afterward
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="ok">Register</button>
+    </form>
+</div>
+{% endblock %}
+

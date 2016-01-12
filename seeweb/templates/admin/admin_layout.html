@@ -5,9 +5,11 @@
   {% endblock css2 %}
 {% endblock css %}
 
-{% block navbar %}
-    <li><a href="{{ request.route_url('admin_users') }}">Users</a></li>
-    <li><a href="{{ request.route_url('admin_projects') }}">Projects</a></li>
-    {% block navbar2 %}
+{% block side %}
+<ul class="nav nav-pills .nav-stacked nav-sidebar">
+  <li role="presentation" {% if users is defined %}class="active"{% endif %}><a href="{{ request.route_url('admin_users') }}">Users</a></li>
+  <li role="presentation" {% if projects is defined %}class="active"{% endif %}><a href="{{ request.route_url('admin_projects') }}">Projects</a></li>
+    {% block side2 %}
     {% endblock %}
+</ul>
 {% endblock %}

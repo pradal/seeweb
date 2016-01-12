@@ -3,10 +3,11 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.user import User
-from seeweb.views.tools import set_current_uid
+
+from .tools import set_current_uid
 
 
-@view_config(route_name='user_register', renderer='templates/user/register.jinja2')
+@view_config(route_name='user_register', renderer='templates/register.jinja2')
 def index(request):
     if "ok" in request.params:
         session = DBSession()
@@ -37,7 +38,5 @@ def index(request):
 
             set_current_uid(request, username)
             return HTTPFound(location=request.route_url('user_home', uid=username))
-    elif 'cancel' in request.params:
-        return HTTPFound(location=request.route_url('home'))
     else:
         return {}

@@ -6,13 +6,17 @@
       <div class="col-md-2">
         <h1>{{ project.name }}</h1>
       </div>
+        {% if allow_edit %}
+        <div class="right">
+            <a href="{{ request.route_url('project_edit', uid=project.owner, pid=project.name) }}" class="btn btn-sm">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit project
+            </a>
+        </div>
+        {% endif %}
     </div>
     <div class="row">
-        {% if allow_edit %}
-        <form action="{{ request.route_url('home') }}" method='POST'>
-            <input type='submit' value='edit' name='edit'>
-        </form>
-        {% endif %}
+        <h2>Visibility</h1>
         <p>{% if project.public %}Public{% else %}Private{% endif %}
     </div>
 </div>

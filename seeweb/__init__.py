@@ -20,18 +20,19 @@ def main(global_config, **settings):
     config.add_route('home', '/')
 
     # admin
-    config.add_route('users_admin', "admin/users")
-    config.add_route('user_edit', "admin/user/{uid}")
-    config.add_route('projects_admin', "admin/projects")
+    config.add_route('admin_users', "admin/users")
+    config.add_route('admin_projects', "admin/projects")
 
-    # project
-
-    # user
+    # user auth
     config.add_route('user_login', 'user_login')
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
 
-    # specific routes
+    # edit
+    config.add_route('project_edit', '{uid}/{pid}/edit')
+    config.add_route('user_edit', '{uid}/edit')
+
+    # display
     config.add_route('project_home', '{uid}/{pid}')
     config.add_route('user_home', '{uid}')
 

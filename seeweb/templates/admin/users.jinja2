@@ -4,10 +4,10 @@
     <h1>All Users</h1>
     {% else %}
     <h1>Users starting with: '{{ search_pattern[:-1] }}'</h1>
-    <a href="{{ request.route_url('users_admin') }}">all</a>
+    <a href="{{ request.route_url('admin_users') }}">all</a>
     {% endif %}
 
-  <form action="{{ request.route_url('users_admin') }}" method="post" name="search">
+  <form action="{{ request.route_url('admin_users') }}" method="post" name="search">
     <p>
         Please enter query: <br>
         <input type="text" name="query">

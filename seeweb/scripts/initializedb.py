@@ -44,8 +44,9 @@ def main(argv=sys.argv):
             session.add(user)
             users.append(user)
 
-        users[0].public_profile = True
-        session.add(users[0])
+        user = users[0]
+        user.public_profile = True
+        session.add(user)
 
         projects = []
 
@@ -56,6 +57,8 @@ def main(argv=sys.argv):
                               public=False)
             session.add(project)
             projects.append(project)
+
+            user.projects.append(project)
 
         projects[0].public = True
         session.add(projects[0])

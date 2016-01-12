@@ -1,26 +1,17 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
-from seeweb.models import DBSession
-from seeweb.models.project import Project
 from seeweb.views.tools import get_current_uid
+
+from .tools import get_project
 
 
 @view_config(route_name='project_home', renderer='templates/project/home.jinja2')
 def index(request):
     uid = request.matchdict['uid']
     pid = request.matchdict['pid']
-    session = DBSession()
 
-    projects = session.query(Project).filter(Project.name == pid).all()
-    if len(projects) == 0:
-        request.session.flash("Project %s does not exists" % pid, 'warning')
-        return HTTPFound(location=request.route_url('home'))
-
-    project, = projects
-    if project.owner != uid:
-        request.session.flash("Project %s does not exists" % pid, 'warning')
-        return HTTPFound(location=request.route_url('home'))
+    project = get_project(request, uid, pid)
 
     current_uid = get_current_uid(request)
     if (not project.public) and (project.owner != current_uid):

@@ -4,7 +4,7 @@ from seeweb.models import DBSession
 from seeweb.models.project import Project
 
 
-@view_config(route_name='projects_admin',
+@view_config(route_name='admin_projects',
              renderer='templates/admin/projects.jinja2')
 def view(request):
     session = DBSession()

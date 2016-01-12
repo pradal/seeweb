@@ -6,8 +6,8 @@
 {% endblock css %}
 
 {% block navbar %}
-    <li><a href="{{ request.route_url('users_admin') }}">Users</a></li>
-    <li><a href="{{ request.route_url('projects_admin') }}">Projects</a></li>
+    <li><a href="{{ request.route_url('admin_users') }}">Users</a></li>
+    <li><a href="{{ request.route_url('admin_projects') }}">Projects</a></li>
     {% block navbar2 %}
     {% endblock %}
 {% endblock %}

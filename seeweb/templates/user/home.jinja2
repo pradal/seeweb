@@ -15,11 +15,22 @@
     </div>
     <div class="row">
         {% if allow_edit %}
-        <form action="{{ request.route_url('user_edit', uid=user.username) }}" method='POST'>
-            <input type='submit' value='edit' name='edit'>
-        </form>
+        <div class="right">
+            <a href="{{ request.route_url('user_edit', uid=user.username) }}" class="btn btn-sm">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit profile
+            </a>
+        </div>
         {% endif %}
         <p>{% if user.public_profile %}Public{% else %}Private{% endif %}
+    </div>
+    <div class="row">
+        <h2>Projects</h2>
+        <ul>
+        {% for project in user.projects %}
+            <li><a href="{{ request.route_url('project_home', uid=user.username, pid=project.name) }}">{{ project.name }}</a></li>
+        {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "project_layout.html" %}
 
-{% block body %}
+{% block project_body %}
 <div class="project">
 <h1>{{ project.name }}</h1>
 <form action="{{ request.route_url('project_home', uid=project.owner, pid=project.name) }}" method='POST'>

@@ -1,6 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
+from seeweb.models.auth import access_role, Role
 from seeweb.views.tools import get_current_uid
 
 from .tools import get_project
@@ -14,9 +15,10 @@ def index(request):
     project = get_project(request, uid, pid)
 
     current_uid = get_current_uid(request)
-    if (not project.public) and (project.owner != current_uid):
+    role = access_role(project, current_uid)
+    if role == Role.denied:
         request.session.flash("Access to %s not granted for you" % pid,
                               'warning')
         return HTTPFound(location=request.route_url('home'))
 
-    return {"project": project, "allow_edit": current_uid == project.owner}
+    return {"project": project, "allow_edit": role == Role.edit}

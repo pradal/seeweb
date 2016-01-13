@@ -2,13 +2,10 @@
 {% block css %}
   <link href="{{request.static_url('seeweb:static/project_theme.css')}}" rel="stylesheet">
   {% block css2 %}
-  {% endblock css2 %}
-{% endblock css %}
+  {% endblock %}
+{% endblock %}
 
-{% block side %}
-<ul class="nav nav-pills .nav-stacked">
-    <li role="presentation"><a href="{{ request.route_url('home') }}">Home3</a></li>
-    {% block side2 %}
-    {% endblock %}
-</ul>
+{% block body %}
+  {% block project_body %}
+  {% endblock %}
 {% endblock %}

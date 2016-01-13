@@ -1,0 +1,23 @@
+{% extends "team_layout.html" %}
+
+{% block team_body %}
+<div class="team">
+    <div class="row">
+      <div class="col-md-2">
+        <h1>{{ team.name }}</h1>
+      </div>
+        {% if allow_edit %}
+        <div class="right">
+            <a href="{{ request.route_url('team_edit', tid=team.name) }}" class="btn btn-sm">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit team
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <h2>Visibility</h1>
+        <p>{% if team.public %}Public{% else %}Private{% endif %}
+    </div>
+</div>
+{% endblock %}

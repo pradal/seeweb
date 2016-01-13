@@ -8,6 +8,7 @@ from sqlalchemy import engine_from_config
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import add_auth, Role
 from seeweb.models.project import Project
+from seeweb.models.team import Team
 from seeweb.models.user import User
 
 
@@ -50,6 +51,9 @@ def main(argv=sys.argv):
         user.public_profile = True
         # session.add(user)
 
+        team = Team(name="openalea", public=True)
+        session.add(team)
+        
         projects = []
 
         for i in range(5):

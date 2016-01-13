@@ -1,0 +1,22 @@
+{% extends "team_layout.html" %}
+
+{% block team_body %}
+<div class="team">
+<h1>{{ team.name }}</h1>
+<form action="{{ request.route_url('team_home', tid=team.name) }}" method='POST'>
+    <input type="submit" value='cancel' name='cancel'>
+</form>
+    <div class="row">
+        <h2>Visibility</h1>
+        <p>{% if team.public %}Public{% else %}Private{% endif %}
+    </div>
+<form action="{{ request.route_url('team_edit', tid=team.name) }}" method='POST'>
+    <input type='submit' value='update' name='update'>
+    <input type='submit' value='default' name='default'>
+    <br>
+    <span class="input-group-addon">
+        <input type="checkbox" value="visibility" name="visibility" {% if team.public %}checked{% endif %}> Visibility
+    </span>
+</form>
+</div>
+{% endblock %}

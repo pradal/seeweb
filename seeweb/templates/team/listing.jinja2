@@ -1,0 +1,47 @@
+{% extends "team_layout.html" %}
+
+{% block team_body %}
+    {% if search_pattern == "" %}
+    <h1>All Teams</h1>
+    {% else %}
+    <h1>Teams starting with: '{{ search_pattern[:-1] }}'</h1>
+    {% endif %}
+
+    <form class="form-inline" role="search" action="{{ request.route_url('team_list') }}">
+        <div class="form-group">
+          <input type="text" class="form-control" name="query" placeholder="Search for name">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        {% if search_pattern != "" %}
+        <button type="all" class="btn btn-default" name="all">Display all</button>
+        {% endif %}
+    </form>
+
+    {% if teams|length == 0 %}
+    <h2>No team found</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>name</th>
+              <th>visibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in teams %}
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>
+                <a href="{{ request.route_url('team_home', tid=team.name) }}">{{ team.name }}</a>
+              </td>
+              <td>{% if team.public %}public{% else %}private{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+

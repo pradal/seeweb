@@ -1,0 +1,11 @@
+{% extends "templates/layout.html" %}
+{% block css %}
+  <link href="{{request.static_url('seeweb:static/team_theme.css')}}" rel="stylesheet">
+  {% block css2 %}
+  {% endblock %}
+{% endblock %}
+
+{% block body %}
+  {% block team_body %}
+  {% endblock %}
+{% endblock %}

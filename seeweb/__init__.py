@@ -20,6 +20,7 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('project_list', 'projects')
     config.add_route('user_list', 'users')
+    config.add_route('team_list', 'teams')
 
     # admin
     config.add_route('admin_users', "admin/users")
@@ -31,10 +32,12 @@ def main(global_config, **settings):
     config.add_route('user_register', 'user_register')
 
     # edit
+    config.add_route('team_edit', 'team/{tid}/edit')
     config.add_route('project_edit', '{uid}/{pid}/edit')
     config.add_route('user_edit', '{uid}/edit')
 
     # display
+    config.add_route('team_home', 'team/{tid}')
     config.add_route('project_home', '{uid}/{pid}')
     config.add_route('user_home', '{uid}')
 

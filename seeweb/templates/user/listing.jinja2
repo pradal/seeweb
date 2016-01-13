@@ -1,0 +1,47 @@
+{% extends "user_layout.html" %}
+
+{% block user_body %}
+    {% if search_pattern == "" %}
+    <h1>All Users</h1>
+    {% else %}
+    <h1>Users starting with: '{{ search_pattern[:-1] }}'</h1>
+    {% endif %}
+
+    <form class="form-inline" role="search" action="{{ request.route_url('user_list') }}">
+        <div class="form-group">
+          <input type="text" class="form-control" name="query" placeholder="Search for name">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        {% if search_pattern != "" %}
+        <button type="all" class="btn btn-default" name="all">Display all</button>
+        {% endif %}
+    </form>
+
+    {% if users|length == 0 %}
+    <h2>No user found</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>username</th>
+              <th>name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>
+                <a href="{{ request.route_url('user_home', uid=user.username) }}">{{ user.username }}</a>
+              </td>
+              <td>{{ user.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+

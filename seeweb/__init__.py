@@ -19,6 +19,7 @@ def main(global_config, **settings):
     # public
     config.add_route('home', '/')
     config.add_route('project_list', 'projects')
+    config.add_route('user_list', 'users')
 
     # admin
     config.add_route('admin_users', "admin/users")

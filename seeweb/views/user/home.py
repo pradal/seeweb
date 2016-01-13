@@ -1,6 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
+from seeweb.models.auth import access_role, Role
 from seeweb.views.tools import get_current_uid
 
 from .tools import get_user
@@ -18,5 +19,13 @@ def index(request):
         return HTTPFound(location=request.route_url('home'))
 
     tab = int(request.params.get("tab", 0))
+    projects = []
+    for pjt in user.projects:
+        role = access_role(pjt, current_uid)
+        if role != Role.denied:
+            projects.append((role, pjt))
 
-    return {"user": user, "tab": tab, "allow_edit": uid == current_uid}
+    return {"user": user,
+            "tab": tab,
+            "allow_edit": uid == current_uid,
+            "projects": projects}

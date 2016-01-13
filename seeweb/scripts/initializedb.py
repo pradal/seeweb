@@ -53,12 +53,15 @@ def main(argv=sys.argv):
         for i in range(5):
             name = "pjt%d" % i
             project = Project(name=name,
-                              owner="user0",
+                              owner="user%d" % (i % 4),
                               public=False)
             session.add(project)
             projects.append(project)
 
-            user.projects.append(project)
+            users[i % 4].projects.append(project)
 
         projects[0].public = True
         session.add(projects[0])
+
+        for user in users:
+            session.add(user)

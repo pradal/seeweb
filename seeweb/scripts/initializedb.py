@@ -4,7 +4,9 @@ import transaction
 from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
-from ..models import Base, DBSession
+
+from seeweb.models import Base, DBSession
+from seeweb.models.auth import add_auth, Role
 from seeweb.models.project import Project
 from seeweb.models.user import User
 
@@ -46,7 +48,7 @@ def main(argv=sys.argv):
 
         user = users[0]
         user.public_profile = True
-        session.add(user)
+        # session.add(user)
 
         projects = []
 
@@ -61,7 +63,10 @@ def main(argv=sys.argv):
             users[i % 4].projects.append(project)
 
         projects[0].public = True
-        session.add(projects[0])
+        add_auth(projects[0], "user%d" % 2, Role.edit)
+        add_auth(projects[4], "user%d" % 2, Role.read)
 
-        for user in users:
-            session.add(user)
+        # session.add(projects[0])
+
+        # for user in users:
+        #     session.add(user)

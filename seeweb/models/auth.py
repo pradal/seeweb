@@ -1,3 +1,5 @@
+from actor import Actor
+
 
 class Role(object):
     denied = 0
@@ -19,8 +21,20 @@ def access_role(project, username):
     if project.owner == username:
         return Role.edit
 
+    # check project auth for this user
+    for actor in project.auth:
+        if actor.user == username:
+            return actor.role
+
     # project is public
     if project.public:
         return Role.read
     else:
         return Role.denied
+
+
+def add_auth(project, username, role):
+    """Add a new user,role authorization to the project
+    """
+    actor = Actor(user=username, role=role)
+    project.auth.append(actor)

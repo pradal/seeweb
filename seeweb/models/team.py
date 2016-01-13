@@ -1,7 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 
-from models import Base
+from .actor import Actor
+from .models import Base
 
 
 team_auth = Table('team_auth',
@@ -25,3 +26,9 @@ class Team(Base):
 
     def __repr__(self):
         return "<Team(id='%s', public='%s')>" % (self.id, self.public)
+
+    def add_auth(self, uid, role):
+        """Add a new user to the team
+        """
+        actor = Actor(user=uid, role=role)
+        self.auth.append(actor)

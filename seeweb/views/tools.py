@@ -1,6 +1,6 @@
 
 def get_current_uid(request):
-    """Fetch username of currently logged user.
+    """Fetch user_id of currently logged user.
 
     Return None if no user logged in.
     """

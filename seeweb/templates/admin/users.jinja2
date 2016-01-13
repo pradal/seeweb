@@ -4,7 +4,7 @@
     {% if search_pattern == "" %}
     <h1>All Users</h1>
     {% else %}
-    <h1>username starting with: '{{ search_pattern[:-1] }}'</h1>
+    <h1>Users starting with: '{{ search_pattern[:-1] }}'</h1>
     {% endif %}
 
     <form class="form-inline" role="search" action="{{ request.route_url('admin_users') }}">
@@ -25,18 +25,14 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>username</th>
-              <th>name</th>
-              <th>email</th>
+              <th>user</th>
             </tr>
           </thead>
           <tbody>
             {% for user in users %}
             <tr>
               <td><input type="checkbox"></td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
+              <td>{{ user.id }}</td>
             </tr>
             {% endfor %}
           </tbody>

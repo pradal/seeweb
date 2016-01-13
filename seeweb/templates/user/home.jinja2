@@ -6,13 +6,12 @@
         <img src="{{ request.static_url('seeweb:static/avatar.jpg') }}">
     </div>
     <div class="row">
-        <h1>{{ user.name }}</h1>
-        <h2>{{ user.username }}</h2>
+        <h1>{{ user.id }}</h1>
     </div>
     {% if allow_edit %}
     <div class="row">
         Profile: {% if user.public_profile %}Public{% else %}Private{% endif %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('user_edit', uid=user.username) }}">
+        <a class="btn btn-default pull-right" href="{{ request.route_url('user_edit', uid=user.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Edit profile
         </a>
@@ -21,8 +20,8 @@
 </div>
 <div class="content col-md-9">
 <ul class="nav nav-tabs">
-  <li role="presentation" {% if tab == 0 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.username, _query={'tab': 0}) }}">Home</a></li>
-  <li role="presentation" {% if tab == 1 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.username, _query={'tab': 1}) }}">Projects</a></li>
+  <li role="presentation" {% if tab == 0 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.id, _query={'tab': 0}) }}">Home</a></li>
+  <li role="presentation" {% if tab == 1 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.id, _query={'tab': 1}) }}">Projects</a></li>
 </ul>
 
 {% if tab == 0 %}
@@ -53,9 +52,9 @@
     {% else %}
     {% for role, project in projects %}
         <div class="row pjt-summary">
-            <a href="{{ request.route_url('project_home', uid=user.username, pid=project.name) }}">{{ project.name }}</a>
+            <a href="{{ request.route_url('project_home', uid=user.id, pid=project.id) }}">{{ project.id }}</a>
             {% if role == 2 %}
-            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', uid=project.owner, pid=project.name) }}">
+            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', uid=project.owner, pid=project.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
               Edit project
             </a>

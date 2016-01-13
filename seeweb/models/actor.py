@@ -6,7 +6,7 @@ class Actor(Base):
     __tablename__ = 'actors'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    user = Column(String(255), ForeignKey("users.username"), nullable=False)
+    user = Column(String(255), ForeignKey("users.id"), nullable=False)
     role = Column(Integer)
 
     def __repr__(self):

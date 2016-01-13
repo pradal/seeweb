@@ -7,23 +7,23 @@ class Role(object):
     edit = 2
 
 
-def access_role(project, username):
+def access_role(project, uid):
     """Check the type of access granted to a user.
 
     args:
      - project (Project): project to test
-     - username (str): id of user willing to access project
+     - uid (str): id of user willing to access project
 
     return:
      - role (Role): type of access granted to user
     """
     # user own project
-    if project.owner == username:
+    if project.owner == uid:
         return Role.edit
 
     # check project auth for this user
     for actor in project.auth:
-        if actor.user == username:
+        if actor.user == uid:
             return actor.role
 
     # project is public
@@ -33,15 +33,15 @@ def access_role(project, username):
         return Role.denied
 
 
-def add_auth(project, username, role):
+def add_auth(project, uid, role):
     """Add a new user,role authorization to the project
     """
-    actor = Actor(user=username, role=role)
+    actor = Actor(user=uid, role=role)
     project.auth.append(actor)
 
 
-def add_member(team, username, role):
+def add_member(team, uid, role):
     """Add a new user to the team
     """
-    actor = Actor(user=username, role=role)
+    actor = Actor(user=uid, role=role)
     team.auth.append(actor)

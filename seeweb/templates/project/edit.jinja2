@@ -2,15 +2,15 @@
 
 {% block project_body %}
 <div class="project">
-<h1>{{ project.name }}</h1>
-<form action="{{ request.route_url('project_home', uid=project.owner, pid=project.name) }}" method='POST'>
+<h1>{{ project.id }}</h1>
+<form action="{{ request.route_url('project_home', uid=project.owner, pid=project.id) }}" method='POST'>
     <input type="submit" value='cancel' name='cancel'>
 </form>
     <div class="row">
         <h2>Visibility</h1>
         <p>{% if project.public %}Public{% else %}Private{% endif %}
     </div>
-<form action="{{ request.route_url('project_edit', uid=project.owner, pid=project.name) }}" method='POST'>
+<form action="{{ request.route_url('project_edit', uid=project.owner, pid=project.id) }}" method='POST'>
     <input type='submit' value='update' name='update'>
     <input type='submit' value='default' name='default'>
     <br>

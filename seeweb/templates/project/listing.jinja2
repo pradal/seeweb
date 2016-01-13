@@ -34,7 +34,7 @@
             <tr>
               <td><input type="checkbox"></td>
               <td>
-                <a href="{{ request.route_url('project_home', uid=project.owner, pid=project.name) }}">{{ project.name }}</a>
+                <a href="{{ request.route_url('project_home', uid=project.owner, pid=project.id) }}">{{ project.id }}</a>
               </td>
               <td>{{ project.owner }}</td>
             </tr>

@@ -28,16 +28,7 @@ def view(request):
         # actually already done
         pass
     elif 'update' in request.params:
-        # edit user display_name
-        name = request.params['name']
-        if len(name) > 0:
-            user.name = name
-
-        # edit user email
-        # TODO: check validity and flash/rollback
-        email = request.params['email']
-        if len(email) > 0:
-            user.email = email
+        pass
     else:
         pass
 

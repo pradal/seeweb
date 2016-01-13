@@ -6,12 +6,12 @@
         <img src="{{ request.static_url('seeweb:static/avatar.jpg') }}">
     </div>
     <div class="row">
-        <h1>{{ team.name }}</h1>
+        <h1>{{ team.id }}</h1>
     </div>
     {% if allow_edit %}
     <div class="row">
         Visibility: {% if team.public %}Public{% else %}Private{% endif %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.name) }}">
+        <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Edit team
         </a>
@@ -33,7 +33,7 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>username</th>
+                  <th>user</th>
                   <th>role</th>
                 </tr>
               </thead>

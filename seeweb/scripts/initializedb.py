@@ -39,10 +39,7 @@ def main(argv=sys.argv):
         users = []
 
         for i in range(4):
-            username = "user%d" % i
-            user = User(username=username,
-                        email="%s@gmail.com" % username,
-                        name="toto %s" % username,
+            user = User(id="user%d" % i,
                         public_profile=False)
             session.add(user)
             users.append(user)
@@ -50,19 +47,18 @@ def main(argv=sys.argv):
         users[0].public_profile = True
         users[1].public_profile = True
 
-        team = Team(name="openalea", public=True)
+        team = Team(id="openalea", public=True)
         session.add(team)
 
-        add_member(team, "user%d" % 0, Role.edit)
-        add_member(team, "user%d" % 1, Role.read)
-        add_member(team, "user%d" % 2, Role.read)
+        add_member(team, users[0].id, Role.edit)
+        add_member(team, users[1].id, Role.read)
+        add_member(team, users[2].id, Role.read)
 
         projects = []
 
         for i in range(5):
-            name = "pjt%d" % i
-            project = Project(name=name,
-                              owner="user%d" % (i % 4),
+            project = Project(id="pjt%d" % i,
+                              owner=users[i % 4].id,
                               public=False)
             session.add(project)
             projects.append(project)
@@ -70,5 +66,5 @@ def main(argv=sys.argv):
             users[i % 4].projects.append(project)
 
         projects[0].public = True
-        add_auth(projects[0], "user%d" % 2, Role.edit)
-        add_auth(projects[4], "user%d" % 2, Role.read)
+        add_auth(projects[0], users[2].id, Role.edit)
+        add_auth(projects[4], users[2].id, Role.read)

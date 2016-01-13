@@ -34,7 +34,7 @@
             <tr>
               <td><input type="checkbox"></td>
               <td>
-                <a href="{{ request.route_url('team_home', tid=team.name) }}">{{ team.name }}</a>
+                <a href="{{ request.route_url('team_home', tid=team.id) }}">{{ team.id }}</a>
               </td>
               <td>{% if team.public %}public{% else %}private{% endif %}</td>
             </tr>

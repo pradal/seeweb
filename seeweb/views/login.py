@@ -13,13 +13,13 @@ def index(request):
         session = DBSession()
         query = session.query(User)
 
-        username = request.params["username"]
-        query = query.filter(User.username.like(username))
+        uid = request.params["user_id"]
+        query = query.filter(User.id.like(uid))
         if len(query.all()) == 0:
             request.session.flash("No such user", 'warning')
             return HTTPFound(location=request.route_url('user_login'))
 
-        set_current_uid(request, username)
-        return HTTPFound(location=request.route_url('user_home', uid=username))
+        set_current_uid(request, uid)
+        return HTTPFound(location=request.route_url('user_home', uid=uid))
     else:
         return {}

@@ -2,3 +2,6 @@ body {
   color: #000000;
   background: #00aaff;
 }
+div.summary img {
+    width: 100%;
+}

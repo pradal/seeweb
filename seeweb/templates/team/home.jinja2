@@ -1,23 +1,56 @@
 {% extends "team_layout.html" %}
 
 {% block team_body %}
-<div class="team">
+<div class="summary col-md-3">
     <div class="row">
-      <div class="col-md-2">
-        <h1>{{ team.name }}</h1>
-      </div>
-        {% if allow_edit %}
-        <div class="right">
-            <a href="{{ request.route_url('team_edit', tid=team.name) }}" class="btn btn-sm">
-              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-              Edit team
-            </a>
-        </div>
-        {% endif %}
+        <img src="{{ request.static_url('seeweb:static/avatar.jpg') }}">
     </div>
     <div class="row">
-        <h2>Visibility</h1>
-        <p>{% if team.public %}Public{% else %}Private{% endif %}
+        <h1>{{ team.name }}</h1>
+    </div>
+    {% if allow_edit %}
+    <div class="row">
+        Visibility: {% if team.public %}Public{% else %}Private{% endif %}
+        <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.name) }}">
+          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+          Edit team
+        </a>
+    </div>
+    {% endif %}
+</div>
+<div class="content col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Members</h3>
+      </div>
+      <div class="panel-body projects">
+        {% if members|length == 0 %}
+        <div class="row">
+            This team has no public members.
+        </div>
+        {% else %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>username</th>
+                  <th>role</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for role, user in members %}
+                <tr>
+                  <td>
+                    <a href="{{ request.route_url('user_home', uid=user) }}">{{ user }}</a>
+                  </td>
+                  <td>{% if role == 1 %}read{% else %}edit{% endif %}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+        {% endif %}
+      </div>
     </div>
 </div>
 {% endblock %}

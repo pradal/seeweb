@@ -6,7 +6,7 @@ from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 
 from seeweb.models import Base, DBSession
-from seeweb.models.auth import add_auth, Role
+from seeweb.models.auth import add_auth, add_member, Role
 from seeweb.models.project import Project
 from seeweb.models.team import Team
 from seeweb.models.user import User
@@ -47,13 +47,16 @@ def main(argv=sys.argv):
             session.add(user)
             users.append(user)
 
-        user = users[0]
-        user.public_profile = True
-        # session.add(user)
+        users[0].public_profile = True
+        users[1].public_profile = True
 
         team = Team(name="openalea", public=True)
         session.add(team)
-        
+
+        add_member(team, "user%d" % 0, Role.edit)
+        add_member(team, "user%d" % 1, Role.read)
+        add_member(team, "user%d" % 2, Role.read)
+
         projects = []
 
         for i in range(5):
@@ -69,8 +72,3 @@ def main(argv=sys.argv):
         projects[0].public = True
         add_auth(projects[0], "user%d" % 2, Role.edit)
         add_auth(projects[4], "user%d" % 2, Role.read)
-
-        # session.add(projects[0])
-
-        # for user in users:
-        #     session.add(user)

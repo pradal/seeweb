@@ -38,3 +38,10 @@ def add_auth(project, username, role):
     """
     actor = Actor(user=username, role=role)
     project.auth.append(actor)
+
+
+def add_member(team, username, role):
+    """Add a new user to the team
+    """
+    actor = Actor(user=username, role=role)
+    team.auth.append(actor)

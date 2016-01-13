@@ -27,6 +27,14 @@ p {
   font-weight: 700;
 }
 
+footer.footer {
+    border-top: 1px solid #000000;
+    margin-top: 2em;
+    padding: 1em;
+    background-color: #000000;
+    color: #aaaaaa;
+}
+
 .copyright {
   font-size: 0.9em;
   color: #f2b7bd;

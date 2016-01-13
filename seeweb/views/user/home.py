@@ -13,11 +13,6 @@ def index(request):
     user = get_user(request, uid)
     current_uid = get_current_uid(request)
 
-    if (not user.public_profile) and (uid != current_uid):
-        request.session.flash("Access to %s not granted for you" % uid,
-                              'warning')
-        return HTTPFound(location=request.route_url('home'))
-
     tab = int(request.params.get("tab", 0))
     projects = []
     for pjt in user.projects:

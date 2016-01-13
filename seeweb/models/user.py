@@ -19,8 +19,6 @@ class User(Base):
 
     id = Column(String(255), unique=True, primary_key=True)
 
-    public_profile = Column(Boolean)
-
     projects = relationship("Project", secondary=user_to_projects)
 
     def __repr__(self):

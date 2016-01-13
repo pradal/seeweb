@@ -39,13 +39,9 @@ def main(argv=sys.argv):
         users = []
 
         for i in range(4):
-            user = User(id="user%d" % i,
-                        public_profile=False)
+            user = User(id="user%d" % i)
             session.add(user)
             users.append(user)
-
-        users[0].public_profile = True
-        users[1].public_profile = True
 
         team = Team(id="openalea", public=True)
         session.add(team)

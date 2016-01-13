@@ -10,7 +10,7 @@
     </div>
     {% if allow_edit %}
     <div class="row">
-        Profile: {% if user.public_profile %}Public{% else %}Private{% endif %}
+        Profile
         <a class="btn btn-default pull-right" href="{{ request.route_url('user_edit', uid=user.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Edit profile

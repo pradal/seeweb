@@ -2,7 +2,6 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.views.user.tools import get_user
 from seeweb.views.tools import get_current_uid
 
 from .tools import get_team
@@ -29,12 +28,9 @@ def index(request):
     allow_edit = False
 
     for actor in team.auth:
+        members.append((actor.role, actor.user))
+
         if actor.user == current_uid:
             allow_edit = (actor.role == Role.edit)
-            members.append((actor.role, actor.user))
-        else:
-            user = get_user(request, actor.user)
-            if user.public_profile:
-                members.append((actor.role, actor.user))
 
     return {"team": team, "allow_edit": allow_edit, "members": members}

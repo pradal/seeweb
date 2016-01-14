@@ -13,6 +13,9 @@
         <li role="presentation" {% if users is defined %}class="active" {% endif %}>
             <a href="{{ request.route_url('admin_users') }}">Users</a>
         </li>
+        <li role="presentation" {% if teams is defined %}class="active" {% endif %}>
+            <a href="{{ request.route_url('admin_teams') }}">Teams</a>
+        </li>
         <li role="presentation" {% if projects is defined %}class="active" {% endif
             %}>
             <a href="{{ request.route_url('admin_projects') }}">Projects</a>

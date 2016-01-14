@@ -13,7 +13,9 @@ def index(request):
 
     if 'new_team' in request.params:
         tid = request.params.get('team_id', "")
-        if len(tid) > 0:
+        if len(tid) == 0:
+            request.session.flash("Enter a team id first", 'warning')
+        else:
             tid = tid.lower().strip()
             if " " in tid:
                 request.session.flash("Team id ('%s') cannot have space" % tid, 'warning')

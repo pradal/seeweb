@@ -23,7 +23,7 @@ def index(request):
             request.session.flash("User %s already exists" % uid, 'warning')
             return HTTPFound(location=request.route_url('user_register'))
         else:
-            user = User(uid=uid)
+            user = User(id=uid)
             session.add(user)
 
             set_current_uid(request, uid)

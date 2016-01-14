@@ -19,7 +19,7 @@ def view(request):
 
     if 'cancel' in request.params:
         request.session.flash("Edition cancelled", 'success')
-        return HTTPFound(location=request.route_url('user_home', uid=uid))
+        return HTTPFound(location=request.route_url('user_view_home', uid=uid))
 
     user = get_user(request, uid)
 

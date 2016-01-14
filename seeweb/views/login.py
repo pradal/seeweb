@@ -20,6 +20,6 @@ def index(request):
             return HTTPFound(location=request.route_url('user_login'))
 
         set_current_uid(request, uid)
-        return HTTPFound(location=request.route_url('user_home', uid=uid))
+        return HTTPFound(location=request.route_url('user_view_home', uid=uid))
     else:
         return {}

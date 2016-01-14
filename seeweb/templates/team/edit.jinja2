@@ -53,7 +53,7 @@
                     {% for role, uid in members %}
                     <tr>
                       <td>
-                        <a href="{{ request.route_url('user_home', uid=uid) }}">{{ uid }}</a>
+                        <a href="{{ request.route_url('user_view_home', uid=uid) }}">{{ uid }}</a>
                       </td>
                       <td>
                         <select name="role_{{ uid }}">

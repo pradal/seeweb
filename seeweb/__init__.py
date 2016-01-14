@@ -38,8 +38,11 @@ def main(global_config, **settings):
 
     # display
     config.add_route('team_home', 'team/{tid}')
+    config.add_route('user_view_home', 'user/{uid}/home')
+    config.add_route('user_view_projects', 'user/{uid}/projects')
+    config.add_route('user_view_teams', 'user/{uid}/teams')
+    config.add_route('user_view_home_default', 'user/{uid}')
     config.add_route('project_home', '{uid}/{pid}')
-    config.add_route('user_home', '{uid}')
 
     config.scan()
 

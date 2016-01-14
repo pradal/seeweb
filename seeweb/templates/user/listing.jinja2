@@ -33,7 +33,7 @@
             <tr>
               <td><input type="checkbox"></td>
               <td>
-                <a href="{{ request.route_url('user_home', uid=user.id) }}">{{ user.id }}</a>
+                <a href="{{ request.route_url('user_view_home', uid=user.id) }}">{{ user.id }}</a>
               </td>
             </tr>
             {% endfor %}

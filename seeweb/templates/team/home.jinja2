@@ -90,7 +90,7 @@
                 {% for role, user in members %}
                 <tr>
                   <td>
-                    <a href="{{ request.route_url('user_home', uid=user) }}">{{ user }}</a>
+                    <a href="{{ request.route_url('user_view_home', uid=user) }}">{{ user }}</a>
                   </td>
                   <td>{% if role == 1 %}read{% else %}edit{% endif %}</td>
                 </tr>

@@ -1,0 +1,33 @@
+{% extends "user_view.html" %}
+
+{% block user_view_body %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Owned</h3>
+  </div>
+  <div class="panel-body projects">
+    {% if projects|length == 0 %}
+    <div class="row">
+        {% if allow_edit %}
+        None yet. Create one?
+        {% else %}
+        This user has no public project.
+        {% endif %}
+    </div>
+    {% else %}
+    {% for role, project in projects %}
+        <div class="row pjt-summary">
+            <a href="{{ request.route_url('project_home', uid=user.id, pid=project.id) }}">{{ project.id }}</a>
+            {% if role == 2 %}
+            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', uid=project.owner, pid=project.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit project
+            </a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

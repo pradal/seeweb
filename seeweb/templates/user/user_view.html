@@ -1,0 +1,33 @@
+{% extends "user_layout.html" %}
+
+{% block user_body %}
+<div class="summary col-md-3">
+    <div class="row">
+        <img src="{{ request.static_url('seeweb:static/avatar.jpg') }}">
+    </div>
+    <div class="row">
+        <h1>{{ user.id }}</h1>
+    </div>
+    {% if allow_edit %}
+    <div class="row">
+        Profile
+        <a class="btn btn-default pull-right" href="{{ request.route_url('user_edit', uid=user.id) }}">
+          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+          Edit profile
+        </a>
+    </div>
+    {% endif %}
+</div>
+<div class="content col-md-9">
+<ul class="nav nav-tabs">
+  <li role="presentation" {% if tab == 0 %}class="active"{% endif %}><a href="{{ request.route_url('user_view_home', uid=user.id) }}">Home</a></li>
+  <li role="presentation" {% if tab == 1 %}class="active"{% endif %}><a href="{{ request.route_url('user_view_projects', uid=user.id) }}">Projects</a></li>
+  <li role="presentation" {% if tab == 2 %}class="active"{% endif %}><a href="{{ request.route_url('user_view_teams', uid=user.id) }}">Teams</a></li>
+</ul>
+
+{% block user_view_body %}
+{% endblock %}
+
+</div>
+
+{% endblock %}

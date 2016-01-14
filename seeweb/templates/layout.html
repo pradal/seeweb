@@ -87,7 +87,7 @@
             {% if request.session["userid"] == None %}
                 <li><a href="{{ request.route_url('user_login') }}">login</a></li>
             {% else %}
-                <li><p class="navbar-text">Signed in as <a href="{{ request.route_url('user_home', uid=request.session['userid']) }}" class="navbar-link">{{ request.session["userid"] }}</a></p></li>
+                <li><p class="navbar-text">Signed in as <a href="{{ request.route_url('user_view_home', uid=request.session['userid']) }}" class="navbar-link">{{ request.session["userid"] }}</a></p></li>
                 <li><a href="{{ request.route_url('user_logout') }}">logout</a></li>
             {% endif %}
           </ul>

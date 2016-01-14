@@ -1,0 +1,27 @@
+{% extends "user_view.html" %}
+
+{% block user_view_body %}
+
+<div class="panel panel-default">
+  <div class="panel-body teams">
+    {% if teams|length == 0 %}
+    <div class="row">
+        This user do not belong to any public team.
+    </div>
+    {% else %}
+    {% for role, team in teams %}
+        <div class="row pjt-summary">
+            <a href="{{ request.route_url('team_home', tid=team.id) }}">{{ team.id }}</a>
+            {% if role == 2 %}
+            <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit team
+            </a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

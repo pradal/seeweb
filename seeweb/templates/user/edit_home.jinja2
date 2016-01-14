@@ -1,6 +1,15 @@
 {% extends "user_edit.html" %}
 
 {% block user_edit_body %}
-Nothing yet!
+<div class="form-group">
+    <label for="avatar">Load avatar</label>
+    <input id="avatar" name="avatar" type="file" value="" />
+    <input type="submit" value="submit" name="submit_avatar" />
+</div>
+
+<div class="form-group">
+  <label for="descr">Description:</label>
+  <textarea class="form-control" rows="20" id="descr" name='description' {% if user.description == "" %}placeholder='write some description in restructured text here'{% endif %}>{{ user.description }}</textarea>
+</div>
 {% endblock %}
 

@@ -1,5 +1,5 @@
 # import hashlib
-from sqlalchemy import Boolean, Column, ForeignKey, String, Table
+from sqlalchemy import Column, ForeignKey, String, Table, Text
 from sqlalchemy.orm import relationship
 from models import Base
 
@@ -13,22 +13,22 @@ user_to_projects = Table('asso_user_projects',
                                 primary_key=True),
                          )
 
-
 user_to_teams = Table('asso_user_teams',
-                         Base.metadata,
-                         Column('user_id', String(255),
-                                ForeignKey('users.id'),
-                                primary_key=True),
-                         Column('team_id', String(255),
-                                ForeignKey('teams.id'),
-                                primary_key=True),
-                         )
+                      Base.metadata,
+                      Column('user_id', String(255),
+                             ForeignKey('users.id'),
+                             primary_key=True),
+                      Column('team_id', String(255),
+                             ForeignKey('teams.id'),
+                             primary_key=True),
+                      )
 
 
 class User(Base):
     __tablename__ = 'users'
 
     id = Column(String(255), unique=True, primary_key=True)
+    description = Column(Text, default="")
 
     projects = relationship("Project", secondary=user_to_projects)
     teams = relationship("Team", secondary=user_to_teams)

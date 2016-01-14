@@ -1,4 +1,5 @@
 from project import Project
+from team import Team
 
 
 def create_project(owner, name, public=False):
@@ -19,3 +20,13 @@ def create_project(owner, name, public=False):
     owner.projects.append(project)
 
     return project
+
+
+def create_team(tid, public=False):
+    """Create a new team.
+
+    Does not test existence of team beforehand
+    """
+    team = Team(id=tid, public=public)
+
+    return team

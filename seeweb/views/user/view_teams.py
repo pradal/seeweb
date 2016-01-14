@@ -2,7 +2,7 @@ from jinja2 import Markup
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.views.team.tools import create_team, get_team
+from seeweb.views.team.tools import get_team, register_team
 
 from .tools import view_init
 
@@ -30,7 +30,7 @@ def index(request):
                         request.session.flash("Team '%s' already exists (private)" % tid, 'warning')
                 else:
                     # create new team
-                    team = create_team(tid)
+                    team = register_team(tid)
                     team.add_auth(user, Role.edit)
                     request.session.flash("New team %s created" % tid, 'success')
 

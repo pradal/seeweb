@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
+from seeweb.models.edit import create_team
 from seeweb.models.team import Team
 from seeweb.views.tools import get_current_uid
 
@@ -17,13 +18,13 @@ def get_team(request, tid):
     return team
 
 
-def create_team(tid):
+def register_team(tid):
     """Create a new team.
 
     Does not test existence of team beforehand
     """
     session = DBSession()
-    team = Team(id=tid, public=False)
+    team = create_team(tid)
     session.add(team)
 
     return team

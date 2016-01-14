@@ -35,8 +35,10 @@ def main(global_config, **settings):
     config.add_route('team_edit_home', 'team/{tid}/edit/home')
     config.add_route('team_edit_projects', 'team/{tid}/edit/projects')
     config.add_route('team_edit_members', 'team/{tid}/edit/members')
+    config.add_route('user_edit_home', 'user/{uid}/edit/home')
+    config.add_route('user_edit_projects', 'user/{uid}/edit/projects')
+    config.add_route('user_edit_teams', 'user/{uid}/edit/teams')
     config.add_route('project_edit', '{uid}/{pid}/edit')
-    config.add_route('user_edit', '{uid}/edit')
 
     # display
     config.add_route('team_view_home', 'team/{tid}/home')

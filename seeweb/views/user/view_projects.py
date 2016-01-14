@@ -8,7 +8,6 @@ from .tools import view_init
 @view_config(route_name='user_view_projects', renderer='templates/user/view_projects.jinja2')
 def index(request):
     user, current_uid, allow_edit = view_init(request)
-    tab = 1
 
     projects = []
     for pjt in user.projects:
@@ -17,6 +16,6 @@ def index(request):
             projects.append((role, pjt))
 
     return {"user": user,
-            "tab": tab,
+            "tab": 'projects',
             "allow_edit": allow_edit,
             "projects": projects}

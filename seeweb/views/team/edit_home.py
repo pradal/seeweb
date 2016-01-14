@@ -11,6 +11,8 @@ from .tools import edit_common, edit_init
              renderer='templates/team/edit_home.jinja2')
 def view(request):
     team, current_uid = edit_init(request)
+    if team is None:
+        return current_uid
 
     if 'back' in request.params:
         request.session.flash("Edition cancelled", 'success')

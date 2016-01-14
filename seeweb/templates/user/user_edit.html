@@ -1,0 +1,37 @@
+{% extends "user_layout.html" %}
+
+{% block user_body %}
+<form action="{{ request.route_url('user_edit_%s' % tab, uid=user.id) }}" method='POST'
+      enctype="multipart/form-data">
+<div class="summary col-md-3">
+    <div class="row">
+        <img src="{{ request.static_url('seeweb:static/avatar.jpg') }}">
+    </div>
+    <div class="row">
+        <h1>{{ user.id }}</h1>
+    </div>
+</div>
+<div class="content col-md-9">
+    <div class="container col-md-12">
+        <ul class="nav nav-tabs">
+          <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('user_edit_home', uid=user.id) }}">Home</a></li>
+          <li role="presentation" {% if tab == 'projects' %}class="active"{% endif %}><a href="{{ request.route_url('user_edit_projects', uid=user.id) }}">Projects</a></li>
+          <li role="presentation" {% if tab == 'teams' %}class="active"{% endif %}><a href="{{ request.route_url('user_edit_teams', uid=user.id) }}">Teams</a></li>
+        </ul>
+
+        <div class="form-group">
+            <div class="row">
+                <button class="btn btn-primary" type="submit" name="update">Update</button>
+                <button class="btn" type="submit" name="default">Default</button>
+                <button class="btn pull-right" type="submit" name="back">Back</button>
+            </div>
+        </div>
+
+        <div class="row">
+        {% block user_edit_body %}
+        {% endblock %}
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}

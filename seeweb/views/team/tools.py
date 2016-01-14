@@ -53,7 +53,7 @@ def edit_init(request):
     if not allow_edit:
         request.session.flash("Access to %s edition not granted for you" % team.id,
                               'warning')
-        return HTTPFound(location=request.route_url('home'))
+        return None, HTTPFound(location=request.route_url('home'))
 
     return team, current_uid
 

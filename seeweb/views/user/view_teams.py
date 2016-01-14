@@ -8,7 +8,6 @@ from .tools import view_init
 @view_config(route_name='user_view_teams', renderer='templates/user/view_teams.jinja2')
 def index(request):
     user, current_uid, allow_edit = view_init(request)
-    tab = 2
 
     teams = []
     for team in user.teams:
@@ -17,6 +16,6 @@ def index(request):
             teams.append((role, team))
 
     return {"user": user,
-            "tab": tab,
+            "tab": 'teams',
             "allow_edit": allow_edit,
             "teams": teams}

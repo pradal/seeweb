@@ -29,7 +29,7 @@ def view(request):
 
     if 'back' in request.params:
         request.session.flash("Edition cancelled", 'success')
-        return HTTPFound(location=request.route_url('team_home', tid=tid))
+        return HTTPFound(location=request.route_url('team_view_home', tid=tid))
 
     if 'default' in request.params:
         # reload default values for this user

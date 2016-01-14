@@ -1,0 +1,39 @@
+{% extends "team_view.html" %}
+
+{% block team_view_body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Members</h3>
+  </div>
+  <div class="panel-body projects">
+    {% if members|length == 0 %}
+    <div class="row">
+        This team has no members.
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>user</th>
+              <th>role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for role, user in members %}
+            <tr>
+              <td>
+                <a href="{{ request.route_url('user_view_home', uid=user) }}">{{ user }}</a>
+              </td>
+              <td>{% if role == 1 %}read{% else %}edit{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

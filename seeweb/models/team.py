@@ -28,6 +28,15 @@ class Team(Base):
     def __repr__(self):
         return "<Team(id='%s', public='%s')>" % (self.id, self.public)
 
+    def get_actor(self, uid):
+        """Retrieve actor associated with this uid.
+        """
+        for i, actor in enumerate(self.auth):
+            if actor.user == uid:
+                return i, actor
+
+        return None, None
+
     def add_auth(self, user, role):
         """Add a new user to the team
         """
@@ -35,6 +44,22 @@ class Team(Base):
         self.auth.append(actor)
 
         user.teams.append(self)
+
+    def update_auth(self, user, new_role):
+        """Update role of user in the team
+        """
+        i, actor = self.get_actor(user.id)
+
+        if new_role == Role.denied:  # remove user from team
+            try:
+                user.teams.remove(self)
+            except ValueError:
+                pass  # user already removed???
+
+            if actor is not None:
+                del self.auth[i]
+        else:
+            actor.role = new_role
 
     def access_role(self, uid):
         """Check the type of access granted to a user.
@@ -46,9 +71,9 @@ class Team(Base):
          - role (Role): type of access granted to user
         """
         # check team auth for this user
-        for actor in self.auth:
-            if actor.user == uid:
-                return actor.role
+        i, actor = self.get_actor(uid)
+        if actor is not None:
+            return actor.role
 
         # project is public
         if self.public:

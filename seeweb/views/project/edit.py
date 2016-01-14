@@ -9,20 +9,22 @@ from .tools import get_project
 @view_config(route_name='project_edit',
              renderer='templates/project/edit.jinja2')
 def view(request):
-    uid = request.matchdict['uid']
     pid = request.matchdict['pid']
     current_uid = get_current_uid(request)
 
     if 'cancel' in request.params:
         request.session.flash("Edition cancelled", 'success')
-        return HTTPFound(location=request.route_url('project_home', uid=uid, pid=pid))
+        return HTTPFound(location=request.route_url('project_home', pid=pid))
 
-    project = get_project(request, uid, pid)
+    project = get_project(request, pid)
+    if project is None:
+        request.session.flash("Project %s does not exists" % pid, 'warning')
+        return HTTPFound(location=request.route_url('home'))
 
     if project.owner != current_uid:
         request.session.flash("Access to %s edition not granted for you" % pid,
                               'warning')
-        return HTTPFound(location=request.route_url('project_home', uid=uid, pid=pid))
+        return HTTPFound(location=request.route_url('project_home', pid=pid))
 
     if 'default' in request.params:
         # reload default values for this user

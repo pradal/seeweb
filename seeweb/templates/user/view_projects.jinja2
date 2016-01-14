@@ -1,11 +1,20 @@
 {% extends "user_view.html" %}
 
 {% block user_view_body %}
+
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Owned</h3>
   </div>
   <div class="panel-body projects">
+    <div class="row pjt-summary">
+        <form action="{{ request.route_url('user_view_projects', uid=user.id) }}" method='POST'>
+            <div class="form-group">
+                <button class="btn btn-primary pull-right" type="submit" name="new_project">Create</button>
+                <input type='text' name='project_id' placeholder='new project id'>
+            </div>
+        </form>
+    </div>
     {% if projects|length == 0 %}
     <div class="row">
         {% if allow_edit %}
@@ -17,9 +26,9 @@
     {% else %}
     {% for role, project in projects %}
         <div class="row pjt-summary">
-            <a href="{{ request.route_url('project_home', uid=user.id, pid=project.id) }}">{{ project.id }}</a>
+            <a href="{{ request.route_url('project_home', pid=project.id) }}">{{ project.id }}</a>
             {% if role == 2 %}
-            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', uid=project.owner, pid=project.id) }}">
+            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', pid=project.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
               Edit project
             </a>

@@ -39,7 +39,7 @@ def main(global_config, **settings):
     config.add_route('user_edit_home', 'user/{uid}/edit/home')
     config.add_route('user_edit_projects', 'user/{uid}/edit/projects')
     config.add_route('user_edit_teams', 'user/{uid}/edit/teams')
-    config.add_route('project_edit', '{uid}/{pid}/edit')
+    config.add_route('project_edit', 'project/{pid}/edit')
 
     # display
     config.add_route('team_view_home', 'team/{tid}/home')
@@ -50,7 +50,7 @@ def main(global_config, **settings):
     config.add_route('user_view_projects', 'user/{uid}/projects')
     config.add_route('user_view_teams', 'user/{uid}/teams')
     config.add_route('user_view_home_default', 'user/{uid}')
-    config.add_route('project_home', '{uid}/{pid}')
+    config.add_route('project_home', 'project/{pid}')
 
     config.scan()
 

@@ -8,7 +8,7 @@
       </div>
         {% if allow_edit %}
         <div class="right">
-            <a href="{{ request.route_url('project_edit', uid=project.owner, pid=project.id) }}" class="btn btn-sm">
+            <a href="{{ request.route_url('project_edit', pid=project.id) }}" class="btn btn-sm">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
               Edit project
             </a>

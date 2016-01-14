@@ -27,6 +27,7 @@
               <th>#</th>
               <th>team</th>
               <th>users</th>
+              <th>visibility</th>
             </tr>
           </thead>
           <tbody>
@@ -41,6 +42,7 @@
                     {% endfor %}
                 </select>
               </td>
+              <td>{% if team.public %}public{% else %}private{% endif %}</td>
             </tr>
             {% endfor %}
           </tbody>

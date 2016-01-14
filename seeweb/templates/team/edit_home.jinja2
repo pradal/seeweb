@@ -1,14 +1,12 @@
 {% extends "team_edit.html" %}
 
 {% block team_edit_body %}
-<form action="/store_mp3_view" method="post" accept-charset="utf-8"
-      enctype="multipart/form-data">
-
+<div class="form-group">
     <label for="avatar">Load avatar</label>
     <input id="avatar" name="avatar" type="file" value="" />
+    <input type="submit" value="submit" name="submit_avatar" />
+</div>
 
-    <input type="submit" value="submit" />
-</form>
 <div class="form-group">
   <label for="descr">Description:</label>
   <textarea class="form-control" rows="20" id="descr" name='description' {% if team.description == "" %}placeholder='write some description in restructured text here'{% endif %}>{{ team.description }}</textarea>

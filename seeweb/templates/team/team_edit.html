@@ -1,7 +1,8 @@
 {% extends "team_layout.html" %}
 
 {% block team_body %}
-<form action="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}" method='POST'>
+<form action="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}" method='POST'
+      enctype="multipart/form-data">
 <div class="summary col-md-3">
     <div class="row">
         <img src="{{ request.static_url('seeweb:static/avatar/team/%s.png' % team.id) }}">

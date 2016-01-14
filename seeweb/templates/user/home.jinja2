@@ -22,6 +22,7 @@
 <ul class="nav nav-tabs">
   <li role="presentation" {% if tab == 0 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.id, _query={'tab': 0}) }}">Home</a></li>
   <li role="presentation" {% if tab == 1 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.id, _query={'tab': 1}) }}">Projects</a></li>
+  <li role="presentation" {% if tab == 2 %}class="active"{% endif %}><a href="{{ request.route_url('user_home', uid=user.id, _query={'tab': 2}) }}">Teams</a></li>
 </ul>
 
 {% if tab == 0 %}
@@ -57,6 +58,30 @@
             <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', uid=project.owner, pid=project.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
               Edit project
+            </a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% if tab == 2 %}
+<div class="panel panel-default">
+  <div class="panel-body teams">
+    {% if teams|length == 0 %}
+    <div class="row">
+        This user do not belong to any public team.
+    </div>
+    {% else %}
+    {% for role, team in teams %}
+        <div class="row pjt-summary">
+            <a href="{{ request.route_url('team_home', tid=team.id) }}">{{ team.id }}</a>
+            {% if role == 2 %}
+            <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit team
             </a>
             {% endif %}
         </div>

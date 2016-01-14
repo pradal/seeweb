@@ -46,9 +46,9 @@ def main(argv=sys.argv):
         team = Team(id="openalea", public=True)
         session.add(team)
 
-        team.add_auth(users[0].id, Role.edit)
-        team.add_auth(users[1].id, Role.read)
-        team.add_auth(users[2].id, Role.read)
+        team.add_auth(users[0], Role.edit)
+        team.add_auth(users[1], Role.read)
+        team.add_auth(users[2], Role.read)
 
         projects = []
 

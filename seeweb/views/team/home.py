@@ -13,6 +13,8 @@ def index(request):
     team = get_team(request, tid)
     current_uid = get_current_uid(request)
 
+    tab = int(request.params.get("tab", 0))
+
     allow_view = team.public
     if not allow_view:
         for actor in team.auth:
@@ -33,4 +35,7 @@ def index(request):
         if actor.user == current_uid:
             allow_edit = (actor.role == Role.edit)
 
-    return {"team": team, "allow_edit": allow_edit, "members": members}
+    return {"team": team,
+            "tab": tab,
+            "allow_edit": allow_edit,
+            "members": members}

@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
 from .actor import Actor
@@ -24,6 +24,8 @@ class Team(Base):
 
     public = Column(Boolean)
     auth = relationship("Actor", secondary=team_auth)
+
+    description = Column(Text, default="")
 
     def __repr__(self):
         return "<Team(id='%s', public='%s')>" % (self.id, self.public)

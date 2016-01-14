@@ -19,6 +19,10 @@ def view(request):
         pass
     elif 'update' in request.params:
         edit_common(request, team)
+
+        if 'description' in request.params:
+            # sanitize
+            team.description = request.params['description']
     else:
         pass
 

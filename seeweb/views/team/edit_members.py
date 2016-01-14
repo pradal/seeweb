@@ -18,7 +18,7 @@ def view(request):
         return HTTPFound(location=request.route_url('team_view_members', tid=team.id))
 
     if 'default' in request.params:
-        # reload default values for this user
+        # reload default values for this team
         # actually already done
         pass
     elif 'update' in request.params:
@@ -35,18 +35,17 @@ def view(request):
             if any(actor.user == new_uid for actor in team.auth):
                 request.session.flash("%s already a member" % new_uid, 'warning')
             else:
-                team.add_auth(user, 1)
-                request.session.flash("New member %s added" % new_uid, 'success')
+                team.add_auth(user, Role.from_str(request.params.get("role_new", "denied")))
+                print "auth", "\n" * 10, team.auth
+                request.session.flash("New member %s added" % user.id, 'success')
 
         # update user roles
         for actor in team.auth:
-            new_role_str = request.params.get("role_%s" % actor.user, Role.denied)
-            if new_role_str == "read":
-                new_role = Role.read
-            elif new_role_str == "edit":
-                new_role = Role.edit
+            if actor.user == new_uid:
+                new_role_str = request.params.get("role_new", "denied")
             else:
-                new_role = Role.denied
+                new_role_str = request.params.get("role_%s" % actor.user, "denied")
+            new_role = Role.from_str(new_role_str)
 
             if new_role != actor.role:
                 user = get_user(request, actor.user)
@@ -54,6 +53,7 @@ def view(request):
                     return user
 
                 team.update_auth(user, new_role)
+
     else:
         pass
 

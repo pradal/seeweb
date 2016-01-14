@@ -36,6 +36,7 @@ def view_init(request):
                               'warning')
         return HTTPFound(location=request.route_url('home'))
 
+    # allow edition
     allow_edit = False
     i, actor = team.get_actor(current_uid)
     if actor is not None:

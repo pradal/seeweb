@@ -9,7 +9,7 @@ from .tools import view_init
 def index(request):
     user, current_uid, allow_edit = view_init(request)
     tab = 1
-    
+
     projects = []
     for pjt in user.projects:
         role = pjt.access_role(current_uid)

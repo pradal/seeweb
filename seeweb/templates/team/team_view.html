@@ -11,7 +11,7 @@
     {% if allow_edit %}
     <div class="row">
         Visibility: {% if team.public %}Public{% else %}Private{% endif %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.id) }}">
+        <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Edit team
         </a>
@@ -20,9 +20,9 @@
 </div>
 <div class="content col-md-9">
     <ul class="nav nav-tabs">
-      <li role="presentation" {% if tab == 0 %}class="active"{% endif %}><a href="{{ request.route_url('team_view_home', tid=team.id) }}">Home</a></li>
-      <li role="presentation" {% if tab == 1 %}class="active"{% endif %}><a href="{{ request.route_url('team_view_projects', tid=team.id) }}">Projects</a></li>
-      <li role="presentation" {% if tab == 2 %}class="active"{% endif %}><a href="{{ request.route_url('team_view_members', tid=team.id) }}">Members</a></li>
+      <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('team_view_home', tid=team.id) }}">Home</a></li>
+      <li role="presentation" {% if tab == 'projects' %}class="active"{% endif %}><a href="{{ request.route_url('team_view_projects', tid=team.id) }}">Projects</a></li>
+      <li role="presentation" {% if tab == 'members' %}class="active"{% endif %}><a href="{{ request.route_url('team_view_members', tid=team.id) }}">Members</a></li>
     </ul>
 
     {% block team_view_body %}

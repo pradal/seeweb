@@ -32,7 +32,9 @@ def main(global_config, **settings):
     config.add_route('user_register', 'user_register')
 
     # edit
-    config.add_route('team_edit', 'team/{tid}/edit')
+    config.add_route('team_edit_home', 'team/{tid}/edit/home')
+    config.add_route('team_edit_projects', 'team/{tid}/edit/projects')
+    config.add_route('team_edit_members', 'team/{tid}/edit/members')
     config.add_route('project_edit', '{uid}/{pid}/edit')
     config.add_route('user_edit', '{uid}/edit')
 

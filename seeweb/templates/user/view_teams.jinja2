@@ -13,7 +13,7 @@
         <div class="row pjt-summary">
             <a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a>
             {% if role == 2 %}
-            <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit', tid=team.id) }}">
+            <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit_home', tid=team.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
               Edit team
             </a>

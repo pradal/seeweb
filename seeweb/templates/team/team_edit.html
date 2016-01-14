@@ -1,0 +1,38 @@
+{% extends "team_layout.html" %}
+
+{% block team_body %}
+<form action="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}" method='POST'>
+<div class="summary col-md-3">
+    <div class="row">
+        <img src="{{ request.static_url('seeweb:static/avatar.jpg') }}">
+    </div>
+    <div class="row">
+        <h1>{{ team.id }}</h1>
+    </div>
+    <div class="row">
+        <span class="input-group-addon">
+            <input type="checkbox" value="visibility" name="visibility" {% if team.public %}checked{% endif %}> Public
+        </span>
+    </div>
+</div>
+<div class="content col-md-9">
+    <div class="container col-md-12">
+        <ul class="nav nav-tabs">
+          <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_home', tid=team.id) }}">Home</a></li>
+          <li role="presentation" {% if tab == 'projects' %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_projects', tid=team.id) }}">Projects</a></li>
+          <li role="presentation" {% if tab == 'members' %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_members', tid=team.id) }}">Members</a></li>
+        </ul>
+        <div class="row">
+            <button class="btn btn-primary" type="submit" name="update">Update</button>
+            <button class="btn" type="submit" name="default">Default</button>
+            <button class="btn pull-right" type="submit" name="back">Back</button>
+        </div>
+
+        <div class="row">
+        {% block team_edit_body %}
+        {% endblock %}
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}

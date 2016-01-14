@@ -1,6 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models import DBSession
+from seeweb.views.tools import get_current_uid
 from seeweb.models.user import User
 
 
@@ -14,3 +15,14 @@ def get_user(request, uid):
     user, = users
 
     return user
+
+
+def view_init(request):
+    """Common init for all 'view'.
+    """
+    uid = request.matchdict['uid']
+    user = get_user(request, uid)
+    current_uid = get_current_uid(request)
+    allow_edit = (uid == current_uid)
+
+    return user, current_uid, allow_edit

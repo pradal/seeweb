@@ -9,6 +9,8 @@ from .tools import view_init
 @view_config(route_name='team_view_home_default', renderer='templates/team/view_home.jinja2')
 def index(request):
     team, current_uid, allow_edit = view_init(request)
+    if team is None:
+        return current_uid
 
     if team.description == "":
         description = ""

@@ -4,9 +4,17 @@
 
 <div class="panel panel-default">
   <div class="panel-body teams">
+    <div class="row pjt-summary">
+        <form action="{{ request.route_url('user_view_teams', uid=user.id) }}" method='POST'>
+            <div class="form-group">
+                <button class="btn btn-primary pull-right" type="submit" name="new_team">Create</button>
+                <input type='text' name='team_id' placeholder='new team id'>
+            </div>
+        </form>
+    </div>
     {% if teams|length == 0 %}
     <div class="row">
-        This user do not belong to any public team.
+        This user does not belong to any public team.
     </div>
     {% else %}
     {% for role, team in teams %}

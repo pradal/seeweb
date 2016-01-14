@@ -10,10 +10,21 @@ def get_team(request, tid):
     session = DBSession()
     teams = session.query(Team).filter(Team.id == tid).all()
     if len(teams) == 0:
-        request.session.flash("Team %s does not exists" % tid, 'warning')
-        return HTTPFound(location=request.route_url('home'))
+        return None
 
     team, = teams
+
+    return team
+
+
+def create_team(tid):
+    """Create a new team.
+
+    Does not test existence of team beforehand
+    """
+    session = DBSession()
+    team = Team(id=tid, public=False)
+    session.add(team)
 
     return team
 
@@ -23,6 +34,10 @@ def view_init(request):
     """
     tid = request.matchdict['tid']
     team = get_team(request, tid)
+    if team is None:
+        request.session.flash("Team %s does not exists" % tid, 'warning')
+        return None, HTTPFound(location=request.route_url('home')), None
+
     current_uid = get_current_uid(request)
 
     allow_view = team.public
@@ -34,7 +49,7 @@ def view_init(request):
     if not allow_view:  # use auth list
         request.session.flash("Access to %s not granted for you" % tid,
                               'warning')
-        return HTTPFound(location=request.route_url('home'))
+        return None, HTTPFound(location=request.route_url('home')), None
 
     # allow edition
     allow_edit = False

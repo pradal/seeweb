@@ -1,0 +1,29 @@
+{% macro list_comments(comments) -%}
+{% for comment in comments %}
+    <div class="list-group-item">
+        <div class="container">
+            <div class="col-md-1">
+                <a type="button" class="btn btn-success" data-toggle="tooltip" title="Useful comment!"
+                    href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='up') }}">
+                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-up"></span>
+                </a>
+                <div class="rating">{{ comment.rating }}</div>
+                <a type="button" class="btn btn-warning" data-toggle="tooltip" title="Useless comment!"
+                    href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='down') }}">
+                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-down"></span>
+                </a>
+            </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <p class="col-md-12">Posted by <a href="{{ request.route_url('user_view_home', uid=comment.author) }}">{{ comment.author }}</a> on {{ comment.creation }}</p>
+                </div>
+                <div class=row>
+                    <div class="col-md-12">
+                        {{ comment.message }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{%- endmacro %}

@@ -1,26 +1,4 @@
-{% macro comment_display(comment) -%}
-<div class="col-md-1">
-    <a type="button" class="btn btn-success" data-toggle="tooltip" title="Useful comment!"
-        href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='up') }}">
-        <span aria-hidden="true" class="glyphicon glyphicon-arrow-up"></span>
-    </a>
-    <div class="rating">{{ comment.rating }}</div>
-    <a type="button" class="btn btn-warning" data-toggle="tooltip" title="Useless comment!"
-        href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='down') }}">
-        <span aria-hidden="true" class="glyphicon glyphicon-arrow-down"></span>
-    </a>
-</div>
-<div class="col-md-11">
-    <div class=row>
-        <div class="col-md-12">
-            {{ comment.message }}
-        </div>
-    </div>
-    <div class="row">
-        <p class="col-md-12">Posted by <a href="{{ request.route_url('user_view_home', uid=comment.author) }}">{{ comment.author }}</a> on {{ comment.creation }}</p>
-    </div>
-</div>
-{%- endmacro %}
+{% from 'templates/comment/macro.html' import list_comments with context %}
 
 {% extends "project_view.html" %}
 
@@ -59,18 +37,14 @@
             <h3 class="panel-title">Comments</h3>
           </div>
           <div class="panel-body">
-            <div class="row comment">
-                <a class="col-md-3" href="{{ request.route_url('project_view_comments', pid=project.id) }}">see all...</a>
-            </div>
+            <div class="list-group">
             {% if comments|length == 0 %}
-                No comment yet, add one?
+                <p class="list-group-item">No comment yet, add one?</p>
             {% else %}
-                {% for cmt in comments %}
-                    <div class="row comment">
-                        {{ comment_display(cmt) }}
-                    </div>
-                {% endfor %}
+                {{ list_comments(comments) }}
             {% endif %}
+            </div>
+            <a class="btn btn-default" href="{{ request.route_url('project_view_comments', pid=project.id) }}">see all...</a>
           </div>
          </div>
     </div>

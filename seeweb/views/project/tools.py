@@ -30,6 +30,20 @@ def register_project(owner, pid):
     return project
 
 
+def fetch_comments(pid, limit=None):
+    """Fectch all comments associated to a project.
+    """
+    session = DBSession()
+
+    query = session.query(Comment).filter(Comment.project == pid).order_by(Comment.rating.desc())
+    if limit is not None:
+        query = query.limit(limit)
+
+    comments = query.all()
+
+    return comments
+
+
 def view_init(request):
     """Common init for all 'view' parts
     """
@@ -47,20 +61,26 @@ def view_init(request):
                               'warning')
         return None, HTTPFound(location=request.route_url('home'))
 
-    allow_edit = role == Role.edit
+    allow_edit = (role == Role.edit)
 
     return project, allow_edit
 
 
-def fetch_comments(pid, limit=None):
-    """Fectch all comments associated to a project.
+def edit_init(request):
+    """Common init for all 'edit' views.
     """
-    session = DBSession()
+    project, allow_edit = view_init(request)
 
-    query = session.query(Comment).filter(Comment.project == pid).order_by(Comment.rating.desc())
-    if limit is not None:
-        query = query.limit(limit)
+    if not allow_edit:
+        request.session.flash("Access to %s edition not granted for you" % project.id,
+                              'warning')
+        return None, HTTPFound(location=request.route_url('home'))
 
-    comments = query.all()
+    return project, allow_edit
 
-    return comments
+def edit_common(request, project):
+    """Common edition operations
+    """
+    # edit team visibility
+    public = 'visibility' in request.params
+    project.public = public

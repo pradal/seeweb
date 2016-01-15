@@ -11,9 +11,9 @@
         <h1>{{ team.id }}</h1>
     </div>
     <div class="row">
-        <span class="input-group-addon">
-            <input type="checkbox" value="visibility" name="visibility" {% if team.public %}checked{% endif %}> Public
-        </span>
+        <div class="checkbox">
+          <label>Public<input type="checkbox" value="visibility" name="visibility" {% if team.public %}checked{% endif %}></label>
+        </div>
     </div>
 </div>
 <div class="content col-md-9">

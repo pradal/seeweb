@@ -2,20 +2,19 @@
 
 {% block project_body %}
 
+<form action="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}" method='POST'
+      enctype="multipart/form-data">
+
 <div class="row">
     <div class="col-md-3">
         <img src="{{ request.static_url('seeweb:static/avatar/project/%s.png' % project.id) }}">
     </div>
     <div class="col-md-9">
-        {% if allow_edit %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_home', pid=project.id) }}">
-          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-          Edit project
-        </a>
-        {% endif %}
         <h1>{{ project.id }}</h1>
         <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
-        <p>Visibility: {% if project.public %}Public{% else %}Private{% endif %}</p>
+        <div class="checkbox">
+          <label>Public<input type="checkbox" value="visibility" name="visibility" {% if project.public %}checked{% endif %}></label>
+        </div>
     </div>
 </div>
 
@@ -25,7 +24,7 @@
         <ul class="nav nav-pills nav-stacked nav-sidebar" data-spy="affix" data-offset-top="197">
             {% for section in sections %}
             <li role="presentation">
-                <a href="{{ request.route_url('project_view_%s' % tab, pid=project.id, _anchor='%s' % section) }}">{{ section }}</a>
+                <a href="{{ request.route_url('project_edit_%s' % tab, pid=project.id, _anchor='%s' % section) }}">{{ section }}</a>
             </li>
             {% endfor %}
         </ul>
@@ -33,20 +32,31 @@
     </div>
 
     <div class="col-md-9">
-        <div class="col-md-12">
+        <div class="content col-md-12">
             <ul class="nav nav-tabs">
-              <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_home', pid=project.id) }}">Home</a></li>
+              <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_home', pid=project.id) }}">Home</a></li>
               <li role="presentation" {% if tab == 'documentation' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_documentation', pid=project.id) }}">Documentation</a></li>
               <li role="presentation" {% if tab == 'source' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_source', pid=project.id) }}">Source</a></li>
               <li role="presentation" {% if tab == 'contributors' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_contributors', pid=project.id) }}">Contributors</a></li>
               <li role="presentation" {% if tab == 'comments' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_comments', pid=project.id) }}">Comments</a></li>
             </ul>
 
-            {% block project_view_body %}
+            <div class="form-group">
+                <div class="row">
+                    <button class="btn btn-primary" type="submit" name="update">Update</button>
+                    <button class="btn" type="submit" name="default">Default</button>
+                    <button class="btn pull-right" type="submit" name="back">Back</button>
+                </div>
+            </div>
+
+            <div class="row">
+            {% block project_edit_body %}
             {% endblock %}
+            </div>
 
         </div>
     </div>
 </div>
 
+</form>
 {% endblock %}

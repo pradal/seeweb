@@ -3,7 +3,7 @@
 {% block project_body %}
 <div class="project">
 <h1>{{ project.id }}</h1>
-<form action="{{ request.route_url('project_home', pid=project.id) }}" method='POST'>
+<form action="{{ request.route_url('project_view_home', pid=project.id) }}" method='POST'>
     <input type="submit" value='cancel' name='cancel'>
 </form>
     <div class="row">

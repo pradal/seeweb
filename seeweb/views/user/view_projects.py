@@ -23,7 +23,7 @@ def index(request):
                 project = get_project(request, pid)
                 if project is not None:
                     if project.public:
-                        project_url = request.route_url('project_home', pid=pid)
+                        project_url = request.route_url('project_view_home', pid=pid)
                         msg = "Project <a href='%s'>'%s'</a> already exists" % (project_url, pid)
                         request.session.flash(Markup(msg), 'warning')
                     else:

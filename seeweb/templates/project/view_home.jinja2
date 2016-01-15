@@ -12,16 +12,16 @@
         <div class="col-md-12">
             <ul class="nav nav-pills nav-stacked nav-sidebar">
                 <li role="presentation">
-                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='description') }}">Description</a>
+                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='description') }}">Description</a>
                 </li>
                 <li role="presentation">
-                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='gallery') }}">Gallery</a>
+                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='gallery') }}">Gallery</a>
                 </li>
                 <li role="presentation">
-                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='comments') }}">Comments</a>
+                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='comments') }}">Comments</a>
                 </li>
                 <li role="presentation">
-                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='extra info') }}">Extra info</a>
+                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='extra info') }}">Extra info</a>
                 </li>
             </ul>
         </div>
@@ -47,15 +47,15 @@
 
 <div class="row">
     <div class="col-md-12">
-        <a class="btn btn-default" href="{{ request.route_url('project_home', pid=project.id) }}">
+        <a class="btn btn-default" href="{{ request.route_url('project_view_home', pid=project.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Documentation
         </a>
-        <a class="btn btn-default" href="{{ request.route_url('project_home', pid=project.id) }}">
+        <a class="btn btn-default" href="{{ request.route_url('project_view_home', pid=project.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Homepage
         </a>
-        <a class="btn btn-default" href="{{ request.route_url('project_home', pid=project.id) }}">
+        <a class="btn btn-default" href="{{ request.route_url('project_view_home', pid=project.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Source/Download
         </a>

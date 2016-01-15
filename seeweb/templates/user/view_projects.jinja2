@@ -26,7 +26,7 @@
     {% else %}
     {% for role, project in projects %}
         <div class="row pjt-summary">
-            <a href="{{ request.route_url('project_home', pid=project.id) }}">{{ project.id }}</a>
+            <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
             {% if role == 2 %}
             <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', pid=project.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>

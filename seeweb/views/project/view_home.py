@@ -7,7 +7,8 @@ from seeweb.views.tools import get_current_uid
 from .tools import get_project
 
 
-@view_config(route_name='project_home', renderer='templates/project/home.jinja2')
+@view_config(route_name='project_view_home_default', renderer='templates/project/view_home.jinja2')
+@view_config(route_name='project_view_home', renderer='templates/project/view_home.jinja2')
 def index(request):
     pid = request.matchdict['pid']
 

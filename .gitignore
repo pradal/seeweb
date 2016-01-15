@@ -30,3 +30,4 @@ lib64
 data/*
 
 seeweb/static/avatar/*
+seeweb/static/test.html

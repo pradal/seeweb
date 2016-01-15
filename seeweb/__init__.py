@@ -26,6 +26,7 @@ def main(global_config, **settings):
     config.add_route('admin_users', "admin/users")
     config.add_route('admin_teams', "admin/teams")
     config.add_route('admin_projects', "admin/projects")
+    config.add_route('admin_comments', "admin/comments")
 
     # user auth
     config.add_route('user_login', 'user_login')

@@ -7,7 +7,7 @@ from sqlalchemy import engine_from_config
 
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
-from seeweb.models.edit import create_project
+from seeweb.models.edit import create_comment, create_project
 from seeweb.models.team import Team
 from seeweb.models.user import User
 
@@ -60,3 +60,10 @@ def main(argv=sys.argv):
         projects[0].public = True
         projects[0].add_auth(users[2].id, Role.edit)
         projects[4].add_auth(users[2].id, Role.read)
+
+        comments = []
+
+        pid = projects[0].id
+        for i in range(4):
+            cmt = create_comment(pid, users[i].id, "very nasty comment (%d)" % i)
+            session.add(cmt)

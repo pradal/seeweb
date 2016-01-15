@@ -15,6 +15,4 @@ def view(request):
     else:
         search_pattern = ""
 
-    projects = query.all()
-
-    return {'projects': projects, 'search_pattern': search_pattern}
+    return {'projects': query.all(), 'search_pattern': search_pattern}

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from comment import Comment
 from project import Project
 from team import Team
 
@@ -30,3 +33,11 @@ def create_team(tid, public=False):
     team = Team(id=tid, public=public)
 
     return team
+
+
+def create_comment(pid, uid, msg):
+    """Create a new comment now.
+    """
+    cmt = Comment(project=pid, author=uid, creation=datetime.now(), message=msg)
+
+    return cmt

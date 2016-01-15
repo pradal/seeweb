@@ -11,6 +11,7 @@ class Comment(Base):
     creation = Column(DateTime, nullable=False)
 
     message = Column(Text, default="")
+    rating = Column(Integer, default=0)
 
     def __repr__(self):
-        return "<User(id='%s')>" % self.id
+        return "<Comment(id='%s')>" % self.id

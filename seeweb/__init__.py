@@ -42,6 +42,9 @@ def main(global_config, **settings):
     config.add_route('user_edit_teams', 'user/{uid}/edit/teams')
     config.add_route('project_edit', 'project/{pid}/edit')
 
+    # comment
+    config.add_route('comment_edit_rating', 'comment/{cid}/rate/{vote}')
+
     # display
     config.add_route('team_view_home', 'team/{tid}/home')
     config.add_route('team_view_projects', 'team/{tid}/projects')

@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
+from seeweb.models.comment import Comment
 from seeweb.models.edit import create_project
 from seeweb.models.project import Project
 from seeweb.views.tools import get_current_uid
@@ -49,3 +50,14 @@ def view_init(request):
     allow_edit = role == Role.edit
 
     return project, allow_edit
+
+
+def fetch_comments(pid):
+    """Fectch all comments associated to a project.
+    """
+    session = DBSession()
+
+    query = session.query(Comment).filter(Comment.project == pid).order_by(Comment.rating.desc())
+    comments = query.all()
+
+    return comments

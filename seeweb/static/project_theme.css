@@ -2,3 +2,15 @@ body {
   color: #000000;
   background: #00aa55;
 }
+
+.comment {
+    margin: 0 1em 1em 1em;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #dddddd;
+}
+
+.comment .rating {
+    width: 100%;
+    text-align: center;
+    padding: 0.3em 0 0.3em 0;
+}

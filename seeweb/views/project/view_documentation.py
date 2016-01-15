@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+from urlparse import urlparse
 
 from .tools import view_init
 
@@ -9,7 +10,16 @@ def index(request):
     if project is None:
         return allow_edit
 
+    doc_host = ""
+    if len(project.doc_url) > 0:
+        url = urlparse(project.doc_url)
+        doc_host = url.hostname
+
+    if len(doc_host) == 0:
+        doc_host = "doc host"
+
     return {"project": project,
             "tab": 'documentation',
             "allow_edit": allow_edit,
-            "sections": []}
+            "sections": [],
+            "doc_host": doc_host}

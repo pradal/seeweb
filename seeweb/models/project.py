@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
 from .actor import Actor
@@ -22,6 +22,8 @@ class Project(Base):
 
     id = Column(String(255), unique=True, primary_key=True)
     owner = Column(String(255), ForeignKey("users.id"), nullable=False)
+
+    doc_url = Column(Text, default="")
 
     public = Column(Boolean)
     auth = relationship("Actor", secondary=project_auth)

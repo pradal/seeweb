@@ -4,7 +4,11 @@
 
 <div class="row">
     <div class="col-md-12">
-        link to readthedocs
+        {% if project.doc_url|length == 0 %}
+        No Documentation associated to this project
+        {% else %}
+        <a href="{{ project.doc_url }}">{{ host_name }}</a>
+        {% endif %}
     </div>
 </div>
 

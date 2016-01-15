@@ -4,6 +4,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2">
+                    <img src="{{ request.static_url('seeweb:static/avatar/project/%s_small.png' % project.id) }}" />
                 </div>
                 <div class="col-md-10">
                     <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>

@@ -32,7 +32,7 @@ def view(request):
         if field_storage == "":
             request.session.flash("Select an image first", 'warning')
         else:
-            pth = upload_avatar(field_storage, user=user)
+            pth = upload_avatar(field_storage, item=user, item_type='user')
             if pth is None:
                 request.session.flash("Unable to read image", 'warning')
             else:

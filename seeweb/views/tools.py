@@ -55,7 +55,7 @@ def get_save_pth(pth):
     return join(root, 'static', pth)
 
 
-def upload_avatar(field_storage, team=None, user=None):
+def upload_avatar(field_storage, item, item_type):
     """Upload an image to use as avatar for either
     a team or a single user
     """
@@ -65,12 +65,16 @@ def upload_avatar(field_storage, team=None, user=None):
         return None
 
     img.thumbnail((256, 256))
-    if team is not None:
-        pth = get_save_pth('avatar/team/%s.png' % team.id)
-    elif user is not None:
-        pth = get_save_pth('avatar/user/%s.png' % user.id)
-    else:
-        raise UserWarning("at least one user or one team argument")
+
+    pth = get_save_pth('avatar/%s/%s.png' % (item_type, item.id))
+
+    if exists(pth):
+        os.remove(pth)
+    img.save(pth)
+
+    img.thumbnail((64, 64))
+
+    pth = get_save_pth('avatar/%s/%s_small.png' % (item_type, item.id))
 
     if exists(pth):
         os.remove(pth)

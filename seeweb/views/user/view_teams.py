@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from seeweb.models.auth import Role
 from seeweb.views.team.tools import get_team, register_team
 
-from .tools import view_init
+from .tools import view_init, tabs
 
 
 @view_config(route_name='user_view_teams', renderer='templates/user/view_teams.jinja2')
@@ -41,6 +41,7 @@ def index(request):
             teams.append((role, team))
 
     return {"user": user,
+            "tabs": tabs,
             "tab": 'teams',
             "allow_edit": allow_edit,
             "teams": teams}

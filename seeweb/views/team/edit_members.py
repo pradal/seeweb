@@ -5,7 +5,7 @@ from seeweb.models.auth import Role
 from seeweb.models.user import User
 from seeweb.views.user.tools import get_user
 
-from .tools import edit_common, edit_init
+from .tools import edit_common, edit_init, tabs
 
 
 @view_config(route_name='team_edit_members',
@@ -64,4 +64,7 @@ def view(request):
     for actor in team.auth:
         members.append((actor.role, actor.user))
 
-    return {'team': team, 'tab': 'members', 'members': members}
+    return {'team': team,
+            "tabs": tabs,
+            'tab': 'members',
+            'members': members}

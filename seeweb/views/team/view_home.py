@@ -2,7 +2,7 @@ from docutils.core import publish_parts
 from jinja2 import Markup
 from pyramid.view import view_config
 
-from .tools import view_init
+from .tools import tabs, view_init
 
 
 @view_config(route_name='team_view_home', renderer='templates/team/view_home.jinja2')
@@ -19,6 +19,7 @@ def index(request):
         description = Markup(html)
 
     return {"team": team,
+            "tabs": tabs,
             "tab": 'home',
             "allow_edit": allow_edit,
             "description": description}

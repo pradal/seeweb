@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.views.tools import upload_avatar
 
-from .tools import edit_common, edit_init
+from .tools import edit_common, edit_init, tabs
 
 
 @view_config(route_name='user_edit_home',
@@ -40,4 +40,6 @@ def view(request):
     else:
         pass
 
-    return {'user': user, 'tab': 'home'}
+    return {'user': user,
+            "tabs": tabs,
+            'tab': 'home'}

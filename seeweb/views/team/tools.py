@@ -6,6 +6,10 @@ from seeweb.models.edit import create_team
 from seeweb.models.team import Team
 from seeweb.views.tools import get_current_uid
 
+tabs = [('Home', 'home'),
+        ('Projects', 'projects'),
+        ('Members', 'members')]
+
 
 def get_team(request, tid):
     session = DBSession()

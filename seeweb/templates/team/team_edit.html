@@ -19,9 +19,9 @@
 <div class="content col-md-9">
     <div class="container col-md-12">
         <ul class="nav nav-tabs">
-          <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_home', tid=team.id) }}">Home</a></li>
-          <li role="presentation" {% if tab == 'projects' %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_projects', tid=team.id) }}">Projects</a></li>
-          <li role="presentation" {% if tab == 'members' %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_members', tid=team.id) }}">Members</a></li>
+            {% for tab_title, tab_id in tabs %}
+                <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
+            {% endfor %}
         </ul>
         <div class="form-group">
             <div class="row">

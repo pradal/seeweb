@@ -20,9 +20,9 @@
 </div>
 <div class="content col-md-9">
     <ul class="nav nav-tabs">
-      <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('user_view_home', uid=user.id) }}">Home</a></li>
-      <li role="presentation" {% if tab == 'projects' %}class="active"{% endif %}><a href="{{ request.route_url('user_view_projects', uid=user.id) }}">Projects</a></li>
-      <li role="presentation" {% if tab == 'teams' %}class="active"{% endif %}><a href="{{ request.route_url('user_view_teams', uid=user.id) }}">Teams</a></li>
+        {% for tab_title, tab_id in tabs %}
+            <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_view_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
+        {% endfor %}
     </ul>
 
     {% block user_view_body %}

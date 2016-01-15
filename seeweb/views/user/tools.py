@@ -5,6 +5,11 @@ from seeweb.views.tools import get_current_uid
 from seeweb.models.user import User
 
 
+tabs = [('Home', 'home'),
+        ('Projects', 'projects'),
+        ('Teams', 'teams')]
+
+
 def get_user(request, uid):
     session = DBSession()
     users = session.query(User).filter(User.id == uid).all()

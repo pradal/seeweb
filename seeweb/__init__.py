@@ -3,6 +3,8 @@ from sqlalchemy import engine_from_config
 
 from models import DBSession, Base
 from views.project.tools import tabs as project_tabs
+from views.team.tools import tabs as team_tabs
+from views.user.tools import tabs as user_tabs
 
 
 def main(global_config, **settings):
@@ -34,34 +36,29 @@ def main(global_config, **settings):
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
 
-    # edit
-    config.add_route('team_edit_home', 'team/{tid}/edit/home')
-    config.add_route('team_edit_projects', 'team/{tid}/edit/projects')
-    config.add_route('team_edit_members', 'team/{tid}/edit/members')
-    config.add_route('user_edit_home', 'user/{uid}/edit/home')
-    config.add_route('user_edit_projects', 'user/{uid}/edit/projects')
-    config.add_route('user_edit_teams', 'user/{uid}/edit/teams')
-
     # comment
     config.add_route('comment_edit_rating', 'comment/{cid}/rate/{vote}')
 
-    # display
-    config.add_route('team_view_home', 'team/{tid}/home')
-    config.add_route('team_view_projects', 'team/{tid}/projects')
-    config.add_route('team_view_members', 'team/{tid}/members')
-    config.add_route('team_view_home_default', 'team/{tid}')
-
-    config.add_route('user_view_home', 'user/{uid}/home')
-    config.add_route('user_view_projects', 'user/{uid}/projects')
-    config.add_route('user_view_teams', 'user/{uid}/teams')
-    config.add_route('user_view_home_default', 'user/{uid}')
-
-    # projects
+    # project
     for tab_title, tab_id in project_tabs:
         config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
         config.add_route('project_view_%s' % tab_id, 'project/{pid}/%s' % tab_id)
 
     config.add_route('project_view_home_default', 'project/{pid}')
+
+    # team
+    for tab_title, tab_id in team_tabs:
+        config.add_route('team_edit_%s' % tab_id, 'team/{tid}/edit/%s' % tab_id)
+        config.add_route('team_view_%s' % tab_id, 'team/{tid}/%s' % tab_id)
+
+    config.add_route('team_view_home_default', 'team/{tid}')
+
+    # user
+    for tab_title, tab_id in user_tabs:
+        config.add_route('user_edit_%s' % tab_id, 'user/{uid}/edit/%s' % tab_id)
+        config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
+
+    config.add_route('user_view_home_default', 'user/{uid}')
 
     config.scan()
 

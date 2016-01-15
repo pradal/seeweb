@@ -35,10 +35,10 @@
         <div class="content col-md-12">
             <ul class="nav nav-tabs">
               <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_home', pid=project.id) }}">Home</a></li>
-              <li role="presentation" {% if tab == 'documentation' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_documentation', pid=project.id) }}">Documentation</a></li>
-              <li role="presentation" {% if tab == 'source' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_source', pid=project.id) }}">Source</a></li>
-              <li role="presentation" {% if tab == 'contributors' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_contributors', pid=project.id) }}">Contributors</a></li>
-              <li role="presentation" {% if tab == 'comments' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_comments', pid=project.id) }}">Comments</a></li>
+              <li role="presentation" {% if tab == 'documentation' %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_documentation', pid=project.id) }}">Documentation</a></li>
+              <li role="presentation" {% if tab == 'source' %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_source', pid=project.id) }}">Source</a></li>
+              <li role="presentation" {% if tab == 'contributors' %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_contributors', pid=project.id) }}">Contributors</a></li>
+              <li role="presentation" {% if tab == 'comments' %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_comments', pid=project.id) }}">Comments</a></li>
             </ul>
 
             <div class="form-group">

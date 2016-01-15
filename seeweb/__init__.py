@@ -40,8 +40,11 @@ def main(global_config, **settings):
     config.add_route('user_edit_home', 'user/{uid}/edit/home')
     config.add_route('user_edit_projects', 'user/{uid}/edit/projects')
     config.add_route('user_edit_teams', 'user/{uid}/edit/teams')
-    config.add_route('project_edit_home', 'project/{pid}/edit')
-    config.add_route('project_edit', 'project_none_edit')
+    config.add_route('project_edit_home', 'project/{pid}/edit/home')
+    config.add_route('project_edit_documentation', 'project/{pid}/edit/doc')
+    config.add_route('project_edit_source', 'project/{pid}/edit/source')
+    config.add_route('project_edit_contributors', 'project/{pid}/edit/contributors')
+    config.add_route('project_edit_comments', 'project/{pid}/edit/comments')
 
     # comment
     config.add_route('comment_edit_rating', 'comment/{cid}/rate/{vote}')

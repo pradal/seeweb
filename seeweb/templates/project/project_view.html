@@ -8,7 +8,7 @@
     </div>
     <div class="col-md-9">
         {% if allow_edit %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_home', pid=project.id) }}">
+        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Edit project
         </a>

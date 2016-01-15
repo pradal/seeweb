@@ -1,7 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
-from .tools import edit_common, edit_init
+from .tools import edit_common, edit_init, tabs
 
 
 @view_config(route_name='project_edit_contributors',
@@ -24,5 +24,6 @@ def view(request):
     else:
         pass
 
-    return {'project': project,
+    return {"project": project,
+            "tabs": tabs,
             "tab": 'contributors'}

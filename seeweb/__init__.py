@@ -2,6 +2,7 @@ from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
 from models import DBSession, Base
+from views.project.tools import tabs as project_tabs
 
 
 def main(global_config, **settings):
@@ -40,11 +41,6 @@ def main(global_config, **settings):
     config.add_route('user_edit_home', 'user/{uid}/edit/home')
     config.add_route('user_edit_projects', 'user/{uid}/edit/projects')
     config.add_route('user_edit_teams', 'user/{uid}/edit/teams')
-    config.add_route('project_edit_home', 'project/{pid}/edit/home')
-    config.add_route('project_edit_documentation', 'project/{pid}/edit/doc')
-    config.add_route('project_edit_source', 'project/{pid}/edit/source')
-    config.add_route('project_edit_contributors', 'project/{pid}/edit/contributors')
-    config.add_route('project_edit_comments', 'project/{pid}/edit/comments')
 
     # comment
     config.add_route('comment_edit_rating', 'comment/{cid}/rate/{vote}')
@@ -60,11 +56,11 @@ def main(global_config, **settings):
     config.add_route('user_view_teams', 'user/{uid}/teams')
     config.add_route('user_view_home_default', 'user/{uid}')
 
-    config.add_route('project_view_home', 'project/{pid}/home')
-    config.add_route('project_view_documentation', 'project/{pid}/doc')
-    config.add_route('project_view_source', 'project/{pid}/source')
-    config.add_route('project_view_contributors', 'project/{pid}/contributors')
-    config.add_route('project_view_comments', 'project/{pid}/comments')
+    # projects
+    for tab_title, tab_id in project_tabs:
+        config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
+        config.add_route('project_view_%s' % tab_id, 'project/{pid}/%s' % tab_id)
+
     config.add_route('project_view_home_default', 'project/{pid}')
 
     config.scan()

@@ -7,6 +7,12 @@ from seeweb.models.edit import create_project
 from seeweb.models.project import Project
 from seeweb.views.tools import get_current_uid
 
+tabs = [('Home', 'home'),
+        ('Documentation', 'doc'),
+        ('Source', 'source'),
+        ('Contributors', 'contributors'),
+        ('Comments', 'comments')]
+
 
 def get_project(request, pid):
     session = DBSession()

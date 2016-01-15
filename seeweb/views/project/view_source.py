@@ -1,6 +1,6 @@
 from pyramid.view import view_config
 
-from .tools import view_init
+from .tools import tabs, view_init
 
 
 @view_config(route_name='project_view_source', renderer='templates/project/view_source.jinja2')
@@ -10,6 +10,7 @@ def index(request):
         return allow_edit
 
     return {"project": project,
+            "tabs": tabs,
             "tab": 'source',
             "allow_edit": allow_edit,
             "sections": []}

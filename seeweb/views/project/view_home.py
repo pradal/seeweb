@@ -1,6 +1,6 @@
 from pyramid.view import view_config
 
-from .tools import fetch_comments, view_init
+from .tools import fetch_comments, tabs, view_init
 
 
 @view_config(route_name='project_view_home_default', renderer='templates/project/view_home.jinja2')
@@ -14,6 +14,7 @@ def index(request):
     comments = fetch_comments(project.id, 2)
 
     return {"project": project,
+            "tabs": tabs,
             "tab": 'home',
             "allow_edit": allow_edit,
             "sections": ['description',

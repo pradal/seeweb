@@ -1,10 +1,10 @@
 from pyramid.view import view_config
 from urlparse import urlparse
 
-from .tools import view_init
+from .tools import tabs, view_init
 
 
-@view_config(route_name='project_view_documentation', renderer='templates/project/view_documentation.jinja2')
+@view_config(route_name='project_view_doc', renderer='templates/project/view_doc.jinja2')
 def index(request):
     project, allow_edit = view_init(request)
     if project is None:
@@ -19,7 +19,8 @@ def index(request):
         doc_host = "doc host"
 
     return {"project": project,
-            "tab": 'documentation',
+            "tabs": tabs,
+            "tab": 'doc',
             "allow_edit": allow_edit,
             "sections": [],
             "doc_host": doc_host}

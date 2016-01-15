@@ -1,11 +1,11 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
-from .tools import edit_common, edit_init
+from .tools import edit_common, edit_init, tabs
 
 
-@view_config(route_name='project_edit_documentation',
-             renderer='templates/project/edit_documentation.jinja2')
+@view_config(route_name='project_edit_doc',
+             renderer='templates/project/edit_doc.jinja2')
 def view(request):
     project, allow_edit = edit_init(request)
     if project is None:
@@ -13,7 +13,7 @@ def view(request):
 
     if 'back' in request.params:
         request.session.flash("Edition cancelled", 'success')
-        return HTTPFound(location=request.route_url('project_view_documentation', pid=project.id))
+        return HTTPFound(location=request.route_url('project_view_doc', pid=project.id))
 
     if 'default' in request.params:
         # reload default values for this user
@@ -24,5 +24,6 @@ def view(request):
     else:
         pass
 
-    return {'project': project,
-            "tab": 'documentation'}
+    return {"project": project,
+            "tabs": tabs,
+            "tab": 'doc'}

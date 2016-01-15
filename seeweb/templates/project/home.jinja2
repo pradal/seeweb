@@ -1,12 +1,38 @@
 {% extends "project_layout.html" %}
 
 {% block project_body %}
+<!-- side bar -->
+<div class="summary col-md-3">
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{{ request.static_url('seeweb:static/avatar/project/%s.png' % project.id) }}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-stacked nav-sidebar">
+                <li role="presentation">
+                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='description') }}">Description</a>
+                </li>
+                <li role="presentation">
+                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='gallery') }}">Gallery</a>
+                </li>
+                <li role="presentation">
+                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='comments') }}">Comments</a>
+                </li>
+                <li role="presentation">
+                    <a href="{{ request.route_url('project_home', pid=project.id, _anchor='extra info') }}">Extra info</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- main content -->
+<div class="summary col-md-9">
 
 <div class="row">
-    <div class="summary col-md-3">
-        <img src="{{ request.static_url('seeweb:static/avatar/project/%s.png' % project.id) }}">
-    </div>
-    <div class="summary col-md-9">
+    <div class="col-md-12">
         {% if allow_edit %}
         <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', pid=project.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
@@ -20,9 +46,7 @@
 </div>
 
 <div class="row">
-    <div class="summary col-md-3">
-    </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
         <a class="btn btn-default" href="{{ request.route_url('project_home', pid=project.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Documentation
@@ -38,7 +62,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="description">
     <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -51,7 +75,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="gallery">
     <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -64,7 +88,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="comments">
     <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -77,7 +101,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="extra info">
     <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -90,5 +114,6 @@
     </div>
 </div>
 
+</div>
 
 {% endblock %}

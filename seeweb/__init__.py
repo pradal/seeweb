@@ -60,6 +60,7 @@ def main(global_config, **settings):
     config.add_route('project_view_documentation', 'project/{pid}/doc')
     config.add_route('project_view_source', 'project/{pid}/source')
     config.add_route('project_view_contributors', 'project/{pid}/contributors')
+    config.add_route('project_view_comments', 'project/{pid}/comments')
     config.add_route('project_view_home_default', 'project/{pid}')
 
     config.scan()

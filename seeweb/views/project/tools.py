@@ -52,12 +52,15 @@ def view_init(request):
     return project, allow_edit
 
 
-def fetch_comments(pid):
+def fetch_comments(pid, limit=None):
     """Fectch all comments associated to a project.
     """
     session = DBSession()
 
     query = session.query(Comment).filter(Comment.project == pid).order_by(Comment.rating.desc())
+    if limit is not None:
+        query = query.limit(limit)
+
     comments = query.all()
 
     return comments

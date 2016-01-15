@@ -59,6 +59,9 @@
             <h3 class="panel-title">Comments</h3>
           </div>
           <div class="panel-body">
+            <div class="row comment">
+                <a class="col-md-3" href="{{ request.route_url('project_view_comments', pid=project.id) }}">see all...</a>
+            </div>
             {% if comments|length == 0 %}
                 No comment yet, add one?
             {% else %}

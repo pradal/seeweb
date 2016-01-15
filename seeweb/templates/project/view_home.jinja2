@@ -38,11 +38,11 @@
           </div>
           <div class="panel-body">
             <div class="list-group">
-            {% if comments|length == 0 %}
-                <p class="list-group-item">No comment yet, add one?</p>
-            {% else %}
-                {{ list_comments(comments) }}
-            {% endif %}
+                {% if comments|length == 0 %}
+                    <p class="list-group-item">No comment yet, add one?</p>
+                {% else %}
+                    {{ list_comments(comments) }}
+                {% endif %}
             </div>
             <a class="btn btn-default" href="{{ request.route_url('project_view_comments', pid=project.id) }}">see all...</a>
           </div>

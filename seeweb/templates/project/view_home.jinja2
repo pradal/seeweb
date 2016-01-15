@@ -1,66 +1,6 @@
-{% extends "project_layout.html" %}
+{% extends "project_view.html" %}
 
-{% block project_body %}
-<!-- side bar -->
-<div class="summary col-md-3">
-    <div class="row">
-        <div class="col-md-12">
-            <img src="{{ request.static_url('seeweb:static/avatar/project/%s.png' % project.id) }}">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-pills nav-stacked nav-sidebar">
-                <li role="presentation">
-                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='description') }}">Description</a>
-                </li>
-                <li role="presentation">
-                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='gallery') }}">Gallery</a>
-                </li>
-                <li role="presentation">
-                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='comments') }}">Comments</a>
-                </li>
-                <li role="presentation">
-                    <a href="{{ request.route_url('project_view_home', pid=project.id, _anchor='extra info') }}">Extra info</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- main content -->
-<div class="summary col-md-9">
-
-<div class="row">
-    <div class="col-md-12">
-        {% if allow_edit %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', pid=project.id) }}">
-          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-          Edit project
-        </a>
-        {% endif %}
-        <h1>{{ project.id }}</h1>
-        <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
-        <p>Visibility: {% if project.public %}Public{% else %}Private{% endif %}
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <a class="btn btn-default" href="{{ request.route_url('project_view_home', pid=project.id) }}">
-          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-          Documentation
-        </a>
-        <a class="btn btn-default" href="{{ request.route_url('project_view_home', pid=project.id) }}">
-          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-          Homepage
-        </a>
-        <a class="btn btn-default" href="{{ request.route_url('project_view_home', pid=project.id) }}">
-          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-          Source/Download
-        </a>
-    </div>
-</div>
+{% block project_view_body %}
 
 <div class="row" id="description">
     <div class="col-md-12">
@@ -101,6 +41,110 @@
     </div>
 </div>
 
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
+<div class="row" id="comments">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+          </div>
+          <div class="panel-body">
+            Discussion threads
+          </div>
+         </div>
+    </div>
+</div>
+
 <div class="row" id="extra info">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -112,8 +156,6 @@
           </div>
          </div>
     </div>
-</div>
-
 </div>
 
 {% endblock %}

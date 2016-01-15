@@ -24,4 +24,10 @@ def index(request):
                               'warning')
         return HTTPFound(location=request.route_url('home'))
 
-    return {"project": project, "allow_edit": role == Role.edit}
+    return {"project": project,
+            "tab": 'home',
+            "allow_edit": role == Role.edit,
+            "sections": ['description',
+                         'gallery',
+                         'comments',
+                         'extra info']}

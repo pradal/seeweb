@@ -1,0 +1,59 @@
+{% extends "project_layout.html" %}
+
+{% block project_body %}
+<!-- side bar -->
+<div class="col-md-3">
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{{ request.static_url('seeweb:static/avatar/project/%s.png' % project.id) }}">
+        </div>
+    </div>
+    {% if sections|length > 0 %}
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-stacked nav-sidebar" data-spy="affix">
+                {% for section in sections %}
+                <li role="presentation">
+                    <a href="{{ request.route_url('project_view_%s' % tab, pid=project.id, _anchor='%s' % section) }}">{{ section }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- main content -->
+<div class="col-md-9">
+
+<div class="row">
+    <div class="col-md-12">
+        {% if allow_edit %}
+        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', pid=project.id) }}">
+          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+          Edit project
+        </a>
+        {% endif %}
+        <h1>{{ project.id }}</h1>
+        <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
+        <p>Visibility: {% if project.public %}Public{% else %}Private{% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="content col-md-12">
+        <ul class="nav nav-tabs">
+          <li role="presentation" {% if tab == 'home' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_home', pid=project.id) }}">Home</a></li>
+          <li role="presentation" {% if tab == 'documentation' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_documentation', pid=project.id) }}">Documentation</a></li>
+          <li role="presentation" {% if tab == 'source' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_source', pid=project.id) }}">Source</a></li>
+          <li role="presentation" {% if tab == 'contributors' %}class="active"{% endif %}><a href="{{ request.route_url('project_view_contributors', pid=project.id) }}">Contributors</a></li>
+        </ul>
+
+        {% block project_view_body %}
+        {% endblock %}
+
+    </div>
+</div>
+
+</div>
+{% endblock %}

@@ -45,17 +45,6 @@ def view_init(request):
 
     current_uid = get_current_uid(request)
 
-    allow_view = team.public
-    if not allow_view:
-        for actor in team.auth:
-            if actor.user == current_uid:
-                allow_view = (actor.role != Role.denied)
-
-    if not allow_view:  # use auth list
-        request.session.flash("Access to %s not granted for you" % tid,
-                              'warning')
-        return None, HTTPFound(location=request.route_url('home')), None
-
     # allow edition
     allow_edit = False
     i, actor = team.get_actor(current_uid)
@@ -81,6 +70,4 @@ def edit_init(request):
 def edit_common(request, team):
     """Common edition operations
     """
-    # edit team visibility
-    public = 'visibility' in request.params
-    team.public = public
+    pass

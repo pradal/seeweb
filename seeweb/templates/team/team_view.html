@@ -10,7 +10,6 @@
     </div>
     {% if allow_edit %}
     <div class="row">
-        Visibility: {% if team.public %}Public{% else %}Private{% endif %}
         <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}">
           <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
           Edit team

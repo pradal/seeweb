@@ -23,6 +23,11 @@ def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
 
+    # remove sqlite file
+    sqlite_pth = "data/seeweb.sqlite"
+    if os.path.exists(sqlite_pth):
+        os.remove(sqlite_pth)
+
     config_uri = argv[1]
     options = parse_vars(argv[2:])
 
@@ -36,33 +41,63 @@ def main(argv=sys.argv):
     with transaction.manager:
         session = DBSession()
 
-        users = []
+        # users
+        users = [User(id='revesansparole',
+                      name="Jerome Chopard",
+                      email="revesansparole@gmail.com"),
+                 User(id='pradal',
+                      name="Christophe Pradal",
+                      email="christophe.pradal@inria.fr"),
+                 User(id='sartzet',
+                      name="Simon Artzet",
+                      email="simon.aertzet@inria.fr"),
+                 User(id='fboudon',
+                      name="Fred Boudon",
+                      email="fred.boudon@inria.fr")]
 
         for i in range(4):
-            user = User(id="user%d" % i)
+            users.append(User(id='doofus%d' % i,
+                              name="Dummy Doofus",
+                              email="dummy.doofus@email.com"))
+
+        for user in users:
             session.add(user)
-            users.append(user)
 
-        team = Team(id="openalea", public=True)
-        session.add(team)
+        # teams
+        vplants = Team(id="vplants")
+        session.add(vplants)
 
-        team.add_auth(users[0], Role.edit)
-        team.add_auth(users[1], Role.read)
-        team.add_auth(users[2], Role.read)
+        vplants.add_auth(users[1], Role.edit)
+        vplants.add_auth(users[3], Role.read)
 
-        projects = []
+        oa = Team(id="openalea")
+        session.add(oa)
+
+        oa.add_auth(users[0], Role.edit)
+        oa.add_auth(users[1], Role.read)
+        oa.add_auth(users[2], Role.read)
+        # oa.add_auth(vplants, Role.edit)
+
+        # projects
+        projects = [create_project(users[0], name) for name in ("pkglts",
+                                                                "svgdraw",
+                                                                "workflow")]
 
         for i in range(5):
-            project = create_project(users[i % 4], "pjt%d" % i)
-            session.add(project)
+            project = create_project(users[i], "pjt%d" % i)
             projects.append(project)
 
-        projects[0].public = True
+        for project in projects:
+            session.add(project)
+
+        for i in range(3):
+            projects[i].public = True
+
         projects[0].add_auth(users[2].id, Role.edit)
-        projects[4].add_auth(users[2].id, Role.read)
+        projects[1].add_auth(users[2].id, Role.read)
+        # projects[2].add_auth(openalea.id, Role.read)
 
-        comments = []
-
+        # comments
         pid = projects[0].id
         for i in range(4):
             cmt = create_comment(pid, users[i].id, "very nasty comment (%d)" % i)

@@ -22,12 +22,9 @@ def index(request):
             else:
                 team = get_team(request, tid)
                 if team is not None:
-                    if team.public:
-                        team_url = request.route_url('team_view_home', tid=tid)
-                        msg = "Team <a href='%s'>'%s'</a> already exists" % (team_url, tid)
-                        request.session.flash(Markup(msg), 'warning')
-                    else:
-                        request.session.flash("Team '%s' already exists (private)" % tid, 'warning')
+                    team_url = request.route_url('team_view_home', tid=tid)
+                    msg = "Team <a href='%s'>'%s'</a> already exists" % (team_url, tid)
+                    request.session.flash(Markup(msg), 'warning')
                 else:
                     # create new team
                     team = register_team(tid)

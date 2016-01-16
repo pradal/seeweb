@@ -25,12 +25,12 @@ def create_project(owner, name, public=False):
     return project
 
 
-def create_team(tid, public=False):
+def create_team(tid):
     """Create a new team.
 
     Does not test existence of team beforehand
     """
-    team = Team(id=tid, public=public)
+    team = Team(id=tid)
 
     return team
 

@@ -22,13 +22,12 @@ class Team(Base):
 
     id = Column(String(255), unique=True, primary_key=True)
 
-    public = Column(Boolean)
     auth = relationship("Actor", secondary=team_auth)
 
     description = Column(Text, default="")
 
     def __repr__(self):
-        return "<Team(id='%s', public='%s')>" % (self.id, self.public)
+        return "<Team(id='%s')>" % self.id
 
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.
@@ -77,8 +76,5 @@ class Team(Base):
         if actor is not None:
             return actor.role
 
-        # project is public
-        if self.public:
-            return Role.read
-        else:
-            return Role.denied
+        # teams are public by default
+        return Role.read

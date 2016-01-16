@@ -34,14 +34,15 @@ def view(request):
                 return HTTPFound(location=request.route_url('home'))
 
             # check user already in team
-            if any(actor.user == new_uid for actor in team.auth):
+            if any(actor.user == new_uid for actor in team.auth_user):
                 request.session.flash("%s already a member" % new_uid, 'warning')
             else:
-                team.add_auth(user, Role.from_str(request.params.get("role_new", "denied")))
+                role = Role.from_str(request.params.get("role_new", "denied"))
+                team.add_auth(role, user=user)
                 request.session.flash("New member %s added" % user.id, 'success')
 
         # update user roles
-        for actor in team.auth:
+        for actor in team.auth_user:
             if actor.user == new_uid:
                 new_role_str = request.params.get("role_new", "denied")
             else:
@@ -61,7 +62,7 @@ def view(request):
 
     members = []
 
-    for actor in team.auth:
+    for actor in team.auth_user:
         members.append((actor.role, actor.user))
 
     return {'team': team,

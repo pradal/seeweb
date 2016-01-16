@@ -28,7 +28,7 @@ def index(request):
                 else:
                     # create new team
                     team = register_team(tid)
-                    team.add_auth(user, Role.edit)
+                    team.add_auth(Role.edit, user=user)
                     request.session.flash("New team %s created" % tid, 'success')
 
     teams = []

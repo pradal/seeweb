@@ -73,8 +73,8 @@ INRIA team based in Montpellier
         """
         session.add(vplants)
 
-        vplants.add_auth(users[1], Role.edit)
-        vplants.add_auth(users[3], Role.read)
+        vplants.add_auth(Role.edit, user=users[1])
+        vplants.add_auth(Role.read, user=users[3])
 
         oa = Team(id="openalea")
         oa.description = """
@@ -89,10 +89,10 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
         """
         session.add(oa)
 
-        oa.add_auth(users[0], Role.edit)
-        oa.add_auth(users[1], Role.read)
-        oa.add_auth(users[2], Role.read)
-        # oa.add_auth(vplants, Role.edit)
+        oa.add_auth(Role.edit, user=users[0])
+        oa.add_auth(Role.read, user=users[1])
+        oa.add_auth(Role.read, user=users[2])
+        oa.add_auth(Role.edit, team=vplants)
 
         # projects
         projects = [create_project(users[0], name) for name in ("pkglts",

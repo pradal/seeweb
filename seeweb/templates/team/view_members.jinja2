@@ -21,10 +21,16 @@
             </tr>
           </thead>
           <tbody>
-            {% for role, user in members %}
+            {% for type, role, user in members %}
             <tr>
               <td>
-                <a href="{{ request.route_url('user_view_home', uid=user) }}">{{ user }}</a>
+                {% if type == 'user' %}
+                    <a href="{{ request.route_url('user_view_home', uid=user) }}">{{ user }}</a>
+                {% elif type == 'team' %}
+                    <a href="{{ request.route_url('team_view_members', tid=user) }}">{{ user }}</a>
+                {% else %}
+                    unknown
+                {% endif %}
               </td>
               <td>{% if role == 1 %}read{% else %}edit{% endif %}</td>
             </tr>

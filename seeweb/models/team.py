@@ -1,20 +1,31 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
+from sqlalchemy import Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
-from .actor import Actor
+from .actor import TActor, UActor
 from .auth import Role
 from .models import Base
 
 
-team_auth = Table('team_auth',
-                  Base.metadata,
-                  Column('team_id', String(255),
-                         ForeignKey('teams.id'),
-                         primary_key=True),
-                  Column('actor_id', Integer,
-                         ForeignKey('actors.id'),
-                         primary_key=True),
-                  )
+team_auth_users = Table('team_auth_users',
+                        Base.metadata,
+                        Column('team_id', String(255),
+                               ForeignKey('teams.id'),
+                               primary_key=True),
+                        Column('actor_id', Integer,
+                               ForeignKey('uactors.id'),
+                               primary_key=True),
+                        )
+
+
+team_auth_teams = Table('team_auth_teams',
+                        Base.metadata,
+                        Column('team_id', String(255),
+                               ForeignKey('teams.id'),
+                               primary_key=True),
+                        Column('actor_id', Integer,
+                               ForeignKey('tactors.id'),
+                               primary_key=True),
+                        )
 
 
 class Team(Base):
@@ -22,7 +33,8 @@ class Team(Base):
 
     id = Column(String(255), unique=True, primary_key=True)
 
-    auth = relationship("Actor", secondary=team_auth)
+    auth_user = relationship("UActor", secondary=team_auth_users)
+    auth_team = relationship("TActor", secondary=team_auth_teams)
 
     description = Column(Text, default="")
 
@@ -32,19 +44,24 @@ class Team(Base):
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.
         """
-        for i, actor in enumerate(self.auth):
+        for i, actor in enumerate(self.auth_user):
             if actor.user == uid:
                 return i, actor
 
         return None, None
 
-    def add_auth(self, user, role):
+    def add_auth(self, role, user=None, team=None):
         """Add a new user to the team
         """
-        actor = Actor(user=user.id, role=role)
-        self.auth.append(actor)
-
-        user.teams.append(self)
+        if user is not None:
+            actor = UActor(user=user.id, role=role)
+            self.auth_user.append(actor)
+            user.teams.append(self)
+        elif team is not None:
+            actor = TActor(team=team.id, role=role)
+            self.auth_team.append(actor)
+        else:
+            raise NotImplementedError()
 
     def update_auth(self, user, new_role):
         """Update role of user in the team
@@ -58,7 +75,7 @@ class Team(Base):
                 pass  # user already removed???
 
             if actor is not None:
-                del self.auth[i]
+                del self.auth_user[i]
         else:
             actor.role = new_role
 

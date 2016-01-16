@@ -11,7 +11,7 @@ def index(request):
     team, current_uid, allow_edit = view_init(request)
 
     projects = {}
-    for actor in team.auth:
+    for actor in team.auth_user:
         if actor.role != Role.denied:
             user = get_user(actor.user)
 

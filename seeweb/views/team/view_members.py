@@ -8,8 +8,10 @@ def index(request):
     team, current_uid, allow_edit = view_init(request)
 
     members = []
-    for actor in team.auth:
-        members.append((actor.role, actor.user))
+    for actor in team.auth_user:
+        members.append(("user", actor.role, actor.user))
+    for actor in team.auth_team:
+        members.append(("team", actor.role, actor.team))
 
     return {"team": team,
             "tabs": tabs,

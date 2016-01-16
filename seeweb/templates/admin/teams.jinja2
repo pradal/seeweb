@@ -36,7 +36,7 @@
               <td><a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a></td>
               <td>
                 <select>
-                    {% for actor in team.auth %}
+                    {% for actor in team.auth_user %}
                     <option>{{ actor.user }}</option>
                     {% endfor %}
                 </select>

@@ -2,7 +2,8 @@ from jinja2 import Markup
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.views.team.tools import get_team, register_team
+from seeweb.models.access import get_team
+from seeweb.models.edit import register_team
 
 from .tools import view_init, tabs
 

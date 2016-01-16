@@ -1,6 +1,8 @@
 from pyramid.view import view_config
 
-from .tools import fetch_comments, tabs, view_init
+from seeweb.models.access import fetch_comments
+
+from .tools import tabs, view_init
 
 
 @view_config(route_name='project_view_home_default', renderer='templates/project/view_home.jinja2')

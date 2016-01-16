@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.views.user.tools import get_user
+from seeweb.models.access import get_user
 
 from .tools import tabs, view_init
 

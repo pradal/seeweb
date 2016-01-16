@@ -2,7 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.views.user.tools import get_user
+from seeweb.models.access import get_user
 
 from .tools import edit_common, edit_init, tabs
 
@@ -28,7 +28,7 @@ def view(request):
         # check for new members
         new_uid = request.params['new_member']
         if len(new_uid) > 0:
-            user = get_user(request, new_uid)
+            user = get_user(new_uid)
             if user is None:
                 request.session.flash("User %s does not exists" % new_uid, 'warning')
                 return HTTPFound(location=request.route_url('home'))

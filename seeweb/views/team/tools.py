@@ -1,9 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 
-from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.models.edit import create_team
-from seeweb.models.team import Team
+from seeweb.models.access import get_team
 from seeweb.views.tools import get_current_uid
 
 tabs = [('Home', 'home'),
@@ -11,34 +9,11 @@ tabs = [('Home', 'home'),
         ('Members', 'members')]
 
 
-def get_team(request, tid):
-    session = DBSession()
-    teams = session.query(Team).filter(Team.id == tid).all()
-    if len(teams) == 0:
-        return None
-
-    team, = teams
-
-    return team
-
-
-def register_team(tid):
-    """Create a new team.
-
-    Does not test existence of team beforehand
-    """
-    session = DBSession()
-    team = create_team(tid)
-    session.add(team)
-
-    return team
-
-
 def view_init(request):
     """Common init for all 'view' parts
     """
     tid = request.matchdict['tid']
-    team = get_team(request, tid)
+    team = get_team(tid)
     if team is None:
         request.session.flash("Team %s does not exists" % tid, 'warning')
         return None, HTTPFound(location=request.route_url('home')), None

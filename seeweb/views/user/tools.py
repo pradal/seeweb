@@ -1,24 +1,12 @@
 from pyramid.httpexceptions import HTTPFound
 
-from seeweb.models import DBSession
+from seeweb.models.access import get_user
 from seeweb.views.tools import get_current_uid
-from seeweb.models.user import User
 
 
 tabs = [('Home', 'home'),
         ('Projects', 'projects'),
         ('Teams', 'teams')]
-
-
-def get_user(uid):
-    session = DBSession()
-    users = session.query(User).filter(User.id == uid).all()
-    if len(users) == 0:
-        return None
-
-    user, = users
-
-    return user
 
 
 def view_init(request):

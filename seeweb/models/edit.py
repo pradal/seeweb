@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from comment import Comment
-from project import Project
-from team import Team
+from .comment import Comment
+from .models import DBSession
+from .project import Project
+from .team import Team
 
 
 def create_project(owner, name, public=False):
@@ -25,12 +26,34 @@ def create_project(owner, name, public=False):
     return project
 
 
+def register_project(owner, pid):
+    """Create a new project and register it.
+    """
+    session = DBSession()
+    project = create_project(owner, pid, public=False)
+    session.add(project)
+
+    return project
+
+
 def create_team(tid):
     """Create a new team.
 
     Does not test existence of team beforehand
     """
     team = Team(id=tid)
+
+    return team
+
+
+def register_team(tid):
+    """Create a new team.
+
+    Does not test existence of team beforehand
+    """
+    session = DBSession()
+    team = create_team(tid)
+    session.add(team)
 
     return team
 

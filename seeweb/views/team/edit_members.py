@@ -2,7 +2,6 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.models.user import User
 from seeweb.views.user.tools import get_user
 
 from .tools import edit_common, edit_init, tabs
@@ -30,15 +29,15 @@ def view(request):
         new_uid = request.params['new_member']
         if len(new_uid) > 0:
             user = get_user(request, new_uid)
-            if not isinstance(user, User):
-                return user
+            if user is None:
+                request.session.flash("User %s does not exists" % new_uid, 'warning')
+                return HTTPFound(location=request.route_url('home'))
 
             # check user already in team
             if any(actor.user == new_uid for actor in team.auth):
                 request.session.flash("%s already a member" % new_uid, 'warning')
             else:
                 team.add_auth(user, Role.from_str(request.params.get("role_new", "denied")))
-                print "auth", "\n" * 10, team.auth
                 request.session.flash("New member %s added" % user.id, 'success')
 
         # update user roles
@@ -50,9 +49,10 @@ def view(request):
             new_role = Role.from_str(new_role_str)
 
             if new_role != actor.role:
-                user = get_user(request, actor.user)
-                if not isinstance(user, User):
-                    return user
+                user = get_user(actor.user)
+                if user is None:
+                    request.session.flash("User %s does not exists" % actor.user, 'warning')
+                    return HTTPFound(location=request.route_url('home'))
 
                 team.update_auth(user, new_role)
 

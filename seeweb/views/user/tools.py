@@ -10,12 +10,11 @@ tabs = [('Home', 'home'),
         ('Teams', 'teams')]
 
 
-def get_user(request, uid):
+def get_user(uid):
     session = DBSession()
     users = session.query(User).filter(User.id == uid).all()
     if len(users) == 0:
-        request.session.flash("User %s does not exists" % uid, 'warning')
-        return HTTPFound(location=request.route_url('home'))
+        return None
 
     user, = users
 
@@ -26,7 +25,11 @@ def view_init(request):
     """Common init for all 'view'.
     """
     uid = request.matchdict['uid']
-    user = get_user(request, uid)
+    user = get_user(uid)
+    if user is None:
+        request.session.flash("User %s does not exists" % uid, 'warning')
+        return HTTPFound(location=request.route_url('home'))
+
     current_uid = get_current_uid(request)
     allow_edit = (uid == current_uid)
 
@@ -44,7 +47,10 @@ def edit_init(request):
                               'warning')
         return None, HTTPFound(location=request.route_url('home'))
 
-    user = get_user(request, uid)
+    user = get_user(uid)
+    if user is None:
+        request.session.flash("User %s does not exists" % uid, 'warning')
+        return None, HTTPFound(location=request.route_url('home'))
 
     return user, current_uid
 

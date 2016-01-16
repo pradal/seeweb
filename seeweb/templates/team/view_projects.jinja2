@@ -1,3 +1,5 @@
+{% from 'templates/project/macro.html' import list_projects with context %}
+
 {% extends "team_view.html" %}
 
 {% block team_view_body %}
@@ -8,25 +10,19 @@
   </div>
   <div class="panel-body projects">
     {% if projects|length == 0 %}
-    <div class="row">
-        {% if allow_edit %}
-        None yet. Create one?
-        {% else %}
-        This user has no public project.
-        {% endif %}
-    </div>
-    {% else %}
-    {% for role, project in projects %}
-        <div class="row pjt-summary">
-            <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
-            {% if role == 2 %}
-            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit', pid=project.id) }}">
-              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-              Edit project
-            </a>
+        <div class="row">
+            {% if allow_edit %}
+            None yet. Create one?
+            {% else %}
+            This team has no public project.
             {% endif %}
         </div>
-    {% endfor %}
+    {% else %}
+        <div class="container-fluid">
+            <div class="list-group">
+                {{ list_projects(projects) }}
+            </div>
+        </div>
     {% endif %}
   </div>
 </div>

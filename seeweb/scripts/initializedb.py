@@ -65,12 +65,28 @@ def main(argv=sys.argv):
 
         # teams
         vplants = Team(id="vplants")
+        vplants.description = """
+Team
+----
+INRIA team based in Montpellier
+
+        """
         session.add(vplants)
 
         vplants.add_auth(users[1], Role.edit)
         vplants.add_auth(users[3], Role.read)
 
         oa = Team(id="openalea")
+        oa.description = """
+Community
+---------
+
+OpenAlea is an open source project primarily aimed at the plant research community.
+It is a distributed collaborative effort to develop Python libraries and tools that address the needs of
+current and future works in Plant Architecture modeling.
+OpenAlea includes modules to analyse, visualize and model the functioning and growth of plant architecture.
+
+        """
         session.add(oa)
 
         oa.add_auth(users[0], Role.edit)

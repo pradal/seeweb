@@ -2,7 +2,7 @@ from jinja2 import Markup
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.models.access import get_project
+from seeweb.models.access import get_project, project_access_role
 from seeweb.models.edit import register_project
 
 from .tools import tabs, view_init
@@ -36,7 +36,7 @@ def index(request):
 
     projects = []
     for pjt in user.projects:
-        role = pjt.access_role(current_uid)
+        role = project_access_role(pjt, current_uid)
         if role != Role.denied:
             projects.append((role, pjt))
 

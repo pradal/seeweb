@@ -2,7 +2,7 @@ from jinja2 import Markup
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.models.access import get_team
+from seeweb.models.access import get_team, team_access_role
 from seeweb.models.edit import register_team
 
 from .tools import view_init, tabs
@@ -34,7 +34,7 @@ def index(request):
 
     teams = []
     for team in user.teams:
-        role = team.access_role(current_uid)
+        role = team_access_role(team, current_uid)
         if role != Role.denied:
             teams.append((role, team))
 

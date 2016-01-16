@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models.auth import Role
-from seeweb.models.access import get_user
+from seeweb.models.access import get_user, project_access_role
 
 from .tools import tabs, view_init
 
@@ -17,7 +17,7 @@ def index(request):
 
             for pjt in user.projects:
                 if pjt.id not in projects:
-                    role = pjt.access_role(current_uid)
+                    role = project_access_role(pjt, current_uid)
                     if role != Role.denied:
                         projects[pjt.id] = (role, pjt)
 

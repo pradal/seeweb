@@ -2,7 +2,6 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
 from .actor import UActor
-from .auth import Role
 from .models import Base
 
 
@@ -38,27 +37,3 @@ class Project(Base):
         """
         actor = UActor(user=uid, role=role)
         self.auth.append(actor)
-
-    def access_role(self, uid):
-        """Check the type of access granted to a user.
-
-        args:
-         - uid (str): id of user willing to access project
-
-        return:
-         - role (Role): type of access granted to user
-        """
-        # user own project
-        if self.owner == uid:
-            return Role.edit
-
-        # check project auth for this user
-        for actor in self.auth:
-            if actor.user == uid:
-                return actor.role
-
-        # project is public
-        if self.public:
-            return Role.read
-        else:
-            return Role.denied

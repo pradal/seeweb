@@ -1,3 +1,4 @@
+from .auth import Role
 from .comment import Comment
 from .models import DBSession
 from .project import Project
@@ -58,3 +59,47 @@ def fetch_comments(pid, limit=None):
 
     return comments
 
+
+def project_access_role(project, uid):
+    """Check the type of access granted to a user for a given project.
+
+    args:
+     - project (Project): project to check
+     - uid (str): id of user willing to access project
+
+    return:
+     - role (Role): type of access granted to user
+    """
+    # user own project
+    if project.owner == uid:
+        return Role.edit
+
+    # check project auth for this user
+    for actor in project.auth:
+        if actor.user == uid:
+            return actor.role
+
+    # project is public
+    if project.public:
+        return Role.read
+    else:
+        return Role.denied
+
+
+def team_access_role(team, uid):
+    """Check the type of access granted to a user for a given team.
+
+    args:
+     - team (Team): team to check
+     - uid (str): id of user willing to access team
+
+    return:
+     - role (Role): type of access granted to user
+    """
+    # check team auth for this user
+    i, actor = team.get_actor(uid)
+    if actor is not None:
+        return actor.role
+
+    # teams are public by default
+    return Role.read

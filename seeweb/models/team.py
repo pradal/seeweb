@@ -78,20 +78,3 @@ class Team(Base):
                 del self.auth_user[i]
         else:
             actor.role = new_role
-
-    def access_role(self, uid):
-        """Check the type of access granted to a user.
-
-        args:
-         - uid (str): id of user willing to access team
-
-        return:
-         - role (Role): type of access granted to user
-        """
-        # check team auth for this user
-        i, actor = self.get_actor(uid)
-        if actor is not None:
-            return actor.role
-
-        # teams are public by default
-        return Role.read

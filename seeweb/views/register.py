@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.models.team import Team
 from seeweb.models.user import User
 
 from .tools import set_current_uid
@@ -11,22 +12,41 @@ from .tools import set_current_uid
 def index(request):
     if "ok" in request.params:
         session = DBSession()
-        query = session.query(User)
 
+        # check all fields are correct
         uid = request.params["user_id"]
         if len(uid) == 0:  # test user_id validity
             request.session.flash("No user id given", 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
-        query = query.filter(User.id.like(uid))
+        name = request.params["user_name"]
+        if len(name) == 0:  # test name validity
+            request.session.flash("No name given", 'warning')
+            return HTTPFound(location=request.route_url('user_register'))
+
+        email = request.params["user_email"]
+        if len(email) == 0:  # test name validity
+            request.session.flash("No email given", 'warning')
+            return HTTPFound(location=request.route_url('user_register'))
+
+        # check user does not exist already
+        # as a user
+        query = session.query(User).filter(User.id == uid)
         if len(query.all()) != 0:
             request.session.flash("User %s already exists" % uid, 'warning')
             return HTTPFound(location=request.route_url('user_register'))
-        else:
-            user = User(id=uid)
-            session.add(user)
 
-            set_current_uid(request, uid)
-            return HTTPFound(location=request.route_url('user_view_home', uid=uid))
+        # as a team
+        query = session.query(Team).filter(Team.id == uid)
+        if len(query.all()) != 0:
+            request.session.flash("User %s already exists as a team name" % uid, 'warning')
+            return HTTPFound(location=request.route_url('user_register'))
+
+        # register new user
+        user = User(id=uid, name=name, email=email)
+        session.add(user)
+
+        set_current_uid(request, uid)
+        return HTTPFound(location=request.route_url('user_view_home', uid=uid))
     else:
         return {}

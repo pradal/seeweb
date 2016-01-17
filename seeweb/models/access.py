@@ -96,10 +96,21 @@ def team_access_role(team, uid):
     return:
      - role (Role): type of access granted to user
     """
+    role = Role.read
+
     # check team auth for this user
     i, actor = team.get_actor(uid)
     if actor is not None:
-        return actor.role
+        role = actor.role
+        if role == Role.denied:  # actually will never occur since denied
+                                 # user are removed from the list
+            return role
+
+    # check team auth
+    user = get_user(uid)
+    for actor in team.auth_team:
+        if user.is_member(actor.team):
+            role = max(role, actor.role)
 
     # teams are public by default
-    return Role.read
+    return role

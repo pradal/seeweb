@@ -43,3 +43,12 @@ class User(Base):
 
     # def md5(self):
     #     return hashlib.md5(self.email.strip().lower()).hexdigest()
+
+    def is_member(self, tid):
+        """Check if user is a member of the given team
+        """
+        for team in self.teams:
+            if team.id == tid:
+                return True
+
+        return False

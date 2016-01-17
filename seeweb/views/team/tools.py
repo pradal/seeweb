@@ -1,7 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.auth import Role
-from seeweb.models.access import get_team
+from seeweb.models.access import get_team, team_access_role
 from seeweb.views.tools import get_current_uid
 
 tabs = [('Home', 'home'),
@@ -21,10 +21,7 @@ def view_init(request):
     current_uid = get_current_uid(request)
 
     # allow edition
-    allow_edit = False
-    i, actor = team.get_actor(current_uid)
-    if actor is not None:
-        allow_edit = (actor.role == Role.edit)
+    allow_edit = (team_access_role(team, current_uid) == Role.edit)
 
     return team, current_uid, allow_edit
 

@@ -64,6 +64,17 @@ def main(argv=sys.argv):
             session.add(user)
 
         # teams
+        subsub_team = Team(id="subsubteam")
+        subsub_team.description = """Test team only"""
+        session.add(subsub_team)
+        subsub_team.add_auth(Role.edit, user=users[4])
+
+        sub_team = Team(id="subteam")
+        sub_team.description = """Test team only"""
+        session.add(sub_team)
+        sub_team.add_auth(Role.edit, user=users[5])
+        sub_team.add_auth(Role.edit, team=subsub_team)
+
         vplants = Team(id="vplants")
         vplants.description = """
 Team
@@ -93,6 +104,7 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
         oa.add_auth(Role.read, user=users[1])
         oa.add_auth(Role.read, user=users[2])
         oa.add_auth(Role.edit, team=vplants)
+        oa.add_auth(Role.read, team=sub_team)
 
         # projects
         projects = [create_project(users[0], name) for name in ("pkglts",

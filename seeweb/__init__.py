@@ -17,7 +17,8 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     config.include('pyramid_jinja2')
     config.include('pyramid_beaker')
-    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_static_view(name='static', path='static', cache_max_age=3600)
+    config.add_static_view(name='avatar', path='avatar', cache_max_age=3600)
 
     # public
     config.add_route('home', '/')

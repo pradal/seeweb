@@ -53,7 +53,7 @@ def load_image(field_storage):
 
 def get_save_pth(pth):
     root = dirname(dirname(__file__))
-    return join(root, 'static', pth)
+    return join(root, pth)
 
 
 def upload_avatar(field_storage, item, item_type):

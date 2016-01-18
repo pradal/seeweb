@@ -1,30 +1,19 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Table, Text
+from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship
 
-from .actor import Actor
+from .actor import TActor
 from .auth import Role
-from .models import Base
-
-
-team_auth = Table('team_auth',
-                  Base.metadata,
-                  Column('team_id', String(255),
-                         ForeignKey('team.id'),
-                         primary_key=True),
-                  Column('actor_id', Integer,
-                         ForeignKey('actor.id'),
-                         primary_key=True),
-                  )
+from .models import Base, DBSession
 
 
 class Team(Base):
-    __tablename__ = 'team'
+    __tablename__ = 'teams'
 
-    id = Column("id", String(255), ForeignKey('userid.id'), primary_key=True)
-
-    auth = relationship("Actor", secondary=team_auth)
+    id = Column(String(255), unique=True, primary_key=True)
 
     description = Column(Text, default="")
+
+    auth = relationship("TActor")
 
     def __repr__(self):
         return "<Team(id='%s')>" % self.id
@@ -32,31 +21,41 @@ class Team(Base):
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.
         """
-        for i, actor in enumerate(self.auth_user):
+        for i, actor in enumerate(self.auth):
             if actor.user == uid:
                 return i, actor
 
         return None, None
 
-    def add_auth(self, role, user=None):
+    def add_auth(self, uid, role, is_team=False):
         """Add a new user to the team
-        """
-        actor = Actor(user=user.id, role=role)
-        self.auth_user.append(actor)
-        user.teams.append(self)
 
-    def update_auth(self, user, new_role):
-        """Update role of user in the team
+        args:
+         - uid (user_id or team_id): id of new 'user'
+         - role (Role): type of role to grant
         """
-        i, actor = self.get_actor(user.id)
+        session = DBSession()
+        actor = TActor(team=self.id, user=uid, role=role)
+        actor.is_team = is_team
+        session.add(actor)
+        # self.auth_user.append(actor)
+        # user.teams.append(self)
+
+    def update_auth(self, uid, new_role):
+        """Update role of user in the team
+        args:
+         - uid (user_id or team_id): id of 'user'
+         - new_role (Role): type of role to grant
+        """
+        i, actor = self.get_actor(uid)
 
         if new_role == Role.denied:  # remove user from team
-            try:
-                user.teams.remove(self)
-            except ValueError:
-                pass  # user already removed???
-
+            # try:
+            #     user.teams.remove(self)
+            # except ValueError:
+            #     pass  # user already removed???
+            session = DBSession()
             if actor is not None:
-                del self.auth_user[i]
+                session.delete(actor)
         else:
             actor.role = new_role

@@ -5,7 +5,6 @@ from .models import DBSession
 from .project import Project
 from .team import Team
 from .user import User
-from .userid import UserId
 
 
 def create_comment(pid, uid, msg, session=None):
@@ -26,19 +25,17 @@ def create_user(uid, name, email, session=None):
     if session is None:
         session = DBSession()
 
-    userid = UserId(id=uid)
-    session.add(userid)
-    user = User(id=userid.id, name=name, email=email)
+    user = User(id=uid, name=name, email=email)
     session.add(user)
 
     return user
 
 
-def create_project(owner, name, public=False, session=None):
+def create_project(owner_id, name, public=False, session=None):
     """Create a new project.
 
     args:
-     - owner (User): future owner of the project
+     - owner_id (uid): id of future owner of the project
      - name (str): id of the project
      - public (bool): visibility of the project (default False)
 
@@ -49,11 +46,11 @@ def create_project(owner, name, public=False, session=None):
         session = DBSession()
 
     project = Project(id=name,
-                      owner=owner.id,
+                      owner=owner_id,
                       public=public)
     session.add(project)
 
-    owner.projects.append(project)
+    # owner.projects.append(project)
 
     return project
 

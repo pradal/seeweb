@@ -69,21 +69,21 @@ def project_access_role(project, uid):
 
     return:
      - role (Role): type of access granted to user
+     - project (Project): project associated to pid
     """
     # user own project
     if project.owner == uid:
         return Role.edit
 
     # check project auth for this user
-    for actor in project.auth:
-        if actor.user == uid:
-            return actor.role
-
-    # project is public
-    if project.public:
-        return Role.read
+    i, actor = project.get_actor(uid)
+    if actor is None:
+        if project.public:
+            return Role.read
+        else:
+            return Role.denied
     else:
-        return Role.denied
+        return actor.role
 
 
 def team_access_role(team, uid):
@@ -103,14 +103,14 @@ def team_access_role(team, uid):
     if actor is not None:
         role = actor.role
         if role == Role.denied:  # actually will never occur since denied
-                                 # user are removed from the list
+                                 # users are removed from the list
             return role
 
-    # check team auth
-    user = get_user(uid)
-    for actor in team.auth_team:
-        if user.is_member(actor.team):
-            role = max(role, actor.role)
+    # # check team auth
+    # user = get_user(uid)
+    # for actor in team.auth_team:
+    #     if user.is_member(actor.team):
+    #         role = max(role, actor.role)
 
     # teams are public by default
     return role

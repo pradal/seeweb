@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.models.auth import Role
 from seeweb.models.access import get_team, team_access_role
-from seeweb.models.edit import register_team
+from seeweb.models.edit import create_team
 
 from .tools import view_init, tabs
 
@@ -21,19 +21,20 @@ def index(request):
             if " " in tid:
                 request.session.flash("Team id ('%s') cannot have space" % tid, 'warning')
             else:
-                team = get_team(request, tid)
+                team = get_team(tid)
                 if team is not None:
                     team_url = request.route_url('team_view_home', tid=tid)
                     msg = "Team <a href='%s'>'%s'</a> already exists" % (team_url, tid)
                     request.session.flash(Markup(msg), 'warning')
                 else:
                     # create new team
-                    team = register_team(tid)
+                    team = create_team(tid)
                     team.add_auth(Role.edit, user=user)
                     request.session.flash("New team %s created" % tid, 'success')
 
     teams = []
-    for team in user.teams:
+    for actor in user.teams:
+        team = get_team(actor.team)
         role = team_access_role(team, current_uid)
         if role != Role.denied:
             teams.append((role, team))

@@ -69,12 +69,12 @@ def main(argv=sys.argv):
         # teams
         subsub_team = create_team(tid="subsubteam", session=session)
         subsub_team.description = """Test team only"""
-        subsub_team.add_auth(Role.edit, user=users[4])
+        subsub_team.add_auth('doofus%d' % 0, Role.edit)
 
         sub_team = create_team(tid="subteam", session=session)
         sub_team.description = """Test team only"""
-        sub_team.add_auth(Role.edit, user=users[5])
-        sub_team.add_auth(Role.edit, team=subsub_team)
+        sub_team.add_auth('doofus%d' % 1, Role.edit)
+        sub_team.add_auth("subsubteam", Role.edit, is_team=True)
 
         vplants = create_team(tid="vplants", session=session)
         vplants.description = """
@@ -84,8 +84,8 @@ INRIA team based in Montpellier
 
         """
 
-        vplants.add_auth(Role.edit, user=users[1])
-        vplants.add_auth(Role.read, user=users[3])
+        vplants.add_auth('pradal', Role.edit)
+        vplants.add_auth('fboudon', Role.read)
 
         oa = create_team(tid="openalea", session=session)
         oa.description = """
@@ -99,27 +99,28 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
 
         """
 
-        oa.add_auth(Role.edit, user=users[0])
-        oa.add_auth(Role.read, user=users[1])
-        oa.add_auth(Role.read, user=users[2])
-        oa.add_auth(Role.edit, team=vplants)
-        oa.add_auth(Role.read, team=sub_team)
+        oa.add_auth('revesansparole', Role.edit)
+        oa.add_auth('pradal', Role.read)
+        oa.add_auth('sartzet', Role.read)
+        oa.add_auth('vplants', Role.edit, is_team=True)
+        oa.add_auth('subteam', Role.edit, is_team=True)
 
         # projects
-        projects = [create_project(users[0], name) for name in ("pkglts",
-                                                                "svgdraw",
-                                                                "workflow")]
+        projects = [create_project('revesansparole', name) for name in
+                    ("pkglts",
+                     "svgdraw",
+                     "workflow")]
 
         for i in range(5):
-            project = create_project(users[i], "pjt%d" % i)
+            project = create_project('doofus%d' % i, "pjt%d" % i)
             projects.append(project)
 
         for i in range(3):
             projects[i].public = True
 
-        projects[0].add_auth(users[2].id, Role.edit)
-        projects[1].add_auth(users[2].id, Role.read)
-        # projects[2].add_auth(openalea.id, Role.read)
+        projects[0].add_auth('sartzet', Role.edit)
+        projects[1].add_auth('sartzet', Role.read)
+        # projects[2].add_auth('openalea', Role.read, is_team=True)
 
         # comments
         pid = projects[0].id

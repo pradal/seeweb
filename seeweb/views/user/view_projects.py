@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.models.auth import Role
 from seeweb.models.access import get_project, project_access_role
-from seeweb.models.edit import register_project
+from seeweb.models.edit import create_project
 
 from .tools import tabs, view_init
 
@@ -21,7 +21,7 @@ def index(request):
             if " " in pid:
                 request.session.flash("Project id ('%s') cannot have space" % pid, 'warning')
             else:
-                project = get_project(request, pid)
+                project = get_project(pid)
                 if project is not None:
                     if project.public:
                         project_url = request.route_url('project_view_home', pid=pid)
@@ -31,14 +31,14 @@ def index(request):
                         request.session.flash("Project '%s' already exists (private)" % pid, 'warning')
                 else:
                     # create new project
-                    project = register_project(user, pid)
+                    create_project(current_uid, pid)
                     request.session.flash("New project %s created" % pid, 'success')
 
     projects = []
-    for pjt in user.projects:
-        role = project_access_role(pjt, current_uid)
+    for project in user.projects:
+        role = project_access_role(project, current_uid)
         if role != Role.denied:
-            projects.append((role, pjt))
+            projects.append((role, project))
 
     return {"user": user,
             "tabs": tabs,

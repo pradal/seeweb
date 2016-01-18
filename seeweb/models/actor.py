@@ -8,6 +8,7 @@ class PActor(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     project = Column(String(255), ForeignKey("projects.id"))
     user = Column(String(255), ForeignKey("users.id"))
+    is_team = Column(Boolean, default=False)
     role = Column(Integer)
 
     def __repr__(self):

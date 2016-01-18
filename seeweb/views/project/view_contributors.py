@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.models.auth import Role
 
 from .tools import tabs, view_init
 
@@ -11,8 +12,17 @@ def index(request):
     session = DBSession()
     project, allow_edit = view_init(request, session)
 
+    members = [('user', Role.edit, project.owner)]
+    for actor in project.auth:
+        if actor.is_team:
+            typ = 'team'
+        else:
+            typ = 'user'
+        members.append((typ, actor.role, actor.user))
+
     return {"project": project,
             "tabs": tabs,
             "tab": 'contributors',
             "allow_edit": allow_edit,
-            "sections": []}
+            "sections": [],
+            "members": members}

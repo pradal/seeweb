@@ -2,7 +2,8 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
 from .actor import PActor
-from .models import Base, DBSession
+from .auth import Role
+from .models import Base
 
 
 class Project(Base):
@@ -33,8 +34,24 @@ class Project(Base):
 
         return None
 
-    def add_auth(self, session, uid, role):
+    def add_auth(self, session, uid, role, is_team=False):
         """Add a new user,role authorization to the project
         """
         actor = PActor(project=self.id, user=uid, role=role)
         session.add(actor)
+        actor.is_team = is_team
+
+    def update_auth(self, session, uid, new_role):
+        """Update role of user in the team
+        args:
+         - uid (user_id or team_id): id of 'user'
+         - new_role (Role): type of role to grant
+        """
+        actor = self.get_actor(uid)
+
+        if new_role == Role.denied:  # remove user from team
+            if actor is not None:
+                session.delete(actor)
+        else:
+            actor.role = new_role
+            session.add(actor)

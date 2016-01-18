@@ -83,6 +83,23 @@ def is_member(session, team, uid):
     return False
 
 
+def is_contributor(session, project, uid):
+    """Check whether project has a given member.
+
+    Also check sub teams
+    """
+    actors = list(project.auth)
+    while len(actors) > 0:
+        actor = actors.pop(0)
+        if actor.user == uid:
+            return actor.role != Role.denied  # potential problem here, better ensure Role.denied never occurs
+
+        if actor.is_team:
+            actors.extend(get_team(session, actor.user).auth)
+
+    return False
+
+
 def project_access_role(session, project, uid):
     """Check the type of access granted to a user for a given project.
 
@@ -98,15 +115,25 @@ def project_access_role(session, project, uid):
     if project.owner == uid:
         return Role.edit
 
-    # check project auth for this user
+    # check team auth for this user, supersede sub_team auth
     actor = project.get_actor(uid)
-    if actor is None:
-        if project.public:
-            return Role.read
-        else:
-            return Role.denied
-    else:
+    if actor is not None:
         return actor.role
+
+    if project.public:
+        role = Role.read
+    else:
+        role = Role.denied
+
+    # check team auth in subteams
+    for actor in project.auth:
+        print "ACTOR", "\n" * 10, actor.user, actor.is_team
+        if actor.is_team:
+            tid = actor.user
+            if is_member(session, get_team(session, tid), uid):
+                role = max(role, actor.role)
+
+    return role
 
 
 def team_access_role(session, team, uid):
@@ -119,19 +146,19 @@ def team_access_role(session, team, uid):
     return:
      - role (Role): type of access granted to user
     """
-    role = Role.read
+    # check team auth for this user, supersede sub_team auth
+    actor = team.get_actor(uid)
+    if actor is not None:
+        return actor.role
 
     # check team auth in subteams
+    role = Role.read
+
     for actor in team.auth:
         if actor.is_team:
             tid = actor.user
             if is_member(session, get_team(session, tid), uid):
                 role = max(role, actor.role)
-
-    # check team auth for this user, supersede sub_team auth
-    actor = team.get_actor(uid)
-    if actor is not None:
-        role = actor.role
 
     # teams are public by default
     return role

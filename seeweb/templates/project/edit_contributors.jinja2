@@ -1,4 +1,56 @@
 {% extends "project_edit.html" %}
 
 {% block project_edit_body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Contributors</h3>
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>user</th>
+              <th>role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>
+                    <input type='text' name='new_member' placeholder='new user id'>
+                </td>
+                <td>
+                    <select name="role_new">
+                        <option value="read" selected>read</option>
+                        <option value="edit">edit</option>
+                    </select>
+                </td>
+            </tr>
+            {% for type, role, uid in members %}
+            <tr>
+              <td>
+                {% if type == 'user' %}
+                    <a href="{{ request.route_url('user_view_home', uid=uid) }}">{{ uid }}</a>
+                {% elif type == 'team' %}
+                    <a href="{{ request.route_url('team_view_members', tid=uid) }}">{{ uid }}</a>
+                {% else %}
+                    unknown
+                {% endif %}
+              </td>
+              <td>
+                <select name="role_{{ uid }}">
+                    <option value="denied" {% if role == 0 %}selected{% endif %}>denied</option>
+                    <option value="read" {% if role == 1 %}selected{% endif %}>read</option>
+                    <option value="edit" {% if role == 2 %}selected{% endif %}>edit</option>
+                </select>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

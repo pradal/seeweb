@@ -8,31 +8,45 @@ from seeweb.models.access import get_team, get_user, is_member
 from .tools import edit_common, edit_init, tabs
 
 
-def fetch_new_user(session, new_uid):
-    user = get_user(session, new_uid)
-    if user is None:
-        user = get_team(session, new_uid)
-
-    return user
-
-
 def register_new_user(request, session, team, new_uid):
-    user = fetch_new_user(session, new_uid)
-    if user is None:
-        request.session.flash("User %s does not exists" % new_uid, 'warning')
-    else:
-        # check user already in team
+    if new_uid == team.id:
+        msg = "Cannot be a member of itself"
+        request.session.flash(msg, 'warning')
+        return False
+
+    role = Role.from_str(request.params.get("role_new", "denied"))
+    if role == Role.denied:
+        msg = "You granted 'denied' to %s, did nothing" % new_uid
+        request.session.flash(msg, 'warning')
+        return False
+
+    member = get_user(session, new_uid)
+    if member is not None:
+        if team.get_actor(new_uid) is not None:
+            request.session.flash("%s already a member" % new_uid, 'warning')
+            return False
+
+        team.add_auth(session, new_uid, role)
+        request.session.flash("New member %s added" % member.id, 'success')
+        return True
+
+    member = get_team(session, new_uid)
+    if member is not None:
         if is_member(session, team, new_uid):
             request.session.flash("%s already a member" % new_uid, 'warning')
-        else:
-            role = Role.from_str(request.params.get("role_new", "denied"))
-            if role == Role.denied:
-                msg = "You granted 'denied' to %s, did nothing" % new_uid
-                request.session.flash(msg, 'warning')
-            else:
-                team.add_auth(session, new_uid, role)
-                request.session.flash("New member %s added" % user.id,
-                                      'success')
+            return False
+
+        if is_member(session, member, team.id):
+            msg = "Circular reference %s is a member of %s" % (team.id, new_uid)
+            request.session.flash(msg, 'warning')
+            return False
+
+        team.add_auth(session, new_uid, role, is_team=True)
+        request.session.flash("New member %s added" % new_uid, 'success')
+        return True
+
+    request.session.flash("User %s does not exists" % new_uid, 'warning')
+    return False
 
 
 @view_config(route_name='team_edit_members',
@@ -56,12 +70,11 @@ def view(request):
         # check for new members
         new_uid = request.params['new_member']
         if len(new_uid) > 0:
-            register_new_user(request, session, team, new_uid)
-            need_reload = True
+            need_reload = register_new_user(request, session, team, new_uid)
 
         # update user roles
         for actor in team.auth:
-            if actor.user == new_uid:
+            if actor.user == new_uid and need_reload:
                 new_role_str = request.params.get("role_new", "denied")
             else:
                 new_role_str = request.params.get("role_%s" % actor.user,

@@ -59,6 +59,8 @@ def edit_common(request, session, project):
     public = 'visibility' in request.params
     project.public = public
 
+    return False
+
 
 def fetch_documentation(url, pid):
     """Try to fetch documentation from given url

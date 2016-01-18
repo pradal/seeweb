@@ -5,10 +5,15 @@
 <div class="row">
     <div class="col-md-12">
         {% if project.doc_url|length == 0 %}
-        No Documentation associated to this project
+        No remote documentation associated to this project
         {% else %}
-        <a href="{{ project.doc_url }}">{{ host_name }}</a>
+        <a href="{{ project.doc_url }}">{{ doc_host }}</a>
         {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {{ doc }}
     </div>
 </div>
 

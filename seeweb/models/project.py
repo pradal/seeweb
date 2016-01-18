@@ -12,6 +12,7 @@ class Project(Base):
     owner = Column(String(255), ForeignKey("users.id"))
 
     doc_url = Column(Text, default="")
+    doc = Column(Text, default="")
 
     public = Column(Boolean)
     auth = relationship("PActor")

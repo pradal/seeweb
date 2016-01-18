@@ -1,6 +1,6 @@
 from jinja2 import Markup
 from pyramid.view import view_config
-from urlparse import urlparse
+from urlparse import urlsplit
 
 from seeweb.models import DBSession
 
@@ -13,13 +13,13 @@ def index(request):
     session = DBSession()
     project, allow_edit = view_init(request, session)
 
-    doc_host = ""
+    hostname = ""
     if len(project.doc_url) > 0:
-        url = urlparse(project.doc_url)
-        doc_host = url.hostname
+        url = urlsplit(project.doc_url)
+        hostname = url.hostname
 
-    if doc_host is None or len(doc_host) == 0:
-        doc_host = "doc host"
+    if hostname is None or len(hostname) == 0:
+        hostname = "doc hostname"
 
     doc = Markup(project.doc)
 
@@ -28,5 +28,5 @@ def index(request):
             "tab": 'doc',
             "allow_edit": allow_edit,
             "sections": [],
-            "doc_host": doc_host,
+            "hostname": hostname,
             "doc": doc}

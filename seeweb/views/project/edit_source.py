@@ -23,9 +23,17 @@ def view(request):
         pass
     elif 'update' in request.params:
         edit_common(request, session, project)
+    elif "github" in request.params:
+        project.src_url = "https://github.com/%s/%s" % (project.owner,
+                                                        project.id)
+    elif "gforge" in request.params:
+        project.src_url = "https://gforge.inria.fr/projects/%s" % project.id
     else:
         pass
 
+    src_hosts = ["github", "gforge"]
+
     return {"project": project,
             "tabs": tabs,
-            "tab": 'source'}
+            "tab": 'source',
+            "src_hosts": src_hosts}

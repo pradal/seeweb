@@ -1,7 +1,7 @@
 {% extends "project_edit.html" %}
 
 {% block project_edit_body %}
-  <div class="form-group">
+<div class="form-group">
     <label>hosts:</label>
     {% for hostname in doc_hosts %}
         <button class="btn" type="submit" name="{{ hostname }}">{{ hostname }}</button>

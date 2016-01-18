@@ -14,6 +14,8 @@ class Project(Base):
     doc_url = Column(Text, default="")
     doc = Column(Text, default="")
 
+    src_url = Column(Text, default="")
+
     public = Column(Boolean)
     auth = relationship("PActor")
 

@@ -4,7 +4,11 @@
 
 <div class="row">
     <div class="col-md-12">
-        link to github
+        {% if project.src_url|length == 0 %}
+        No remote documentation associated to this project
+        {% else %}
+        <a href="{{ project.src_url }}">{{ hostname }}</a>
+        {% endif %}
     </div>
 </div>
 

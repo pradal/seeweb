@@ -21,7 +21,7 @@ def view_init(request):
     current_uid = get_current_uid(request)
 
     # allow edition
-    allow_edit = (team_access_role(team, current_uid) == Role.edit)
+    allow_edit = (current_uid is not None) and (team_access_role(team, current_uid) == Role.edit)
 
     return team, current_uid, allow_edit
 

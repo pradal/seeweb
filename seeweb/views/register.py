@@ -2,7 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.models.team import Team
+from seeweb.models.access import get_team, get_user
 from seeweb.models.user import User
 
 from .tools import set_current_uid
@@ -31,14 +31,14 @@ def index(request):
 
         # check user does not exist already
         # as a user
-        query = session.query(User).filter(User.id == uid)
-        if len(query.all()) != 0:
+        user = get_user(uid)
+        if user is not None:
             request.session.flash("User %s already exists" % uid, 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
         # as a team
-        query = session.query(Team).filter(Team.id == uid)
-        if len(query.all()) != 0:
+        team = get_team(uid)
+        if team is not None:
             request.session.flash("User %s already exists as a team name" % uid, 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 

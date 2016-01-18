@@ -27,10 +27,16 @@
                     </select>
                 </td>
             </tr>
-            {% for role, uid in members %}
+            {% for type, role, uid in members %}
             <tr>
               <td>
-                <a href="{{ request.route_url('user_view_home', uid=uid) }}">{{ uid }}</a>
+                {% if type == 'user' %}
+                    <a href="{{ request.route_url('user_view_home', uid=uid) }}">{{ uid }}</a>
+                {% elif type == 'team' %}
+                    <a href="{{ request.route_url('team_view_members', tid=uid) }}">{{ uid }}</a>
+                {% else %}
+                    unknown
+                {% endif %}
               </td>
               <td>
                 <select name="role_{{ uid }}">

@@ -1,37 +1,30 @@
 from datetime import datetime
 
 from .comment import Comment
-from .models import DBSession
 from .project import Project
 from .team import Team
 from .user import User
 
 
-def create_comment(pid, uid, msg, session=None):
+def create_comment(session, pid, uid, msg):
     """Create a new comment now.
     """
-    if session is None:
-        session = DBSession()
-
     cmt = Comment(project=pid, author=uid, creation=datetime.now(), message=msg)
     session.add(cmt)
 
     return cmt
 
 
-def create_user(uid, name, email, session=None):
+def create_user(session, uid, name, email):
     """Create a new user.
     """
-    if session is None:
-        session = DBSession()
-
     user = User(id=uid, name=name, email=email)
     session.add(user)
 
     return user
 
 
-def create_project(owner_id, name, public=False, session=None):
+def create_project(session, owner_id, name, public=False):
     """Create a new project.
 
     args:
@@ -42,9 +35,6 @@ def create_project(owner_id, name, public=False, session=None):
     return:
      - (Project): project has been added to user project list
     """
-    if session is None:
-        session = DBSession()
-
     project = Project(id=name,
                       owner=owner_id,
                       public=public)
@@ -55,14 +45,11 @@ def create_project(owner_id, name, public=False, session=None):
     return project
 
 
-def create_team(tid, session=None):
+def create_team(session, tid):
     """Create a new team.
 
     Does not test existence of team beforehand
     """
-    if session is None:
-        session = DBSession()
-
     team = Team(id=tid)
     session.add(team)
 

@@ -1,7 +1,7 @@
-import os
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
+from seeweb.models import DBSession
 from seeweb.views.tools import upload_avatar
 
 from .tools import edit_common, edit_init, tabs
@@ -10,20 +10,20 @@ from .tools import edit_common, edit_init, tabs
 @view_config(route_name='team_edit_home',
              renderer='templates/team/edit_home.jinja2')
 def view(request):
-    team, current_uid = edit_init(request)
-    if team is None:
-        return current_uid
+    session = DBSession()
+    team, current_uid = edit_init(request, session)
 
     if 'back' in request.params:
         request.session.flash("Edition cancelled", 'success')
-        return HTTPFound(location=request.route_url('team_view_home', tid=team.id))
+        return HTTPFound(location=request.route_url('team_view_home',
+                                                    tid=team.id))
 
     if 'default' in request.params:
         # reload default values for this user
         # actually already done
         pass
     elif 'update' in request.params:
-        edit_common(request, team)
+        edit_common(request, session, team)
 
         if 'description' in request.params:
             # sanitize

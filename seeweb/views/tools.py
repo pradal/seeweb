@@ -1,3 +1,4 @@
+from docutils.core import publish_parts
 import os
 from os.path import dirname, exists, join
 from PIL import Image
@@ -81,3 +82,10 @@ def upload_avatar(field_storage, item, item_type):
     img.save(pth)
 
     return pth
+
+
+def convert_rst_to_html(rst):
+    """Convert restructured text into html
+    """
+    html = publish_parts(rst, writer_name='html')['html_body']
+    return html

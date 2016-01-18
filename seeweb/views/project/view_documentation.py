@@ -1,14 +1,16 @@
 from pyramid.view import view_config
 from urlparse import urlparse
 
+from seeweb.models import DBSession
+
 from .tools import tabs, view_init
 
 
-@view_config(route_name='project_view_doc', renderer='templates/project/view_doc.jinja2')
+@view_config(route_name='project_view_doc',
+             renderer='templates/project/view_doc.jinja2')
 def index(request):
-    project, allow_edit = view_init(request)
-    if project is None:
-        return allow_edit
+    session = DBSession()
+    project, allow_edit = view_init(request, session)
 
     doc_host = ""
     if len(project.doc_url) > 0:

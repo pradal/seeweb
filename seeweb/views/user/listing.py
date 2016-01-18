@@ -17,5 +17,6 @@ def view(request):
 
     users = query.all()
 
-    return {'users': users, 'search_pattern': search_pattern}
+    return {'users': users,
+            'search_pattern': search_pattern}
 

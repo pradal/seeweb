@@ -11,44 +11,46 @@ tabs = [('Home', 'home'),
         ('Comments', 'comments')]
 
 
-def view_init(request):
+def view_init(request, session):
     """Common init for all 'view' parts
     """
     pid = request.matchdict['pid']
 
-    project = get_project(pid)
+    project = get_project(session, pid)
     if project is None:
         request.session.flash("Project %s does not exists" % pid, 'warning')
-        return None, HTTPFound(location=request.route_url('home'))
+        raise HTTPFound(location=request.route_url('home'))
 
     current_uid = get_current_uid(request)
-    role = project_access_role(project, current_uid)
+    role = project_access_role(session, project, current_uid)
     if role == Role.denied:
         request.session.flash("Access to %s not granted for you" % pid,
                               'warning')
-        return None, HTTPFound(location=request.route_url('home'))
+        raise HTTPFound(location=request.route_url('home'))
 
     allow_edit = (role == Role.edit)
 
     return project, allow_edit
 
 
-def edit_init(request):
+def edit_init(request, session):
     """Common init for all 'edit' views.
     """
-    project, allow_edit = view_init(request)
+    project, allow_edit = view_init(request, session)
 
     if not allow_edit:
-        request.session.flash("Access to %s edition not granted for you" % project.id,
-                              'warning')
-        return None, HTTPFound(location=request.route_url('home'))
+        msg = "Access to %s edition not granted for you" % project.id
+        request.session.flash(msg, 'warning')
+        raise HTTPFound(location=request.route_url('home'))
 
     return project, allow_edit
 
 
-def edit_common(request, project):
+def edit_common(request, session, project):
     """Common edition operations
     """
+    del session
+
     # edit team visibility
     public = 'visibility' in request.params
     project.public = public

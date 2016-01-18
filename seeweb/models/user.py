@@ -1,8 +1,7 @@
-# import hashlib
+import hashlib
 from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship
 
-from .auth import Role
 from .models import Base
 
 
@@ -24,5 +23,5 @@ class User(Base):
                                                            self.name,
                                                            self.email)
 
-    # def md5(self):
-    #     return hashlib.md5(self.email.strip().lower()).hexdigest()
+    def md5(self):
+        return hashlib.md5(self.email.strip().lower()).hexdigest()

@@ -24,15 +24,14 @@ class Project(Base):
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.
         """
-        for i, actor in enumerate(self.auth):
+        for actor in self.auth:
             if actor.user == uid:
-                return i, actor
+                return actor
 
-        return None, None
+        return None
 
-    def add_auth(self, uid, role):
+    def add_auth(self, session, uid, role):
         """Add a new user,role authorization to the project
         """
-        session = DBSession()
         actor = PActor(project=self.id, user=uid, role=role)
         session.add(actor)

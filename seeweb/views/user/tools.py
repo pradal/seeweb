@@ -9,14 +9,14 @@ tabs = [('Home', 'home'),
         ('Teams', 'teams')]
 
 
-def view_init(request):
+def view_init(request, session):
     """Common init for all 'view'.
     """
     uid = request.matchdict['uid']
-    user = get_user(uid)
+    user = get_user(session, uid)
     if user is None:
         request.session.flash("User %s does not exists" % uid, 'warning')
-        return HTTPFound(location=request.route_url('home'))
+        raise HTTPFound(location=request.route_url('home'))
 
     current_uid = get_current_uid(request)
     allow_edit = (uid == current_uid)
@@ -24,26 +24,22 @@ def view_init(request):
     return user, current_uid, allow_edit
 
 
-def edit_init(request):
+def edit_init(request, session):
     """Common init for all 'edit' views.
     """
-    uid = request.matchdict['uid']
-    current_uid = get_current_uid(request)
+    user, current_uid, allow_edit = view_init(request, session)
 
-    if uid != current_uid:
-        request.session.flash("Access to %s edition not granted for you" % uid,
-                              'warning')
-        return None, HTTPFound(location=request.route_url('home'))
-
-    user = get_user(uid)
-    if user is None:
-        request.session.flash("User %s does not exists" % uid, 'warning')
-        return None, HTTPFound(location=request.route_url('home'))
+    if not allow_edit:
+        msg = "Access to %s edition not granted for you" % user.id
+        request.session.flash(msg, 'warning')
+        raise HTTPFound(location=request.route_url('home'))
 
     return user, current_uid
 
 
-def edit_common(request, user):
+def edit_common(request, session, user):
     """Common edition operations
     """
-    pass
+    del request
+    del session
+    del user

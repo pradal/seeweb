@@ -31,15 +31,16 @@ def index(request):
 
         # check user does not exist already
         # as a user
-        user = get_user(uid)
+        user = get_user(session, uid)
         if user is not None:
             request.session.flash("User %s already exists" % uid, 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
         # as a team
-        team = get_team(uid)
+        team = get_team(session, uid)
         if team is not None:
-            request.session.flash("User %s already exists as a team name" % uid, 'warning')
+            msg = "User %s already exists as a team name" % uid
+            request.session.flash(msg, 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
         # register new user
@@ -47,6 +48,7 @@ def index(request):
         session.add(user)
 
         set_current_uid(request, uid)
-        return HTTPFound(location=request.route_url('user_view_home', uid=uid))
+        return HTTPFound(location=request.route_url('user_view_home',
+                                                    uid=uid))
     else:
         return {}

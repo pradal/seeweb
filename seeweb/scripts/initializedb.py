@@ -43,40 +43,40 @@ def main(argv=sys.argv):
         session = DBSession()
 
         # users
-        users = [create_user(uid='revesansparole',
+        users = [create_user(session,
+                             uid='revesansparole',
                              name="Jerome Chopard",
-                             email="revesansparole@gmail.com",
-                             session=session),
-                 create_user(uid='pradal',
+                             email="revesansparole@gmail.com"),
+                 create_user(session,
+                             uid='pradal',
                              name="Christophe Pradal",
-                             email="christophe.pradal@inria.fr",
-                             session=session),
-                 create_user(uid='sartzet',
+                             email="christophe.pradal@inria.fr"),
+                 create_user(session,
+                             uid='sartzet',
                              name="Simon Artzet",
-                             email="simon.aertzet@inria.fr",
-                             session=session),
-                 create_user(uid='fboudon',
+                             email="simon.aertzet@inria.fr"),
+                 create_user(session,
+                             uid='fboudon',
                              name="Fred Boudon",
-                             email="fred.boudon@inria.fr",
-                             session=session)]
+                             email="fred.boudon@inria.fr")]
 
         for i in range(4):
-            users.append(create_user(uid='doofus%d' % i,
+            users.append(create_user(session,
+                                     uid='doofus%d' % i,
                                      name="Dummy Doofus",
-                                     email="dummy.doofus@email.com",
-                                     session=session))
+                                     email="dummy.doofus@email.com"))
 
         # teams
-        subsub_team = create_team(tid="subsubteam", session=session)
+        subsub_team = create_team(session, tid="subsubteam")
         subsub_team.description = """Test team only"""
-        subsub_team.add_auth('doofus%d' % 0, Role.edit)
+        subsub_team.add_auth(session, 'doofus%d' % 0, Role.edit)
 
-        sub_team = create_team(tid="subteam", session=session)
+        sub_team = create_team(session, tid="subteam")
         sub_team.description = """Test team only"""
-        sub_team.add_auth('doofus%d' % 1, Role.edit)
-        sub_team.add_auth("subsubteam", Role.edit, is_team=True)
+        sub_team.add_auth(session, 'doofus%d' % 1, Role.edit)
+        sub_team.add_auth(session, "subsubteam", Role.edit, is_team=True)
 
-        vplants = create_team(tid="vplants", session=session)
+        vplants = create_team(session, tid="vplants")
         vplants.description = """
 Team
 ----
@@ -84,10 +84,10 @@ INRIA team based in Montpellier
 
         """
 
-        vplants.add_auth('pradal', Role.edit)
-        vplants.add_auth('fboudon', Role.read)
+        vplants.add_auth(session, 'pradal', Role.edit)
+        vplants.add_auth(session, 'fboudon', Role.read)
 
-        oa = create_team(tid="openalea", session=session)
+        oa = create_team(session, tid="openalea")
         oa.description = """
 Community
 ---------
@@ -99,30 +99,33 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
 
         """
 
-        oa.add_auth('revesansparole', Role.edit)
-        oa.add_auth('pradal', Role.read)
-        oa.add_auth('sartzet', Role.read)
-        oa.add_auth('vplants', Role.edit, is_team=True)
-        oa.add_auth('subteam', Role.edit, is_team=True)
+        oa.add_auth(session, 'revesansparole', Role.edit)
+        oa.add_auth(session, 'pradal', Role.read)
+        oa.add_auth(session, 'sartzet', Role.read)
+        oa.add_auth(session, 'vplants', Role.edit, is_team=True)
+        oa.add_auth(session, 'subteam', Role.edit, is_team=True)
 
         # projects
-        projects = [create_project('revesansparole', name) for name in
+        projects = [create_project(session, 'revesansparole', name) for name in
                     ("pkglts",
                      "svgdraw",
                      "workflow")]
 
         for i in range(5):
-            project = create_project('doofus%d' % i, "pjt%d" % i)
+            project = create_project(session, 'doofus%d' % i, "pjt%d" % i)
             projects.append(project)
 
         for i in range(3):
             projects[i].public = True
 
-        projects[0].add_auth('sartzet', Role.edit)
-        projects[1].add_auth('sartzet', Role.read)
-        # projects[2].add_auth('openalea', Role.read, is_team=True)
+        projects[0].add_auth(session, 'sartzet', Role.edit)
+        projects[1].add_auth(session, 'sartzet', Role.read)
+        # projects[2].add_auth(session, 'openalea', Role.read, is_team=True)
 
         # comments
         pid = projects[0].id
         for i in range(4):
-            create_comment(pid, users[i].id, "very nasty comment (%d)" % i)
+            create_comment(session,
+                           pid,
+                           users[i].id,
+                           "very nasty comment (%d)" % i)

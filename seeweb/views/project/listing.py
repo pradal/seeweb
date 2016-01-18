@@ -17,5 +17,6 @@ def view(request):
 
     projects = query.all()
 
-    return {'projects': projects, 'search_pattern': search_pattern}
+    return {'projects': projects,
+            'search_pattern': search_pattern}
 

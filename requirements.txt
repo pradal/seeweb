@@ -1,3 +1,5 @@
+docutils
+pillow
 pyramid
 pyramid_jinja2
 pyramid_debugtoolbar
@@ -7,3 +9,4 @@ SQLAlchemy
 transaction
 zope.sqlalchemy
 waitress
+

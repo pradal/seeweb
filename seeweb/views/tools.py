@@ -65,21 +65,24 @@ def upload_avatar(field_storage, item, item_type):
     except IOError:
         return None
 
-    img.thumbnail((256, 256))
+    s = 256
+    thumb = Image.new('RGBA', (s, s))
+    img.thumbnail((s, s))
+    thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
 
     pth = get_save_pth('avatar/%s/%s.png' % (item_type, item.id))
 
     if exists(pth):
         os.remove(pth)
-    img.save(pth)
+    thumb.save(pth)
 
-    img.thumbnail((64, 64))
+    thumb.thumbnail((64, 64))
 
     pth = get_save_pth('avatar/%s/%s_small.png' % (item_type, item.id))
 
     if exists(pth):
         os.remove(pth)
-    img.save(pth)
+    thumb.save(pth)
 
     return pth
 

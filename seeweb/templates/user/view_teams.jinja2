@@ -1,3 +1,5 @@
+{% from 'templates/team/macro.html' import list_teams with context %}
+
 {% extends "user_view.html" %}
 
 {% block user_view_body %}
@@ -5,13 +7,15 @@
 <div class="panel panel-default">
   <div class="panel-body teams">
     {% if allow_edit %}
-        <div class="row pjt-summary">
-            <form action="{{ request.route_url('user_view_teams', uid=user.id) }}" method='POST'>
-                <div class="form-group">
-                    <button class="btn btn-primary pull-right" type="submit" name="new_team">Create</button>
-                    <input type='text' name='team_id' placeholder='new team id'>
-                </div>
-            </form>
+        <div class="row">
+            <div class="container col-md-12">
+                <form action="{{ request.route_url('user_view_teams', uid=user.id) }}" method='POST'>
+                    <div class="form-group">
+                        <button class="btn btn-primary pull-right" type="submit" name="new_team">Create</button>
+                        <input type='text' name='team_id' placeholder='new team id'>
+                    </div>
+                </form>
+            </div>
         </div>
     {% endif %}
     {% if teams|length == 0 %}
@@ -19,17 +23,11 @@
         This user does not belong to any public team.
     </div>
     {% else %}
-    {% for role, team in teams %}
-        <div class="row pjt-summary">
-            <a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a>
-            {% if role == 2 %}
-            <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit_home', tid=team.id) }}">
-              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-              Edit team
-            </a>
-            {% endif %}
+        <div class="container-fluid">
+            <div class="list-group">
+                {{ list_teams(teams) }}
+            </div>
         </div>
-    {% endfor %}
     {% endif %}
   </div>
 </div>

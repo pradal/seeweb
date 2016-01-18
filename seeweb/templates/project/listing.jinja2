@@ -1,47 +1,42 @@
+{% from 'macro.html' import list_projects with context %}
+
 {% extends "project_layout.html" %}
 
 {% block project_body %}
-    {% if search_pattern == "" %}
-    <h1>All Projects</h1>
-    {% else %}
-    <h1>Projects starting with: '{{ search_pattern[:-1] }}'</h1>
-    {% endif %}
-
-    <form class="form-inline" role="search" action="{{ request.route_url('project_list') }}">
-        <div class="form-group">
-          <input type="text" class="form-control" name="query" placeholder="Search for name">
+    <div class="row">
+        <div class="container col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All Projects</h1>
+            {% else %}
+            <h1>Projects starting with: '{{ search_pattern[:-1] }}'</h1>
+            {% endif %}
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-        {% if search_pattern != "" %}
-        <button type="all" class="btn btn-default" name="all">Display all</button>
-        {% endif %}
-    </form>
+    </div>
+
+    <div class="row">
+        <div class="container col-md-12">
+            <form class="form-inline" role="search" action="{{ request.route_url('project_list') }}">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="query" placeholder="Search for name">
+                </div>
+                <button type="submit" class="btn btn-default">Search</button>
+                {% if search_pattern != "" %}
+                <button type="all" class="btn btn-default" name="all">Display all</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 
     {% if projects|length == 0 %}
-    <h2>No project found</h2>
-    {% else %}
-    <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>name</th>
-              <th>owner</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for project in projects %}
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>
-                <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
-              </td>
-              <td>{{ project.owner }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <div class="row">
+        No project found.
     </div>
+    {% else %}
+        <div class="container-fluid">
+            <div class="list-group">
+                {{ list_projects(projects) }}
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
 

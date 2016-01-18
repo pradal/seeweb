@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.models.auth import Role
 from seeweb.models.project import Project
 
 
@@ -15,7 +16,8 @@ def view(request):
     else:
         search_pattern = ""
 
-    projects = query.all()
+    query = query.order_by(Project.id)
+    projects = [(Role.read, project) for project in query.all()]
 
     return {'projects': projects,
             'search_pattern': search_pattern}

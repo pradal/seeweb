@@ -1,0 +1,22 @@
+{% macro list_teams(teams) -%}
+{% for role, team in teams %}
+    <div class="list-group-item">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="{{ request.static_url('seeweb:static/avatar/team/%s_small.png' % team.id) }}" />
+                </div>
+                <div class="col-md-10">
+                    <a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a>
+                    {% if role == 2 %}
+                    <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit_home', tid=team.id) }}">
+                      <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+                      Edit team
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{%- endmacro %}

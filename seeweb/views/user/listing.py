@@ -15,6 +15,7 @@ def view(request):
     else:
         search_pattern = ""
 
+    query = query.order_by(User.id)
     users = query.all()
 
     return {'users': users,

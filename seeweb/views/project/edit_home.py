@@ -25,9 +25,9 @@ def view(request):
     elif 'update' in request.params:
         edit_common(request, session, project)
 
-        # if 'description' in request.params:
-        #     # sanitize
-        #     project.description = request.params['description']
+        if 'description' in request.params:
+            # sanitize
+            project.description = request.params['description']
     elif 'submit_avatar' in request.params:
         field_storage = request.params['avatar']
         if field_storage == "":

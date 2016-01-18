@@ -12,6 +12,8 @@ class Project(Base):
     id = Column(String(255), unique=True, primary_key=True)
     owner = Column(String(255), ForeignKey("users.id"))
 
+    description = Column(Text, default="")
+
     doc_url = Column(Text, default="")
     doc = Column(Text, default="")
 

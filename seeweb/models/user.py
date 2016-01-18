@@ -1,7 +1,9 @@
 # import hashlib
 from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship
-from models import Base
+
+from .auth import Role
+from .models import Base
 
 
 class User(Base):

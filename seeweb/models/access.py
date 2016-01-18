@@ -60,6 +60,23 @@ def fetch_comments(pid, limit=None):
     return comments
 
 
+def is_member(team, uid):
+    """Check whether team has a given member.
+
+    Also check sub teams
+    """
+    actors = list(team.auth)
+    while len(actors) > 0:
+        actor = actors.pop(0)
+        if actor.user == uid:
+            return actor.role != Role.denied
+
+        if actor.is_team:
+            actors.extend(get_team(actor.user).auth)
+
+    return False
+
+
 def project_access_role(project, uid):
     """Check the type of access granted to a user for a given project.
 
@@ -106,11 +123,12 @@ def team_access_role(team, uid):
                                  # users are removed from the list
             return role
 
-    # # check team auth
-    # user = get_user(uid)
-    # for actor in team.auth_team:
-    #     if user.is_member(actor.team):
-    #         role = max(role, actor.role)
+    # check team auth
+    for actor in team.auth:
+        if actor.is_team:
+            tid = actor.user
+            if is_member(get_team(tid), uid):
+                role = max(role, actor.role)
 
     # teams are public by default
     return role

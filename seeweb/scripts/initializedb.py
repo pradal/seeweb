@@ -7,9 +7,10 @@ from sqlalchemy import engine_from_config
 
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
-from seeweb.models.edit import create_comment, create_project
-from seeweb.models.team import Team
-from seeweb.models.user import User
+from seeweb.models.edit import (create_comment,
+                                create_project,
+                                create_team,
+                                create_user)
 
 
 def usage(argv):
@@ -42,52 +43,51 @@ def main(argv=sys.argv):
         session = DBSession()
 
         # users
-        users = [User(id='revesansparole',
-                      name="Jerome Chopard",
-                      email="revesansparole@gmail.com"),
-                 User(id='pradal',
-                      name="Christophe Pradal",
-                      email="christophe.pradal@inria.fr"),
-                 User(id='sartzet',
-                      name="Simon Artzet",
-                      email="simon.aertzet@inria.fr"),
-                 User(id='fboudon',
-                      name="Fred Boudon",
-                      email="fred.boudon@inria.fr")]
+        users = [create_user(uid='revesansparole',
+                             name="Jerome Chopard",
+                             email="revesansparole@gmail.com",
+                             session=session),
+                 create_user(uid='pradal',
+                             name="Christophe Pradal",
+                             email="christophe.pradal@inria.fr",
+                             session=session),
+                 create_user(uid='sartzet',
+                             name="Simon Artzet",
+                             email="simon.aertzet@inria.fr",
+                             session=session),
+                 create_user(uid='fboudon',
+                             name="Fred Boudon",
+                             email="fred.boudon@inria.fr",
+                             session=session)]
 
         for i in range(4):
-            users.append(User(id='doofus%d' % i,
-                              name="Dummy Doofus",
-                              email="dummy.doofus@email.com"))
-
-        for user in users:
-            session.add(user)
+            users.append(create_user(uid='doofus%d' % i,
+                                     name="Dummy Doofus",
+                                     email="dummy.doofus@email.com",
+                                     session=session))
 
         # teams
-        subsub_team = Team(id="subsubteam")
+        subsub_team = create_team(tid="subsubteam", session=session)
         subsub_team.description = """Test team only"""
-        session.add(subsub_team)
         subsub_team.add_auth(Role.edit, user=users[4])
 
-        sub_team = Team(id="subteam")
+        sub_team = create_team(tid="subteam", session=session)
         sub_team.description = """Test team only"""
-        session.add(sub_team)
         sub_team.add_auth(Role.edit, user=users[5])
         sub_team.add_auth(Role.edit, team=subsub_team)
 
-        vplants = Team(id="vplants")
+        vplants = create_team(tid="vplants", session=session)
         vplants.description = """
 Team
 ----
 INRIA team based in Montpellier
 
         """
-        session.add(vplants)
 
         vplants.add_auth(Role.edit, user=users[1])
         vplants.add_auth(Role.read, user=users[3])
 
-        oa = Team(id="openalea")
+        oa = create_team(tid="openalea", session=session)
         oa.description = """
 Community
 ---------
@@ -98,7 +98,6 @@ current and future works in Plant Architecture modeling.
 OpenAlea includes modules to analyse, visualize and model the functioning and growth of plant architecture.
 
         """
-        session.add(oa)
 
         oa.add_auth(Role.edit, user=users[0])
         oa.add_auth(Role.read, user=users[1])
@@ -115,9 +114,6 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
             project = create_project(users[i], "pjt%d" % i)
             projects.append(project)
 
-        for project in projects:
-            session.add(project)
-
         for i in range(3):
             projects[i].public = True
 
@@ -128,5 +124,4 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
         # comments
         pid = projects[0].id
         for i in range(4):
-            cmt = create_comment(pid, users[i].id, "very nasty comment (%d)" % i)
-            session.add(cmt)
+            create_comment(pid, users[i].id, "very nasty comment (%d)" % i)

@@ -1,40 +1,28 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
-from .actor import TActor, UActor
+from .actor import Actor
 from .auth import Role
 from .models import Base
 
 
-team_auth_users = Table('team_auth_users',
-                        Base.metadata,
-                        Column('team_id', String(255),
-                               ForeignKey('teams.id'),
-                               primary_key=True),
-                        Column('actor_id', Integer,
-                               ForeignKey('uactors.id'),
-                               primary_key=True),
-                        )
-
-
-team_auth_teams = Table('team_auth_teams',
-                        Base.metadata,
-                        Column('team_id', String(255),
-                               ForeignKey('teams.id'),
-                               primary_key=True),
-                        Column('actor_id', Integer,
-                               ForeignKey('tactors.id'),
-                               primary_key=True),
-                        )
+team_auth = Table('team_auth',
+                  Base.metadata,
+                  Column('team_id', String(255),
+                         ForeignKey('team.id'),
+                         primary_key=True),
+                  Column('actor_id', Integer,
+                         ForeignKey('actor.id'),
+                         primary_key=True),
+                  )
 
 
 class Team(Base):
-    __tablename__ = 'teams'
+    __tablename__ = 'team'
 
-    id = Column(String(255), unique=True, primary_key=True)
+    id = Column("id", String(255), ForeignKey('userid.id'), primary_key=True)
 
-    auth_user = relationship("UActor", secondary=team_auth_users)
-    auth_team = relationship("TActor", secondary=team_auth_teams)
+    auth = relationship("Actor", secondary=team_auth)
 
     description = Column(Text, default="")
 
@@ -50,18 +38,12 @@ class Team(Base):
 
         return None, None
 
-    def add_auth(self, role, user=None, team=None):
+    def add_auth(self, role, user=None):
         """Add a new user to the team
         """
-        if user is not None:
-            actor = UActor(user=user.id, role=role)
-            self.auth_user.append(actor)
-            user.teams.append(self)
-        elif team is not None:
-            actor = TActor(team=team.id, role=role)
-            self.auth_team.append(actor)
-        else:
-            raise NotImplementedError()
+        actor = Actor(user=user.id, role=role)
+        self.auth_user.append(actor)
+        user.teams.append(self)
 
     def update_auth(self, user, new_role):
         """Update role of user in the team

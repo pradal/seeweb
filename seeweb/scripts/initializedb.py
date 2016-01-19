@@ -115,10 +115,21 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
             project = create_project(session, 'doofus%d' % i, "pjt%d" % i)
             projects.append(project)
 
-        # for i in range(3):
-        #     projects[i].public = True
+        for i in range(3):
+            projects[i].public = True
 
         projects[0].add_auth(session, 'sartzet', Role.edit)
+        projects[0].description = """
+This project is part of OpenAlea_.
+
+.. image:: http://localhost:6543/avatar/team/openalea_small.png
+    :alt: Openalea team
+    :target: http://localhost:6543/team/openalea
+
+.. _OpenAlea: http://localhost:6543/team/openalea
+
+        """
+
         projects[1].add_auth(session, 'sartzet', Role.read)
         # projects[2].add_auth(session, 'openalea', Role.read, is_team=True)
 

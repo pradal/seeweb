@@ -127,7 +127,6 @@ def project_access_role(session, project, uid):
 
     # check team auth in subteams
     for actor in project.auth:
-        print "ACTOR", "\n" * 10, actor.user, actor.is_team
         if actor.is_team:
             tid = actor.user
             if is_member(session, get_team(session, tid), uid):

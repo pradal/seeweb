@@ -3,6 +3,18 @@
 {% block team_body %}
 <form action="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}" method='POST'
       enctype="multipart/form-data">
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+            <button class="btn btn-primary" type="submit" name="update">Update</button>
+            <button class="btn" type="submit" name="default">Default</button>
+            <button class="btn pull-right" type="submit" name="back">Back</button>
+        </div>
+    </div>
+</div>
+
 <div class="summary col-md-3">
     <div class="row">
         <img src="{{ request.static_url('seeweb:avatar/team/%s.png' % team.id) }}">
@@ -18,17 +30,10 @@
                 <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
             {% endfor %}
         </ul>
-        <div class="form-group">
-            <div class="row">
-                <button class="btn btn-primary" type="submit" name="update">Update</button>
-                <button class="btn" type="submit" name="default">Default</button>
-                <button class="btn pull-right" type="submit" name="back">Back</button>
-            </div>
-        </div>
 
-        <div class="row">
-        {% block team_edit_body %}
-        {% endblock %}
+        <div class="container-fluid edit_body">
+            {% block team_edit_body %}
+            {% endblock %}
         </div>
     </div>
 </div>

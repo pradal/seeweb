@@ -41,17 +41,14 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="list-group">
-                    <div class="list-group-item">
-                        <button class="btn btn-default glyphicon glyphicon-star">Interest</button>
-                        </div>
-                    <div class="list-group-item">
-                    <button class="btn btn-default glyphicon glyphicon-star">Documentation</button>
-                        </div>
-                    <div class="list-group-item">
-                    <button class="btn btn-default glyphicon glyphicon-star">Installation</button>
-                        </div>
-                </div>
+                {% for name, rating in ratings %}
+                    <div class="form-inline">
+                      <div class="form-group">
+                        <label>{{ name }}:</label>
+                        <input type="hidden" class="rating-tooltip" data-fractions="2" value="2.5">
+                      </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <div class="row">

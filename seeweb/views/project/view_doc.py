@@ -4,14 +4,14 @@ from urlparse import urlsplit
 
 from seeweb.models import DBSession
 
-from .tools import tabs, view_init
+from .tools import view_init
 
 
 @view_config(route_name='project_view_doc',
              renderer='templates/project/view_doc.jinja2')
 def index(request):
     session = DBSession()
-    project, current_uid, allow_edit = view_init(request, session)
+    project, view_params = view_init(request, session, 'doc')
 
     hostname = ""
     if len(project.doc_url) > 0:
@@ -21,12 +21,7 @@ def index(request):
     if hostname is None or len(hostname) == 0:
         hostname = "doc hostname"
 
-    doc = Markup(project.doc)
+    view_params["hostname"] = hostname
+    view_params["doc"] = Markup(project.doc)
 
-    return {"project": project,
-            "tabs": tabs,
-            "tab": 'doc',
-            "allow_edit": allow_edit,
-            "sections": [],
-            "hostname": hostname,
-            "doc": doc}
+    return view_params

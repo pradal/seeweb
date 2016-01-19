@@ -5,7 +5,7 @@ from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.access import get_team, get_user
 
-from .tools import edit_common, edit_init, tabs
+from .tools import edit_common, edit_init
 
 
 def register_new_user(request, session, project, new_uid):
@@ -39,12 +39,7 @@ def register_new_user(request, session, project, new_uid):
              renderer='templates/project/edit_contributors.jinja2')
 def view(request):
     session = DBSession()
-    project, allow_edit = edit_init(request, session)
-
-    if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        loc = request.route_url('project_view_contributors', pid=project.id)
-        return HTTPFound(location=loc)
+    project, view_params = edit_init(request, session, 'contributors')
 
     need_update = 'update' in request.params
     if not need_update:
@@ -98,7 +93,6 @@ def view(request):
             typ = 'user'
         members.append((typ, actor.role, actor.user))
 
-    return {"project": project,
-            "tabs": tabs,
-            "tab": 'contributors',
-            "members": members}
+    view_params["members"] = members
+
+    return view_params

@@ -6,6 +6,7 @@ from urlparse import urlsplit, urlunsplit
 
 from seeweb.models.access import get_project, project_access_role
 from seeweb.models.auth import Role
+from seeweb.views.comment.tools import format_ratings
 from seeweb.views.tools import get_current_uid
 
 tabs = [('Home', 'home'),
@@ -15,7 +16,7 @@ tabs = [('Home', 'home'),
         ('Comments', 'comments')]
 
 
-def view_init(request, session):
+def view_init(request, session, tab):
     """Common init for all 'view' parts
     """
     pid = request.matchdict['pid']
@@ -32,22 +33,35 @@ def view_init(request, session):
                               'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    allow_edit = (role == Role.edit)
+    view_params = {"project": project,
+                   "tabs": tabs,
+                   "tab": tab,
+                   "allow_edit": (role == Role.edit),
+                   "sections": [],
+                   "ratings": format_ratings(project)}
 
-    return project, current_uid, allow_edit
+    if current_uid is not None:
+        view_params["current_uid"] = current_uid
+
+    return project, view_params
 
 
-def edit_init(request, session):
+def edit_init(request, session, tab):
     """Common init for all 'edit' views.
     """
-    project, current_uid, allow_edit = view_init(request, session)
+    project, view_params = view_init(request, session, tab)
 
-    if not allow_edit:
+    if not view_params["allow_edit"]:
         msg = "Access to %s edition not granted for you" % project.id
         request.session.flash(msg, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    return project, allow_edit
+    if 'back' in request.params:
+        request.session.flash("Edition stopped", 'success')
+        loc = request.route_url('project_view_%s' % tab, pid=project.id)
+        raise HTTPFound(location=loc)
+
+    return project, view_params
 
 
 def edit_common(request, session, project):

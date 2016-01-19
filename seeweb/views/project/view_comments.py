@@ -2,7 +2,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.access import fetch_comments
-from .tools import tabs, view_init
+from .tools import view_init
 
 
 @view_config(route_name='project_view_comments',
@@ -10,18 +10,9 @@ from .tools import tabs, view_init
 def index(request):
     session = DBSession()
     request.session['last'] = request.current_route_url()
-    project, current_uid, allow_edit = view_init(request, session)
 
-    comments = fetch_comments(session, project.id)
+    project, view_params = view_init(request, session, 'comments')
 
-    params = {"project": project,
-              "tabs": tabs,
-              "tab": 'comments',
-              "allow_edit": allow_edit,
-              "sections": [],
-              "comments": comments}
+    view_params["comments"] = fetch_comments(session, project.id)
 
-    if current_uid is not None:
-        params["current_uid"] = current_uid
-
-    return params
+    return view_params

@@ -1,11 +1,17 @@
 {% extends "templates/layout.html" %}
 {% block css %}
-  <link href="{{ request.static_url('seeweb:static/project_theme.css') }}" rel="stylesheet">
-  {% block css2 %}
-  {% endblock %}
+    <link href="{{ request.static_url('seeweb:static/project_theme.css') }}" rel="stylesheet">
+    <link href="bootstrap-rating.css" rel="stylesheet">
+    {% block css2 %}
+    {% endblock %}
 {% endblock %}
 
 {% block body %}
-  {% block project_body %}
-  {% endblock %}
+    {% block project_body %}
+    {% endblock %}
+{% endblock %}
+
+{% block javascripts_end %}
+    <script type="text/javascript" src="bower_components/bootstrap/js/tooltip.js"></script>
+    <script type="text/javascript" src="{{ request.static_url('seeweb:static/bootstrap-rating.js') }}"></script>
 {% endblock %}

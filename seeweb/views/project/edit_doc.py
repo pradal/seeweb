@@ -1,22 +1,16 @@
-from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from urlparse import urlparse
 
 from seeweb.models import DBSession
 
-from .tools import edit_common, edit_init, fetch_documentation, tabs
+from .tools import edit_common, edit_init, fetch_documentation
 
 
 @view_config(route_name='project_edit_doc',
              renderer='templates/project/edit_doc.jinja2')
 def view(request):
     session = DBSession()
-    project, allow_edit = edit_init(request, session)
-
-    if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        return HTTPFound(location=request.route_url('project_view_doc',
-                                                    pid=project.id))
+    project, view_params = edit_init(request, session, 'doc')
 
     if 'default' in request.params:
         # reload default values for this user
@@ -48,9 +42,6 @@ def view(request):
     else:
         pass
 
-    doc_hosts = ["readthedocs", "pypi"]
+    view_params["doc_hosts"] = ["readthedocs", "pypi"]
 
-    return {"project": project,
-            "tabs": tabs,
-            "tab": 'doc',
-            "doc_hosts": doc_hosts}
+    return view_params

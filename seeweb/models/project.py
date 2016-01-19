@@ -11,6 +11,8 @@ class Project(Base):
 
     id = Column(String(255), unique=True, primary_key=True)
     owner = Column(String(255), ForeignKey("users.id"))
+    public = Column(Boolean)
+    auth = relationship("PActor")
 
     description = Column(Text, default="")
 
@@ -19,8 +21,11 @@ class Project(Base):
 
     src_url = Column(Text, default="")
 
-    public = Column(Boolean)
-    auth = relationship("PActor")
+    # rating
+    rating_value = Column(Integer, default=50)
+    rating_doc = Column(Integer, default=50)
+    rating_install = Column(Integer, default=50)
+    rating_usage = Column(Integer, default=50)
 
     def __repr__(self):
         return "<Project(id='%s', owner='%s', public='%s')>" % (self.id,

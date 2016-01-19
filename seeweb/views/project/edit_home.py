@@ -1,22 +1,16 @@
-from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.views.tools import upload_avatar
 
-from .tools import edit_common, edit_init, tabs
+from .tools import edit_common, edit_init
 
 
 @view_config(route_name='project_edit_home',
              renderer='templates/project/edit_home.jinja2')
 def view(request):
     session = DBSession()
-    project, allow_edit = edit_init(request, session)
-
-    if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        return HTTPFound(location=request.route_url('project_view_home',
-                                                    pid=project.id))
+    project, view_params = edit_init(request, session, 'home')
 
     if 'default' in request.params:
         # reload default values for this user
@@ -43,6 +37,4 @@ def view(request):
     else:
         pass
 
-    return {"project": project,
-            "tabs": tabs,
-            "tab": 'home'}
+    return view_params

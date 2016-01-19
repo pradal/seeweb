@@ -7,15 +7,25 @@
         <img src="{{ request.static_url('seeweb:avatar/project/%s.png' % project.id) }}">
     </div>
     <div class="col-md-9">
-        {% if allow_edit %}
-        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}">
-          <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-          Edit project
-        </a>
-        {% endif %}
         <h1>{{ project.id }}</h1>
+        {% if allow_edit %}
+            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit project
+            </a>
+        {% endif %}
         <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
         <p>Visibility: {% if project.public %}Public{% else %}Private{% endif %}</p>
+        <!-- rating -->
+
+        {% for name, rating in ratings %}
+            <div class="form-inline">
+              <div class="form-group">
+                <label>{{ name }}:</label>
+                <input type="hidden" class="rating" data-fractions="2" data-readonly value="{{ rating }}">
+              </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 

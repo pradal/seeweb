@@ -1,16 +1,32 @@
 from datetime import datetime
 
+from .fmt import float_to_rating
 from .comment import Comment
 from .project import Project
 from .team import Team
 from .user import User
 
 
-def create_comment(session, pid, uid, msg, ratings):
+def affect_ratings(rated, ratings):
+    """Affect ratings to an object.
+
+    Inverse of 'format_ratings' function.
+    """
+    ratings = dict((name.lower(), rating) for name, rating in ratings)
+    rated.rating_value = float_to_rating(ratings["value"])
+    rated.rating_doc = float_to_rating(ratings["documentation"])
+    rated.rating_install = float_to_rating(ratings["installation"])
+    rated.rating_usage = float_to_rating(ratings["usage"])
+
+
+def create_comment(session, pid, uid, msg, ratings=None):
     """Create a new comment now.
     """
     cmt = Comment(project=pid, author=uid, creation=datetime.now(), message=msg)
     session.add(cmt)
+
+    if ratings is not None:
+        affect_ratings(cmt, ratings)
 
     return cmt
 

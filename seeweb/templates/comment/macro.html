@@ -18,8 +18,18 @@
                     <p class="col-md-12">Posted by <a href="{{ request.route_url('user_view_home', uid=comment.author) }}">{{ comment.author }}</a> on {{ comment.creation }}</p>
                 </div>
                 <div class=row>
-                    <div class="col-md-12">
+                    <div class="col-md-7">
                         {{ comment.message }}
+                    </div>
+                    <div class="col-md-5">
+                        {% for name, rating in comment.format_ratings() %}
+                            <div class="form-inline">
+                              <div class="form-group">
+                                <label>{{ name }}:</label>
+                                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" data-readonly />
+                              </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

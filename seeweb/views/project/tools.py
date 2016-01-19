@@ -4,9 +4,10 @@ import urllib2
 from urllib2 import HTTPError
 from urlparse import urlsplit, urlunsplit
 
-from seeweb.models.access import get_project, project_access_role
+from seeweb.models.access import (format_ratings,
+                                  get_project,
+                                  project_access_role)
 from seeweb.models.auth import Role
-from seeweb.views.comment.tools import format_ratings
 from seeweb.views.tools import get_current_uid
 
 tabs = [('Home', 'home'),

@@ -1,5 +1,6 @@
 from .auth import Role
 from .comment import Comment
+from .fmt import format_ratings
 from .project import Project
 from .team import Team
 from .user import User

@@ -1,5 +1,7 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
-from models import Base
+
+from .fmt import format_ratings
+from .models import Base
 
 
 class Comment(Base):
@@ -13,5 +15,14 @@ class Comment(Base):
     message = Column(Text, default="")
     rating = Column(Integer, default=0)
 
+    # rating
+    rating_value = Column(Integer, default=50)
+    rating_doc = Column(Integer, default=50)
+    rating_install = Column(Integer, default=50)
+    rating_usage = Column(Integer, default=50)
+
     def __repr__(self):
         return "<Comment(id='%s')>" % self.id
+
+    def format_ratings(self):
+        return format_ratings(self)

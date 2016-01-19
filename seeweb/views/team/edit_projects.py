@@ -13,7 +13,7 @@ def view(request):
     team, current_uid = edit_init(request, session)
 
     if 'back' in request.params:
-        request.session.flash("Edition cancelled", 'success')
+        request.session.flash("Edition stopped", 'success')
         return HTTPFound(location=request.route_url('team_view_projects',
                                                     tid=team.id))
 

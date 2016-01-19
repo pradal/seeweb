@@ -46,7 +46,7 @@ def view(request):
     project, allow_edit = edit_init(request, session)
 
     if 'back' in request.params:
-        request.session.flash("Edition cancelled", 'success')
+        request.session.flash("Edition stopped", 'success')
         loc = request.route_url('project_view_contributors', pid=project.id)
         return HTTPFound(location=loc)
 

@@ -23,6 +23,9 @@
     <div class="col-md-3">
         {% if sections|length > 0 %}
         <ul class="nav nav-pills nav-stacked nav-sidebar" data-spy="affix" data-offset-top="197">
+            <li role="presentation">
+                <a href="{{ request.route_url('project_view_%s' % tab, pid=project.id) }}">Top</a>
+            </li>
             {% for section in sections %}
             <li role="presentation">
                 <a href="{{ request.route_url('project_view_%s' % tab, pid=project.id, _anchor='%s' % section) }}">{{ section }}</a>
@@ -40,8 +43,10 @@
               {% endfor %}
             </ul>
 
-            {% block project_view_body %}
-            {% endblock %}
+            <div class="container-fluid view_body">
+                {% block project_view_body %}
+                {% endblock %}
+            </div>
 
         </div>
     </div>

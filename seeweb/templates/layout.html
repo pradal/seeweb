@@ -34,6 +34,7 @@
 <div class="container">
 
     <!-- Navigation bar -->
+    <div class="row">
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -94,9 +95,10 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
+</div>
 
     <!-- Flash messages -->
-    <div class="container">
+    <div class="row flash-msg">
         {% for msg in request.session.pop_flash('warning') %}
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -114,26 +116,22 @@
     </div>
 
     <!-- Body -->
-    <div class="container">
+    <div class="row main-body">
         <div class="col-md-12">
-        {% block body %}
-        {% endblock %}
+            {% block body %}
+            {% endblock %}
         </div>
     </div>
 
     <!-- footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    SEEweb
-                </div>
-                <div class="copyright col-md-4">
-                Copyright &copy; revesansparole
-                </div>
-            </div>
+    <div class="row footer">
+        <div class="col-md-8">
+            SEEweb
         </div>
-    </footer>
+        <div class="copyright col-md-4">
+        Copyright &copy; revesansparole
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

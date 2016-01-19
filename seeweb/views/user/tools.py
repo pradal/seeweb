@@ -40,6 +40,12 @@ def edit_init(request, session):
 def edit_common(request, session, user):
     """Common edition operations
     """
-    del request
     del session
-    del user
+    need_reload = False
+    if 'name' in request.params:
+        name = request.params['name']
+        if user.name != name:
+            user.name = name
+            need_reload = True
+
+    return need_reload

@@ -3,9 +3,13 @@
 {% block user_view_body %}
 
 {% if description == "" %}
-No description available
+    <p>No description available</p>
 {% else %}
-{{ description }}
+    <div class="row">
+        <div class="col-md-12">
+            {{ description }}
+        </div>
+    </div>
 {% endif %}
 
 {% endblock %}

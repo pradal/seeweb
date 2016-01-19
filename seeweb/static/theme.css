@@ -27,11 +27,15 @@ p {
   font-weight: 700;
 }
 
-footer.footer {
+.main-body {
+    background: #555555;
+}
+
+.footer {
     border-top: 1px solid #000000;
-    margin-top: 2em;
+    margin-top: 1em;
     padding: 1em;
-    background-color: #000000;
+    background: #000000;
     color: #aaaaaa;
 }
 

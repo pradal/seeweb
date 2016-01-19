@@ -1,15 +1,21 @@
 {% from 'templates/comment/macro.html' import list_comments with context %}
+{% from 'templates/comment/macro.html' import comment_edit_item with context %}
 
 {% extends "project_view.html" %}
 
 {% block project_view_body %}
 
-<div class="list-group">
-{% if comments|length == 0 %}
-    <p class="list-group-item">No comment yet, add one?</p>
-{% else %}
-    {{ list_comments(comments) }}
-{% endif %}
+<div class="container-fluid">
+    <div class="list-group">
+        {% if comments|length == 0 %}
+            <p class="list-group-item">No comment yet, add one?</p>
+        {% else %}
+            {{ list_comments(comments) }}
+        {% endif %}
+        {% if current_uid is defined %}
+            {{ comment_edit_item(current_uid) }}
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}

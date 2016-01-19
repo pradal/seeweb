@@ -34,13 +34,13 @@ def view_init(request, session):
 
     allow_edit = (role == Role.edit)
 
-    return project, allow_edit
+    return project, current_uid, allow_edit
 
 
 def edit_init(request, session):
     """Common init for all 'edit' views.
     """
-    project, allow_edit = view_init(request, session)
+    project, current_uid, allow_edit = view_init(request, session)
 
     if not allow_edit:
         msg = "Access to %s edition not granted for you" % project.id

@@ -1,7 +1,7 @@
 {% macro list_comments(comments) -%}
 {% for comment in comments %}
     <div class="list-group-item">
-        <div class="container">
+        <div class="row">
             <div class="col-md-1">
                 <a type="button" class="btn btn-success" data-toggle="tooltip" title="Useful comment!"
                     href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='up') }}">
@@ -26,4 +26,41 @@
         </div>
     </div>
 {% endfor %}
+{%- endmacro %}
+
+
+{% macro comment_edit_item(author) -%}
+<div class="list-group-item">
+    <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
+        <input type="hidden" name="author" value="{{ author }}"/>
+        <input type="hidden" name="project" value="{{ project.id }}"/>
+        <div class=row>
+            <div class="col-md-7">
+                <div class="form-group">
+                  <textarea class="form-control" rows="5" name='text' placeholder="New comment"></textarea>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <button class="btn btn-default glyphicon glyphicon-star">Interest</button>
+                        </div>
+                    <div class="list-group-item">
+                    <button class="btn btn-default glyphicon glyphicon-star">Documentation</button>
+                        </div>
+                    <div class="list-group-item">
+                    <button class="btn btn-default glyphicon glyphicon-star">Installation</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-default glyphicon glyphicon-edit pull-right" type="submit" name="new_comment">Submit</button>
+                <p>Posted by {{ author }}</p>
+                <p>for project {{ project.id }}</p>
+            </div>
+        </div>
+    </form>
+</div>
 {%- endmacro %}

@@ -11,7 +11,7 @@ from .tools import tabs, view_init
              renderer='templates/project/view_doc.jinja2')
 def index(request):
     session = DBSession()
-    project, allow_edit = view_init(request, session)
+    project, current_uid, allow_edit = view_init(request, session)
 
     hostname = ""
     if len(project.doc_url) > 0:

@@ -38,6 +38,7 @@ def main(global_config, **settings):
     config.add_route('user_register', 'user_register')
 
     # comment
+    config.add_route('comment_edit_new', 'comment/new')
     config.add_route('comment_edit_rating', 'comment/{cid}/rate/{vote}')
 
     # project

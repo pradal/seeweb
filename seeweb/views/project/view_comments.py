@@ -10,13 +10,18 @@ from .tools import tabs, view_init
 def index(request):
     session = DBSession()
     request.session['last'] = request.current_route_url()
-    project, allow_edit = view_init(request, session)
+    project, current_uid, allow_edit = view_init(request, session)
 
     comments = fetch_comments(session, project.id)
 
-    return {"project": project,
-            "tabs": tabs,
-            "tab": 'comments',
-            "allow_edit": allow_edit,
-            "sections": [],
-            "comments": comments}
+    params = {"project": project,
+              "tabs": tabs,
+              "tab": 'comments',
+              "allow_edit": allow_edit,
+              "sections": [],
+              "comments": comments}
+
+    if current_uid is not None:
+        params["current_uid"] = current_uid
+
+    return params

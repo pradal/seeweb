@@ -15,7 +15,7 @@ from .tools import tabs, view_init
 def index(request):
     session = DBSession()
     request.session['last'] = request.current_route_url()
-    project, allow_edit = view_init(request, session)
+    project, current_uid, allow_edit = view_init(request, session)
 
     if project.description == "":
         dscr = ""
@@ -25,13 +25,18 @@ def index(request):
 
     comments = fetch_comments(session, project.id, 2)
 
-    return {"project": project,
-            "tabs": tabs,
-            "tab": 'home',
-            "allow_edit": allow_edit,
-            "sections": ['description',
-                         'gallery',
-                         'comments',
-                         'extra info'],
-            "short_description": dscr,
-            "comments": comments}
+    params = {"project": project,
+              "tabs": tabs,
+              "tab": 'home',
+              "allow_edit": allow_edit,
+              "sections": ['description',
+                           'gallery',
+                           'comments',
+                           'extra info'],
+              "short_description": dscr,
+              "comments": comments}
+
+    if current_uid is not None:
+        params["current_uid"] = current_uid
+
+    return params

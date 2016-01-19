@@ -1,4 +1,5 @@
 {% from 'templates/comment/macro.html' import list_comments with context %}
+{% from 'templates/comment/macro.html' import comment_edit_item with context %}
 
 {% extends "project_view.html" %}
 
@@ -46,6 +47,9 @@
                     <p class="list-group-item">No comment yet, add one?</p>
                 {% else %}
                     {{ list_comments(comments) }}
+                {% endif %}
+                {% if current_uid is defined %}
+                    {{ comment_edit_item(current_uid) }}
                 {% endif %}
             </div>
             <a class="btn btn-default" href="{{ request.route_url('project_view_comments', pid=project.id) }}">see all...</a>

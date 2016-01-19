@@ -1,0 +1,11 @@
+{% extends "comment_edit.html" %}
+
+{% block comment_edit_body %}
+<h1>New comment</h1>
+<p>Author: {{ author }}</p>
+<p>Project: {{ pid }}</p>
+<p>Message:</p>
+<p>{{ txt }}</p>
+
+<a href="{{ from }}">Back</a>
+{% endblock %}

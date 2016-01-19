@@ -10,7 +10,7 @@ from .tools import tabs, view_init
              renderer='templates/project/view_contributors.jinja2')
 def index(request):
     session = DBSession()
-    project, allow_edit = view_init(request, session)
+    project, current_uid, allow_edit = view_init(request, session)
 
     members = [('user', Role.edit, project.owner)]
     for actor in project.auth:

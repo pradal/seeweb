@@ -18,8 +18,5 @@ def index(request):
             "tabs": tabs,
             "tab": 'comments',
             "allow_edit": allow_edit,
-            "sections": ['description',
-                         'gallery',
-                         'comments',
-                         'extra info'],
+            "sections": [],
             "comments": comments}

@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.access import get_project
-from seeweb.models.edit import create_comment
+from seeweb.models.edit import create_comment, recompute_project_ratings
 from seeweb.views.tools import get_current_uid
 
 
@@ -11,7 +11,7 @@ def validate_comment(request, session, author, pid, txt, ratings):
     # check user credentials
     current_uid = get_current_uid(request)
     if current_uid != author:
-        request.session.flash("Action non authorized %s %s" % (current_uid, author), 'warning')
+        request.session.flash("Action non authorized", 'warning')
         raise HTTPFound(location=request.session['last'])
 
     project = get_project(session, pid)
@@ -25,6 +25,10 @@ def validate_comment(request, session, author, pid, txt, ratings):
 
     # register new comment
     create_comment(session, pid, author, txt, ratings)
+
+    # recompute project ratings
+    recompute_project_ratings(session, project)
+
     return True
 
 
@@ -32,7 +36,6 @@ def validate_comment(request, session, author, pid, txt, ratings):
              renderer='templates/comment/edit_new.jinja2')
 def view(request):
     session = DBSession()
-    print "PARAMS", request.params, "\n" * 10
 
     author = request.params.get("author", "unknown")
     pid = request.params.get("project", "unknown")

@@ -13,7 +13,7 @@ class Comment(Base):
     creation = Column(DateTime, nullable=False)
 
     message = Column(Text, default="")
-    rating = Column(Integer, default=0)
+    score = Column(Integer, default=1)
 
     # rating
     rating_value = Column(Integer, default=50)

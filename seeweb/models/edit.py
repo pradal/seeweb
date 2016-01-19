@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from .fmt import float_to_rating
+from .access import fetch_comments
 from .comment import Comment
+from .fmt import float_to_rating
 from .project import Project
 from .team import Team
 from .user import User
@@ -70,3 +71,28 @@ def create_team(session, tid):
     session.add(team)
 
     return team
+
+
+def recompute_project_ratings(session, project):
+    """Recompute project ratings according to
+    comments ratings.
+    """
+    ratings = dict((name.lower(), [0, 0]) for name, rating in project.format_ratings())
+
+    for comment in fetch_comments(session, project.id):
+        nb = comment.score
+        if nb > 0:
+            for name, rating in comment.format_ratings():
+                key = name.lower()
+                ratings[key][0] += nb
+                ratings[key][1] += rating * nb
+
+    new_ratings = []
+    for key, (nb, val) in ratings.items():
+        if nb == 0:
+            rating = 2.5
+        else:
+            rating = val / nb
+        new_ratings.append((key, rating))
+
+    affect_ratings(project, new_ratings)

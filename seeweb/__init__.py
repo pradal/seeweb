@@ -39,7 +39,7 @@ def main(global_config, **settings):
 
     # comment
     config.add_route('comment_edit_new', 'comment/new')
-    config.add_route('comment_edit_rating', 'comment/{cid}/rate/{vote}')
+    config.add_route('comment_edit_score', 'comment/{cid}/score')
 
     # project
     for tab_title, tab_id in project_tabs:

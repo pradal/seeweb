@@ -57,7 +57,7 @@ def fetch_comments(session, pid, limit=None):
     """Fectch all comments associated to a project.
     """
     query = session.query(Comment).filter(Comment.project == pid)
-    query = query.order_by(Comment.rating.desc())
+    query = query.order_by(Comment.score.desc())
     if limit is not None:
         query = query.limit(limit)
 

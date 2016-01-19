@@ -1,0 +1,17 @@
+{% from 'templates/comment/macro.html' import comment_edit_form %}
+
+{% extends "comment_edit.html" %}
+
+{% block comment_edit_body %}
+<h1>Score comment</h1>
+<h2>{{ vote }}</h2>
+
+<form action="{{ request.route_url('comment_edit_score', cid=comment.id) }}" method='POST'>
+    {{ comment_edit_form(request, comment.author, comment.project, comment.message, comment.format_ratings(), False) }}
+
+    <input type="submit" class="btn btn-default" name="validate" value="validate" />
+    <input type="hidden" name="{{ vote }}">
+</form>
+
+<a href="{{ from }}">Back</a>
+{% endblock %}

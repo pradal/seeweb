@@ -3,15 +3,17 @@
     <div class="list-group-item">
         <div class="row">
             <div class="col-md-1">
-                <a type="button" class="btn btn-success" data-toggle="tooltip" title="Useful comment!"
-                    href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='up') }}">
-                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-up"></span>
-                </a>
-                <div class="rating">{{ comment.rating }}</div>
-                <a type="button" class="btn btn-warning" data-toggle="tooltip" title="Useless comment!"
-                    href="{{ request.route_url('comment_edit_rating', cid=comment.id, vote='down') }}">
-                    <span aria-hidden="true" class="glyphicon glyphicon-arrow-down"></span>
-                </a>
+                <form action="{{ request.route_url('comment_edit_score', cid=comment.id) }}" method="POST">
+                    <div class="btn-group-vertical">
+                        <button type="submit" class="btn btn-success" name="up" data-toggle="tooltip" title="Useful comment!">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </button>
+                        <button class="btn btn-default disabled">{{ comment.score }}</button>
+                        <button type="submit" class="btn btn-warning" name="down" data-toggle="tooltip" title="Useless comment!">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </button>
+                    </div>
+                </form>
             </div>
             <div class="col-md-11">
                 <div class="row">

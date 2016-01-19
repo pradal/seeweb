@@ -1,11 +1,27 @@
+{% from 'templates/comment/macro.html' import comment_edit_form %}
+
 {% extends "comment_edit.html" %}
 
 {% block comment_edit_body %}
 <h1>New comment</h1>
+<!-- old test
 <p>Author: {{ author }}</p>
 <p>Project: {{ pid }}</p>
 <p>Message:</p>
 <p>{{ txt }}</p>
+
+<ul>
+    {% for name, rating in ratings %}
+        <li>{{ name }}: {{ rating }}</li>
+    {% endfor %}
+</ul>
+-->
+
+<form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
+    {{ comment_edit_form(request, author, pid, txt, ratings, False) }}
+
+    <input type="submit" class="btn btn-default" name="validate" value="validate" />
+</form>
 
 <a href="{{ from }}">Back</a>
 {% endblock %}

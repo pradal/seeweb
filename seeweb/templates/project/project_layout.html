@@ -14,17 +14,17 @@
 {% block javascripts_end %}
     <script type="text/javascript" src="bower_components/bootstrap/js/tooltip.js"></script>
     <script type="text/javascript" src="{{ request.static_url('seeweb:static/bootstrap-rating.js') }}"></script>
-<script>
-    $(function () {
-        $('.rating-tooltip').rating({
-          extendSymbol: function (rate) {
-            $(this).tooltip({
-              container: 'body',
-              placement: 'bottom',
-              title: 'Rate ' + rate
+    <script>
+        $(function () {
+            $('.rating-tooltip').rating({
+              extendSymbol: function (rate) {
+                $(this).tooltip({
+                  container: 'body',
+                  placement: 'bottom',
+                  title: 'Rate ' + rate
+                });
+              }
             });
-          }
         });
-    });
-</script>
+    </script>
 {% endblock %}

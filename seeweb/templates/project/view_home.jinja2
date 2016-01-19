@@ -1,5 +1,5 @@
 {% from 'templates/comment/macro.html' import list_comments with context %}
-{% from 'templates/comment/macro.html' import comment_edit_item with context %}
+{% from 'templates/comment/macro.html' import comment_edit_form %}
 
 {% extends "project_view.html" %}
 
@@ -49,7 +49,11 @@
                     {{ list_comments(comments) }}
                 {% endif %}
                 {% if current_uid is defined %}
-                    {{ comment_edit_item(current_uid) }}
+                    <div class="list-group-item">
+                        <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
+                            {{ comment_edit_form(request, current_uid, project.id, "", ratings, True) }}
+                        </form>
+                    </div>
                 {% endif %}
             </div>
             <a class="btn btn-default" href="{{ request.route_url('project_view_comments', pid=project.id) }}">see all...</a>

@@ -6,7 +6,7 @@ from .team import Team
 from .user import User
 
 
-def create_comment(session, pid, uid, msg):
+def create_comment(session, pid, uid, msg, ratings):
     """Create a new comment now.
     """
     cmt = Comment(project=pid, author=uid, creation=datetime.now(), message=msg)

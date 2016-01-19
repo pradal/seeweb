@@ -29,35 +29,33 @@
 {%- endmacro %}
 
 
-{% macro comment_edit_item(author) -%}
-<div class="list-group-item">
-    <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
-        <input type="hidden" name="author" value="{{ author }}"/>
-        <input type="hidden" name="project" value="{{ project.id }}"/>
-        <div class=row>
-            <div class="col-md-7">
-                <div class="form-group">
-                  <textarea class="form-control" rows="5" name='text' placeholder="New comment"></textarea>
-                </div>
-            </div>
-            <div class="col-md-5">
-                {% for name, rating in ratings %}
-                    <div class="form-inline">
-                      <div class="form-group">
-                        <label>{{ name }}:</label>
-                        <input type="hidden" class="rating-tooltip" data-fractions="2" value="2.5">
-                      </div>
-                    </div>
-                {% endfor %}
-            </div>
+{% macro comment_edit_form(request, author, pid, txt, ratings, submit) -%}
+<input type="hidden" name="author" value="{{ author }}"/>
+<input type="hidden" name="project" value="{{ pid }}"/>
+<div class=row>
+    <div class="col-md-7">
+        <div class="form-group">
+          <textarea class="form-control" rows="5" name='text' {% if txt|length == 0 %}placeholder="New comment"{% endif %}>{% if txt|length > 0 %}{{ txt }}{% endif %}</textarea>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-default glyphicon glyphicon-edit pull-right" type="submit" name="new_comment">Submit</button>
-                <p>Posted by {{ author }}</p>
-                <p>for project {{ project.id }}</p>
+    </div>
+    <div class="col-md-5">
+        {% for name, rating in ratings %}
+            <div class="form-inline">
+              <div class="form-group">
+                <label>{{ name }}:</label>
+                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" name="rating_{{ name|lower }}">
+              </div>
             </div>
-        </div>
-    </form>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {% if submit %}
+            <button class="btn btn-default glyphicon glyphicon-edit pull-right" type="submit" name="new_comment">Submit</button>
+        {% endif %}
+        <p>Posted by {{ author }}</p>
+        <p>for project {{ pid }}</p>
+    </div>
 </div>
 {%- endmacro %}

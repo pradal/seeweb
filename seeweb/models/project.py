@@ -43,6 +43,15 @@ class Project(Base):
         session.add(actor)
         actor.is_team = is_team
 
+    def remove_auth(self, session, uid):
+        """Remove user from the project
+        args:
+         - uid (user_id or team_id): id of 'user'
+        """
+        actor = self.get_actor(uid)
+        if actor is not None:
+            session.delete(actor)
+
     def update_auth(self, session, uid, new_role):
         """Update role of user in the team
         args:
@@ -50,10 +59,5 @@ class Project(Base):
          - new_role (Role): type of role to grant
         """
         actor = self.get_actor(uid)
-
-        if new_role == Role.denied:  # remove user from team
-            if actor is not None:
-                session.delete(actor)
-        else:
-            actor.role = new_role
-            session.add(actor)
+        actor.role = new_role
+        session.add(actor)

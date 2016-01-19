@@ -15,10 +15,6 @@ def register_new_user(request, session, team, new_uid):
         return False
 
     role = Role.from_str(request.params.get("role_new", "denied"))
-    if role == Role.denied:
-        msg = "You granted 'denied' to %s, did nothing" % new_uid
-        request.session.flash(msg, 'warning')
-        return False
 
     member = get_user(session, new_uid)
     if member is not None:
@@ -60,11 +56,18 @@ def view(request):
         return HTTPFound(location=request.route_url('team_view_members',
                                                     tid=team.id))
 
+    need_update = 'update' in request.params
+    if not need_update:
+        for actor in team.auth:
+            rm_button_id = "rm_%s" % actor.user
+            if rm_button_id in request.params:
+                need_update = True
+
     if 'default' in request.params:
         # reload default values for this team
         # actually already done
         pass
-    elif 'update' in request.params:
+    elif need_update:
         need_reload = edit_common(request, session, team)
 
         # check for new members
@@ -74,16 +77,22 @@ def view(request):
 
         # update user roles
         for actor in team.auth:
-            if actor.user == new_uid and need_reload:
-                new_role_str = request.params.get("role_new", "denied")
-            else:
-                new_role_str = request.params.get("role_%s" % actor.user,
-                                                  "denied")
-            new_role = Role.from_str(new_role_str)
-
-            if new_role != actor.role:
-                team.update_auth(session, actor.user, new_role)
+            # check need to remove
+            if "rm_%s" % actor.user in request.params:
+                team.remove_auth(session, actor.user)
+                request.session.flash("User %s removed" % actor.user, 'success')
                 need_reload = True
+            else:  # update roles
+                if actor.user == new_uid and need_reload:
+                    new_role_str = request.params.get("role_new", "denied")
+                else:
+                    new_role_str = request.params.get("role_%s" % actor.user,
+                                                      "denied")
+                new_role = Role.from_str(new_role_str)
+
+                if new_role != actor.role:
+                    team.update_auth(session, actor.user, new_role)
+                    need_reload = True
 
         if need_reload:
             loc = request.route_url('team_edit_members', tid=team.id)

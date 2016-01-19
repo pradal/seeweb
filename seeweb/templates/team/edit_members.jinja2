@@ -13,6 +13,7 @@
             <tr>
               <th>user</th>
               <th>role</th>
+              <th>action</th>
             </tr>
           </thead>
           <tbody>
@@ -22,10 +23,12 @@
                 </td>
                 <td>
                     <select name="role_new">
+                        <option value="denied">denied</option>
                         <option value="read" selected>read</option>
                         <option value="edit">edit</option>
                     </select>
                 </td>
+                <td></td>
             </tr>
             {% for type, role, uid in members %}
             <tr>
@@ -44,6 +47,11 @@
                     <option value="read" {% if role == 1 %}selected{% endif %}>read</option>
                     <option value="edit" {% if role == 2 %}selected{% endif %}>edit</option>
                 </select>
+              </td>
+              <td>
+                <div class="input-group">
+                    <button class="btn glyphicon glyphicon-trash" type="submit" name="rm_{{ uid }}"></button>
+                </div>
               </td>
             </tr>
             {% endfor %}

@@ -32,7 +32,7 @@
                     unknown
                 {% endif %}
               </td>
-              <td>{% if role == 1 %}read{% else %}edit{% endif %}</td>
+              <td>{% if role == 1 %}read{% elif role==2 %}edit{% else %}denied{% endif %}</td>
             </tr>
             {% endfor %}
           </tbody>

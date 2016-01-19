@@ -13,7 +13,7 @@
             {{ list_comments(comments) }}
         {% endif %}
         {% if current_uid is defined %}
-            <div class="list-group-item">
+            <div class="list-group-item" id="edit comment">
                 <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
                     {{ comment_edit_form(request, current_uid, project.id, "", ratings, True) }}
                 </form>

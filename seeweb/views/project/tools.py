@@ -4,9 +4,7 @@ import urllib2
 from urllib2 import HTTPError
 from urlparse import urlsplit, urlunsplit
 
-from seeweb.models.access import (format_ratings,
-                                  get_project,
-                                  project_access_role)
+from seeweb.models.access import get_project, project_access_role
 from seeweb.models.auth import Role
 from seeweb.views.tools import get_current_uid
 
@@ -39,7 +37,7 @@ def view_init(request, session, tab):
                    "tab": tab,
                    "allow_edit": (role == Role.edit),
                    "sections": [],
-                   "ratings": format_ratings(project)}
+                   "ratings": project.format_ratings()}
 
     if current_uid is not None:
         view_params["current_uid"] = current_uid

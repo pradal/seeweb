@@ -12,6 +12,8 @@ def index(request):
     request.session['last'] = request.current_route_url()
 
     project, view_params = view_init(request, session, 'comments')
+    if 'current_uid' in view_params:
+        view_params["sections"] = ['edit comment']
 
     view_params["comments"] = fetch_comments(session, project.id)
 

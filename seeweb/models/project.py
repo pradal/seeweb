@@ -1,8 +1,8 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from .actor import PActor
-from .auth import Role
+from .fmt import format_ratings
 from .models import Base
 
 
@@ -66,3 +66,6 @@ class Project(Base):
         actor = self.get_actor(uid)
         actor.role = new_role
         session.add(actor)
+
+    def format_ratings(self):
+        return format_ratings(self)

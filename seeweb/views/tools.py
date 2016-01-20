@@ -8,6 +8,10 @@ import shutil
 import StringIO
 
 
+def check_password(session, user, pwd):
+    return pwd == user.id
+
+
 def log_user(request, uid):
     """Perform login, assume all credentials are OK
     """

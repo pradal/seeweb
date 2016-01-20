@@ -4,7 +4,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.access import get_comment, get_project
 from seeweb.models.edit import recompute_project_ratings
-from seeweb.views.tools import get_current_uid
 
 
 @view_config(route_name='comment_edit_score',
@@ -23,7 +22,7 @@ def view(request):
         return HTTPFound(location=request.session['last'])
 
     # check user credentials
-    if get_current_uid(request) is None:
+    if request.unauthenticated_userid is None:
         request.session.flash("Action non authorized for anonymous users", 'warning')
         return HTTPFound(location=request.session['last'])
 

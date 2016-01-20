@@ -5,7 +5,7 @@ from seeweb.models import DBSession
 from seeweb.models.access import get_team, get_user
 from seeweb.models.user import User
 
-from .tools import set_current_uid
+from .tools import log_user
 
 
 @view_config(route_name='user_register', renderer='templates/register.jinja2')
@@ -46,9 +46,7 @@ def index(request):
         # register new user
         user = User(id=uid, name=name, email=email)
         session.add(user)
+        return log_user(request, uid)
 
-        set_current_uid(request, uid)
-        return HTTPFound(location=request.route_url('user_view_home',
-                                                    uid=uid))
     else:
         return {}

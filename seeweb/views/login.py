@@ -1,11 +1,10 @@
 from pyramid.httpexceptions import HTTPFound
-from pyramid.security import remember
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.access import get_user
 
-from .tools import set_current_uid
+from .tools import log_user
 
 
 @view_config(route_name='user_login', renderer='templates/login.jinja2')
@@ -19,10 +18,6 @@ def index(request):
             request.session.flash("No such user", 'warning')
             return HTTPFound(location=request.route_url('user_login'))
 
-        set_current_uid(request, uid)
-        headers = remember(request, uid)
-        return HTTPFound(location=request.route_url('user_view_home',
-                                                    uid=uid),
-                         headers=headers)
+        return log_user(request, uid)
     else:
         return {}

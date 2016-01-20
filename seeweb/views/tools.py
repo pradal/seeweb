@@ -2,22 +2,19 @@ from docutils.core import publish_parts
 import os
 from os.path import dirname, exists, join
 from PIL import Image
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember
 import shutil
 import StringIO
 
 
-def get_current_uid(request):
-    """Fetch user_id of currently logged user.
-
-    Return None if no user logged in.
+def log_user(request, uid):
+    """Perform login, assume all credentials are OK
     """
-    return request.session.get("userid", None)
-
-
-def set_current_uid(request, uid):
-    """Set the currently logged user
-    """
-    request.session["userid"] = uid
+    headers = remember(request, uid)
+    return HTTPFound(location=request.route_url('user_view_home',
+                                                uid=uid),
+                     headers=headers)
 
 
 def store_file(field_storage, pth):

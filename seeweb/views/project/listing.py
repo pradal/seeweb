@@ -4,14 +4,13 @@ from seeweb.models import DBSession
 from seeweb.models.access import project_access_role
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
-from seeweb.views.tools import get_current_uid
 
 
 @view_config(route_name='project_list',
              renderer='templates/project/listing.jinja2')
 def view(request):
     session = DBSession()
-    current_uid = get_current_uid(request)
+    current_uid = request.unauthenticated_userid
 
     query = session.query(Project)
     if 'query' in request.params and "all" not in request.params:

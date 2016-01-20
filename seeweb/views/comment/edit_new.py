@@ -4,12 +4,11 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.access import get_project
 from seeweb.models.edit import create_comment, recompute_project_ratings
-from seeweb.views.tools import get_current_uid
 
 
 def validate_comment(request, session, author, pid, txt, ratings):
     # check user credentials
-    current_uid = get_current_uid(request)
+    current_uid = request.unauthenticated_userid
     if current_uid != author:
         request.session.flash("Action non authorized", 'warning')
         raise HTTPFound(location=request.session['last'])

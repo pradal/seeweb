@@ -1,4 +1,4 @@
-from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPFound
@@ -30,9 +30,7 @@ def main(global_config, **settings):
     config.include('pyramid_beaker')
 
     # Security policies
-    authn_policy = AuthTktAuthenticationPolicy(settings['seeweb.secret'],
-                                               callback=groupfinder,
-                                               hashalg='sha512')
+    authn_policy = SessionAuthenticationPolicy(callback=groupfinder)
     authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)

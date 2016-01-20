@@ -1,7 +1,6 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.access import get_user
-from seeweb.views.tools import get_current_uid
 
 
 tabs = [('Home', 'home'),
@@ -18,7 +17,7 @@ def view_init(request, session):
         request.session.flash("User %s does not exists" % uid, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    current_uid = get_current_uid(request)
+    current_uid = request.unauthenticated_userid
     allow_edit = (uid == current_uid)
 
     return user, current_uid, allow_edit

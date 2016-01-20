@@ -6,7 +6,6 @@ from urlparse import urlsplit, urlunsplit
 
 from seeweb.models.access import get_project, project_access_role
 from seeweb.models.auth import Role
-from seeweb.views.tools import get_current_uid
 
 tabs = [('Home', 'home'),
         ('Documentation', 'doc'),
@@ -25,7 +24,7 @@ def view_init(request, session, tab):
         request.session.flash("Project %s does not exists" % pid, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    current_uid = get_current_uid(request)
+    current_uid = request.unauthenticated_userid
     role = project_access_role(session, project, current_uid)
     if role == Role.denied:
         request.session.flash("Access to %s not granted for you" % pid,

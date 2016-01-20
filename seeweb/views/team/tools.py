@@ -2,7 +2,6 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.auth import Role
 from seeweb.models.access import get_team, team_access_role
-from seeweb.views.tools import get_current_uid
 
 tabs = [('Home', 'home'),
         ('Projects', 'projects'),
@@ -18,7 +17,7 @@ def view_init(request, session):
         request.session.flash("Team %s does not exists" % tid, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    current_uid = get_current_uid(request)
+    current_uid = request.unauthenticated_userid
 
     # allow edition
     allow_edit = (current_uid is not None and

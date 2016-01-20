@@ -5,7 +5,8 @@ from seeweb.models.comment import Comment
 
 
 @view_config(route_name='admin_comments',
-             renderer='templates/admin/comments.jinja2')
+             renderer='templates/admin/comments.jinja2',
+             permission='admin')
 def view(request):
     session = DBSession()
     query = session.query(Comment)

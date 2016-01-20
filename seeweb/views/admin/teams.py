@@ -5,7 +5,8 @@ from seeweb.models.team import Team
 
 
 @view_config(route_name='admin_teams',
-             renderer='templates/admin/teams.jinja2')
+             renderer='templates/admin/teams.jinja2',
+             permission='admin')
 def view(request):
     session = DBSession()
     query = session.query(Team)

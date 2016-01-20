@@ -5,7 +5,8 @@ from seeweb.models.project import Project
 
 
 @view_config(route_name='admin_projects',
-             renderer='templates/admin/projects.jinja2')
+             renderer='templates/admin/projects.jinja2',
+             permission='admin')
 def view(request):
     session = DBSession()
     query = session.query(Project)

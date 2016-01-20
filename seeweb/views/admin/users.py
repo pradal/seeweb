@@ -5,7 +5,8 @@ from seeweb.models.user import User
 
 
 @view_config(route_name='admin_users',
-             renderer='templates/admin/users.jinja2')
+             renderer='templates/admin/users.jinja2',
+             permission='admin')
 def view(request):
     session = DBSession()
     query = session.query(User)

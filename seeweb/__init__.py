@@ -1,10 +1,20 @@
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
+from pyramid.httpexceptions import HTTPFound
 from sqlalchemy import engine_from_config
 
 from models import DBSession, Base
 from views.project.tools import tabs as project_tabs
 from views.team.tools import tabs as team_tabs
 from views.user.tools import tabs as user_tabs
+
+from .security import groupfinder
+
+
+def forbidden(request):
+    request.session.flash("Access forbidden", 'warning')
+    return HTTPFound(location=request.route_url('home'))
 
 
 def main(global_config, **settings):
@@ -14,9 +24,21 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
 
-    config = Configurator(settings=settings)
+    config = Configurator(settings=settings,
+                          root_factory='seeweb.models.RootFactory')
     config.include('pyramid_jinja2')
     config.include('pyramid_beaker')
+
+    # Security policies
+    authn_policy = AuthTktAuthenticationPolicy(settings['seeweb.secret'],
+                                               callback=groupfinder,
+                                               hashalg='sha512')
+    authz_policy = ACLAuthorizationPolicy()
+    config.set_authentication_policy(authn_policy)
+    config.set_authorization_policy(authz_policy)
+    config.add_forbidden_view(forbidden)
+
+    # static
     config.add_static_view(name='static', path='static', cache_max_age=3600)
     config.add_static_view(name='avatar', path='avatar', cache_max_age=3600)
 

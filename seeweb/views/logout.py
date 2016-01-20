@@ -1,3 +1,5 @@
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import forget
 from pyramid.view import view_config
 
 from .tools import get_current_uid, set_current_uid
@@ -9,5 +11,6 @@ def index(request):
                           'success')
 
     set_current_uid(request, None)
-
-    return {}
+    headers = forget(request)
+    return HTTPFound(location=request.route_url('home'),
+                     headers=headers)

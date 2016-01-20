@@ -1,1 +1,1 @@
-from models import Base, DBSession
+from models import Base, DBSession, RootFactory

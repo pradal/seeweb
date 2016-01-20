@@ -1,4 +1,5 @@
 from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -19,7 +20,9 @@ def index(request):
             return HTTPFound(location=request.route_url('user_login'))
 
         set_current_uid(request, uid)
+        headers = remember(request, uid)
         return HTTPFound(location=request.route_url('user_view_home',
-                                                    uid=uid))
+                                                    uid=uid),
+                         headers=headers)
     else:
         return {}

@@ -31,15 +31,13 @@ def view_init(request, session, tab):
                               'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    view_params = {"project": project,
+    view_params = {"current_uid": current_uid,
+                   "project": project,
                    "tabs": tabs,
                    "tab": tab,
                    "allow_edit": (role == Role.edit),
                    "sections": [],
                    "ratings": project.format_ratings()}
-
-    if current_uid is not None:
-        view_params["current_uid"] = current_uid
 
     return project, view_params
 

@@ -57,6 +57,11 @@ def edit_init(request, session, tab):
         loc = request.route_url('project_view_%s' % tab, pid=project.id)
         raise HTTPFound(location=loc)
 
+    if 'delete' in request.params:
+        request.session.flash("Edition stopped", 'success')
+        loc = request.route_url('home')
+        raise HTTPFound(location=loc)
+
     return project, view_params
 
 

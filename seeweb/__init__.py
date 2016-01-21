@@ -66,6 +66,7 @@ def main(global_config, **settings):
         config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
         config.add_route('project_view_%s' % tab_id, 'project/{pid}/%s' % tab_id)
 
+    config.add_route('project_edit_delete', 'project/{pid}/delete')
     config.add_route('project_view_home_default', 'project/{pid}')
 
     # team

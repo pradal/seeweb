@@ -26,6 +26,9 @@
         <div class="checkbox">
           <label>Public<input type="checkbox" value="visibility" name="visibility" {% if project.public %}checked{% endif %}></label>
         </div>
+        {% if current_uid == project.owner %}
+            <a class="btn btn-danger" href="{{ request.route_url('project_edit_delete', pid=project.id) }}">Delete</a>
+        {% endif %}
     </div>
 </div>
 

@@ -62,6 +62,24 @@ def create_project(session, owner_id, name, public=False):
     return project
 
 
+def remove_project(session, project):
+    """Remove a given project from the database
+    """
+    # remove associated comments
+    query = session.query(Comment).filter(Comment.project == project.id)
+    for comment in query.all():
+        session.delete(comment)
+
+    # remove authorizations
+    for actor in project.auth:
+        session.delete(actor)
+
+    # delete project
+    session.delete(project)
+
+    return True
+
+
 def create_team(session, tid):
     """Create a new team.
 

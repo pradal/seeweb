@@ -8,53 +8,12 @@
 }
 .frontpage .content h1 .smaller {
   font-size: 40px;
-  color: #f2b7bd;
+  color: #066c10;
 }
 .frontpage .content .lead {
   font-size: 25px;
-  color: #f2b7bd;
+  color: #066c10;
 }
 .frontpage .content .lead .font-normal {
   color: #ffffff;
-}
-
-.frontpage .tasks ul {
-  display: block;
-  padding: 0;
-  margin: 0;
-}
-
-.frontpage .tasks ul li {
-  list-style: none;
-  display: inline;
-  margin: 0 10px;
-}
-
-.frontpage .tasks ul li a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.frontpage .tasks ul li a:hover {
-  text-decoration: underline;
-}
-
-.frontpage .links ul {
-  display: block;
-  padding: 0;
-  margin: 0;
-}
-
-.frontpage .links ul li {
-  list-style: none;
-  display: inline;
-  margin: 0 10px;
-}
-
-.frontpage .links ul li a {
-  color: #ffffff;
-  text-decoration: none;
-}
-.frontpage .links ul li a:hover {
-  text-decoration: underline;
 }

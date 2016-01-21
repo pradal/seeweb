@@ -46,7 +46,8 @@ def index(request):
         # register new user
         user = User(id=uid, name=name, email=email)
         session.add(user)
-        return log_user(request, uid)
+        print "register", 'edit_after' in request.params, "\n" * 10
+        return log_user(request, uid, 'edit_after' in request.params)
 
     else:
         return {}

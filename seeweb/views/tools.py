@@ -12,13 +12,16 @@ def check_password(session, user, pwd):
     return pwd == user.id
 
 
-def log_user(request, uid):
+def log_user(request, uid, edit=False):
     """Perform login, assume all credentials are OK
     """
     headers = remember(request, uid)
-    return HTTPFound(location=request.route_url('user_view_home',
-                                                uid=uid),
-                     headers=headers)
+    if edit:
+        loc = request.route_url('user_edit_home', uid=uid)
+    else:
+        loc = request.route_url('user_view_home', uid=uid)
+
+    return HTTPFound(location=loc, headers=headers)
 
 
 def store_file(field_storage, pth):

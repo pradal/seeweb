@@ -10,11 +10,10 @@ from seeweb.models.comment import Comment
 def view(request):
     session = DBSession()
     query = session.query(Comment)
-    if 'query' in request.params and "all" not in request.params:
-        search_pattern = "%s%%" % request.params['query']
-        query = query.filter(Comment.author.like(search_pattern))
-    else:
-        search_pattern = ""
+
+    search_pattern = request.params.get("main_search", "")
+    if search_pattern != "":
+        query = query.filter(Comment.project.like("%s%%" % search_pattern))
 
     return {'comments': query.all(),
             'search_pattern': search_pattern}

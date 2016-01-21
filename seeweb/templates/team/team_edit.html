@@ -21,6 +21,7 @@
     </div>
     <div class="row">
         <h1>{{ team.id }}</h1>
+        <a class="btn btn-danger" href="{{ request.route_url('team_edit_delete', tid=team.id) }}">Delete</a>
     </div>
 </div>
 <div class="content col-md-9">

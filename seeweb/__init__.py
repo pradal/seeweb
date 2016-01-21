@@ -74,6 +74,7 @@ def main(global_config, **settings):
         config.add_route('team_edit_%s' % tab_id, 'team/{tid}/edit/%s' % tab_id)
         config.add_route('team_view_%s' % tab_id, 'team/{tid}/%s' % tab_id)
 
+    config.add_route('team_edit_delete', 'team/{tid}/delete')
     config.add_route('team_view_home_default', 'team/{tid}')
 
     # user

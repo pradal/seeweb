@@ -91,6 +91,19 @@ def create_team(session, tid):
     return team
 
 
+def remove_team(session, team):
+    """Remove a given team from the database
+    """
+    # remove authorizations
+    for actor in team.auth:
+        session.delete(actor)
+
+    # remove team
+    session.delete(team)
+
+    return True
+
+
 def recompute_project_ratings(session, project):
     """Recompute project ratings according to
     comments ratings.

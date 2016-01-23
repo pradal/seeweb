@@ -10,6 +10,7 @@
 
 <div class="row">
     <div class="col-md-12">
+        <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_fetch', pid=project.id) }}">Fetch</a>
         <div class="input-group">
             <span class="input-group-addon">url</span>
             <input type="text" class="form-control" id="src_url" name="src_url" value="{{ project.src_url }}" />

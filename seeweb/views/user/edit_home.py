@@ -2,7 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.views.tools import upload_avatar
+from seeweb.views.tools import load_image, upload_avatar
 
 from .tools import edit_common, edit_init, tabs
 
@@ -33,11 +33,12 @@ def view(request):
         if field_storage == "":
             request.session.flash("Select an image first", 'warning')
         else:
-            pth = upload_avatar(field_storage, item=user, item_type='user')
-            if pth is None:
-                request.session.flash("Unable to read image", 'warning')
-            else:
+            try:
+                img = load_image(field_storage)
+                upload_avatar(img, item=user, item_type='user')
                 request.session.flash("Avatar submitted", 'success')
+            except IOError:
+                request.session.flash("Unable to read image", 'warning')
     else:
         pass
 

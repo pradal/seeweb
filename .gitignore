@@ -30,5 +30,6 @@ lib64
 data/*
 
 seeweb/avatar/*
+seeweb/gallery/*
 seeweb/static/test.html
 try/*

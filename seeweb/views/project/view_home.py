@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.access import fetch_comments
-from seeweb.views.tools import convert_rst_to_html
+from seeweb.views.tools import convert_rst_to_html, fetch_gallery_images
 
 from .tools import view_init
 
@@ -22,12 +22,17 @@ def index(request):
                                'comments',
                                'extra info']
 
+    # description
     if project.description == "":
         view_params["short_description"] = ""
     else:
         html = convert_rst_to_html(project.description)
         view_params["short_description"] = Markup(html)
 
+    # gallery
+    view_params["gallery"] = fetch_gallery_images(project.id)
+
+    # comments
     view_params["comments"] = fetch_comments(session, project.id, 2)
 
     return view_params

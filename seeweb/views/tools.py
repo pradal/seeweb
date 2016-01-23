@@ -1,11 +1,32 @@
 from docutils.core import publish_parts
 import os
-from os.path import dirname, exists, join
+from os.path import dirname, exists, join, splitext
 from PIL import Image
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
 import shutil
 import StringIO
+
+
+def avatar_pth(item_type, item_name, small=False):
+    """Return a path to avatar.
+
+    Not testing its existence.
+    """
+    root = dirname(dirname(__file__))
+    if small:
+        name = "avatar_small.png"
+    else:
+        name = "avatar.png"
+
+    return join(root, "avatar", item_type, item_name, name)
+
+
+def gallery_pth(pid):
+    """Return a path to the gallery associated to a given project.
+    """
+    root = dirname(dirname(__file__))
+    return join(root, "gallery", pid)
 
 
 def check_password(session, user, pwd):
@@ -55,26 +76,16 @@ def load_image(field_storage):
     return img
 
 
-def get_save_pth(pth):
-    root = dirname(dirname(__file__))
-    return join(root, pth)
-
-
-def upload_avatar(field_storage, item, item_type):
+def upload_avatar(img, item, item_type):
     """Upload an image to use as avatar for either
     a team or a single user
     """
-    try:
-        img = load_image(field_storage)
-    except IOError:
-        return None
-
     s = 256
     thumb = Image.new('RGBA', (s, s))
     img.thumbnail((s, s))
     thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
 
-    pth = get_save_pth('avatar/%s/%s.png' % (item_type, item.id))
+    pth = avatar_pth(item_type, item.id, small=False)
 
     if exists(pth):
         os.remove(pth)
@@ -85,13 +96,11 @@ def upload_avatar(field_storage, item, item_type):
     img.thumbnail((s, s))
     thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
 
-    pth = get_save_pth('avatar/%s/%s_small.png' % (item_type, item.id))
+    pth = avatar_pth(item_type, item.id, small=True)
 
     if exists(pth):
         os.remove(pth)
     thumb.save(pth)
-
-    return pth
 
 
 def convert_rst_to_html(rst):
@@ -99,3 +108,51 @@ def convert_rst_to_html(rst):
     """
     html = publish_parts(rst, writer_name='html')['html_body']
     return html
+
+
+def fetch_gallery_images(pid):
+    """List all available image in gallery associated
+    to the given project.
+    """
+    gal_dir = gallery_pth(pid)
+    imgs = []
+    if not exists(gal_dir):
+        return imgs
+
+    for img_name in os.listdir(gal_dir):
+        name, ext = splitext(img_name)
+        if ext == ".png" and not name.endswith("_small"):
+            imgs.append(name)
+
+    return imgs
+
+
+def clear_gallery(pid):
+    """Remove all images from gallery
+    """
+    gal_dir = gallery_pth(pid)
+    if exists(gal_dir):
+        shutil.rmtree(gal_dir)
+
+
+def add_gallery_image(pid, img, img_name):
+    """Save a new image in the gallery of a project
+    """
+    gal_dir = gallery_pth(pid)
+    if not exists(gal_dir):
+        os.mkdir(gal_dir)
+
+    img_pth = join(gal_dir, img_name)
+    if exists(img_pth):
+        os.remove(img_pth)
+
+    img.save(img_pth)
+
+    # thumbnail
+    img.thumbnail((256, 256))
+    th_name = "%s_small%s" % splitext(img_name)
+    th_pth = join(gal_dir, th_name)
+    if exists(th_pth):
+        os.remove(th_pth)
+
+    img.save(th_pth)

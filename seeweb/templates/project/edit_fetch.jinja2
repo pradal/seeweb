@@ -1,0 +1,53 @@
+{% extends "project_layout.html" %}
+
+{% block project_body %}
+<form action="{{ request.route_url('project_edit_fetch', pid=project.id) }}" method='POST'>
+<div class="col-md-12">
+    <div class="row">
+        <h1>Fetch info for {{ project.id }}</h1>
+        <h2>on {{ provider }}</h2>
+        <div class="form-group">
+            <div class="checkbox">
+              <label>Sources<input type="checkbox" value="source" name="source" {% if source %}checked{% endif %}></label>
+            </div>
+            <div class="checkbox">
+              <label>Readme<input type="checkbox" value="readme" name="readme" {% if readme %}checked{% endif %}></label>
+            </div>
+            <div class="checkbox">
+              <label>Avatar<input type="checkbox" value="avatar" name="avatar" {% if avatar %}checked{% endif %}></label>
+            </div>
+            <div class="checkbox">
+              <label>Documentation<input type="checkbox" value="doc" name="doc"{% if doc %}checked{% endif %}></label>
+            </div>
+            <div class="checkbox">
+              <label>Contributors<input type="checkbox" value="contributors" name="contributors"{% if contributors %}checked{% endif %}></label>
+            </div>
+            <div class="checkbox">
+              <label>Dependencies<input type="checkbox" value="dependencies" name="dependencies"{% if dependencies %}checked{% endif %}></label>
+            </div>
+            <div class="checkbox">
+              <label>Gallery<input type="checkbox" value="gallery" name="gallery"{% if gallery %}checked{% endif %}></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-signin">
+            <h2 class="form-signin-heading">{{ provider }} credentials</h2>
+            <label for="user_id" class="sr-only">Username</label>
+            <input type="text" id="user_id" class="form-control" placeholder="login" name="login" autofocus>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Password" name="password">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit" name="validate">Validate</button>
+            <button class="btn pull-right" type="submit" name="cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+</form>
+{% endblock %}

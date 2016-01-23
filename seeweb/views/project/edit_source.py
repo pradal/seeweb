@@ -17,6 +17,8 @@ def view(request):
         pass
     elif 'update' in request.params:
         edit_common(request, session, project)
+        if "src_url" in request.params:
+            project.src_url = request.params['src_url']
     elif "github" in request.params:
         project.src_url = "https://github.com/%s/%s" % (project.owner,
                                                         project.id)

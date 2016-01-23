@@ -29,7 +29,15 @@
             <h3 class="panel-title">Gallery</h3>
           </div>
           <div class="panel-body">
-            Gallery
+            {% if gallery|length == 0 %}
+                <p>Empty gallery</p>
+            {% else %}
+                {% for img_name in gallery %}
+                    <a href="{{ request.static_url('seeweb:gallery/%s/%s.png' % (project.id, img_name)) }}">
+                        <img src="{{ request.static_url('seeweb:gallery/%s/%s_small.png' % (project.id, img_name)) }}" />
+                    </a>
+                {% endfor %}
+            {% endif %}
           </div>
          </div>
     </div>

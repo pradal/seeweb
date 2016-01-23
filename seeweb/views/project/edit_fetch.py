@@ -42,7 +42,6 @@ def view(request):
     # find relevant provider
     url = urlsplit(project.src_url)
     if url.netloc == "":  # local used for debug purpose
-        print "LOCAL\n" * 10
         provider = "local"
     elif url.netloc == "github.com":
         provider = "github"

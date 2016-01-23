@@ -15,11 +15,11 @@ def avatar_pth(item_type, item_name, small=False):
     """
     root = dirname(dirname(__file__))
     if small:
-        name = "avatar_small.png"
+        name = "%s_small.png" % item_name
     else:
-        name = "avatar.png"
+        name = "%s.png" % item_name
 
-    return join(root, "avatar", item_type, item_name, name)
+    return join(root, "avatar", item_type, name)
 
 
 def gallery_pth(pid):
@@ -27,6 +27,13 @@ def gallery_pth(pid):
     """
     root = dirname(dirname(__file__))
     return join(root, "gallery", pid)
+
+
+def source_pth(pid):
+    """Return a path to the source dir associated to a given project.
+    """
+    root = dirname(dirname(dirname(__file__)))
+    return join(root, "data", "source", pid)
 
 
 def check_password(session, user, pwd):
@@ -76,6 +83,18 @@ def load_image(field_storage):
     return img
 
 
+def clean_avatar(item, item_type):
+    pth = avatar_pth(item_type, item.id, small=False)
+
+    if exists(pth):
+        os.remove(pth)
+
+    pth = avatar_pth(item_type, item.id, small=True)
+
+    if exists(pth):
+        os.remove(pth)
+
+
 def upload_avatar(img, item, item_type):
     """Upload an image to use as avatar for either
     a team or a single user
@@ -86,6 +105,7 @@ def upload_avatar(img, item, item_type):
     thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
 
     pth = avatar_pth(item_type, item.id, small=False)
+    print "pth\n" * 10, pth
 
     if exists(pth):
         os.remove(pth)

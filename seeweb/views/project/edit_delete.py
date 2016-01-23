@@ -4,6 +4,7 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.access import get_project
 from seeweb.models.edit import remove_project
+from seeweb.views.tools import clean_avatar, clear_gallery
 
 
 @view_config(route_name='project_edit_delete',
@@ -29,6 +30,9 @@ def view(request):
 
     if 'delete' in request.params:
         if remove_project(session, project):
+            # clean associated data
+            clean_avatar(project, 'project')
+            clear_gallery(project.id)
             request.session.flash("Project %s has been deleted" % pid, 'success')
             loc = request.route_url('user_view_projects', uid=current_uid)
             return HTTPFound(location=loc)

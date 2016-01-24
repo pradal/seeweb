@@ -1,7 +1,10 @@
+from os.path import exists
 from pyramid.view import view_config
 from urlparse import urlsplit
 
 from seeweb.models import DBSession
+from seeweb.tools.explore import find_executables, find_notebooks
+from seeweb.views.tools import source_pth
 
 from .tools import view_init
 
@@ -21,5 +24,14 @@ def index(request):
         hostname = "src hostname"
 
     view_params["hostname"] = hostname
+
+    # explore sources
+    for name in ["notebooks", "executables"]:
+        view_params[name] = []
+
+    src_pth = source_pth(project.id)
+    if exists(src_pth):
+        view_params["notebooks"] = find_notebooks(src_pth)
+        view_params["executables"] = find_executables(src_pth)
 
     return view_params

@@ -33,7 +33,7 @@ def source_pth(pid):
     """Return a path to the source dir associated to a given project.
     """
     root = dirname(dirname(dirname(__file__)))
-    return join(root, "data", "source", pid)
+    return join(root, "data", "sources", pid)
 
 
 def check_password(session, user, pwd):

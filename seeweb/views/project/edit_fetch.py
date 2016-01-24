@@ -4,10 +4,10 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from urlparse import urlsplit
 
-from seeweb.lib import github, local_provider
 from seeweb.models import DBSession
 from seeweb.models.access import get_project, project_access_role
 from seeweb.models.auth import Role
+from seeweb.tools import github, local_provider
 from seeweb.views.tools import add_gallery_image, clear_gallery, upload_avatar
 
 

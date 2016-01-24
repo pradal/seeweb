@@ -5,11 +5,48 @@
 <div class="row">
     <div class="col-md-12">
         {% if project.src_url|length == 0 %}
-            <p>No remote documentation associated to this project</p>
+            <p>No remote source associated to this project</p>
         {% else %}
             <a href="{{ project.src_url }}">{{ hostname }}</a>
         {% endif %}
     </div>
 </div>
 
+{% if notebooks|length > 0 %}
+<div class="row" id="notebooks">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Notebooks</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+                {% for pth, name in notebooks %}
+                    <li>{{ pth }}: {{ name }}</li>
+                {% endfor %}
+            </ul>
+          </div>
+         </div>
+    </div>
+</div>
+{% endif %}
+
+{% if executables|length > 0 %}
+<div class="row" id="executables">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Executables</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+                {% for name, descr in executables %}
+                    <li>{{ name }}: {{ descr }}</li>
+                {% endfor %}
+            </ul>
+          </div>
+         </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

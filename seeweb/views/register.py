@@ -3,7 +3,8 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.access import get_team, get_user
-from seeweb.models.user import User
+from seeweb.models.edit import create_user
+from seeweb.playground.workspace import create_workspace
 
 from .tools import log_user
 
@@ -44,9 +45,7 @@ def index(request):
             return HTTPFound(location=request.route_url('user_register'))
 
         # register new user
-        user = User(id=uid, name=name, email=email)
-        session.add(user)
-        print "register", 'edit_after' in request.params, "\n" * 10
+        create_user(session, uid, name, email)
         return log_user(request, uid, 'edit_after' in request.params)
 
     else:

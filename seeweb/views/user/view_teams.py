@@ -36,7 +36,9 @@ def register_new_team(request, session, uid):
              renderer='templates/user/view_teams.jinja2')
 def index(request):
     session = DBSession()
-    user, current_uid, allow_edit = view_init(request, session)
+    user, view_params = view_init(request, session, 'teams')
+
+    current_uid = view_params["current_uid"]
 
     if 'new_team' in request.params:
         register_new_team(request, session, current_uid)
@@ -48,8 +50,6 @@ def index(request):
         if role != Role.denied:
             teams.append((role, team))
 
-    return {"user": user,
-            "tabs": tabs,
-            "tab": 'teams',
-            "allow_edit": allow_edit,
-            "teams": teams}
+    view_params['teams'] = teams
+
+    return view_params

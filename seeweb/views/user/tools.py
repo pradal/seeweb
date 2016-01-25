@@ -8,7 +8,7 @@ tabs = [('Home', 'home'),
         ('Teams', 'teams')]
 
 
-def view_init(request, session):
+def view_init(request, session, tab):
     """Common init for all 'view'.
     """
     uid = request.matchdict['uid']
@@ -18,22 +18,28 @@ def view_init(request, session):
         raise HTTPFound(location=request.route_url('home'))
 
     current_uid = request.unauthenticated_userid
-    allow_edit = (uid == current_uid)
 
-    return user, current_uid, allow_edit
+    view_params = {"current_uid": current_uid,
+                   "user": user,
+                   "tabs": tabs,
+                   "tab": tab,
+                   "allow_edit": (uid == current_uid),
+                   "sections": []}
+
+    return user, view_params
 
 
-def edit_init(request, session):
+def edit_init(request, session, tab):
     """Common init for all 'edit' views.
     """
-    user, current_uid, allow_edit = view_init(request, session)
+    user, view_params = view_init(request, session, tab)
 
-    if not allow_edit:
+    if not view_params["allow_edit"]:
         msg = "Access to %s edition not granted for you" % user.id
         request.session.flash(msg, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    return user, current_uid
+    return user, view_params
 
 
 def edit_common(request, session, user):

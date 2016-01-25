@@ -10,7 +10,7 @@ from .tools import edit_common, edit_init, tabs
              renderer='templates/user/edit_projects.jinja2')
 def view(request):
     session = DBSession()
-    user, current_uid = edit_init(request, session)
+    user, view_params = edit_init(request, session, 'projects')
 
     if 'back' in request.params:
         request.session.flash("Edition stopped", 'success')
@@ -26,6 +26,4 @@ def view(request):
     else:
         pass
 
-    return {'user': user,
-            "tabs": tabs,
-            'tab': 'projects'}
+    return view_params

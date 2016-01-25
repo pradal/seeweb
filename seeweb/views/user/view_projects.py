@@ -45,7 +45,9 @@ def register_new_project(request, session, uid):
              renderer='templates/user/view_projects.jinja2')
 def index(request):
     session = DBSession()
-    user, current_uid, allow_edit = view_init(request, session)
+    user, view_params = view_init(request, session, 'projects')
+
+    current_uid = view_params["current_uid"]
 
     if 'new_project' in request.params:
         pid = register_new_project(request, session, current_uid)
@@ -59,8 +61,15 @@ def index(request):
         if role != Role.denied:
             projects.append((role, project))
 
-    return {"user": user,
-            "tabs": tabs,
-            "tab": 'projects',
-            "allow_edit": allow_edit,
-            "projects": projects}
+    view_params["projects"] = projects
+
+    allow_install = (current_uid == user.id)
+    installed = []
+    if allow_install:
+        for project in user.projects:
+            installed.append((Role.read, project))
+
+    view_params["allow_install"] = allow_install
+    view_params["installed"] = installed
+
+    return view_params

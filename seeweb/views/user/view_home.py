@@ -13,16 +13,12 @@ from .tools import tabs, view_init
              renderer='templates/user/view_home.jinja2')
 def index(request):
     session = DBSession()
-    user, current_uid, allow_edit = view_init(request, session)
+    user, view_params = view_init(request, session, 'home')
 
     if user.description == "":
-        description = ""
+        view_params['description'] = ""
     else:
         html = convert_rst_to_html(user.description)
-        description = Markup(html)
+        view_params['description'] = Markup(html)
 
-    return {"user": user,
-            "tabs": tabs,
-            "tab": 'home',
-            "allow_edit": allow_edit,
-            "description": description}
+    return view_params

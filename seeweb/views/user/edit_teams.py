@@ -12,11 +12,6 @@ def view(request):
     session = DBSession()
     user, view_params = edit_init(request, session, 'teams')
 
-    if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        return HTTPFound(location=request.route_url('user_view_teams',
-                                                    uid=user.id))
-
     if 'default' in request.params:
         # reload default values for this user
         # actually already done

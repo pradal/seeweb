@@ -1,0 +1,8 @@
+{% extends "user_view.html" %}
+
+{% block user_view_body %}
+<form action="{{ request.route_url('user_view_playground', uid=user.id) }}" method='POST'>
+    <button class="btn btn-primary" type="submit" name="create">Create</button>
+    <button class="btn btn-default" type="submit" name="clear">Clear</button>
+</form>
+{% endblock %}

@@ -5,6 +5,7 @@ from seeweb.models import DBSession
 from seeweb.models.access import get_project, get_user, project_access_role
 from seeweb.models.auth import Role
 from seeweb.models.edit import uninstall_project
+from seeweb.playground import workspace
 
 
 @view_config(route_name='project_uninstall',
@@ -38,6 +39,13 @@ def view(request):
             return HTTPFound(location=loc)
 
         uninstall_project(session, user, project)
+        if workspace.has_workspace(user.id):
+            try:
+                workspace.uninstall_project(user.id, project.id)
+            except UserWarning:
+                request.session.flash("Unable to uninstall %s" % pid,
+                                      'warning')
+
         loc = request.route_url('user_view_projects', uid=current_uid)
         return HTTPFound(location=loc)
 

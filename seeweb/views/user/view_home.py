@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.views.tools import convert_rst_to_html
 
-from .tools import tabs, view_init
+from .tools import view_init
 
 
 @view_config(route_name='user_view_home_default',

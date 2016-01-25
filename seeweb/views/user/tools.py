@@ -5,7 +5,8 @@ from seeweb.models.access import get_user
 
 tabs = [('Home', 'home'),
         ('Projects', 'projects'),
-        ('Teams', 'teams')]
+        ('Teams', 'teams'),
+        ("Playground", "playground")]
 
 
 def view_init(request, session, tab):
@@ -19,9 +20,14 @@ def view_init(request, session, tab):
 
     current_uid = request.unauthenticated_userid
 
+    if uid == current_uid:
+        itabs = len(tabs)
+    else:
+        itabs = len(tabs) - 1
+
     view_params = {"current_uid": current_uid,
                    "user": user,
-                   "tabs": tabs,
+                   "tabs": tabs[:itabs],
                    "tab": tab,
                    "allow_edit": (uid == current_uid),
                    "sections": []}
@@ -38,6 +44,11 @@ def edit_init(request, session, tab):
         msg = "Access to %s edition not granted for you" % user.id
         request.session.flash(msg, 'warning')
         raise HTTPFound(location=request.route_url('home'))
+
+    if 'back' in request.params:
+        request.session.flash("Edition stopped", 'success')
+        raise HTTPFound(location=request.route_url('user_view_%s' % tab,
+                                                   uid=user.id))
 
     return user, view_params
 

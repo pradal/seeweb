@@ -4,7 +4,7 @@ import urllib2
 from urllib2 import HTTPError
 from urlparse import urlsplit, urlunsplit
 
-from seeweb.models.access import get_project, project_access_role
+from seeweb.models.access import get_project, get_user, project_access_role
 from seeweb.models.auth import Role
 
 tabs = [('Home', 'home'),
@@ -31,11 +31,22 @@ def view_init(request, session, tab):
                               'warning')
         raise HTTPFound(location=request.route_url('home'))
 
+    # potential install
+    if current_uid is None:  # TODO can do better
+        install_action = None
+    else:
+        user = get_user(session, current_uid)
+        if project in user.installed:
+            install_action = "uninstall"
+        else:
+            install_action = "install"
+
     view_params = {"current_uid": current_uid,
                    "project": project,
                    "tabs": tabs,
                    "tab": tab,
                    "allow_edit": (role == Role.edit),
+                   "install_action": install_action,
                    "sections": [],
                    "ratings": project.format_ratings()}
 

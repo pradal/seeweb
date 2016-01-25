@@ -69,6 +69,8 @@ def main(global_config, **settings):
 
     config.add_route('project_edit_fetch', 'project/{pid}/fetch')
     config.add_route('project_edit_delete', 'project/{pid}/delete')
+    config.add_route('project_install', 'project/{pid}/install')
+    config.add_route('project_uninstall', 'project/{pid}/uninstall')
     config.add_route('project_view_home_default', 'project/{pid}')
 
     # team

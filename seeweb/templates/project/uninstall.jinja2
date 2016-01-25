@@ -1,0 +1,17 @@
+{% extends "project_layout.html" %}
+
+{% block project_body %}
+
+<div class="col-md-3">
+    <img src="{{ request.static_url('seeweb:avatar/project/%s.png' % project.id) }}">
+</div>
+<div class="col-md-9">
+    <h1>About to uninstall {{ project.id }}</h1>
+    <form class="form-inline" action="{{ request.route_url('project_uninstall', pid=project.id) }}" method='POST'>
+        <input type="submit" class="btn btn-warning" name="validate" value="Validate" />
+        <input type="submit" class="btn btn-default" name="cancel" value="Cancel" />
+    </form>
+</div>
+
+{% endblock %}
+

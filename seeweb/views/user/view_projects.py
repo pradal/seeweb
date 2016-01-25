@@ -66,7 +66,7 @@ def index(request):
     allow_install = (current_uid == user.id)
     installed = []
     if allow_install:
-        for project in user.projects:
+        for project in user.installed:
             installed.append((Role.read, project))
 
     view_params["allow_install"] = allow_install

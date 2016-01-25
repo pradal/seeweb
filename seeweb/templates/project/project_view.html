@@ -8,6 +8,17 @@
     </div>
     <div class="col-md-9">
         <h1>{{ project.id }}</h1>
+        {% if install_action == 'install' %}
+            <a class="btn btn-warning pull-right" href="{{ request.route_url('project_install', pid=project.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Install project
+            </a>
+        {% elif install_action == 'uninstall' %}
+            <a class="btn btn-warning pull-right" href="{{ request.route_url('project_uninstall', pid=project.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Uninstall project
+            </a>
+        {% endif %}
         {% if allow_edit %}
             <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>

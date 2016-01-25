@@ -127,3 +127,22 @@ def recompute_project_ratings(session, project):
         new_ratings.append((key, rating))
 
     affect_ratings(project, new_ratings)
+
+
+def install_project(session, user, project):
+    """Install project in user installed projects
+
+    Does not test if user has permission to do that.
+    """
+    user.installed.append(project)
+
+
+def uninstall_project(session, user, project):
+    """Install project in user installed projects
+
+    Does not test if user has permission to do that.
+    """
+    if project not in user.installed:
+        raise UserWarning("Project not installed")
+
+    user.installed.remove(project)

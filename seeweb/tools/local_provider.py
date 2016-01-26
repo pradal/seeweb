@@ -6,6 +6,7 @@ import os
 from os.path import exists, splitext
 from os.path import join as pj
 from PIL import Image
+from subprocess import call, Popen, PIPE
 
 
 def fetch_contributors(pth):
@@ -50,10 +51,25 @@ def fetch_gallery_images(pth):
     return imgs
 
 
-def fetch_sources(pth, dest):
-    """Fetch sources located in pth
-    and copy them into dest.
+def fetch_sources(src_url, dst):
+    """Fetch sources located in src_url
+    and copy them into a pid directory in dst.
 
-    Use git clone, assume pth is a valid git repo
+    Use git clone, check pth is a valid git repo
     """
-    raise NotImplementedError
+    cwd = os.getcwd()
+
+    # check dest
+    if not exists(dst):
+        os.mkdir(dst)
+
+    os.chdir(dst)
+
+    if not exists(".git"):
+        call(["git", "init"])
+
+    call(["git", "pull", pj(cwd, src_url)])
+
+    os.chdir(cwd)
+
+    return True

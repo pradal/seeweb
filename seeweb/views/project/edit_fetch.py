@@ -8,7 +8,10 @@ from seeweb.models import DBSession
 from seeweb.models.access import get_project, project_access_role
 from seeweb.models.auth import Role
 from seeweb.tools import github, local_provider
-from seeweb.views.tools import add_gallery_image, clear_gallery, upload_avatar
+from seeweb.views.tools import (add_gallery_image,
+                                clear_gallery,
+                                source_pth,
+                                upload_avatar)
 
 
 @view_config(route_name='project_edit_fetch',
@@ -69,15 +72,6 @@ def view(request):
             fetch_success = True
             pth = url.path
 
-            if 'readme' in request.params:
-                try:
-                    readme = local_provider.fetch_readme(pth)
-                    project.description = readme
-                except IOError:
-                    msg = "Unable to fetch README from local dir"
-                    request.session.flash(msg, 'warning')
-                    fetch_success = False
-
             if 'avatar' in request.params:
                 try:
                     avatar = local_provider.fetch_avatar(pth)
@@ -92,6 +86,21 @@ def view(request):
                 clear_gallery(project.id)
                 for img_name, img in local_provider.fetch_gallery_images(pth):
                     add_gallery_image(project.id, img, img_name)
+
+            if 'readme' in request.params:
+                try:
+                    readme = local_provider.fetch_readme(pth)
+                    project.description = readme
+                except IOError:
+                    msg = "Unable to fetch README from local dir"
+                    request.session.flash(msg, 'warning')
+                    fetch_success = False
+
+            if 'source' in request.params:
+                if not local_provider.fetch_sources(pth, source_pth(pid)):
+                    msg = "Unable to fetch sources from local dir"
+                    request.session.flash(msg, 'warning')
+                    fetch_success = False
 
             if fetch_success:
                 loc = request.route_url('project_edit_source', pid=project.id)
@@ -109,15 +118,6 @@ def view(request):
                                       'warning')
                 return view_params
 
-            if 'readme' in request.params:
-                try:
-                    readme = github.fetch_readme(repo)
-                    project.description = readme
-                except IOError:
-                    msg = "Unable to fetch README from github"
-                    request.session.flash(msg, 'warning')
-                    fetch_success = False
-
             if 'avatar' in request.params:
                 try:
                     avatar = github.fetch_avatar(repo)
@@ -125,6 +125,15 @@ def view(request):
                     upload_avatar(img, project, 'project')
                 except IOError:
                     msg = "Unable to fetch avatar from github"
+                    request.session.flash(msg, 'warning')
+                    fetch_success = False
+
+            if 'readme' in request.params:
+                try:
+                    readme = github.fetch_readme(repo)
+                    project.description = readme
+                except IOError:
+                    msg = "Unable to fetch README from github"
                     request.session.flash(msg, 'warning')
                     fetch_success = False
 

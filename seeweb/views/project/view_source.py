@@ -3,6 +3,8 @@ from pyramid.view import view_config
 from urlparse import urlsplit
 
 from seeweb.models import DBSession
+from seeweb.models.access import get_user
+from seeweb.playground.workspace import has_workspace
 from seeweb.tools.explore import find_executables, find_notebooks
 from seeweb.views.tools import source_pth
 
@@ -33,5 +35,14 @@ def index(request):
     if exists(src_pth):
         view_params["notebooks"] = find_notebooks(src_pth)
         view_params["executables"] = find_executables(src_pth)
+
+    playground = False
+    user = get_user(session, view_params["current_uid"])
+    view_params["user"] = user
+    if user is not None and project in user.installed:
+        if has_workspace(user.id):
+            playground = True
+
+    view_params["playground"] = playground
 
     return view_params

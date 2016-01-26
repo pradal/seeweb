@@ -44,6 +44,9 @@ def get_team(session, tid):
 def get_user(session, uid):
     """Fetch a given user from the database
     """
+    if uid is None:
+        return None
+
     users = session.query(User).filter(User.id == uid).all()
     if len(users) == 0:
         return None

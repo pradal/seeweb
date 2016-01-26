@@ -41,7 +41,11 @@
           <div class="panel-body">
             <ul>
                 {% for name, descr in executables %}
+                    {% if playground %}
+                    <li><a class="btn btn-primary" href="{{ request.route_url('user_view_playground', uid=user.id, _query={'executable': name}) }}">{{ name }}</a>: {{ descr }}</li>
+                    {% else %}
                     <li>{{ name }}: {{ descr }}</li>
+                    {% endif %}
                 {% endfor %}
             </ul>
           </div>

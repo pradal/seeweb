@@ -5,6 +5,7 @@ from seeweb.models import DBSession
 from seeweb.playground.workspace import (create_workspace,
                                          has_workspace,
                                          install_project,
+                                         launch_executable,
                                          remove_workspace)
 
 from .tools import view_init
@@ -34,5 +35,12 @@ def index(request):
     if "clear" in request.params:
         if has_workspace(user.id):
             remove_workspace(user.id)
+
+    view_params["executable"] = None
+    if 'executable' in request.params:
+        exe_name = request.params['executable']
+        ans = launch_executable(user.id, exe_name)
+        view_params["executable"] = exe_name
+        view_params["exe_answer"] = ans
 
     return view_params

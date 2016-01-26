@@ -1,8 +1,11 @@
 import ast
 from ast import parse
+from ConfigParser import ConfigParser
 from os import walk
 from os.path import exists, splitext
 from os.path import join as pj
+
+from seeweb.views.tools import source_pth
 
 
 def find_notebooks(pth):
@@ -19,11 +22,23 @@ def find_notebooks(pth):
 
         # fidn notebooks
         for name in filenames:
-            if splitext(name)[1] == ".pnb":
+            if splitext(name)[1] == ".ipynb":
                 dname = root.replace("\\", "/")[n:]
                 notebooks.append((dname, name))
 
     return notebooks
+
+
+def parse_console_script(elm):
+    """Construct a list of console scripts.
+    """
+    exename, exepth = elm.split("=")
+    # TODO
+    # find associated description as docstring
+    # of refered function
+    descr = "No description found yet (TODO)"
+
+    return exename.strip(), descr
 
 
 def parse_console_scripts(elms):
@@ -64,11 +79,24 @@ def parse_setup(pth):
                             return parse_entry_points(kwd.value)
 
 
-def find_executables(pth):
-    """Parse setup.py to find cli entry points
+def find_executables(pid):
+    """Find all console_scripts entry points in a project
     """
+    pth = source_pth(pid)
+
     setup_pth = pj(pth, "setup.py")
     if not exists(setup_pth):
         return []
 
-    return parse_setup(pth)
+    egg_pth = pj(pth, "src", "%s.egg-info" % pid)
+    if not exists(egg_pth):
+        return []
+
+    cf = ConfigParser()
+    cf.read(pj(egg_pth, "entry_points.txt"))
+    if cf.has_section('console_scripts'):
+        eps = cf.items('console_scripts')
+    else:
+        eps = []
+
+    return eps

@@ -68,7 +68,8 @@ def fetch_sources(src_url, dst):
     if not exists(".git"):
         call(["git", "init"])
 
-    call(["git", "pull", pj(cwd, src_url)])
+    res = call(["git", "pull", pj(cwd, src_url)])
+    # print "res\n" * 10, res
 
     os.chdir(cwd)
 

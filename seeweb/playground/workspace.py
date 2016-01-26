@@ -161,3 +161,30 @@ def launch_executable(uid, exename):
     return ans
 
 
+def compile_sources(uid, pid):
+    """Compile sources using a given user environment.
+    """
+    cwd = getcwd()
+    ppth = source_pth(pid)
+    if not exists(ppth):
+        raise UserWarning("no source directory")
+
+    if not exists(join(ppth, "setup.py")):
+        raise UserWarning("no setup.py found")
+
+    chdir(ppth)
+    pr = Popen("cmd", stdin=PIPE, stdout=PIPE)
+    pr.stdin.write("activate %s\n" % uid)
+    pr.stdin.write("echo azerty\n")
+    res = pr.communicate("python setup.py bdist_egg\n")
+    if res[1] is not None:
+        raise UserWarning(res[1])
+
+    lines = res[0].splitlines()
+    while not lines[0].startswith("azerty"):
+        lines.pop(0)
+
+    ans = lines[3:-2]
+
+    chdir(cwd)
+    return ans

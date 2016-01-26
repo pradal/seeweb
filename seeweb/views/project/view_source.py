@@ -34,7 +34,7 @@ def index(request):
     src_pth = source_pth(project.id)
     if exists(src_pth):
         view_params["notebooks"] = find_notebooks(src_pth)
-        view_params["executables"] = find_executables(src_pth)
+        view_params["executables"] = find_executables(project.id)
 
     playground = False
     user = get_user(session, view_params["current_uid"])

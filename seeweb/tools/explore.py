@@ -35,7 +35,7 @@ def parse_console_scripts(elms):
         # TODO
         # find associated description as docstring
         # of refered function
-        descr = "No description found yet"
+        descr = "No description found yet (TODO)"
         executables.append((exename.strip(), descr))
 
     return executables
@@ -56,7 +56,6 @@ def parse_setup(pth):
     # find setup function
     for item in tree.body:
         if isinstance(item, ast.Expr):
-            expr = item
             if item.col_offset == 0 and isinstance(item.value, ast.Call):
                 ca = item.value
                 if ca.func.id == "setup":

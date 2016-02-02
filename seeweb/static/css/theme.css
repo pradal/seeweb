@@ -64,3 +64,48 @@ a {
   font-size: 0.9em;
   color: #bc2131;
 }
+
+.project {
+    float: left;
+    padding: 1em;
+    min-width: 180px;
+}
+
+.project .avatar {
+   display: inline;
+}
+
+.project .name {
+    display: inline;
+    vertical-align: bottom;
+}
+
+.team {
+    float: left;
+    padding: 1em;
+    min-width: 180px;
+}
+
+.team .avatar {
+   display: inline;
+}
+
+.team .name {
+    display: inline;
+    vertical-align: bottom;
+}
+
+.user {
+    float: left;
+    min-width: 180px;
+    padding: 1em;
+}
+
+.user .avatar {
+   display: inline;
+}
+
+.user .name {
+    display: inline;
+    vertical-align: bottom;
+}

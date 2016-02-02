@@ -1,0 +1,37 @@
+{% from 'templates/team/macro.jinja2' import team_condensed with context %}
+
+{% extends "layout_view.jinja2" %}
+
+{% block user_view_body %}
+
+<div class="panel panel-default">
+  <div class="panel-body teams">
+    {% if allow_edit %}
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{{ request.route_url('user_view_teams', uid=user.id) }}" method='POST'>
+                    <div class="form-group">
+                        <button class="btn btn-primary pull-right" type="submit" name="new_team">Create</button>
+                        <input type='text' name='team_id' placeholder='new team id'>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+    {% if teams|length == 0 %}
+        <div class="row">
+            This user does not belong to any public team.
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                {% for role, team in teams %}
+                    {{ team_condensed(team) }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

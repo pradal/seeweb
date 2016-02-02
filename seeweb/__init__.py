@@ -7,7 +7,7 @@ from sqlalchemy import engine_from_config
 from models import DBSession, Base
 # from views.project.tools import tabs as project_tabs
 # from views.team.tools import tabs as team_tabs
-# from views.user.tools import tabs as user_tabs
+from views.user.commons import tabs as user_tabs
 #
 from .security import groupfinder
 
@@ -103,12 +103,12 @@ def main(global_config, **settings):
     # config.add_route('team_edit_delete', 'team/{tid}/delete')
     # config.add_route('team_view_home_default', 'team/{tid}')
     #
-    # # user
-    # for tab_title, tab_id in user_tabs:
-    #     config.add_route('user_edit_%s' % tab_id, 'user/{uid}/edit/%s' % tab_id)
-    #     config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
-    #
-    # config.add_route('user_view_home_default', 'user/{uid}')
+    # user
+    for tab_title, tab_id in user_tabs:
+        # config.add_route('user_edit_%s' % tab_id, 'user/{uid}/edit/%s' % tab_id)
+        config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
+
+    config.add_route('user_view_home_default', 'user/{uid}')
 
     config.scan()
 

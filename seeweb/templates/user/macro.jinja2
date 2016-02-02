@@ -6,7 +6,7 @@
         </a>
     </div>
     <div class="name">
-        <a href="#">{{ user.id }}</a>
+        <a href="{{ request.route_url('user_view_home', uid=user.id) }}">{{ user.id }}</a>
     </div>
 </div>
 {%- endmacro %}

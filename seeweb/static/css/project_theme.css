@@ -14,18 +14,3 @@ body {
     text-align: center;
     padding: 0.3em 0 0.3em 0;
 }
-
-.project {
-    float: left;
-    padding: 1em;
-    min-width: 180px;
-}
-
-.project .avatar {
-   display: inline;
-}
-
-.project .name {
-    display: inline;
-    vertical-align: bottom;
-}

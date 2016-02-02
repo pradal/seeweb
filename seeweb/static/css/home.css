@@ -1,0 +1,22 @@
+.frontpage .jumbotron {
+    background: #444444;
+    margin-top: 50px;
+}
+
+.frontpage .jumbotron .lead {
+  font-size: 25px;
+  color: #eeeeee;
+}
+
+.frontpage .jumbotron .lead .font-normal {
+  color: #ffffff;
+}
+
+
+.frontpage .panel-heading {
+    background: #bc2131;
+}
+
+.frontpage .panel-heading h3{
+    color: #ffffff;
+}

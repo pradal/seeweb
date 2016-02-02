@@ -1,0 +1,30 @@
+{% from 'macro.jinja2' import project_condensed with context %}
+
+{% extends "layout.jinja2" %}
+
+{% block project_body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All Projects</h1>
+            {% else %}
+            <h1>Projects starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('project_list') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if projects|length == 0 %}
+        <div class="row">
+            No project found.
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                {% for role, project in projects %}
+                    {{ project_condensed(project, role) }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

@@ -1,0 +1,23 @@
+body {
+  color: #000000;
+  background: #ffffff;
+}
+
+div.summary img {
+    width: 100%;
+}
+
+.team {
+    float: left;
+    padding: 1em;
+    min-width: 180px;
+}
+
+.team .avatar {
+   display: inline;
+}
+
+.team .name {
+    display: inline;
+    vertical-align: bottom;
+}

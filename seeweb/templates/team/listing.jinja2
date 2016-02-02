@@ -1,0 +1,30 @@
+{% from 'macro.jinja2' import team_condensed with context %}
+
+{% extends "layout.jinja2" %}
+
+{% block team_body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All Teams</h1>
+            {% else %}
+            <h1>Teams starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('team_list') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if teams|length == 0 %}
+        <div class="row">
+            No team found.
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                {% for team in teams %}
+                    {{ team_condensed(team) }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

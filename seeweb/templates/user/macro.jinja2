@@ -1,0 +1,12 @@
+{% macro user_condensed(user) -%}
+<div class="user">
+    <div class="avatar">
+        <a href="#">
+            <img class="img-circle" src="{{ request.static_url('seeweb:data/avatar/user/%s_small.png' % user.id) }}" />
+        </a>
+    </div>
+    <div class="name">
+        <a href="#">{{ user.id }}</a>
+    </div>
+</div>
+{%- endmacro %}

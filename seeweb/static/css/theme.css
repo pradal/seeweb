@@ -1,0 +1,66 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  color: #555555;
+  background: #ffffff;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+p {
+  font-weight: 300;
+}
+.font-normal {
+  font-weight: 400;
+}
+.font-semi-bold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+
+a {
+    color: #000050;
+}
+
+.body {
+    background: #ffffff;
+}
+
+.banner {
+    background: #bc2131;
+    color: #ffeeee;
+}
+
+.flash-msg {
+    background: #ffffff;
+}
+
+.main-body {
+    background: #ffffff;
+}
+
+.view_body {
+    background: #ffffff;
+    padding: 0.2em;
+}
+
+.footer {
+    margin-top: 1em;
+    padding: 1em;
+    background: #000000;
+    color: #bc2131;
+}
+
+.copyright {
+  font-size: 0.9em;
+  color: #bc2131;
+}

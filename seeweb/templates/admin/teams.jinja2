@@ -1,0 +1,45 @@
+{% extends "layout.jinja2" %}
+
+{% block admin_body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All teams</h1>
+            {% else %}
+            <h1>Teams starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('admin_teams') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if teams|length == 0 %}
+    <h2>No team found</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>team</th>
+              <th>users</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in teams %}
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a></td>
+              <td>
+                <select>
+                    {% for actor in team.auth %}
+                    <option>{{ actor.user }}</option>
+                    {% endfor %}
+                </select>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+

@@ -68,13 +68,13 @@ def main(global_config, **settings):
     config.add_route('project_list', 'projects')
     config.add_route('user_list', 'users')
     config.add_route('team_list', 'teams')
-    #
-    # # admin
-    # config.add_route('admin_users', "admin/users")
-    # config.add_route('admin_teams', "admin/teams")
-    # config.add_route('admin_projects', "admin/projects")
-    # config.add_route('admin_comments', "admin/comments")
-    #
+
+    # admin
+    config.add_route('admin_users', "admin/users")
+    config.add_route('admin_teams', "admin/teams")
+    config.add_route('admin_projects', "admin/projects")
+    config.add_route('admin_comments', "admin/comments")
+
     # # user auth
     config.add_route('user_login', 'user_login')
     config.add_route('user_logout', 'user_logout')

@@ -1,0 +1,37 @@
+{% extends "layout.jinja2" %}
+
+{% block admin_body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All users</h1>
+            {% else %}
+            <h1>Users starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('admin_users') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if users|length == 0 %}
+    <h2>No user found</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>user</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="{{ request.route_url('user_view_home', uid=user.id) }}">{{ user.id }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+

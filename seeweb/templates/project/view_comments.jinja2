@@ -1,0 +1,23 @@
+{% from 'templates/comment/macro.jinja2' import list_comments with context %}
+{% from 'templates/comment/macro.jinja2' import comment_edit_form %}
+
+{% extends "layout_view.jinja2" %}
+
+{% block project_view_body %}
+
+<div class="list-group">
+    {% if comments|length == 0 %}
+        <p class="list-group-item">No comment yet, add one?</p>
+    {% else %}
+        {{ list_comments(comments) }}
+    {% endif %}
+    {% if request.unauthenticated_userid != None %}
+        <div class="list-group-item" id="edit comment">
+            <form action="#" method='POST'>
+                {{ comment_edit_form(request, request.unauthenticated_userid, project.id, "", ratings, True) }}
+            </form>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -36,7 +36,7 @@ def check_password(session, user, pwd):
         (Bool): True if password correspond to user password
     """
     del session
-    return pwd == user.id
+    return pwd[0] == user.id[0]
 
 
 def log_user_in(request, uid, edit=False):

@@ -1,4 +1,5 @@
 from jinja2 import Markup
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -52,8 +53,11 @@ def index(request):
     session = DBSession()
     user, view_params = view_init(request, session, 'teams')
 
-    if 'new_team' in request.params:
-        register_new_team(request, session, request.unauthenticated_userid)
+    if 'new_team' in request.params and user.id == request.unauthenticated_userid:
+        tid = register_new_team(request, session, user)
+        if tid is not None:
+            loc = request.route_url("team_view_home", tid=tid)
+            return HTTPFound(location=loc)
 
     teams = []
     for actor in user.teams:

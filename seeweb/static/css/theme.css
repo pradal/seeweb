@@ -109,3 +109,25 @@ a {
     display: inline;
     vertical-align: bottom;
 }
+
+.view_header {
+    margin-top: 0.2em;
+}
+
+.view_header .avatar {
+    vertical-align: bottom;
+}
+
+.view_header .avatar img {
+    width: 100%;
+    max-width: 256px;
+}
+
+.view_header .description {
+    padding-left: 1em;
+    vertical-align: bottom;
+}
+
+.view_header .description .spacer {
+    height: 50px;
+}

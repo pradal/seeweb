@@ -1,0 +1,20 @@
+{% extends "layout_view.jinja2" %}
+
+{% block project_view_body %}
+
+<div class="row">
+    <div class="col-md-12">
+        {% if project.doc_url|length == 0 %}
+            <p>No remote documentation associated to this project</p>
+        {% else %}
+            <a href="{{ project.doc_url }}">{{ hostname }}</a>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {{ doc }}
+    </div>
+</div>
+
+{% endblock %}

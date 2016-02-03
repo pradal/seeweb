@@ -1,12 +1,12 @@
 {% macro project_condensed(project, role) -%}
 <div class="project">
     <div class="avatar">
-        <a href="#">
+        <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
             <img class="img-circle" src="{{ request.static_url('seeweb:data/avatar/project/%s_small.png' % project.id) }}" />
         </a>
     </div>
     <div class="name">
-        <a href="#">{{ project.id }}</a>
+        <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
     </div>
 </div>
 {%- endmacro %}

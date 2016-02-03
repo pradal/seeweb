@@ -1,25 +1,24 @@
 {% extends "layout.jinja2" %}
 
-{% block user_body %}
+{% block team_body %}
 <div class="row view_header">
     <div class="col-md-3 avatar">
-        <a href="{{ request.route_url('user_view_home', uid=user.id) }}">
-            <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/user/%s.png' % user.id) }}" />
+        <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
+            <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/team/%s.png' % team.id) }}" />
         </a>
     </div>
     <div class="col-md-9 description">
-        <div class="h1">{{ user.id }}</div>
-        <div class="h2">{{ user.name }}</div>
+        <div class="h1">{{ team.id }}</div>
         <div class="spacer"></div>
         {% if allow_edit %}
             <a class="btn btn-default pull-right" href="#">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-              Edit profile
+              Edit team
             </a>
         {% endif %}
         <ul class="nav nav-tabs">
             {% for tab_title, tab_id in tabs %}
-                <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_view_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
+                <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_view_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -29,9 +28,8 @@
 
 <div class="row view_body">
     <div class="col-md-9 col-md-offset-3">
-        {% block user_view_body %}
+        {% block team_view_body %}
         {% endblock %}
     </div>
 </div>
-
 {% endblock %}

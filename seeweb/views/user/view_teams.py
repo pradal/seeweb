@@ -49,7 +49,7 @@ def register_new_team(request, session, user):
 
 @view_config(route_name='user_view_teams',
              renderer='templates/user/view_teams.jinja2')
-def index(request):
+def view(request):
     session = DBSession()
     user, view_params = view_init(request, session, 'teams')
 

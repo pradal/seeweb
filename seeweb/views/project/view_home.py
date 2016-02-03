@@ -12,7 +12,7 @@ from .commons import view_init
              renderer='templates/project/view_home.jinja2')
 @view_config(route_name='project_view_home',
              renderer='templates/project/view_home.jinja2')
-def index(request):
+def view(request):
     session = DBSession()
     request.session['last'] = request.current_route_url()
 

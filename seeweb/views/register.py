@@ -9,7 +9,7 @@ from seeweb.security import log_user_in
 
 
 @view_config(route_name='user_register', renderer='templates/register.jinja2')
-def index(request):
+def view(request):
     if request.unauthenticated_userid is not None:
         request.session.flash("Already logged in, log out first", 'warning')
         return HTTPFound(location=request.route_url('home'))

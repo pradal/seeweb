@@ -4,7 +4,7 @@ from seeweb.security import log_user_out
 
 
 @view_config(route_name='user_logout')
-def index(request):
+def view(request):
     request.session.flash("User %s logged out" % request.unauthenticated_userid,
                           'success')
 

@@ -8,7 +8,7 @@ from .commons import view_init
 
 @view_config(route_name='team_view_members',
              renderer='templates/team/view_members.jinja2')
-def index(request):
+def view(request):
     session = DBSession()
     team, view_params = view_init(request, session, 'members')
 

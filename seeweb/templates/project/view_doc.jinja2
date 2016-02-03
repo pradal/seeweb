@@ -7,7 +7,7 @@
         {% if project.doc_url|length == 0 %}
             <p>No remote documentation associated to this project</p>
         {% else %}
-            <a href="{{ project.doc_url }}">{{ hostname }}</a>
+            <p>Documentation hosted on: <a href="{{ project.doc_url }}">{{ hostname }}</a></p>
         {% endif %}
     </div>
 </div>

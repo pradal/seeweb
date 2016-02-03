@@ -137,6 +137,8 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
         # projects
         pkglts = create_project(session, 'revesansparole', 'pkglts')
         pkglts.public = True
+        pkglts.doc_url = "http://pkglts.readthedocs.org/en/latest/"
+        pkglts.src_url = " C:/Users/jerome/Desktop/pkglts/.git"
         pkglts.store_description("""
 This project is part of OpenAlea_.
 
@@ -158,9 +160,11 @@ This project is part of OpenAlea_.
 
         svgdraw = create_project(session, 'revesansparole', 'svgdraw')
         svgdraw.public = True
+        svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
         add_project_auth(session, svgdraw, sartzet, Role.view)
         workflow = create_project(session, 'revesansparole', 'workflow')
         workflow.public = True
+        workflow.src_url = "C:/Users/jerome/Desktop/see/toto/.git"
         add_project_auth(session, workflow, oa, Role.view)
 
         for i in range(5):

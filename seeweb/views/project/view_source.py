@@ -1,10 +1,11 @@
-from os.path import exists
+from os.path import basename, exists, splitext
 from pyramid.view import view_config
 from urlparse import urlsplit
 
 from seeweb.models import DBSession
 from seeweb.model_access import get_user
 # from seeweb.playground.workspace import has_workspace
+from seeweb.remote.source import parse_vcs, parse_hostname
 # from seeweb.tools.explore import find_executables, find_notebooks
 # from seeweb.views.tools import source_pth
 
@@ -13,18 +14,18 @@ from .commons import view_init
 
 @view_config(route_name='project_view_source',
              renderer='templates/project/view_source.jinja2')
-def index(request):
+def view(request):
     session = DBSession()
     project, view_params = view_init(request, session, 'source')
 
-    hostname = ""
     if len(project.src_url) > 0:
-        url = urlsplit(project.src_url)
-        hostname = url.hostname
+        vcs = parse_vcs(project.src_url)
+        hostname = parse_hostname(project.src_url)
+    else:
+        vcs = ""
+        hostname = ""
 
-    if hostname is None or len(hostname) == 0:
-        hostname = "src hostname"
-
+    view_params["vcs"] = vcs
     view_params["hostname"] = hostname
 
     # explore sources

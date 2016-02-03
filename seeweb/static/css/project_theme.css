@@ -33,3 +33,10 @@
     vertical-align: middle;
 }
 
+.host_list {
+    padding-top: 1em;
+}
+
+button img {
+    width: 64px;
+}

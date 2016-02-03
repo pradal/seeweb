@@ -1,0 +1,32 @@
+{% extends "layout_edit.jinja2" %}
+
+{% block project_edit_body %}
+<div class="row">
+    <div class="col-md-12">
+        <button type="submit" class="btn pull-right" name="fetch_doc">Fetch</button>
+        <div class="input-group">
+            <span class="input-group-addon">url</span>
+            <input type="text" class="form-control" id="doc_url" name="doc_url" value="{{ project.doc_url }}" />
+        </div>
+    </div>
+</div>
+
+<div class="row host_list">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>hosts:</label>
+            {% for hostname in doc_hosts %}
+                <button class="btn" type="submit" name="{{ hostname }}">
+                    {{ hostname }}
+                    <img src="{{request.static_url('seeweb:static/doc_host/%s.png' % hostname) }}" />
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+  <label for="doc">Documentation:</label>
+  <textarea class="form-control" rows="20" id="doc" name='documentation' {% if project.doc == "" %}placeholder='write some documentation in restructured text here'{% endif %}>{{ project.doc }}</textarea>
+</div>
+{% endblock %}

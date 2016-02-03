@@ -1,0 +1,27 @@
+{% extends "layout_edit.jinja2" %}
+
+{% block project_edit_body %}
+<div class="row">
+    <div class="col-md-12">
+        <a class="btn btn-warning pull-right" href="#">Fetch</a>
+        <div class="input-group">
+            <span class="input-group-addon">url</span>
+            <input type="text" class="form-control" id="src_url" name="src_url" value="{{ project.src_url }}" />
+        </div>
+    </div>
+</div>
+<div class="row host_list">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>hosts:</label>
+            {% for hostname in src_hosts %}
+                <button class="btn" type="submit" name="{{ hostname }}">
+                    {{ hostname }}
+                    <img src="{{request.static_url('seeweb:static/src_host/%s.png' % hostname) }}" />
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

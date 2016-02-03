@@ -35,7 +35,7 @@
             </a>
         {% endif %}
         {% if allow_edit %}
-            <a class="btn btn-default pull-right" href="#">
+            <a class="btn btn-default pull-right" href="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}">
               <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
               Edit project
             </a>

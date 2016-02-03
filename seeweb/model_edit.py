@@ -220,7 +220,7 @@ def remove_auth(session, parent, uid):
 
     Args:
         session: (DBSession)
-        parent: (Project{Team)
+        parent: (Project|Team)
         uid: (str) id of user or team
 
     Returns:

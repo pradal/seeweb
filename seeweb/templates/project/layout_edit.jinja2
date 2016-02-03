@@ -1,0 +1,52 @@
+{% extends "layout.jinja2" %}
+
+{% block project_body %}
+<form action="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}" method='POST'
+      enctype="multipart/form-data">
+
+<div class="row view_header">
+    <div class="col-md-3 avatar">
+        <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
+            <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/project/%s.png' % project.id) }}" />
+        </a>
+    </div>
+    <div class="col-md-9 description">
+        <div class="owner pull-right">
+            <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
+            <p>Visibility: {% if project.public %}Public{% else %}Private{% endif %}</p>
+        </div>
+        <div class="h1">{{ project.id }}</div>
+        <div class="spacer"></div>
+        {% for name, rating in ratings %}
+            <div class="form-inline">
+              <div class="form-group">
+                <label>{{ name }}:</label>
+                <input type="hidden" class="rating-tooltip" data-fractions="2" data-readonly value="{{ rating }}">
+              </div>
+            </div>
+        {% endfor %}
+
+        <ul class="nav nav-tabs">
+            {% for tab_title, tab_id in tabs %}
+                <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('project_edit_%s' % tab_id, pid=project.id) }}">{{ tab_title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+
+<div class="row view_body">
+    <div class="col-md-3">
+        <button class="btn btn-primary" type="submit" name="update">Update</button>
+        <button class="btn" type="submit" name="default">Default</button>
+        <button class="btn pull-right" type="submit" name="back">Back</button>
+    </div>
+
+    <div class="col-md-9">
+        {% block project_edit_body %}
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}

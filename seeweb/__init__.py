@@ -86,7 +86,7 @@ def main(global_config, **settings):
     #
     # project
     for tab_title, tab_id in project_tabs:
-        # config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
+        config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
         config.add_route('project_view_%s' % tab_id, 'project/{pid}/%s' % tab_id)
     #
     # config.add_route('project_edit_fetch', 'project/{pid}/fetch')

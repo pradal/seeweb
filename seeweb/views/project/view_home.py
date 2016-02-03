@@ -23,7 +23,7 @@ def index(request):
                                'extra info']
 
     # description
-    view_params['short_description'] = Markup(project.html_description())
+    view_params['description'] = Markup(project.html_description())
 
     # gallery
     view_params["gallery"] = fetch_gallery_images(project)

@@ -1,10 +1,12 @@
 import os
 import sys
-import transaction
+from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
+import transaction
 
+from seeweb.gallery import add_gallery_image
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.model_edit import (create_comment,
@@ -135,7 +137,7 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
         # projects
         pkglts = create_project(session, 'revesansparole', 'pkglts')
         pkglts.public = True
-        pkglts.description = """
+        pkglts.store_description("""
 This project is part of OpenAlea_.
 
 .. image:: http://localhost:6543/avatar/team/openalea_small.png
@@ -144,8 +146,15 @@ This project is part of OpenAlea_.
 
 .. _OpenAlea: http://localhost:6543/team/openalea
 
-        """
+        """)
         add_project_auth(session, pkglts, sartzet, Role.edit)
+        for img_name in ["Chrysanthemum.png",
+                         "Desert.png",
+                         "Jellyfish.png",
+                         "Koala.png",
+                         "Penguins.png"]:
+            img = Image.open("seeweb/scripts/gallery/%s" % img_name)
+            add_gallery_image(pkglts, img, img_name)
 
         svgdraw = create_project(session, 'revesansparole', 'svgdraw')
         svgdraw.public = True

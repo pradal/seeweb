@@ -53,7 +53,7 @@
 <div class="row view_body">
     <div class="col-md-3">
         {% if sections|length > 0 %}
-            <ul class="nav nav-pills nav-stacked nav-sidebar" data-spy="affix" data-offset-top="197">
+            <ul class="nav nav-pills nav-stacked nav-sidebar">
                 <li role="presentation">
                     <a href="{{ request.route_url('project_view_%s' % tab, pid=project.id) }}">Top</a>
                 </li>

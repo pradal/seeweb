@@ -1,5 +1,6 @@
 {% from 'templates/comment/macro.jinja2' import list_comments with context %}
 {% from 'templates/comment/macro.jinja2' import comment_edit_form %}
+{% from 'macro.jinja2' import gallery_item with context %}
 
 {% extends "layout_view.jinja2" %}
 
@@ -32,11 +33,11 @@
             {% if gallery|length == 0 %}
                 <p>Empty gallery</p>
             {% else %}
-                {% for img_name in gallery %}
-                    <a href="{{ request.static_url('seeweb:gallery/%s/%s.png' % (project.id, img_name)) }}">
-                        <img src="{{ request.static_url('seeweb:gallery/%s/%s_small.png' % (project.id, img_name)) }}" />
-                    </a>
-                {% endfor %}
+                <div class="row">
+                    {% for img_name in gallery %}
+                        {{ gallery_item(project, img_name, "description") }}
+                    {% endfor %}
+                </div>
             {% endif %}
           </div>
          </div>

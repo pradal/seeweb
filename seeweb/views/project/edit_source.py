@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.project.source import host_src_url, recognized_hosts
 
 from .commons import edit_common, edit_init
 
@@ -19,14 +20,11 @@ def view(request):
         edit_common(request, session, project)
         if "src_url" in request.params:
             project.src_url = request.params['src_url']
-    elif "github" in request.params:
-        project.src_url = "https://github.com/%s/%s.git" % (project.owner,
-                                                            project.id)
-    elif "gforge" in request.params:
-        project.src_url = "https://gforge.inria.fr/projects/%s" % project.id
-    else:
-        pass
 
-    view_params["src_hosts"] = ["github", "gforge"]
+    for host in recognized_hosts:
+        if host in request.params:
+            project.doc_url = host_src_url(project, host)
+
+    view_params["src_hosts"] = list(recognized_hosts)
 
     return view_params

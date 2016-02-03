@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from urlparse import urlsplit
 
 from seeweb.models import DBSession
-from seeweb.remote.documentation import parse_hostname
+from seeweb.project.documentation import parse_hostname
 
 from .commons import view_init
 

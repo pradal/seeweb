@@ -1,7 +1,7 @@
 from pyramid.view import view_config
-from urlparse import urlparse
 
 from seeweb.models import DBSession
+from seeweb.project.documentation import host_doc_url, recognized_hosts
 
 from .commons import edit_common, edit_init, fetch_documentation
 
@@ -34,13 +34,11 @@ def view(request):
             request.session.flash("Unable to fetch documentation", 'warning')
         else:
             project.doc = doc
-    elif "readthedocs" in request.params:
-        project.doc_url = "https://%s.readthedocs.org/en/latest/" % project.id
-    elif "pypi" in request.params:
-        project.doc_url = "https://pythonhosted.org/%s" % project.id
-    else:
-        pass
 
-    view_params["doc_hosts"] = ["readthedocs", "pypi"]
+    for host in recognized_hosts:
+        if host in request.params:
+            project.doc_url = host_doc_url(project, host)
+
+    view_params["doc_hosts"] = list(recognized_hosts)
 
     return view_params

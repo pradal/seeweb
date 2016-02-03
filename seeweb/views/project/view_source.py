@@ -5,7 +5,7 @@ from urlparse import urlsplit
 from seeweb.models import DBSession
 from seeweb.model_access import get_user
 # from seeweb.playground.workspace import has_workspace
-from seeweb.remote.source import parse_vcs, parse_hostname
+from seeweb.project.source import parse_vcs, parse_hostname
 # from seeweb.tools.explore import find_executables, find_notebooks
 # from seeweb.views.tools import source_pth
 

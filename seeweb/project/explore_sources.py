@@ -3,7 +3,7 @@ relevant items.
 """
 
 from ConfigParser import ConfigParser
-from os import walk
+from os import listdir, walk
 from os.path import exists, splitext
 from os.path import join as pj
 from PIL import Image
@@ -112,3 +112,27 @@ def fetch_readme(pid):
 
     with open(readme_pth, 'r') as f:
         return f.read()
+
+
+def fetch_gallery(pid):
+    """Find all images in gallery associated to a project.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (list of (Image, str)): image, image_name
+    """
+    pth = source_pth(pid)
+    gallery_pth = pj(pth, "gallery")
+
+    if not exists(gallery_pth):
+        return []
+
+    imgs = []
+    for name in listdir(gallery_pth):
+        if splitext(name)[1] == ".png":
+            img = Image.open(pj(gallery_pth, name))
+            imgs.append((img, name))
+
+    return imgs

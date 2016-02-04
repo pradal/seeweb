@@ -1,9 +1,12 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
+from seeweb.gallery import add_gallery_image
 from seeweb.model_access import get_project, get_user, project_access_role
 from seeweb.models.auth import Role
-from seeweb.project.explore_sources import fetch_avatar, fetch_readme
+from seeweb.project.explore_sources import (fetch_avatar,
+                                            fetch_gallery,
+                                            fetch_readme)
 from seeweb.project.source import has_source
 
 tabs = [('Home', 'home'),
@@ -114,6 +117,11 @@ def edit_init(request, session, tab):
         request.session.flash("TODO dependencies submitted", 'success')
 
     if 'fetch_gallery' in request.params:
-        request.session.flash("TODO gallery submitted", 'success')
+        imgs = fetch_gallery(project.id)
+        if len(imgs) > 0:
+            for img, name in imgs:
+                add_gallery_image(project, img, name)
+
+            request.session.flash("TODO gallery submitted", 'success')
 
     return project, view_params

@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.model_access import fetch_comments
-from seeweb.gallery import fetch_gallery_images
+from seeweb.project.gallery import fetch_gallery_images
 
 from .commons import view_init
 

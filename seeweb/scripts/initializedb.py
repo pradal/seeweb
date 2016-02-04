@@ -6,7 +6,6 @@ from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 import transaction
 
-from seeweb.gallery import add_gallery_image
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.model_edit import (create_comment,
@@ -15,6 +14,7 @@ from seeweb.model_edit import (create_comment,
                                create_user,
                                add_project_auth,
                                add_team_auth)
+from seeweb.project.gallery import add_gallery_image
 
 
 def usage(argv):

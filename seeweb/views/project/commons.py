@@ -1,12 +1,12 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.gallery import add_gallery_image
 from seeweb.model_access import get_project, get_user, project_access_role
 from seeweb.models.auth import Role
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
+from seeweb.project.gallery import add_gallery_image
 from seeweb.project.source import has_source
 
 tabs = [('Home', 'home'),

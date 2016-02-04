@@ -17,7 +17,7 @@ def gallery_pth(project):
     Returns:
         (str): pth to gallery dir
     """
-    root = dirname(__file__)
+    root = dirname(dirname(__file__))
 
     return join(root, "data", "gallery", project.id)
 

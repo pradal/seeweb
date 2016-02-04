@@ -44,3 +44,7 @@ button img {
 #host_local .btn-file {
     display: inline-block;
 }
+
+#host_descr img {
+    width: 32px;
+}

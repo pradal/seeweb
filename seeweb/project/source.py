@@ -2,7 +2,10 @@
 """
 from urlparse import urlsplit
 
-recognized_hosts = ["github", "pypi", "zenodo", "gforge", "local"]
+recognized_hosts = {"github": "github.com",
+                    "pypi": "pypi.python.org",
+                    "zenodo": "zenodo.org",
+                    "gforge": "gforge.inria.fr"}
 
 
 def parse_vcs(url):
@@ -37,10 +40,10 @@ def parse_hostname(url):
         else:
             return "unknown"
 
-    gr = [v.lower() for v in url.netloc.split(".")]
+    ref_url = url.netloc.lower()
 
-    for name in recognized_hosts:
-        if name in gr:
+    for name, host_url in recognized_hosts.items():
+        if host_url in ref_url:
             return name
 
     return "unknown"
@@ -60,6 +63,12 @@ def host_src_url(project, hostname):
         return "https://github.com/%s/%s.git" % (project.owner, project.id)
 
     if hostname == 'pypi':
-        return "https://pythonhosted.org/%s" % project.id
+        return "https://pypi.python.org/pypi/%s" % project.id
+
+    if hostname == 'zenodo':
+        return "https://zenodo.org/record/%s" % project.id
+
+    if hostname == 'gforge':
+        return "https://gforge.inria.fr/projects/%s" % project.id
 
     return "unknown host: %s" % hostname

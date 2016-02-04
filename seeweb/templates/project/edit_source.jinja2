@@ -10,6 +10,7 @@
         </div>
     </div>
 </div>
+
 <div class="row host_list">
     <div class="col-md-12">
         <div class="form-group">
@@ -18,9 +19,6 @@
                 <button class="btn btn-{% if hostname == current_hostname %}primary{% else %}default{%endif%}" type="submit" name="{{ hostname }}" {% if hostname == current_hostname %}disabled{% endif %}>
                     {{ hostname }}
                     <img src="{{request.static_url('seeweb:static/src_host/%s.png' % hostname) }}" />
-                    {% if hostanme == 'local' %}
-                        <input type="file">
-                    {% endif %}
                 </button>
             {% endfor %}
         </div>

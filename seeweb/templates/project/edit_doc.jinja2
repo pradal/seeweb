@@ -16,11 +16,20 @@
         <div class="form-group">
             <label>hosts:</label>
             {% for hostname in doc_hosts %}
-                <button class="btn" type="submit" name="{{ hostname }}">
+                <button class="btn btn-{% if hostname == current_hostname %}primary{% else %}default{%endif%}" type="submit" name="{{ hostname }}" {% if hostname == current_hostname %}disabled{% endif %}>
                     {{ hostname }}
                     <img src="{{request.static_url('seeweb:static/doc_host/%s.png' % hostname) }}" />
                 </button>
             {% endfor %}
+        </div>
+    </div>
+</div>
+<div id="host_local" class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>local:</label>
+            <input class="btn btn-default btn-file" type="file" name="local_file" />
+            <button class="btn btn-warning" type="submit" name="submit_local">submit</button>
         </div>
     </div>
 </div>

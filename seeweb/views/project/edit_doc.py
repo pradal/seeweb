@@ -1,9 +1,12 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.project.documentation import host_doc_url, recognized_hosts
+from seeweb.project.documentation import (fetch_documentation,
+                                          host_doc_url,
+                                          parse_hostname,
+                                          recognized_hosts)
 
-from .commons import edit_common, edit_init, fetch_documentation
+from .commons import edit_common, edit_init
 
 
 @view_config(route_name='project_edit_doc',
@@ -16,6 +19,9 @@ def view(request):
         # reload default values for this user
         # actually already done
         pass
+    elif "submit_local" in request.params:
+        field_storage = request.params["local_file"]
+        project.doc_url = field_storage.filename
     elif 'update' in request.params:
         edit_common(request, session, project)
 
@@ -35,10 +41,17 @@ def view(request):
         else:
             project.doc = doc
 
-    for host in recognized_hosts:
+    for host in recognized_hosts.keys():
         if host in request.params:
             project.doc_url = host_doc_url(project, host)
 
-    view_params["doc_hosts"] = list(recognized_hosts)
+    if len(project.doc_url) > 0:
+        hostname = parse_hostname(project.doc_url)
+    else:
+        hostname = ""
+
+    view_params["current_hostname"] = hostname
+
+    view_params["doc_hosts"] = recognized_hosts.keys()
 
     return view_params

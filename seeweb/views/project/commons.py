@@ -1,8 +1,4 @@
-from bs4 import BeautifulSoup
 from pyramid.httpexceptions import HTTPFound
-import urllib2
-from urllib2 import HTTPError
-from urlparse import urlsplit, urlunsplit
 
 from seeweb.model_access import get_project, get_user, project_access_role
 from seeweb.models.auth import Role
@@ -110,29 +106,3 @@ def edit_common(request, session, project):
     project.public = public
 
     return False
-
-
-def fetch_documentation(url, pid):
-    """Try to fetch documentation from given url
-    return html home page for doc
-    """
-    try:
-        scheme = urlsplit(url).scheme
-        netloc = "%s.readthedocs.org/en/latest" % pid
-
-        response = urllib2.urlopen(url)
-        html = response.read()
-        soup = BeautifulSoup(html, "html.parser")
-        section = soup.find('div', {'class': 'section'})
-        if section is None:
-            return None
-
-        for link in section.find_all('a'):
-            url = urlsplit(link["href"])
-            if url.netloc == "":
-                link["href"] = urlunsplit((scheme, netloc) + url[2:])
-
-        txt = section.prettify()
-        return txt
-    except HTTPError:
-        return None

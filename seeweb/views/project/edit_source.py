@@ -1,4 +1,3 @@
-from os.path import dirname
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -28,7 +27,7 @@ def view(request):
         if "src_url" in request.params:
             project.src_url = request.params['src_url']
 
-    for host in recognized_hosts:
+    for host in recognized_hosts.keys():
         if host in request.params:
             project.src_url = host_src_url(project, host)
 
@@ -42,8 +41,6 @@ def view(request):
     view_params["vcs"] = vcs
     view_params["current_hostname"] = hostname
 
-    rh = list(recognized_hosts)
-    rh.remove('local')
-    view_params["src_hosts"] = rh
+    view_params["src_hosts"] = recognized_hosts.keys()
 
     return view_params

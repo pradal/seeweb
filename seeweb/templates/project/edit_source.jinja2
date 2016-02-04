@@ -3,7 +3,7 @@
 {% block project_edit_body %}
 <div class="row">
     <div class="col-md-12">
-        <button class="btn btn-warning pull-right" data-toggle="modal" data-target="#confirm_fetch">Fetch</button>
+        <button class="btn btn-warning pull-right" data-toggle="modal" data-target="#confirm_fetch_src">Fetch</button>
         <div class="input-group">
             <span class="input-group-addon">url</span>
             <input type="text" class="form-control" id="src_url" name="src_url" value="{{ project.src_url }}" />
@@ -35,7 +35,7 @@
 </div>
 
 <!-- Modal -->
-<div id="confirm_fetch" class="modal fade" role="dialog" data-keyboard="true">
+<div id="confirm_fetch_src" class="modal fade" role="dialog" data-keyboard="true">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -49,7 +49,7 @@
         <p>{{ project.src_url }}</p>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" name="confirm_fetch">Confirm</a>
+        <button type="submit" class="btn btn-primary" name="confirm_fetch_src">Confirm</a>
         <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_fetch">Cancel</button>
       </div>
     </div>

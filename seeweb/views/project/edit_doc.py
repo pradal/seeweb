@@ -6,7 +6,7 @@ from seeweb.project.documentation import (fetch_documentation,
                                           parse_hostname,
                                           recognized_hosts)
 
-from .commons import edit_common, edit_init
+from .commons import edit_init
 
 
 @view_config(route_name='project_edit_doc',
@@ -15,16 +15,10 @@ def view(request):
     session = DBSession()
     project, view_params = edit_init(request, session, 'doc')
 
-    if 'default' in request.params:
-        # reload default values for this user
-        # actually already done
-        pass
-    elif "submit_local" in request.params:
+    if "submit_local" in request.params:
         field_storage = request.params["local_file"]
         project.doc_url = field_storage.filename
     elif 'update' in request.params:
-        edit_common(request, session, project)
-
         # edit project url
         doc_url = str(request.params["doc_url"])
         if len(doc_url) > 0 and doc_url != project.doc_url:

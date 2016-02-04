@@ -41,6 +41,9 @@
         <button class="btn btn-primary" type="submit" name="update">Update</button>
         <button class="btn" type="submit" name="default">Default</button>
         <button class="btn pull-right" type="submit" name="back">Back</button>
+        {% if has_source %}
+            <button class="btn btn-warning"  data-toggle="modal" data-target="#confirm_fetch">fetch from sources</button>
+        {% endif %}
     </div>
 
     <div class="col-md-9">
@@ -49,4 +52,51 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div id="confirm_fetch" class="modal fade" role="dialog" data-keyboard="true">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Fetch info in local sources</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>What type of info to you want to fetch?</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="checkbox">
+                          <label><input type="checkbox" value="fetch_avatar" name="fetch_avatar" {% if avatar %}checked{% endif %} />Avatar</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" value="fetch_readme" name="fetch_readme" {% if readme %}checked{% endif %} />Readme</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" value="fetch_dependencies" name="fetch_dependencies"{% if dependencies %}checked{% endif %} />Dependencies</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" value="fetch_gallery" name="fetch_gallery"{% if gallery %}checked{% endif %} />Gallery</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" name="confirm_fetch">Confirm</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_fetch">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</form>
 {% endblock %}

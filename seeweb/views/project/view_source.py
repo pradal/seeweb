@@ -1,11 +1,9 @@
-from os.path import basename, exists, splitext
 from pyramid.view import view_config
-from urlparse import urlsplit
 
 from seeweb.models import DBSession
 from seeweb.model_access import get_user
 # from seeweb.playground.workspace import has_workspace
-from seeweb.project.source import parse_vcs, parse_hostname, source_pth
+from seeweb.project.source import has_source, parse_vcs, parse_hostname
 from seeweb.project.explore_sources import find_executables, find_notebooks
 
 from .commons import view_init
@@ -31,9 +29,8 @@ def view(request):
     for name in ["notebooks", "executables"]:
         view_params[name] = []
 
-    src_pth = source_pth(project.id)
-    if exists(src_pth):
-        view_params["notebooks"] = find_notebooks(src_pth)
+    if has_source(project.id):
+        view_params["notebooks"] = find_notebooks(project.id)
         view_params["executables"] = find_executables(project.id)
 
     playground = False

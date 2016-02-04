@@ -1,7 +1,10 @@
 from pyramid.httpexceptions import HTTPFound
 
+from seeweb.avatar import upload_project_avatar
 from seeweb.model_access import get_project, get_user, project_access_role
 from seeweb.models.auth import Role
+from seeweb.project.explore_sources import fetch_avatar, fetch_readme
+from seeweb.project.source import has_source
 
 tabs = [('Home', 'home'),
         ('Documentation', 'doc'),
@@ -52,7 +55,8 @@ def view_init(request, session, tab):
                    "allow_edit": (role == Role.edit),
                    "install_action": install_action,
                    "sections": [],
-                   "ratings": project.format_ratings()}
+                   "ratings": project.format_ratings(),
+                   "has_source": has_source(project.id)}
 
     return project, view_params
 
@@ -85,24 +89,31 @@ def edit_init(request, session, tab):
         loc = request.route_url('home')
         raise HTTPFound(location=loc)
 
+    if 'update' in request.params:
+        # edit project visibility
+        public = 'visibility' in request.params
+        project.public = public
+
+    if 'fetch_avatar' in request.params:
+        try:
+            img = fetch_avatar(project.id)
+            upload_project_avatar(img, project)
+            request.session.flash("Avatar submitted", 'success')
+        except IOError:
+            request.session.flash("Unable to read image", 'warning')
+
+    if 'fetch_readme' in request.params:
+        try:
+            txt = fetch_readme(project.id)
+            project.store_description(txt)
+            request.session.flash("Readme submitted", 'success')
+        except IOError:
+            request.session.flash("Unable to find suitable readme file", 'warning')
+
+    if 'fetch_dependencies' in request.params:
+        request.session.flash("TODO dependencies submitted", 'success')
+
+    if 'fetch_gallery' in request.params:
+        request.session.flash("TODO gallery submitted", 'success')
+
     return project, view_params
-
-
-def edit_common(request, session, project):
-    """Common edition operations.
-
-    Args:
-        request: (Request)
-        session: (DBSession)
-        project: (Project) project to be edited
-
-    Returns:
-        (Bool): whether project has changed and the view needs to be reloaded
-    """
-    del session
-
-    # edit project visibility
-    public = 'visibility' in request.params
-    project.public = public
-
-    return False

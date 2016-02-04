@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from seeweb.avatar import load_image, upload_project_avatar
 from seeweb.models import DBSession
 
-from .commons import edit_common, edit_init
+from .commons import edit_init
 
 
 @view_config(route_name='project_edit_home',
@@ -12,13 +12,7 @@ def view(request):
     session = DBSession()
     project, view_params = edit_init(request, session, 'home')
 
-    if 'default' in request.params:
-        # reload default values for this user
-        # actually already done
-        pass
-    elif 'update' in request.params:
-        edit_common(request, session, project)
-
+    if 'update' in request.params:
         if 'description' in request.params:
             project.store_description(request.params['description'])
     elif 'submit_avatar' in request.params:

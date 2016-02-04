@@ -6,6 +6,7 @@ from ConfigParser import ConfigParser
 from os import walk
 from os.path import exists, splitext
 from os.path import join as pj
+from PIL import Image
 
 from .source import source_pth
 
@@ -65,3 +66,49 @@ def find_executables(pid):
         eps = []
 
     return eps
+
+
+def fetch_avatar(pid):
+    """Find avatar file at the root of source dir.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (Image)
+    """
+    pth = source_pth(pid)
+    avatar_pth = pj(pth, "avatar.png")
+
+    if not exists(avatar_pth):
+        return None
+
+    img = Image.open(avatar_pth)
+    return img
+
+
+def _readme_pth(pth):
+    for name in ("readme.rst", "README", "readme.txt"):
+        readme_pth = pj(pth, name)
+        if exists(readme_pth):
+            return readme_pth
+
+    return None
+
+
+def fetch_readme(pid):
+    """Find readme file at the root of source dir.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (Image)
+    """
+    readme_pth = _readme_pth(source_pth(pid))
+
+    if readme_pth is None:
+        return None
+
+    with open(readme_pth, 'r') as f:
+        return f.read()

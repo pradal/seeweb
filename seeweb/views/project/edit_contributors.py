@@ -6,7 +6,7 @@ from seeweb.models.auth import Role
 from seeweb.model_access import get_team, get_user
 from seeweb.model_edit import add_project_auth, remove_auth, update_auth
 
-from .commons import edit_common, edit_init
+from .commons import edit_init
 
 
 def register_new_user(request, session, project, new_uid):
@@ -60,12 +60,8 @@ def view(request):
             if rm_button_id in request.params:
                 need_update = True
 
-    if 'default' in request.params:
-        # reload default values for this user
-        # actually already done
-        pass
-    elif need_update:
-        need_reload = edit_common(request, session, project)
+    if need_update:
+        need_reload = False
 
         # check for new members
         new_uid = request.params['new_member']

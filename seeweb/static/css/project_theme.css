@@ -48,3 +48,8 @@ button img {
 #host_descr img {
     width: 32px;
 }
+
+#edit_avatar .btn-file {
+    display: inline-block;
+}
+

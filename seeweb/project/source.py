@@ -25,6 +25,18 @@ def source_pth(pid):
     return join(root, "see_repo", pid)
 
 
+def has_source(pid):
+    """Check if the project has some local sources.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (bool)
+    """
+    return exists(source_pth(pid))
+
+
 def parse_vcs(url):
     """Find vcs associated to a given url
 

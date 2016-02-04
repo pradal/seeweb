@@ -40,3 +40,7 @@
 button img {
     width: 64px;
 }
+
+#host_local .btn-file {
+    display: inline-block;
+}

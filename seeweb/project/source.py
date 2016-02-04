@@ -30,11 +30,14 @@ def parse_hostname(url):
     Returns:
         (str) name of host
     """
-    netloc = urlsplit(url).netloc
-    if len(netloc) == 0:
-        return "local"
+    url = urlsplit(url)
+    if len(url.netloc) == 0:
+        if "/" in url.path:
+            return "local"
+        else:
+            return "unknown"
 
-    gr = [v.lower() for v in netloc.split(".")]
+    gr = [v.lower() for v in url.netloc.split(".")]
 
     for name in recognized_hosts:
         if name in gr:

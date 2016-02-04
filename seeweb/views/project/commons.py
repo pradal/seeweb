@@ -80,7 +80,7 @@ def edit_init(request, session, tab):
         raise HTTPFound(location=request.route_url('home'))
 
     if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
+        # request.session.flash("Edition stopped", 'success')
         loc = request.route_url('project_view_%s' % tab, pid=project.id)
         raise HTTPFound(location=loc)
 

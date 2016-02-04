@@ -1,11 +1,28 @@
 """Set of function used to fetch sources on remote hosts
 """
+from os import mkdir
+from os.path import dirname, exists, join
 from urlparse import urlsplit
+
+from .provider import local_git
 
 recognized_hosts = {"github": "github.com",
                     "pypi": "pypi.python.org",
                     "zenodo": "zenodo.org",
                     "gforge": "gforge.inria.fr"}
+
+
+def source_pth(pid):
+    """Return a path to the source dir associated to a given project.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (str): path, may miss last dirname
+    """
+    root = dirname(dirname(dirname(dirname(__file__))))
+    return join(root, "see_repo", pid)
 
 
 def parse_vcs(url):
@@ -72,3 +89,30 @@ def host_src_url(project, hostname):
         return "https://gforge.inria.fr/projects/%s" % project.id
 
     return "unknown host: %s" % hostname
+
+
+def fetch_sources(project):
+    """Fetch source for a given project according to project.src_url
+
+    Args:
+        project: (Project)
+
+    Returns:
+        (bool): whether fetch has been successful
+    """
+    vcs = parse_vcs(project.src_url)
+    if vcs != "git":
+        return False
+
+    pth = source_pth(project.id)
+    if not exists(pth):
+        mkdir(pth)
+
+    host = parse_hostname(project.src_url)
+    if host == 'github':
+        return False
+
+    if host == 'local':
+        return local_git.fetch_sources(project.src_url, pth)
+
+    return False

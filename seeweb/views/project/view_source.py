@@ -5,9 +5,8 @@ from urlparse import urlsplit
 from seeweb.models import DBSession
 from seeweb.model_access import get_user
 # from seeweb.playground.workspace import has_workspace
-from seeweb.project.source import parse_vcs, parse_hostname
-# from seeweb.tools.explore import find_executables, find_notebooks
-# from seeweb.views.tools import source_pth
+from seeweb.project.source import parse_vcs, parse_hostname, source_pth
+from seeweb.project.explore_sources import find_executables, find_notebooks
 
 from .commons import view_init
 
@@ -32,10 +31,10 @@ def view(request):
     for name in ["notebooks", "executables"]:
         view_params[name] = []
 
-    # src_pth = source_pth(project.id)
-    # if exists(src_pth):
-    #     view_params["notebooks"] = find_notebooks(src_pth)
-    #     view_params["executables"] = find_executables(project.id)
+    src_pth = source_pth(project.id)
+    if exists(src_pth):
+        view_params["notebooks"] = find_notebooks(src_pth)
+        view_params["executables"] = find_executables(project.id)
 
     playground = False
     # user = get_user(session, view_params["current_uid"])

@@ -1,7 +1,9 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.project.source import (host_src_url,
+from seeweb.project.source import (fetch_sources,
+                                   host_src_url,
                                    parse_vcs,
                                    parse_hostname,
                                    recognized_hosts)
@@ -22,6 +24,12 @@ def view(request):
     elif "submit_local" in request.params:
         field_storage = request.params["local_file"]
         project.src_url = field_storage.filename
+    elif "confirm_fetch" in request.params:
+        if fetch_sources(project):
+            loc = request.route_url('project_view_source', pid=project.id)
+            return HTTPFound(location=loc)
+        else:
+            request.session.flash("Unable to fetch sources", 'warning')
     elif 'update' in request.params:
         edit_common(request, session, project)
         if "src_url" in request.params:

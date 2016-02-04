@@ -162,10 +162,14 @@ This project is part of OpenAlea_.
         svgdraw.public = True
         svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
         add_project_auth(session, svgdraw, sartzet, Role.view)
+
         workflow = create_project(session, 'revesansparole', 'workflow')
         workflow.public = True
-        workflow.src_url = "C:/Users/jerome/Desktop/see/toto/.git"
         add_project_auth(session, workflow, oa, Role.view)
+
+        toto = create_project(session, 'revesansparole', 'toto')
+        toto.public = False
+        toto.src_url = "C:/Users/jerome/Desktop/see/toto/.git"
 
         for i in range(5):
             create_project(session, 'doofus%d' % i, "stoopid%d" % i)

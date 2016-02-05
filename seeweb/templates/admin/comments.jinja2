@@ -28,7 +28,7 @@
               <tbody>
                 {% for cmt in comments %}
                 <tr>
-                  <td><input type="checkbox"></td>
+                  <td><input type="checkbox" /></td>
                   <td><a href="{{ request.route_url('project_view_home', pid=cmt.project) }}">{{ cmt.project }}</a></td>
                   <td><a href="{{ request.route_url('user_view_home', uid=cmt.author) }}">{{ cmt.author }}</a></td>
                   <td>{{ cmt.creation }}</td>

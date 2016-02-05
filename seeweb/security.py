@@ -8,6 +8,42 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import forget, remember
 
 
+def is_good_id(txt):  # TODO
+    """Check whether txt is good to use as id.
+
+    Args:
+        txt: (str) a string
+
+    Returns:
+        (bool)
+    """
+    return " " not in txt
+
+
+def is_good_name(txt):  # TODO
+    """Check whether txt is good to use as name.
+
+    Args:
+        txt: (str) a string
+
+    Returns:
+        (bool)
+    """
+    return " " not in txt
+
+
+def is_good_email(txt):  # TODO
+    """Check whether txt is good to use as email.
+
+    Args:
+        txt: (str) a string
+
+    Returns:
+        (bool)
+    """
+    return " " not in txt
+
+
 def groupfinder(userid, request):
     """Find which group the user belongs to.
 

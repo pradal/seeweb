@@ -42,8 +42,8 @@
 
 
 {% macro comment_edit_form(request, author, pid, txt, ratings, submit) -%}
-<input type="hidden" name="author" value="{{ author }}"/>
-<input type="hidden" name="project" value="{{ pid }}"/>
+<input type="hidden" name="author" value="{{ author }}" />
+<input type="hidden" name="project" value="{{ pid }}" />
 <div class=row>
     <div class="col-md-7">
         <div class="form-group">
@@ -55,7 +55,7 @@
             <div class="form-inline">
               <div class="form-group">
                 <label>{{ name }}:</label>
-                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" name="rating_{{ name|lower }}">
+                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" name="rating_{{ name|lower }}" />
               </div>
             </div>
         {% endfor %}

@@ -10,7 +10,7 @@
             <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-addon">src</div>
-                  <input type="text" class="form-control" value="{{ project.src_url }}" disabled/>
+                  <input type="text" class="form-control" value="{{ project.src_url }}" disabled />
                 </div>
             </div>
             <p>VCS: {{ vcs }}, hosted on <a href="{{ project.src_url }}">{{ hostname }}<img src="{{ request.static_url('seeweb:static/src_host/%s.png' % hostname) }}" /></a></p>

@@ -15,7 +15,7 @@
             <div class="owner pull-right">
                 <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
                <div class="checkbox">
-                  <label><input type="checkbox" name="visibility" {% if project.public %}checked{% endif %}>Public</label>
+                  <label><input type="checkbox" name="visibility" {% if project.public %}checked{% endif %} />Public</label>
                 </div>
             </div>
             <div class="h1">{{ project.id }}</div>
@@ -24,7 +24,7 @@
                 <div class="form-inline">
                   <div class="form-group">
                     <label>{{ name }}:</label>
-                    <input type="hidden" class="rating-tooltip" data-fractions="2" data-readonly value="{{ rating }}">
+                    <input type="hidden" class="rating-tooltip" data-fractions="2" data-readonly value="{{ rating }}" />
                   </div>
                 </div>
             {% endfor %}

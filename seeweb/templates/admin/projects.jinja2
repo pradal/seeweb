@@ -27,7 +27,7 @@
           <tbody>
             {% for project in projects %}
             <tr>
-              <td><input type="checkbox" name="select_{{ project.id }}""></td>
+              <td><input type="checkbox" name="select_{{ project.id }}" /></td>
               <td><a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a></td>
               <td><a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></td>
               <td>{% if project.public %}public{% else %}private{% endif %}</td>

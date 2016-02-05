@@ -5,7 +5,10 @@ from seeweb.models import DBSession
 from seeweb.model_access import get_team, get_user
 from seeweb.model_edit import create_user
 
-from seeweb.security import log_user_in
+from seeweb.security import (is_good_email,
+                             is_good_id,
+                             is_good_name,
+                             log_user_in)
 
 
 @view_config(route_name='user_register', renderer='templates/register.jinja2')
@@ -19,18 +22,18 @@ def view(request):
 
         # check all fields are correct
         uid = request.params["user_id"]
-        if len(uid) == 0:  # test user_id validity
-            request.session.flash("No user id given", 'warning')
+        if len(uid) == 0 or not is_good_id(uid):
+            request.session.flash("User id is not a valid id", 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
         name = request.params["user_name"]
-        if len(name) == 0:  # test name validity
-            request.session.flash("No name given", 'warning')
+        if len(name) == 0 or not is_good_name(name):
+            request.session.flash("Name given is not valid", 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
         email = request.params["user_email"]
-        if len(email) == 0:  # test name validity
-            request.session.flash("No email given", 'warning')
+        if len(email) == 0 or not is_good_email(email):
+            request.session.flash("Email given is not valid", 'warning')
             return HTTPFound(location=request.route_url('user_register'))
 
         # check user does not exist already

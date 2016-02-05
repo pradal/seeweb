@@ -2,6 +2,9 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.auth import Role
 from seeweb.model_access import get_team, team_access_role
+from seeweb.model_edit import remove_team
+import transaction
+
 
 tabs = [('Home', 'home'),
         ('Projects', 'projects'),
@@ -63,9 +66,12 @@ def edit_init(request, session, tab):
         loc = request.route_url('team_view_%s' % tab, tid=team.id)
         raise HTTPFound(location=loc)
 
-    if 'delete' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        loc = request.route_url('home')
-        raise HTTPFound(location=loc)
+    if "confirm_delete" in request.params:
+        if remove_team(session, team):
+            transaction.commit()
+            request.session.flash("Team '%s' deleted" % team.id, 'success')
+        else:
+            request.session.flash("Failed to delete '%s'" % team.id, 'warning')
+        raise HTTPFound(location=request.route_url('home'))
 
     return team, view_params

@@ -39,13 +39,22 @@ def main(argv=sys.argv):
     # clean data
     for obj_type in ("project", "team", "user"):
         for name in glob("seeweb/data/avatar/%s/*.png" % obj_type):
-            os.remove(name)
+            try:
+                os.remove(name)
+            except OSError:
+                print "unable to remove %s" % name
 
     for name in glob("seeweb/data/gallery/*/"):
-        rmtree(name)
+        try:
+            rmtree(name)
+        except OSError:
+            print "unable to remove %s" % name
 
     for name in glob("../see_repo/*/"):
-        rmtree(name)
+        try:
+            rmtree(name)
+        except OSError:
+            print "unable to remove %s" % name
 
     # setup config
     config_uri = argv[1]

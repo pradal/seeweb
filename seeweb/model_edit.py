@@ -4,7 +4,9 @@ from datetime import datetime
 
 from .avatar import (generate_default_project_avatar,
                      generate_default_team_avatar,
-                     generate_default_user_avatar)
+                     generate_default_user_avatar,
+                     remove_project_avatar,
+                     remove_team_avatar)
 from .model_access import fetch_comments
 from models.actor import PActor, TActor
 from models.comment import Comment
@@ -138,6 +140,9 @@ def remove_project(session, project):
     Returns:
         (True)
     """
+    # remove avatar
+    remove_project_avatar(project)
+
     # remove associated comments
     query = session.query(Comment).filter(Comment.project == project.id)
     for comment in query.all():
@@ -149,9 +154,6 @@ def remove_project(session, project):
 
     # delete project
     session.delete(project)
-
-    # remove avatar
-    # TODO
 
     return True
 
@@ -168,15 +170,15 @@ def remove_team(session, team):
     Returns:
         (True)
     """
+    # remove avatar
+    remove_team_avatar(team)
+
     # remove authorizations
     for actor in team.auth:
         session.delete(actor)
 
     # remove team
     session.delete(team)
-
-    # remove avatar
-    # TODO
 
     return True
 

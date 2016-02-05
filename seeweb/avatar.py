@@ -203,3 +203,45 @@ def generate_default_user_avatar(user):
         None
     """
     _generate_default_avatar(user, 'user')
+
+
+def _remove_avatar(item, item_typ):
+    for pth in (_avatar_pth(item, item_typ),
+                _avatar_pth(item, item_typ, True)):
+        os.remove(pth)
+
+
+def remove_project_avatar(project):
+    """Remove avatar files associated to a project.
+
+    Args:
+        project: (Project)
+
+    Returns:
+        (None)
+    """
+    _remove_avatar(project, 'project')
+
+
+def remove_team_avatar(team):
+    """Remove avatar files associated to a team.
+
+    Args:
+        team: (Team)
+
+    Returns:
+        (None)
+    """
+    _remove_avatar(team, 'team')
+
+
+def remove_user_avatar(user):
+    """Remove avatar files associated to a user.
+
+    Args:
+        user: (User)
+
+    Returns:
+        (None)
+    """
+    _remove_avatar(user, 'user')

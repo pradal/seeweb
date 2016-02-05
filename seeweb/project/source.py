@@ -4,7 +4,7 @@ from os import mkdir
 from os.path import dirname, exists, join
 from urlparse import urlsplit
 
-from .provider import local_git
+from .provider import github_git, local_git
 
 recognized_hosts = {"github": "github.com",
                     "pypi": "pypi.python.org",
@@ -122,9 +122,9 @@ def fetch_sources(project):
 
     host = parse_hostname(project.src_url)
     if host == 'github':
-        return False
+        return github_git.fetch_sources(project.src_url, pth)
 
     if host == 'local':
-        return local_git.fetch_sources(project.src_url, pth)
+        return local_git.fetch_sources(dirname(project.src_url), pth)
 
     return False

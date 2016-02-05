@@ -1,4 +1,4 @@
-"""Clone git repository hosted locally
+"""Clone git repository hosted on github
 """
 import os
 from os.path import exists, normpath
@@ -22,7 +22,8 @@ def fetch_sources(repo_url, dst):
     if not exists(".git"):
         call(["git", "init"])
 
-    cmd = "git pull %s" % normpath(repo_url)
+    cmd = "git pull %s" % repo_url
+    print "cmd:", cmd, "\n" * 10
 
     res = 1
     try:

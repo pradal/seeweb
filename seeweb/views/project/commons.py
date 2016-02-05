@@ -100,8 +100,11 @@ def edit_init(request, session, tab):
     if 'fetch_avatar' in request.params:
         try:
             img = fetch_avatar(project.id)
-            upload_project_avatar(img, project)
-            request.session.flash("Avatar submitted", 'success')
+            if img is None:
+                request.session.flash("No avatar found in sources", 'warning')
+            else:
+                upload_project_avatar(img, project)
+                request.session.flash("Avatar submitted", 'success')
         except IOError:
             request.session.flash("Unable to read image", 'warning')
 

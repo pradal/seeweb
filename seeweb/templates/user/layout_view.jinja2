@@ -13,7 +13,7 @@
             <div class="h2">{{ user.name }}</div>
             <div class="spacer"></div>
             {% if allow_edit %}
-                <a class="btn btn-default pull-right" href="#">
+                <a class="btn btn-default pull-right" href="{{ request.route_url('user_edit_%s' % tab, uid=user.id) }}">
                   <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
                   Edit profile
                 </a>

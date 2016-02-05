@@ -55,30 +55,14 @@ def edit_init(request, session, tab):
         raise HTTPFound(location=request.route_url('home'))
 
     if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
+        # request.session.flash("Edition stopped", 'success')
         raise HTTPFound(location=request.route_url('user_view_%s' % tab,
                                                    uid=user.id))
 
+    if 'update' in request.params:
+        if 'name' in request.params:
+            name = request.params['name']
+            if user.name != name:
+                user.name = name
+
     return user, view_params
-
-
-def edit_common(request, session, user):
-    """Common edition operations.
-
-    Args:
-        request: (Request)
-        session: (DBSession)
-        user: (User) user to be edited
-
-    Returns:
-        (Bool): whether user has changed and the view needs to be reloaded
-    """
-    del session
-    need_reload = False
-    if 'name' in request.params:
-        name = request.params['name']
-        if user.name != name:
-            user.name = name
-            need_reload = True
-
-    return need_reload

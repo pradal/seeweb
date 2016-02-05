@@ -1,28 +1,26 @@
 {% extends "layout.jinja2" %}
 
-{% block team_body %}
-<form action="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}" method='POST'
+{% block user_body %}
+<form action="{{ request.route_url('user_edit_%s' % tab, uid=user.id) }}" method='POST'
       enctype="multipart/form-data">
 
 <div class="row view_header">
     <div class="partner-table">
         <div class="col-md-3 partner avatar">
-            <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
-                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/team/%s.png' % team.id) }}" />
+            <a href="{{ request.route_url('user_view_home', uid=user.id) }}">
+                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/user/%s.png' % user.id) }}" />
             </a>
         </div>
         <div class="col-md-9 partner description">
-            <div class="h1">{{ team.id }}</div>
+            <div class="h1">{{ user.id }}</div>
+            <div class="input-group">
+                <span class="input-group-addon">Name</span>
+                <input type="text" class="form-control" name="name" value="{{ user.name }}" />
+            </div>
             <div class="spacer"></div>
-            {% if allow_edit %}
-                <a class="btn btn-default pull-right" href="#">
-                  <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-                  Edit team
-                </a>
-            {% endif %}
             <ul class="nav nav-tabs">
                 {% for tab_title, tab_id in tabs %}
-                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
+                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_edit_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -38,10 +36,9 @@
     </div>
 
     <div class="col-md-9">
-        {% block team_edit_body %}
+        {% block user_edit_body %}
         {% endblock %}
     </div>
 </div>
 
-</form>
 {% endblock %}

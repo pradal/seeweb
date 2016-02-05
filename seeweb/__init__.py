@@ -97,7 +97,7 @@ def main(global_config, **settings):
     #
     # # team
     for tab_title, tab_id in team_tabs:
-        # config.add_route('team_edit_%s' % tab_id, 'team/{tid}/edit/%s' % tab_id)
+        config.add_route('team_edit_%s' % tab_id, 'team/{tid}/edit/%s' % tab_id)
         config.add_route('team_view_%s' % tab_id, 'team/{tid}/%s' % tab_id)
 
     # config.add_route('team_edit_delete', 'team/{tid}/delete')

@@ -40,7 +40,7 @@ def view_init(request, session, tab):
     return team, view_params
 
 
-def edit_init(request, session):
+def edit_init(request, session, tab):
     """Common init for all 'edit' views.
 
     Args:
@@ -58,21 +58,14 @@ def edit_init(request, session):
         request.session.flash(msg, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
+    if 'back' in request.params:
+        # request.session.flash("Edition stopped", 'success')
+        loc = request.route_url('team_view_%s' % tab, tid=team.id)
+        raise HTTPFound(location=loc)
+
+    if 'delete' in request.params:
+        request.session.flash("Edition stopped", 'success')
+        loc = request.route_url('home')
+        raise HTTPFound(location=loc)
+
     return team, view_params
-
-
-def edit_common(request, session, team):
-    """Common edition operations
-
-    Args:
-        request: (Request)
-        session: (DBSession)
-        team: (Team)
-
-    Returns:
-        (bool): whether team has changed and need reload
-    """
-    del request
-    del session
-    del team
-    return False

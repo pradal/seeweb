@@ -2,12 +2,14 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
 from seeweb.model_access import get_project, get_user, project_access_role
+from seeweb.model_edit import remove_project
 from seeweb.models.auth import Role
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
 from seeweb.project.gallery import add_gallery_image
 from seeweb.project.source import has_source
+import transaction
 
 tabs = [('Home', 'home'),
         ('Documentation', 'doc'),
@@ -126,5 +128,13 @@ def edit_init(request, session, tab):
                 add_gallery_image(project, img, name)
 
             request.session.flash("TODO gallery submitted", 'success')
+
+    if "confirm_delete" in request.params:
+        if remove_project(session, project):
+            transaction.commit()
+            request.session.flash("Project '%s' deleted" % project.id, 'success')
+        else:
+            request.session.flash("Failed to delete '%s'" % project.id, 'warning')
+        raise HTTPFound(location=request.route_url('home'))
 
     return project, view_params

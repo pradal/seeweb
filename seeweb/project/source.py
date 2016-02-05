@@ -2,6 +2,7 @@
 """
 from os import mkdir
 from os.path import dirname, exists, join
+from shutil import rmtree
 from urlparse import urlsplit
 
 from .provider import github_git, local_git
@@ -35,6 +36,24 @@ def has_source(pid):
         (bool)
     """
     return exists(source_pth(pid))
+
+
+def delete_source(pid):
+    """Wipe the content of the source folder.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (None)
+    """
+    if has_source(pid):
+        try:
+            rmtree(source_pth(pid))
+        except OSError:
+            print "unable to destroy %s" % source_pth(pid)
+        except UnicodeDecodeError:
+            print "TODO remove this problem when deleting source dir"
 
 
 def parse_vcs(url):

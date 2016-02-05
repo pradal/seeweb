@@ -13,6 +13,7 @@ from models.comment import Comment
 from models.project import Project
 from models.team import Team
 from models.user import User
+from project.source import delete_source
 
 
 def create_comment(session, pid, uid, msg, ratings=None):
@@ -142,6 +143,9 @@ def remove_project(session, project):
     """
     # remove avatar
     remove_project_avatar(project)
+
+    # remove sources
+    delete_source(project.id)
 
     # remove associated comments
     query = session.query(Comment).filter(Comment.project == project.id)

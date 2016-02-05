@@ -2,27 +2,28 @@
 
 {% block team_body %}
 <div class="row view_header">
-    <div class="col-md-3 avatar">
-        <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
-            <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/team/%s.png' % team.id) }}" />
-        </a>
-    </div>
-    <div class="col-md-9 description">
-        <div class="h1">{{ team.id }}</div>
-        <div class="spacer"></div>
-        {% if allow_edit %}
-            <a class="btn btn-default pull-right" href="#">
-              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-              Edit team
+    <div class="partner-table">
+        <div class="col-md-3 partner avatar">
+            <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
+                <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/team/%s.png' % team.id) }}" />
             </a>
-        {% endif %}
-        <ul class="nav nav-tabs">
-            {% for tab_title, tab_id in tabs %}
-                <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_view_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
-            {% endfor %}
-        </ul>
+        </div>
+        <div class="col-md-9 partner description">
+            <div class="h1">{{ team.id }}</div>
+            <div class="spacer"></div>
+            {% if allow_edit %}
+                <a class="btn btn-default pull-right" href="#">
+                  <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+                  Edit team
+                </a>
+            {% endif %}
+            <ul class="nav nav-tabs">
+                {% for tab_title, tab_id in tabs %}
+                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_view_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-
 </div>
 
 

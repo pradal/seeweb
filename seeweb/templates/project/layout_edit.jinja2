@@ -13,7 +13,9 @@
     <div class="col-md-9 description">
         <div class="owner pull-right">
             <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
-            <p>Visibility: {% if project.public %}Public{% else %}Private{% endif %}</p>
+           <div class="checkbox">
+              <label><input type="checkbox" name="visibility" {% if project.public %}checked{% endif %}>Public</label>
+            </div>
         </div>
         <div class="h1">{{ project.id }}</div>
         <div class="spacer"></div>

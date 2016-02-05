@@ -176,6 +176,14 @@ a {
 
 /* Wrapper for 'edit' pages */
 
+#action-tools .btn-warning {
+    margin-top: 1em;
+}
+
+#action-tools .btn-danger {
+    margin-top: 2em;
+}
+
 #edit_avatar .btn-file {
     display: inline-block;
 }

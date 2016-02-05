@@ -1,4 +1,4 @@
-.view_header .description .owner {
+#header .description .owner {
     padding: 1em 1em 0 0;
 }
 
@@ -48,8 +48,3 @@ button img {
 #host_descr img {
     width: 32px;
 }
-
-#edit_avatar .btn-file {
-    display: inline-block;
-}
-

@@ -54,7 +54,7 @@ a {
     background: #ffffff;
 }
 
-#content {
+#main-content {
     background: #ffffff;
 }
 
@@ -146,31 +146,37 @@ a {
     float: none;
 }
 
-.view_header {
+#header {
     margin-top: 0.2em;
     text-align: bottom;
 }
 
-.view_header .avatar {
+#header .avatar {
     vertical-align: bottom;
 }
 
-.view_header .avatar img {
+#header .avatar img {
     max-width: 256px;
     max-height: 256px;
 }
 
-.view_header .description {
+#header .description {
     padding-left: 1em;
     vertical-align: bottom;
 }
 
-.view_header .description .spacer {
+#header .description .spacer {
     height: 50px;
 }
 
-.view_body {
+#content {
     background: #ffffff;
     padding: 0.2em;
+}
+
+/* Wrapper for 'edit' pages */
+
+#edit_avatar .btn-file {
+    display: inline-block;
 }
 

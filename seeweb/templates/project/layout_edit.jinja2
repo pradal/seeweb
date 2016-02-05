@@ -4,7 +4,7 @@
 <form action="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}" method='POST'
       enctype="multipart/form-data">
 
-<div class="row view_header">
+<div id="header" class="row">
     <div class="partner-table">
         <div class="col-md-3 partner avatar">
             <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
@@ -39,7 +39,7 @@
 </div>
 
 
-<div class="row view_body">
+<div id="content" class="row">
     <div class="col-md-3">
         <button class="btn btn-primary" type="submit" name="update">Update</button>
         <button class="btn" type="submit" name="default">Default</button>

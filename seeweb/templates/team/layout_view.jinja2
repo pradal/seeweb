@@ -1,7 +1,7 @@
 {% extends "layout.jinja2" %}
 
 {% block team_body %}
-<div class="row view_header">
+<div id="header" class="row">
     <div class="partner-table">
         <div class="col-md-3 partner avatar">
             <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
@@ -27,7 +27,7 @@
 </div>
 
 
-<div class="row view_body">
+<div id="content" class="row">
     <div class="col-md-9 col-md-offset-3">
         {% block team_view_body %}
         {% endblock %}

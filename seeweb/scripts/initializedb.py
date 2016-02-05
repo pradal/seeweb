@@ -6,6 +6,7 @@ from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 import transaction
 
+from seeweb.avatar import upload_user_avatar
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.model_edit import (create_comment,
@@ -73,21 +74,29 @@ def main(argv=sys.argv):
                                      uid='revesansparole',
                                      name="Jerome Chopard",
                                      email="revesansparole@gmail.com")
+        img = Image.open("seeweb/scripts/avatar/revesansparole.png")
+        upload_user_avatar(img, revesansparole)
 
         pradal = create_user(session,
                              uid='pradal',
                              name="Christophe Pradal",
                              email="christophe.pradal@inria.fr")
+        img = Image.open("seeweb/scripts/avatar/pradal.png")
+        upload_user_avatar(img, pradal)
 
         sartzet = create_user(session,
                               uid='sartzet',
                               name="Simon Artzet",
                               email="simon.aertzet@inria.fr")
+        img = Image.open("seeweb/scripts/avatar/sartzet.png")
+        upload_user_avatar(img, sartzet)
 
         fboudon = create_user(session,
                               uid='fboudon',
                               name="Fred Boudon",
                               email="fred.boudon@inria.fr")
+        img = Image.open("seeweb/scripts/avatar/fboudon.png")
+        upload_user_avatar(img, fboudon)
 
         for i in range(30):
             create_user(session,

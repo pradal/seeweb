@@ -1,8 +1,10 @@
+from glob import glob
 import os
 import sys
 from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
+from shutil import rmtree
 from sqlalchemy import engine_from_config
 import transaction
 
@@ -33,6 +35,17 @@ def main(argv=sys.argv):
     sqlite_pth = "data/seeweb.sqlite"
     if os.path.exists(sqlite_pth):
         os.remove(sqlite_pth)
+
+    # clean data
+    for obj_type in ("project", "team", "user"):
+        for name in glob("seeweb/data/avatar/%s/*.png" % obj_type):
+            os.remove(name)
+
+    for name in glob("seeweb/data/gallery/*/"):
+        rmtree(name)
+
+    for name in glob("../see_repo/*/"):
+        rmtree(name)
 
     # setup config
     config_uri = argv[1]

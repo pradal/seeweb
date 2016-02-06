@@ -1,5 +1,5 @@
 {% from 'templates/comment/macro.jinja2' import list_comments with context %}
-{% from 'templates/comment/macro.jinja2' import comment_edit_form %}
+{% from 'templates/comment/macro.jinja2' import comment_submit_form %}
 
 {% extends "layout_view.jinja2" %}
 
@@ -12,9 +12,9 @@
         {{ list_comments(comments) }}
     {% endif %}
     {% if request.unauthenticated_userid != None %}
-        <div class="list-group-item" id="edit comment">
-            <form action="#" method='POST'>
-                {{ comment_edit_form(request, request.unauthenticated_userid, project.id, "", ratings, True) }}
+        <div id="edit comment" class="list-group-item">
+            <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
+                {{ comment_submit_form(request, project.id, "", ratings) }}
             </form>
         </div>
     {% endif %}

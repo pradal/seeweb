@@ -1,0 +1,10 @@
+{% from 'templates/comment/macro.jinja2' import comment_edit_form %}
+
+{% extends "layout_edit.jinja2" %}
+
+{% block comment_edit_body %}
+
+<h1>New comment</h1>
+{{ comment_edit_form(request, author, pid, txt, ratings, True) }}
+
+{% endblock %}

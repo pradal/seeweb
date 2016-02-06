@@ -10,6 +10,9 @@ def float_to_rating(val):
     return int(val / 5. * 100)
 
 
+categories = ("value", "documentation", "installation", "usage")
+
+
 class Rated(object):
     """Abstract class used for all objects with a rating
     """

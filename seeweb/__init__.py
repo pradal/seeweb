@@ -79,18 +79,16 @@ def main(global_config, **settings):
     config.add_route('user_login', 'user_login')
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
-    #
-    # # comment
-    # config.add_route('comment_edit_new', 'comment/new')
-    # config.add_route('comment_edit_score', 'comment/{cid}/score')
-    #
+
+    # comment
+    config.add_route('comment_edit_new', 'comment/new')
+    config.add_route('comment_edit_score', 'comment/{cid}/score')
+
     # project
     for tab_title, tab_id in project_tabs:
         config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
         config.add_route('project_view_%s' % tab_id, 'project/{pid}/%s' % tab_id)
     #
-    # config.add_route('project_edit_fetch', 'project/{pid}/fetch')
-    # config.add_route('project_edit_delete', 'project/{pid}/delete')
     # config.add_route('project_install', 'project/{pid}/install')
     # config.add_route('project_uninstall', 'project/{pid}/uninstall')
     config.add_route('project_view_home_default', 'project/{pid}')
@@ -100,7 +98,6 @@ def main(global_config, **settings):
         config.add_route('team_edit_%s' % tab_id, 'team/{tid}/edit/%s' % tab_id)
         config.add_route('team_view_%s' % tab_id, 'team/{tid}/%s' % tab_id)
 
-    # config.add_route('team_edit_delete', 'team/{tid}/delete')
     config.add_route('team_view_home_default', 'team/{tid}')
 
     # user

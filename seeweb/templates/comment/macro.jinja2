@@ -3,7 +3,7 @@
     <div class="list-group-item">
         <div class="row">
             <div class="col-md-1">
-                <form action="#" method="POST">
+                <form action="{{ request.route_url('comment_edit_score', cid=comment.id) }}" method="POST">
                     <div class="btn-group-vertical">
                         <button type="submit" class="btn btn-success" name="up" data-toggle="tooltip" title="Useful comment!">
                             <span class="glyphicon glyphicon-arrow-up"></span>
@@ -41,13 +41,13 @@
 {%- endmacro %}
 
 
-{% macro comment_edit_form(request, author, pid, txt, ratings, submit) -%}
+{% macro comment_edit_form(request, author, pid, txt, ratings, editable) -%}
 <input type="hidden" name="author" value="{{ author }}" />
 <input type="hidden" name="project" value="{{ pid }}" />
 <div class=row>
     <div class="col-md-7">
         <div class="form-group">
-          <textarea class="form-control" rows="5" name='text' {% if txt|length == 0 %}placeholder="New comment"{% endif %}>{% if txt|length > 0 %}{{ txt }}{% endif %}</textarea>
+          <textarea class="form-control" rows="5" name='text' {% if txt|length == 0 %}placeholder="New comment"{% endif %} {% if not editable %}disabled{% endif %}>{% if txt|length > 0 %}{{ txt }}{% endif %}</textarea>
         </div>
     </div>
     <div class="col-md-5">
@@ -55,7 +55,7 @@
             <div class="form-inline">
               <div class="form-group">
                 <label>{{ name }}:</label>
-                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" name="rating_{{ name|lower }}" />
+                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" name="rating_{{ name|lower }}" {% if not editable %}data-readonly{% endif %} />
               </div>
             </div>
         {% endfor %}
@@ -63,11 +63,16 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        {% if submit %}
-            <button class="btn btn-default glyphicon glyphicon-edit pull-right" type="submit" name="new_comment">Submit</button>
-        {% endif %}
-        <p>Posted by {{ author }}</p>
-        <p>for project {{ pid }}</p>
+        <p>Posted by {{ author }} for project {{ pid }}</p>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro comment_submit_form(request, pid, txt, ratings) -%}
+{{ comment_edit_form(request, request.unauthenticated_userid, pid, txt, ratings, True) }}
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-default glyphicon glyphicon-edit pull-right" type="submit" name="new_comment">Submit</button>
     </div>
 </div>
 {%- endmacro %}

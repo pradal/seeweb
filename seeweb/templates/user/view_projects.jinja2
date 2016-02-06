@@ -40,4 +40,27 @@
     {% endif %}
   </div>
 </div>
+
+{% if user.id == request.unauthenticated_userid %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Installed</h3>
+      </div>
+      <div class="panel-body">
+        {% if installed_projects|length == 0 %}
+            <div class="row">
+                Nothing installed yet.
+            </div>
+        {% else %}
+            <div class="container">
+                <div class="row">
+                    {% for role, project in installed_projects %}
+                        {{ project_condensed(project, role) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+      </div>
+    </div>
+{% endif %}
 {% endblock %}

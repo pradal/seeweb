@@ -10,6 +10,7 @@ from .avatar import (generate_default_project_avatar,
 from .model_access import fetch_comments
 from models.actor import PActor, TActor
 from models.comment import Comment
+from models.installed import Installed
 from models.project import Project
 from models.team import Team
 from models.user import User
@@ -298,8 +299,11 @@ def install_project(session, user, project):
     Returns:
         None
     """
-    del session
-    user.installed.append(project)
+    installed = Installed(user=user.id,
+                          project=project.id,
+                          date=datetime.now(),
+                          version="0.0.0")
+    session.add(installed)
 
 
 def uninstall_project(session, user, project):
@@ -315,8 +319,7 @@ def uninstall_project(session, user, project):
     Returns:
         None
     """
-    del session
-    if project not in user.installed:
-        raise UserWarning("Project not installed")
-
-    user.installed.remove(project)
+    for installed in user.installed:
+        if installed.project == project.id:
+            session.delete(installed)
+            return

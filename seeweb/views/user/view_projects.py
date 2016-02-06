@@ -58,17 +58,28 @@ def view(request):
     user, view_params = view_init(request, session, 'projects')
 
     if 'new_project' in request.params:
-        pid = register_new_project(request, session, request.unauthenticated_userid)
+        pid = register_new_project(request,
+                                   session,
+                                   request.unauthenticated_userid)
         if pid is not None:
             loc = request.route_url('project_edit_home', pid=pid)
             return HTTPFound(location=loc)
 
     projects = []
     for project in user.projects:
-        role = project_access_role(session, project, request.unauthenticated_userid)
+        role = project_access_role(session,
+                                   project,
+                                   request.unauthenticated_userid)
         if role != Role.denied:
             projects.append((role, project))
 
     view_params["projects"] = projects
+
+    installed_projects = []
+    for installed in user.installed:
+        project = get_project(session, installed.project)
+        installed_projects.append((Role.view, project))
+
+    view_params["installed_projects"] = installed_projects
 
     return view_params

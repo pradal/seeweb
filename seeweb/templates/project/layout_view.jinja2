@@ -25,12 +25,12 @@
             {% endfor %}
 
             {% if install_action == 'install' %}
-                <a class="btn btn-warning pull-right" href="{{ request.route_url('project_view_home', pid=project.id) }}">
+                <a class="btn btn-warning pull-right" href="{{ request.route_url('project_install', pid=project.id) }}">
                   <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
                   Install project
                 </a>
             {% elif install_action == 'uninstall' %}
-                <a class="btn btn-warning pull-right" href="{{ request.route_url('project_view_home', pid=project.id) }}">
+                <a class="btn btn-warning pull-right" href="{{ request.route_url('project_uninstall', pid=project.id) }}">
                   <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
                   Uninstall project
                 </a>

@@ -1,7 +1,10 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.model_access import get_project, get_user, project_access_role
+from seeweb.model_access import (get_project,
+                                 get_user,
+                                 is_installed,
+                                 project_access_role)
 from seeweb.model_edit import remove_project
 from seeweb.models.auth import Role
 from seeweb.project.explore_sources import (fetch_avatar,
@@ -48,13 +51,12 @@ def view_init(request, session, tab):
         install_action = None
     else:
         user = get_user(session, current_uid)
-        if project in user.installed:
+        if is_installed(session, user, project):
             install_action = "uninstall"
         else:
             install_action = "install"
 
-    view_params = {"current_uid": current_uid,
-                   "project": project,
+    view_params = {"project": project,
                    "tabs": tabs,
                    "tab": tab,
                    "allow_edit": (role == Role.edit),
@@ -116,7 +118,8 @@ def edit_init(request, session, tab):
             project.store_description(txt)
             request.session.flash("Readme submitted", 'success')
         except IOError:
-            request.session.flash("Unable to find suitable readme file", 'warning')
+            request.session.flash("Unable to find suitable readme file",
+                                  'warning')
 
     if 'fetch_dependencies' in request.params:
         request.session.flash("TODO dependencies submitted", 'success')
@@ -132,9 +135,44 @@ def edit_init(request, session, tab):
     if "confirm_delete" in request.params:
         if remove_project(session, project):
             transaction.commit()
-            request.session.flash("Project '%s' deleted" % project.id, 'success')
+            request.session.flash("Project '%s' deleted" % project.id,
+                                  'success')
         else:
-            request.session.flash("Failed to delete '%s'" % project.id, 'warning')
+            request.session.flash("Failed to delete '%s'" % project.id,
+                                  'warning')
         raise HTTPFound(location=request.route_url('home'))
+
+    return project, view_params
+
+
+def install_init(request, session):
+    """Common actions for install uninstall views
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+
+    Returns:
+        (Project, dict of (str, any)): project, view_params
+    """
+    pid = request.matchdict['pid']
+
+    if 'cancel' in request.params:
+        # back to project page
+        loc = request.route_url('project_view_home', pid=pid)
+        raise HTTPFound(location=loc)
+
+    project = get_project(session, pid)
+    if project is None:
+        request.session.flash("Project %s does not exists" % pid, 'warning')
+        raise HTTPFound(location=request.route_url('home'))
+
+    role = project_access_role(session, project, request.unauthenticated_userid)
+    if role == Role.denied:
+        request.session.flash("Access to %s not granted for you" % pid,
+                              'warning')
+        raise HTTPFound(location=request.route_url('home'))
+
+    view_params = {'project': project}
 
     return project, view_params

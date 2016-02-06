@@ -10,6 +10,7 @@ import transaction
 
 from seeweb.avatar import upload_user_avatar
 from seeweb.models import Base, DBSession
+from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
 from seeweb.model_edit import (create_comment,
                                create_project,

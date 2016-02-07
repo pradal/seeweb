@@ -1,4 +1,4 @@
-{% macro project_condensed(project, role) -%}
+{% macro project_condensed(project, msg) -%}
 <div class="project">
     <div class="avatar">
         <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
@@ -6,13 +6,18 @@
         </a>
     </div>
     <div class="name">
-        <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
+        <p>
+            <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
+        </p>
+        {% if msg|length > 0 %}
+            <p>{{ msg }}</p>
+        {% endif %}
     </div>
 </div>
 {%- endmacro %}
 
 
-{% macro project_fake(name, role) -%}
+{% macro project_fake(name, msg) -%}
 <div class="project">
     <div class="avatar">
         <a href="#">
@@ -20,7 +25,12 @@
         </a>
     </div>
     <div class="name">
-        <a href="#">{{ name }}</a>
+        <p>
+            <a href="#">{{ name }}</a>
+        </p>
+        {% if msg|length > 0 %}
+            <p>{{ msg }}</p>
+        {% endif %}
     </div>
 </div>
 {%- endmacro %}

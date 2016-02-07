@@ -92,7 +92,7 @@ a {
 }
 
 .project .avatar {
-   display: inline;
+   float: left;
 }
 
 .project .avatar img {
@@ -100,7 +100,6 @@ a {
 }
 
 .project .name {
-    display: inline;
     vertical-align: bottom;
 }
 

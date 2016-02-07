@@ -21,7 +21,7 @@ def view(request):
     for project in query.all():
         role = project_access_role(session, project, request.unauthenticated_userid)
         if role != Role.denied:
-            projects.append((role, project))
+            projects.append((Role.to_str(role), project))
 
     return {'projects': projects,
             'search_pattern': search_pattern}

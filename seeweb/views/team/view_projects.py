@@ -24,7 +24,7 @@ def view(request):
                                                pjt,
                                                request.unauthenticated_userid)
                     if role != Role.denied:
-                        projects[pjt.id] = (role, pjt)
+                        projects[pjt.id] = (Role.to_str(role), pjt)
 
     view_params["projects"] = projects.values()
 

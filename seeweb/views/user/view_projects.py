@@ -71,14 +71,15 @@ def view(request):
                                    project,
                                    request.unauthenticated_userid)
         if role != Role.denied:
-            projects.append((role, project))
+            projects.append((Role.to_str(role), project))
 
     view_params["projects"] = projects
 
     installed_projects = []
     for installed in user.installed:
         project = get_project(session, installed.project)
-        installed_projects.append((Role.view, project))
+        installed_projects.append((installed.date.strftime("%Y-%m-%d"),
+                                   project))
 
     view_params["installed_projects"] = installed_projects
 

@@ -35,9 +35,9 @@
                         <div class="row">
                             {% for pjt, version, exists in dependencies %}
                                 {% if exists %}
-                                    {{ project_condensed(pjt, 1) }}
+                                    {{ project_condensed(pjt, version) }}
                                 {% else %}
-                                    {{ project_fake(pjt, 1) }}
+                                    {{ project_fake(pjt, version) }}
                                 {% endif %}
                             {% endfor %}
                         </div>

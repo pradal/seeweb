@@ -12,6 +12,20 @@
 {%- endmacro %}
 
 
+{% macro project_fake(name, role) -%}
+<div class="project">
+    <div class="avatar">
+        <a href="#">
+            <img class="img-circle" src="{{ request.static_url('seeweb:static/project_avatar.png') }}" />
+        </a>
+    </div>
+    <div class="name">
+        <a href="#">{{ name }}</a>
+    </div>
+</div>
+{%- endmacro %}
+
+
 {% macro gallery_item(project, img_name, descr) -%}
 <div class="gallery_item">
     <div class="avatar">

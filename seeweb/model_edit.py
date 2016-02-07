@@ -304,6 +304,20 @@ def add_dependency(session, project, name, version):
     session.add(dep)
 
 
+def clear_dependencies(session, project):
+    """Remove all dependecies from the project
+
+    Args:
+        session: (DBSession)
+        project: (Project)
+
+    Returns:
+        (None)
+    """
+    for dep in list(project.dependencies):
+        session.delete(dep)
+
+
 def install_project(session, user, project):
     """Install project in user installed projects
 

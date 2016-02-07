@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_user
+from seeweb.model_access import get_project, get_user
 # from seeweb.playground.workspace import has_workspace
 from seeweb.project.source import has_source, parse_vcs, parse_hostname
 from seeweb.project.explore_sources import find_executables, find_notebooks
@@ -24,6 +24,17 @@ def view(request):
 
     view_params["vcs"] = vcs
     view_params["hostname"] = hostname
+
+    # dependencies
+    dependencies = []
+    for dep in project.dependencies:
+        pjt = get_project(session, dep.name)
+        if pjt is None:
+            dependencies.append((dep.name, dep.version, False))
+        else:
+            dependencies.append((pjt, dep.version, True))
+
+    view_params["dependencies"] = dependencies
 
     # explore sources
     for name in ["notebooks", "executables"]:

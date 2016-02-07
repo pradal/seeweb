@@ -1,3 +1,6 @@
+{% from 'macro.jinja2' import project_condensed with context %}
+{% from 'macro.jinja2' import project_fake with context %}
+
 {% extends "layout_view.jinja2" %}
 
 {% block project_view_body %}
@@ -18,21 +21,27 @@
     </div>
 </div>
 
-<div class="row" id="notebooks">
+<div class="row" id="dependencies">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Dependencies</h3>
             </div>
             <div class="panel-body">
-                {% if project.dependencies|length == 0 %}
+                {% if dependencies|length == 0 %}
                     <p>None</p>
                 {% else %}
-                    <ul>
-                        {% for dep in project.dependencies %}
-                            <li>{{ dep.name }}: {{ dep.version }}</li>
-                        {% endfor %}
-                    </ul>
+                    <div class="container">
+                        <div class="row">
+                            {% for pjt, version, exists in dependencies %}
+                                {% if exists %}
+                                    {{ project_condensed(pjt, 1) }}
+                                {% else %}
+                                    {{ project_fake(pjt, 1) }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 {% endif %}
             </div>
          </div>

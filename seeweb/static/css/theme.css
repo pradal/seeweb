@@ -95,6 +95,10 @@ a {
    display: inline;
 }
 
+.project .avatar img {
+   width: 64px;
+}
+
 .project .name {
     display: inline;
     vertical-align: bottom;

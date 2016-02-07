@@ -136,3 +136,31 @@ def fetch_gallery(pid):
             imgs.append((img, name))
 
     return imgs
+
+
+def fetch_dependencies(pid):
+    """Analyse sources to extra project dependencies
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (list of (str, str)): list of name, version
+    """
+    pth = source_pth(pid)
+    dep_pth = pj(pth, "requirements.txt")
+
+    if not exists(dep_pth):
+        return []
+
+    with open(dep_pth, 'r') as f:
+        txt = f.read()
+
+    reqs = []
+    for line in txt.splitlines():
+        line = line.strip()
+        if len(line) > 0 and not line.startswith("#"):
+            # TODO parse version
+            reqs.append((line, "none"))
+
+    return reqs

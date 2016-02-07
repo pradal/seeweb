@@ -2,6 +2,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.model_edit import add_dependency, clear_dependencies
+from seeweb.project.explore_sources import fetch_dependencies
 from seeweb.project.source import (fetch_sources,
                                    host_src_url,
                                    parse_vcs,
@@ -22,6 +24,11 @@ def view(request):
         project.src_url = field_storage.filename
     elif "confirm_fetch_src" in request.params:
         if fetch_sources(project):
+            clear_dependencies(session, project)
+            for name, ver in fetch_dependencies(project.id):
+                add_dependency(session, project, name, ver)
+                print name, ver, "\n" * 10
+
             loc = request.route_url('project_view_source', pid=project.id)
             return HTTPFound(location=loc)
         else:

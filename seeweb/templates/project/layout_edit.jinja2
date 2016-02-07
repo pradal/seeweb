@@ -13,7 +13,11 @@
         </div>
         <div class="col-md-9 partner description">
             <div class="owner pull-right">
-                <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></p>
+                <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a>
+                    {% if request.unauthenticated_userid == project.owner %}
+                        <button  class="btn btn-default"  data-toggle="modal" data-target="#transfer_ownership">Transfer ownership</button>
+                    {% endif %}
+                </p>
                <div class="checkbox">
                   <label><input type="checkbox" name="visibility" {% if project.public %}checked{% endif %} />Public</label>
                 </div>
@@ -47,7 +51,9 @@
         {% if has_source %}
             <button class="btn btn-warning"  data-toggle="modal" data-target="#confirm_fetch">fetch from sources</button>
         {% endif %}
-        <button class="btn btn-danger"  data-toggle="modal" data-target="#confirm_delete">Delete project</button>
+        {% if request.unauthenticated_userid == project.owner %}
+            <button class="btn btn-danger"  data-toggle="modal" data-target="#confirm_delete">Delete project</button>
+        {% endif %}
     </div>
 
     <div class="col-md-9">
@@ -56,6 +62,31 @@
     </div>
 </div>
 
+
+<!-- Modal transfer ownership -->
+<div id="transfer_ownership" class="modal fade" role="dialog" data-keyboard="true">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Transfer project's ownership</h4>
+      </div>
+      <div class="modal-body">
+        <p>to who?</p>
+        <div class="form-group">
+            <input type='text' name='new_owner' placeholder='new owner id' />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" name="confirm_transfer">Transfer</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_transfer">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- Modal delete -->
 <div id="confirm_delete" class="modal fade" role="dialog" data-keyboard="true">

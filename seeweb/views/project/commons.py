@@ -5,7 +5,7 @@ from seeweb.model_access import (get_project,
                                  get_user,
                                  is_installed,
                                  project_access_role)
-from seeweb.model_edit import remove_project
+from seeweb.model_edit import change_project_owner, remove_project
 from seeweb.models.auth import Role
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
@@ -91,15 +91,26 @@ def edit_init(request, session, tab):
         loc = request.route_url('project_view_%s' % tab, pid=project.id)
         raise HTTPFound(location=loc)
 
-    if 'delete' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        loc = request.route_url('home')
-        raise HTTPFound(location=loc)
-
     if 'update' in request.params:
         # edit project visibility
         public = 'visibility' in request.params
         project.public = public
+
+    if 'confirm_transfer' in request.params:
+        if request.unauthenticated_userid != project.owner:
+            request.session.flash("Action non authorized for you", 'warning')
+            raise HTTPFound(location=request.route_url('home'))
+
+        user = get_user(session, request.params["new_owner"])
+        if user is None:
+            msg = "User '%s' is unknown" % request.params["new_owner"]
+            request.session.flash(msg, 'warning')
+            raise HTTPFound(location=request.current_route_url())
+
+        change_project_owner(session, project, user)
+        loc = request.route_url("project_view_home", pid=project.id)
+        transaction.commit()
+        raise HTTPFound(location=loc)
 
     if 'fetch_avatar' in request.params:
         try:
@@ -133,6 +144,10 @@ def edit_init(request, session, tab):
             request.session.flash("TODO gallery submitted", 'success')
 
     if "confirm_delete" in request.params:
+        if request.unauthenticated_userid != project.owner:
+            request.session.flash("Action non authorized for you", 'warning')
+            raise HTTPFound(location=request.route_url('home'))
+
         if remove_project(session, project):
             transaction.commit()
             request.session.flash("Project '%s' deleted" % project.id,

@@ -30,9 +30,9 @@ def view(request):
     for dep in project.dependencies:
         pjt = get_project(session, dep.name)
         if pjt is None:
-            dependencies.append((dep.name, dep.version, False))
+            dependencies.append((dep.name, "ver: %s" % dep.version, False))
         else:
-            dependencies.append((pjt, dep.version, True))
+            dependencies.append((pjt, "ver: %s" % dep.version, True))
 
     view_params["dependencies"] = dependencies
 

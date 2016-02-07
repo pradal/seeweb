@@ -180,10 +180,12 @@ a {
 /* Wrapper for 'edit' pages */
 
 #action-tools .btn-warning {
+    display: block;
     margin-top: 1em;
 }
 
 #action-tools .btn-danger {
+    display: block;
     margin-top: 2em;
 }
 

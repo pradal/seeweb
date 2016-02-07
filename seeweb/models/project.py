@@ -21,6 +21,8 @@ class Project(Base, Rated, Described):
 
     src_url = Column(Text, default="")
 
+    dependencies = relationship("Dependency")
+
     def __repr__(self):
         return "<Project(id='%s', owner='%s', public='%s')>" % (self.id,
                                                                 self.owner,

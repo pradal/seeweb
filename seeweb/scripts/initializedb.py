@@ -17,7 +17,8 @@ from seeweb.model_edit import (create_comment,
                                create_team,
                                create_user,
                                add_project_auth,
-                               add_team_auth)
+                               add_team_auth,
+                               add_dependency)
 from seeweb.project.gallery import add_gallery_image
 
 
@@ -202,6 +203,8 @@ This project is part of OpenAlea_.
         toto = create_project(session, 'revesansparole', 'toto')
         toto.public = False
         toto.src_url = "C:/Users/jerome/Desktop/see/toto/.git"
+        add_dependency(session, toto, "numpy", "1.0")
+        add_dependency(session, toto, "pkglts", "1.0")
 
         for i in range(5):
             create_project(session, 'doofus%d' % i, "stoopid%d" % i)
@@ -212,3 +215,5 @@ This project is part of OpenAlea_.
                            'pkglts',
                            "doofus%d" % i,
                            "very nasty comment (%d)" % i)
+
+        print "dependencies", pkglts.dependencies, "\n" * 10

@@ -10,6 +10,7 @@ from .avatar import (generate_default_project_avatar,
 from .model_access import fetch_comments
 from models.actor import PActor, TActor
 from models.comment import Comment
+from models.dependency import Dependency
 from models.installed import Installed
 from models.project import Project
 from models.team import Team
@@ -265,7 +266,8 @@ def recompute_project_ratings(session, project):
     Returns:
         None
     """
-    ratings = dict((name.lower(), [0, 0]) for name, rating in project.format_ratings())
+    ratings = dict((name.lower(), [0, 0])
+                   for name, rating in project.format_ratings())
 
     for comment in fetch_comments(session, project.id):
         nb = comment.score
@@ -284,6 +286,22 @@ def recompute_project_ratings(session, project):
         new_ratings.append((key, rating))
 
     project.affect_ratings(new_ratings)
+
+
+def add_dependency(session, project, name, version):
+    """Add a new dependency for the project
+
+    Args:
+        session: (DBSession)
+        project: (Project)
+        name: (str) name of project|package
+        version: (str) version min to use
+
+    Returns:
+        (None)
+    """
+    dep = Dependency(project=project.id, name=name, version=version)
+    session.add(dep)
 
 
 def install_project(session, user, project):

@@ -18,6 +18,27 @@
     </div>
 </div>
 
+<div class="row" id="notebooks">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Dependencies</h3>
+            </div>
+            <div class="panel-body">
+                {% if project.dependencies|length == 0 %}
+                    <p>None</p>
+                {% else %}
+                    <ul>
+                        {% for dep in project.dependencies %}
+                            <li>{{ dep.name }}: {{ dep.version }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+         </div>
+    </div>
+</div>
+
 {% if notebooks|length > 0 %}
     <div class="row" id="notebooks">
         <div class="col-md-12">

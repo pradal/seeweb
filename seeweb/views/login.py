@@ -22,7 +22,7 @@ def view(request):
         if user is None:
             msg = "No such user! <a href='%s'>Register?</a>" % request.route_url('user_register')
             request.session.flash(Markup(msg), 'warning')
-            return HTTPFound(location=request.route_url('user_login'))
+            return HTTPFound(location=request.current_route_url())
 
         pwd = request.params["password"]
         # check password
@@ -30,6 +30,6 @@ def view(request):
             return log_user_in(request, uid)
         else:
             request.session.flash("Invalid password", 'warning')
-            return HTTPFound(location=request.route_url('user_login'))
+            return HTTPFound(location=request.current_route_url())
     else:
         return {}

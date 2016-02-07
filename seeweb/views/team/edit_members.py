@@ -98,7 +98,7 @@ def view(request):
                     need_reload = True
 
         if need_reload:
-            loc = request.route_url('team_edit_members', tid=team.id)
+            loc = request.current_route_url()
             return HTTPFound(location=loc)
     else:
         pass

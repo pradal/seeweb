@@ -88,7 +88,7 @@ def view(request):
                     need_reload = True
 
         if need_reload:
-            loc = request.route_url('project_edit_contributors', pid=project.id)
+            loc = request.current_route_url()
             return HTTPFound(location=loc)
     else:
         pass

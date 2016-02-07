@@ -3,6 +3,7 @@ relevant items.
 """
 
 from ConfigParser import ConfigParser
+import json
 from os import listdir, walk
 from os.path import exists, splitext
 from os.path import join as pj
@@ -66,6 +67,39 @@ def find_executables(pid):
         eps = []
 
     return eps
+
+
+def find_workflow_nodes(pid):
+    """Find all defined workflow nodes in the project.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (list of Node): list of defined nodes
+    """
+    pth = source_pth(pid)
+
+    plugin_pth = pj(pth, "src", "%s_plugin" % pid)
+    if not exists(plugin_pth):
+        return []
+
+    nodes = []
+    for root, dirnames, filenames in walk(plugin_pth):
+        # avoid hidden directories
+        for i in range(len(dirnames) - 1, -1, -1):
+            if dirnames[i].startswith("."):
+                del dirnames[i]
+
+        # find notebooks
+        for name in filenames:
+            if splitext(name)[1] == ".json":
+                with open(pj(root, name), 'r') as f:
+                    node_def = json.load(f)
+                    if node_def["category"] == "oanode":
+                        nodes.append(node_def)
+
+    return nodes
 
 
 def fetch_avatar(pid):

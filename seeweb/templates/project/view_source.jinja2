@@ -90,4 +90,23 @@
     </div>
 {% endif %}
 
+{% if nodes|length > 0 %}
+    <div class="row" id="nodes">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Workflow nodes</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for node in nodes %}
+                            <li>{{ node['name'] }}: {{ project.id }}:{{ node['module'] }}.{{ node['function'] }} ({{ node['info1'] }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
+        </div>
+    </div>
+{% endif %}
+
 {% endblock %}

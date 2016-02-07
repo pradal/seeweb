@@ -53,4 +53,8 @@ def view(request):
 
     view_params["playground"] = playground
 
+    view_params["sections"] = ["dependencies",
+                               "notebooks",
+                               "executables"]
+
     return view_params

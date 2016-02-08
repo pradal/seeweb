@@ -33,4 +33,7 @@ class Described(object):
         Returns:
             None
         """
-        self.description = rst
+        if rst is None:
+            rst = ""
+
+        self.description = str(rst)

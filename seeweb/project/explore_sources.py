@@ -122,7 +122,7 @@ def fetch_avatar(pid):
 
 
 def _readme_pth(pth):
-    for name in ("readme.rst", "README", "readme.txt"):
+    for name in ("readme.rst", "readme.txt", "README", "README.txt"):
         readme_pth = pj(pth, name)
         if exists(readme_pth):
             return readme_pth
@@ -142,7 +142,7 @@ def fetch_readme(pid):
     readme_pth = _readme_pth(source_pth(pid))
 
     if readme_pth is None:
-        return None
+        return ""
 
     with open(readme_pth, 'r') as f:
         return f.read()

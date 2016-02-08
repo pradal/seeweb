@@ -10,7 +10,7 @@ from seeweb.models.auth import Role
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
-from seeweb.project.gallery import add_gallery_image
+from seeweb.project.gallery import add_gallery_image, clear_gallery
 from seeweb.project.source import has_source
 import transaction
 
@@ -133,6 +133,7 @@ def edit_init(request, session, tab):
                                   'warning')
 
     if 'fetch_gallery' in request.params:
+        clear_gallery(project)
         imgs = fetch_gallery(project.id)
         if len(imgs) > 0:
             for img, name in imgs:

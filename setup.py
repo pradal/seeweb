@@ -20,7 +20,7 @@ def parse_requirements(fname):
 
 
 setup(name='seeweb',
-      version='0.8',
+      version='0.9',
       description='SEE website',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[

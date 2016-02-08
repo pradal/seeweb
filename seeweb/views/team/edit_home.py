@@ -1,33 +1,20 @@
-from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
+from seeweb.avatar import load_image, upload_team_avatar
 from seeweb.models import DBSession
-from seeweb.views.tools import load_image, upload_avatar
 
-from .tools import edit_common, edit_init, tabs
+from .commons import edit_init
 
 
 @view_config(route_name='team_edit_home',
              renderer='templates/team/edit_home.jinja2')
 def view(request):
     session = DBSession()
-    team, current_uid = edit_init(request, session)
+    team, view_params = edit_init(request, session, 'home')
 
-    if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        return HTTPFound(location=request.route_url('team_view_home',
-                                                    tid=team.id))
-
-    if 'default' in request.params:
-        # reload default values for this user
-        # actually already done
-        pass
-    elif 'update' in request.params:
-        edit_common(request, session, team)
-
+    if 'update' in request.params:
         if 'description' in request.params:
-            # sanitize
-            team.description = request.params['description']
+            team.store_description(request.params['description'])
     elif 'submit_avatar' in request.params:
         field_storage = request.params['avatar']
         if field_storage == "":
@@ -35,13 +22,11 @@ def view(request):
         else:
             try:
                 img = load_image(field_storage)
-                upload_avatar(img, item=team, item_type='team')
+                upload_team_avatar(img, team)
                 request.session.flash("Avatar submitted", 'success')
             except IOError:
                 request.session.flash("Unable to read image", 'warning')
     else:
         pass
 
-    return {'team': team,
-            "tabs": tabs,
-            'tab': 'home'}
+    return view_params

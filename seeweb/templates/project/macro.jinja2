@@ -1,0 +1,50 @@
+{% macro project_condensed(project, msg) -%}
+<div class="project">
+    <div class="avatar">
+        <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
+            <img class="img-circle" src="{{ request.static_url('seeweb:data/avatar/project/%s_small.png' % project.id) }}" />
+        </a>
+    </div>
+    <div class="name">
+        <p>
+            <a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a>
+        </p>
+        {% if msg|length > 0 %}
+            <p>{{ msg }}</p>
+        {% endif %}
+    </div>
+</div>
+{%- endmacro %}
+
+
+{% macro project_fake(name, msg) -%}
+<div class="project">
+    <div class="avatar">
+        <a href="#">
+            <img class="img-circle" src="{{ request.static_url('seeweb:static/project_avatar.png') }}" />
+        </a>
+    </div>
+    <div class="name">
+        <p>
+            <a href="#">{{ name }}</a>
+        </p>
+        {% if msg|length > 0 %}
+            <p>{{ msg }}</p>
+        {% endif %}
+    </div>
+</div>
+{%- endmacro %}
+
+
+{% macro gallery_item(project, img_name, descr) -%}
+<div class="gallery_item">
+    <div class="avatar">
+        <a href="{{ request.static_url('seeweb:data/gallery/%s/%s.png' % (project.id, img_name)) }}">
+            <img class="img-rounded" src="{{ request.static_url('seeweb:data/gallery/%s/%s_small.png' % (project.id, img_name)) }}" />
+        </a>
+    </div>
+    <div class="descr">
+        <span>{{ descr }}</span>
+    </div>
+</div>
+{%- endmacro %}

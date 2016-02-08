@@ -10,6 +10,7 @@ from seeweb.models.user import User
 def view(request):
     session = DBSession()
     query = session.query(User)
+
     search_pattern = request.params.get("main_search", "")
     if search_pattern != "":
         query = query.filter(User.id.like("%s%%" % search_pattern))

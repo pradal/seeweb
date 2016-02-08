@@ -1,25 +1,23 @@
-{% from 'templates/comment/macro.html' import list_comments with context %}
-{% from 'templates/comment/macro.html' import comment_edit_form %}
+{% from 'templates/comment/macro.jinja2' import list_comments with context %}
+{% from 'templates/comment/macro.jinja2' import comment_submit_form %}
 
-{% extends "project_view.html" %}
+{% extends "layout_view.jinja2" %}
 
 {% block project_view_body %}
 
-<div class="container-fluid">
-    <div class="list-group">
-        {% if comments|length == 0 %}
-            <p class="list-group-item">No comment yet, add one?</p>
-        {% else %}
-            {{ list_comments(comments) }}
-        {% endif %}
-        {% if current_uid != None %}
-            <div class="list-group-item" id="edit comment">
-                <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
-                    {{ comment_edit_form(request, current_uid, project.id, "", ratings, True) }}
-                </form>
-            </div>
-        {% endif %}
-    </div>
+<div class="list-group">
+    {% if comments|length == 0 %}
+        <p class="list-group-item">No comment yet, add one?</p>
+    {% else %}
+        {{ list_comments(comments) }}
+    {% endif %}
+    {% if request.unauthenticated_userid != None %}
+        <div id="edit comment" class="list-group-item">
+            <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
+                {{ comment_submit_form(request, project.id, "", ratings) }}
+            </form>
+        </div>
+    {% endif %}
 </div>
 
 {% endblock %}

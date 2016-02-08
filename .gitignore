@@ -29,7 +29,6 @@ lib64
 *.sqlite
 data/*
 
-seeweb/avatar/*
-seeweb/gallery/*
+seeweb/data/*
 seeweb/static/test.html
 try/*

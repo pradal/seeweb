@@ -1,0 +1,78 @@
+{% macro list_comments(comments) -%}
+{% for comment in comments %}
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-md-1">
+                <form action="{{ request.route_url('comment_edit_score', cid=comment.id) }}" method="POST">
+                    <div class="btn-group-vertical">
+                        <button type="submit" class="btn btn-success" name="up" data-toggle="tooltip" title="Useful comment!">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </button>
+                        <button class="btn btn-default disabled">{{ comment.score }}</button>
+                        <button type="submit" class="btn btn-warning" name="down" data-toggle="tooltip" title="Useless comment!">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <p class="col-md-12">Posted by <a href="{{ request.route_url('user_view_home', uid=comment.author) }}">{{ comment.author }}</a> on {{ comment.creation }}</p>
+                </div>
+                <div class=row>
+                    <div class="col-md-7">
+                        {{ comment.message }}
+                    </div>
+                    <div class="col-md-5">
+                        {% for name, rating in comment.format_ratings() %}
+                            <div class="form-inline">
+                              <div class="form-group">
+                                <label>{{ name }}:</label>
+                                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" data-readonly />
+                              </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{%- endmacro %}
+
+
+{% macro comment_edit_form(request, author, pid, txt, ratings, editable) -%}
+<input type="hidden" name="author" value="{{ author }}" />
+<input type="hidden" name="project" value="{{ pid }}" />
+<div class=row>
+    <div class="col-md-7">
+        <div class="form-group">
+          <textarea class="form-control" rows="5" name='text' {% if txt|length == 0 %}placeholder="New comment"{% endif %} {% if not editable %}disabled{% endif %}>{% if txt|length > 0 %}{{ txt }}{% endif %}</textarea>
+        </div>
+    </div>
+    <div class="col-md-5">
+        {% for name, rating in ratings %}
+            <div class="form-inline">
+              <div class="form-group">
+                <label>{{ name }}:</label>
+                <input type="hidden" class="rating-tooltip" data-fractions="2" value="{{ rating }}" name="rating_{{ name|lower }}" {% if not editable %}data-readonly{% endif %} />
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>Posted by {{ author }} for project {{ pid }}</p>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro comment_submit_form(request, pid, txt, ratings) -%}
+{{ comment_edit_form(request, request.unauthenticated_userid, pid, txt, ratings, True) }}
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-default glyphicon glyphicon-edit pull-right" type="submit" name="new_comment">Submit</button>
+    </div>
+</div>
+{%- endmacro %}

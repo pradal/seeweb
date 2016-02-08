@@ -1,16 +1,25 @@
+from glob import glob
 import os
 import sys
-import transaction
+from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
+from shutil import rmtree
 from sqlalchemy import engine_from_config
+import transaction
 
+from seeweb.avatar import upload_user_avatar
 from seeweb.models import Base, DBSession
+from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
-from seeweb.models.edit import (create_comment,
-                                create_project,
-                                create_team,
-                                create_user)
+from seeweb.model_edit import (create_comment,
+                               create_project,
+                               create_team,
+                               create_user,
+                               add_project_auth,
+                               add_team_auth,
+                               add_dependency)
+from seeweb.project.gallery import add_gallery_image
 
 
 def usage(argv):
@@ -29,6 +38,27 @@ def main(argv=sys.argv):
     if os.path.exists(sqlite_pth):
         os.remove(sqlite_pth)
 
+    # clean data
+    for obj_type in ("project", "team", "user"):
+        for name in glob("seeweb/data/avatar/%s/*.png" % obj_type):
+            try:
+                os.remove(name)
+            except OSError:
+                print "unable to remove %s" % name
+
+    for name in glob("seeweb/data/gallery/*/"):
+        try:
+            rmtree(name)
+        except OSError:
+            print "unable to remove %s" % name
+
+    for name in glob("../see_repo/*/"):
+        try:
+            rmtree(name)
+        except OSError:
+            print "unable to remove %s" % name
+
+    # setup config
     config_uri = argv[1]
     options = parse_vars(argv[2:])
 
@@ -39,42 +69,74 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
 
+    # populate database
     with transaction.manager:
         session = DBSession()
 
         # users
-        users = [create_user(session,
-                             uid='revesansparole',
-                             name="Jerome Chopard",
-                             email="revesansparole@gmail.com"),
-                 create_user(session,
+        doofus0 = create_user(session,
+                              uid='doofus%d' % 0,
+                              name="Dummy Doofus",
+                              email="dummy.doofus@email.com")
+
+        doofus1 = create_user(session,
+                              uid='doofus%d' % 1,
+                              name="Dummy Doofus",
+                              email="dummy.doofus@email.com")
+
+        doofus2 = create_user(session,
+                              uid='doofus%d' % 2,
+                              name="Dummy Doofus",
+                              email="dummy.doofus@email.com")
+
+        doofus3 = create_user(session,
+                              uid='doofus%d' % 3,
+                              name="Dummy Doofus",
+                              email="dummy.doofus@email.com")
+
+        revesansparole = create_user(session,
+                                     uid='revesansparole',
+                                     name="Jerome Chopard",
+                                     email="revesansparole@gmail.com")
+        img = Image.open("seeweb/scripts/avatar/revesansparole.png")
+        upload_user_avatar(img, revesansparole)
+
+        pradal = create_user(session,
                              uid='pradal',
                              name="Christophe Pradal",
-                             email="christophe.pradal@inria.fr"),
-                 create_user(session,
-                             uid='sartzet',
-                             name="Simon Artzet",
-                             email="simon.aertzet@inria.fr"),
-                 create_user(session,
-                             uid='fboudon',
-                             name="Fred Boudon",
-                             email="fred.boudon@inria.fr")]
+                             email="christophe.pradal@inria.fr")
+        img = Image.open("seeweb/scripts/avatar/pradal.png")
+        upload_user_avatar(img, pradal)
 
-        for i in range(4):
-            users.append(create_user(session,
-                                     uid='doofus%d' % i,
-                                     name="Dummy Doofus",
-                                     email="dummy.doofus@email.com"))
+        sartzet = create_user(session,
+                              uid='sartzet',
+                              name="Simon Artzet",
+                              email="simon.aertzet@inria.fr")
+        img = Image.open("seeweb/scripts/avatar/sartzet.png")
+        upload_user_avatar(img, sartzet)
+
+        fboudon = create_user(session,
+                              uid='fboudon',
+                              name="Fred Boudon",
+                              email="fred.boudon@inria.fr")
+        img = Image.open("seeweb/scripts/avatar/fboudon.png")
+        upload_user_avatar(img, fboudon)
+
+        for i in range(30):
+            create_user(session,
+                        uid="zzzz%d" % i,
+                        name="John Doe%d" % i,
+                        email="john%d@emil.com" % i)
 
         # teams
         subsub_team = create_team(session, tid="subsubteam")
         subsub_team.description = """Test team only"""
-        subsub_team.add_auth(session, 'doofus%d' % 0, Role.edit)
+        add_team_auth(session, subsub_team, doofus0, Role.edit)
 
         sub_team = create_team(session, tid="subteam")
         sub_team.description = """Test team only"""
-        sub_team.add_auth(session, 'doofus%d' % 1, Role.edit)
-        sub_team.add_auth(session, "subsubteam", Role.edit, is_team=True)
+        add_team_auth(session, sub_team, doofus1, Role.edit)
+        add_team_auth(session, sub_team, subsub_team, Role.edit)
 
         vplants = create_team(session, tid="vplants")
         vplants.description = """
@@ -84,8 +146,8 @@ INRIA team based in Montpellier
 
         """
 
-        vplants.add_auth(session, 'pradal', Role.edit)
-        vplants.add_auth(session, 'fboudon', Role.read)
+        add_team_auth(session, vplants, pradal, Role.edit)
+        add_team_auth(session, vplants, fboudon, Role.view)
 
         oa = create_team(session, tid="openalea")
         oa.description = """
@@ -99,27 +161,18 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
 
         """
 
-        oa.add_auth(session, 'revesansparole', Role.edit)
-        oa.add_auth(session, 'pradal', Role.read)
-        oa.add_auth(session, 'sartzet', Role.read)
-        oa.add_auth(session, 'vplants', Role.edit, is_team=True)
-        oa.add_auth(session, 'subteam', Role.edit, is_team=True)
+        add_team_auth(session, oa, revesansparole, Role.edit)
+        add_team_auth(session, oa, pradal, Role.view)
+        add_team_auth(session, oa, sartzet, Role.view)
+        add_team_auth(session, oa, vplants, Role.edit)
+        add_team_auth(session, oa, sub_team, Role.edit)
 
         # projects
-        projects = [create_project(session, 'revesansparole', name) for name in
-                    ("pkglts",
-                     "svgdraw",
-                     "workflow")]
-
-        for i in range(5):
-            project = create_project(session, 'doofus%d' % i, "pjt%d" % i)
-            projects.append(project)
-
-        for i in range(3):
-            projects[i].public = True
-
-        projects[0].add_auth(session, 'sartzet', Role.edit)
-        projects[0].description = """
+        pkglts = create_project(session, 'revesansparole', 'pkglts')
+        pkglts.public = True
+        pkglts.doc_url = "http://pkglts.readthedocs.org/en/latest/"
+        pkglts.src_url = " C:/Users/jerome/Desktop/pkglts/.git"
+        pkglts.store_description("""
 This project is part of OpenAlea_.
 
 .. image:: http://localhost:6543/avatar/team/openalea_small.png
@@ -128,15 +181,39 @@ This project is part of OpenAlea_.
 
 .. _OpenAlea: http://localhost:6543/team/openalea
 
-        """
+        """)
+        add_project_auth(session, pkglts, sartzet, Role.edit)
+        for img_name in ["Chrysanthemum.png",
+                         "Desert.png",
+                         "Jellyfish.png",
+                         "Koala.png",
+                         "Penguins.png"]:
+            img = Image.open("seeweb/scripts/gallery/%s" % img_name)
+            add_gallery_image(pkglts, img, img_name)
 
-        projects[1].add_auth(session, 'sartzet', Role.read)
-        # projects[2].add_auth(session, 'openalea', Role.read, is_team=True)
+        svgdraw = create_project(session, 'revesansparole', 'svgdraw')
+        svgdraw.public = True
+        svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
+        add_project_auth(session, svgdraw, sartzet, Role.view)
+
+        workflow = create_project(session, 'revesansparole', 'workflow')
+        workflow.public = True
+        add_project_auth(session, workflow, oa, Role.view)
+
+        toto = create_project(session, 'revesansparole', 'toto')
+        toto.public = False
+        toto.src_url = "C:/Users/jerome/Desktop/see/toto/.git"
+        add_dependency(session, toto, "numpy", "1.0")
+        add_dependency(session, toto, "pkglts", "1.0")
+
+        for i in range(5):
+            create_project(session, 'doofus%d' % i, "stoopid%d" % i)
 
         # comments
-        pid = projects[0].id
         for i in range(4):
             create_comment(session,
-                           pid,
-                           users[i].id,
+                           'pkglts',
+                           "doofus%d" % i,
                            "very nasty comment (%d)" % i)
+
+        print "dependencies", pkglts.dependencies, "\n" * 10

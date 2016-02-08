@@ -1,15 +1,16 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.models.auth import Role
 
-from .tools import tabs, view_init
+from .commons import view_init
 
 
 @view_config(route_name='team_view_members',
              renderer='templates/team/view_members.jinja2')
-def index(request):
+def view(request):
     session = DBSession()
-    team, current_uid, allow_edit = view_init(request, session)
+    team, view_params = view_init(request, session, 'members')
 
     members = []
     for actor in team.auth:
@@ -17,10 +18,8 @@ def index(request):
             typ = 'team'
         else:
             typ = 'user'
-        members.append((typ, actor.role, actor.user))
+        members.append((typ, Role.to_str(actor.role), actor.user))
 
-    return {"team": team,
-            "tabs": tabs,
-            "tab": 'members',
-            "allow_edit": allow_edit,
-            "members": members}
+    view_params["members"] = members
+
+    return view_params

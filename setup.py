@@ -1,4 +1,3 @@
-import os
 from setuptools import setup, find_packages
 
 with open('README.rst') as f:
@@ -21,7 +20,7 @@ def parse_requirements(fname):
 
 
 setup(name='seeweb',
-      version='0.1',
+      version='0.8',
       description='SEE website',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -38,11 +37,11 @@ setup(name='seeweb',
       include_package_data=True,
       zip_safe=False,
       test_suite='seeweb',
-      install_requires=[], #parse_requirements("requirements.txt"),
-      entry_points="""\
-      [paste.app_factory]
-      main = seeweb:main
-      [console_scripts]
-      initialize_seeweb_db = seeweb.scripts.initializedb:main
-      """,
+      install_requires=[],  # parse_requirements("requirements.txt"),
+      entry_points={
+          "paste.app_factory": ["main = seeweb:main"],
+          "console_scripts": [
+              "initialize_seeweb_db = seeweb.scripts.initializedb:main",
+              "clean_seeweb = seeweb.scripts.clean_package_data:main"]
+                    },
       )

@@ -1,4 +1,4 @@
-{% extends "project_edit.html" %}
+{% extends "layout_edit.jinja2" %}
 
 {% block project_edit_body %}
 
@@ -19,12 +19,13 @@
           <tbody>
             <tr>
                 <td>
-                    <input type='text' name='new_member' placeholder='new user id'>
+                    <input type='text' name='new_member' placeholder='new user id' />
                 </td>
                 <td>
                     <select name="role_new">
                         <option value="denied">denied</option>
-                        <option value="read" selected>read</option>
+                        <option value="view" selected>view</option>
+                        <option value="install">install</option>
                         <option value="edit">edit</option>
                     </select>
                 </td>
@@ -44,8 +45,9 @@
               <td>
                 <select name="role_{{ uid }}">
                     <option value="denied" {% if role == 0 %}selected{% endif %}>denied</option>
-                    <option value="read" {% if role == 1 %}selected{% endif %}>read</option>
-                    <option value="edit" {% if role == 2 %}selected{% endif %}>edit</option>
+                    <option value="view" {% if role == 1 %}selected{% endif %}>view</option>
+                    <option value="install" {% if role == 2 %}selected{% endif %}>install</option>
+                    <option value="edit" {% if role == 3 %}selected{% endif %}>edit</option>
                 </select>
               </td>
               <td>

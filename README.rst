@@ -1,6 +1,9 @@
 SEE website
 ===========
 
+Source code for SEE website to manage projects, users and teams.
+
+
 Getting Started
 ---------------
 

@@ -1,43 +1,43 @@
-{% extends "admin_layout.html" %}
+{% extends "layout.jinja2" %}
 
 {% block admin_body %}
-    {% if search_pattern == "" %}
-    <h1>All Comments</h1>
-    {% else %}
-    <h1>Comments on project: '{{ search_pattern }}'</h1>
-    {% endif %}
-
-    {% if search_pattern != "" %}
-        <button type="all" class="btn btn-default" name="all">Display all</button>
-    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All Comments</h1>
+            {% else %}
+            <h1>Comments on project: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('admin_comments') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
 
     {% if comments|length == 0 %}
-    <h2>No comment found</h2>
+        <h2>No comment found</h2>
     {% else %}
-    <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>project</th>
-              <th>user</th>
-              <th>creation</th>
-              <th>msg</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for cmt in comments %}
-            <tr>
-              <td><input type="checkbox"></td>
-              <td><a href="{{ request.route_url('project_view_home', pid=cmt.project) }}">{{ cmt.project }}</a></td>
-              <td><a href="{{ request.route_url('user_view_home', uid=cmt.author) }}">{{ cmt.author }}</a></td>
-              <td>{{ cmt.creation }}</td>
-              <td>{{ cmt.message }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>project</th>
+                  <th>user</th>
+                  <th>creation</th>
+                  <th>msg</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for cmt in comments %}
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td><a href="{{ request.route_url('project_view_home', pid=cmt.project) }}">{{ cmt.project }}</a></td>
+                  <td><a href="{{ request.route_url('user_view_home', uid=cmt.author) }}">{{ cmt.author }}</a></td>
+                  <td>{{ cmt.creation }}</td>
+                  <td>{{ cmt.message }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
     {% endif %}
 {% endblock %}
 

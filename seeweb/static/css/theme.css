@@ -1,0 +1,195 @@
+/* overall definitions */
+
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+html {
+    height: 100%;
+}
+
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  color: #555555;
+  background: #ffffff;
+  height: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+p {
+  font-weight: 300;
+}
+.font-normal {
+  font-weight: 400;
+}
+.font-semi-bold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+
+a {
+    color: #000050;
+}
+
+/* related to main layout */
+
+#banner {
+    background: #bc2131;
+    color: #ffeeee;
+    padding-top: 0.4em;
+}
+
+#banner .spacer {
+    padding-top: 1em;
+}
+
+#flash-msg {
+    background: #ffffff;
+}
+
+#main-content {
+    background: #ffffff;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -80px;
+}
+
+#push,
+#footer {
+    height: 60px;
+}
+
+#footer {
+    margin-top: 1em;
+    padding: 1em;
+    background: #000000;
+    color: #bc2131;
+}
+
+.copyright {
+  font-size: 0.9em;
+  color: #bc2131;
+}
+
+/* Wrapper for project summary elements */
+
+.project {
+    float: left;
+    padding: 1em;
+    min-width: 180px;
+}
+
+.project .avatar {
+   float: left;
+}
+
+.project .avatar img {
+   width: 64px;
+}
+
+.project .name {
+    vertical-align: bottom;
+}
+
+/* Wrapper for team summary elements */
+
+.team {
+    float: left;
+    padding: 1em;
+    min-width: 180px;
+}
+
+.team .avatar {
+   display: inline;
+}
+
+.team .name {
+    display: inline;
+    vertical-align: bottom;
+}
+
+/* Wrapper for user summary elements */
+
+.user {
+    float: left;
+    min-width: 180px;
+    padding: 1em;
+}
+
+.user .avatar {
+   display: inline;
+}
+
+.user .name {
+    display: inline;
+    vertical-align: bottom;
+}
+
+/* Wrapper for 'view' pages */
+
+.partner-table {
+    display: table;
+    height: 100%;
+}
+.partner {
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
+}
+
+#header {
+    margin-top: 0.2em;
+    text-align: bottom;
+}
+
+#header .avatar {
+    vertical-align: bottom;
+}
+
+#header .avatar img {
+    max-width: 256px;
+    max-height: 256px;
+}
+
+#header .description {
+    padding-left: 1em;
+    vertical-align: bottom;
+}
+
+#header .description .spacer {
+    height: 50px;
+}
+
+#content {
+    background: #ffffff;
+    padding: 0.2em;
+}
+
+/* Wrapper for 'edit' pages */
+
+#action-tools .btn-warning {
+    display: block;
+    margin-top: 1em;
+}
+
+#action-tools .btn-danger {
+    display: block;
+    margin-top: 2em;
+}
+
+#edit_avatar .btn-file {
+    display: inline-block;
+}
+

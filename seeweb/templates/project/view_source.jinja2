@@ -1,56 +1,112 @@
-{% extends "project_view.html" %}
+{% from 'macro.jinja2' import project_condensed with context %}
+{% from 'macro.jinja2' import project_fake with context %}
+
+{% extends "layout_view.jinja2" %}
 
 {% block project_view_body %}
 
-<div class="row">
+<div id="host_descr" class="row">
     <div class="col-md-12">
         {% if project.src_url|length == 0 %}
             <p>No remote source associated to this project</p>
         {% else %}
-            <a href="{{ project.src_url }}">{{ hostname }}</a>
+            <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-addon">src</div>
+                  <input type="text" class="form-control" value="{{ project.src_url }}" disabled />
+                </div>
+            </div>
+            <p>VCS: {{ vcs }}, hosted on <a href="{{ project.src_url }}">{{ hostname }}<img src="{{ request.static_url('seeweb:static/src_host/%s.png' % hostname) }}" /></a></p>
         {% endif %}
     </div>
 </div>
 
-{% if notebooks|length > 0 %}
-<div class="row" id="notebooks">
+<div class="row" id="dependencies">
     <div class="col-md-12">
         <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Notebooks</h3>
-          </div>
-          <div class="panel-body">
-            <ul>
-                {% for pth, name in notebooks %}
-                    <li>{{ pth }}: {{ name }}</li>
-                {% endfor %}
-            </ul>
-          </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">Dependencies</h3>
+            </div>
+            <div class="panel-body">
+                {% if dependencies|length == 0 %}
+                    <p>None</p>
+                {% else %}
+                    <div class="container">
+                        <div class="row">
+                            {% for pjt, version, exists in dependencies %}
+                                {% if exists %}
+                                    {{ project_condensed(pjt, version) }}
+                                {% else %}
+                                    {{ project_fake(pjt, version) }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
          </div>
     </div>
 </div>
+
+{% if notebooks|length > 0 %}
+    <div class="row" id="notebooks">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Notebooks</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for pth, name in notebooks %}
+                            <li>{{ pth }}: {{ name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
+        </div>
+    </div>
 {% endif %}
 
 {% if executables|length > 0 %}
-<div class="row" id="executables">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Executables</h3>
-          </div>
-          <div class="panel-body">
-            <ul>
-                {% for name, descr in executables %}
-                    {% if playground %}
-                    <li><a class="btn btn-primary" href="{{ request.route_url('user_view_playground', uid=user.id, _query={'executable': name}) }}">{{ name }}</a>: {{ descr }}</li>
-                    {% else %}
-                    <li>{{ name }}: {{ descr }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-          </div>
-         </div>
+    <div class="row" id="executables">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Executables</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for name, descr in executables %}
+                            {% if playground %}
+                            <li><a class="btn btn-primary" href="{{ request.route_url('user_view_home', uid=user.id, _query={'executable': name}) }}">{{ name }}</a>: {{ descr }}</li>
+                            {% else %}
+                            <li>{{ name }}: {{ descr }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
+        </div>
     </div>
-</div>
 {% endif %}
+
+{% if nodes|length > 0 %}
+    <div class="row" id="nodes">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Workflow nodes</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for node in nodes %}
+                            <li>{{ node['name'] }}: {{ project.id }}:{{ node['module'] }}.{{ node['function'] }} ({{ node['info1'] }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
+        </div>
+    </div>
+{% endif %}
+
 {% endblock %}

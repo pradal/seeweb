@@ -3,12 +3,24 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.models.access import get_team, get_user
+from seeweb.model_access import get_team, get_user
+from seeweb.model_edit import add_project_auth, remove_auth, update_auth
 
-from .tools import edit_common, edit_init
+from .commons import edit_init
 
 
 def register_new_user(request, session, project, new_uid):
+    """Register a new user according to info in form
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+        project: (Project)
+        new_uid: (str) id of user to add to project auth
+
+    Returns:
+        (bool): whether project has changed and need to be reloaded
+    """
     role = Role.from_str(request.params.get("role_new", "denied"))
 
     user = get_user(session, new_uid)
@@ -17,8 +29,8 @@ def register_new_user(request, session, project, new_uid):
             request.session.flash("%s already a member" % new_uid, 'warning')
             return False
 
-        project.add_auth(session, new_uid, role)
-        request.session.flash("New member %s added" % user.id, 'success')
+        add_project_auth(session, project, user, role)
+        request.session.flash("New member %s added" % new_uid, 'success')
         return True
 
     team = get_team(session, new_uid)
@@ -27,7 +39,7 @@ def register_new_user(request, session, project, new_uid):
             request.session.flash("%s already a member" % new_uid, 'warning')
             return False
 
-        project.add_auth(session, new_uid, role, is_team=True)
+        add_project_auth(session, project, team, role)
         request.session.flash("New member %s added" % new_uid, 'success')
         return True
 
@@ -48,12 +60,8 @@ def view(request):
             if rm_button_id in request.params:
                 need_update = True
 
-    if 'default' in request.params:
-        # reload default values for this user
-        # actually already done
-        pass
-    elif need_update:
-        need_reload = edit_common(request, session, project)
+    if need_update:
+        need_reload = False
 
         # check for new members
         new_uid = request.params['new_member']
@@ -64,7 +72,7 @@ def view(request):
         for actor in project.auth:
             # check need to remove
             if "rm_%s" % actor.user in request.params:
-                project.remove_auth(session, actor.user)
+                remove_auth(session, project, actor.user)
                 request.session.flash("User %s removed" % actor.user, 'success')
                 need_reload = True
             else:
@@ -76,11 +84,11 @@ def view(request):
                 new_role = Role.from_str(new_role_str)
 
                 if new_role != actor.role:
-                    project.update_auth(session, actor.user, new_role)
+                    update_auth(session, project, actor.user, new_role)
                     need_reload = True
 
         if need_reload:
-            loc = request.route_url('project_edit_contributors', pid=project.id)
+            loc = request.current_route_url()
             return HTTPFound(location=loc)
     else:
         pass

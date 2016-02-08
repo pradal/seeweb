@@ -1,0 +1,36 @@
+{% extends "layout.jinja2" %}
+
+{% block team_body %}
+<div id="header" class="row">
+    <div class="partner-table">
+        <div class="col-md-3 partner avatar">
+            <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
+                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/team/%s.png' % team.id) }}" />
+            </a>
+        </div>
+        <div class="col-md-9 partner description">
+            <div class="h1">{{ team.id }}</div>
+            <div class="spacer"></div>
+            {% if allow_edit %}
+                <a class="btn btn-default pull-right" href="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}">
+                  <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+                  Edit team
+                </a>
+            {% endif %}
+            <ul class="nav nav-tabs">
+                {% for tab_title, tab_id in tabs %}
+                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_view_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="content" class="row">
+    <div class="col-md-9 col-md-offset-3">
+        {% block team_view_body %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

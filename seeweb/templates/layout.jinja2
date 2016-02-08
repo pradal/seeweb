@@ -1,0 +1,97 @@
+{% from 'templates/main_banner.jinja2' import main_banner with context %}
+
+<!DOCTYPE html>
+<html lang="{{ request.locale_name }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SEE web application">
+    <meta name="author" content="revesansparole">
+    <link rel="shortcut icon"
+          href="{{ request.static_url('seeweb:static/seeweb-16x16.png') }}">
+
+    <title>Science Everyone Everywhere</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ request.static_url('seeweb:static/css/bootstrap.min.css') }}"
+          rel="stylesheet">
+
+    <!-- Custom styles for this project -->
+    <link href="{{ request.static_url('seeweb:static/css/theme.css') }}"
+          rel="stylesheet">
+    {% block css %}
+    {% endblock %}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    {% block javascripts %}
+    {% endblock %}
+</head>
+
+<body>
+<div id="wrap">
+    <div class="container">
+        <!-- banner -->
+        <div id="banner" class="row">
+            {{ main_banner() }}
+        </div>
+
+        <!-- Flash messages -->
+        <div id="flash-msg" class="row">
+            {% for msg in request.session.pop_flash('warning') %}
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="alert alert-warning" role="alert">{{ msg }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for msg in request.session.pop_flash('success') %}
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="alert alert-success" role="alert">{{ msg }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Body -->
+        <div id="main-content" class="row">
+            <div class="col-md-12">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+
+    </div>
+    <!-- push footer down -->
+    <div id="push"></div>
+</div>
+
+    <!-- footer -->
+<div id="footer" class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <p>SEEweb</p>
+        </div>
+        <div class="copyright col-md-4">
+            <p>Copyright &copy; revesansparole</p>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ request.static_url('seeweb:static/js/jquery.min.js') }}">
+</script>
+<script src="{{ request.static_url('seeweb:static/js/bootstrap.min.js') }}">
+</script>
+{% block javascripts_end %}
+{% endblock %}
+
+</body>
+</html>

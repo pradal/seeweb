@@ -1,13 +1,6 @@
-{% extends "project_edit.html" %}
+{% extends "layout_edit.jinja2" %}
 
 {% block project_edit_body %}
-<div class="form-group">
-    <label>hosts:</label>
-    {% for hostname in doc_hosts %}
-        <button class="btn" type="submit" name="{{ hostname }}">{{ hostname }}</button>
-    {% endfor %}
-</div>
-
 <div class="row">
     <div class="col-md-12">
         <button type="submit" class="btn pull-right" name="fetch_doc">Fetch</button>
@@ -17,6 +10,30 @@
         </div>
     </div>
 </div>
+
+<div class="row host_list">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>hosts:</label>
+            {% for hostname in doc_hosts %}
+                <button class="btn btn-{% if hostname == current_hostname %}primary{% else %}default{%endif%}" type="submit" name="{{ hostname }}" {% if hostname == current_hostname %}disabled{% endif %}>
+                    {{ hostname }}
+                    <img src="{{request.static_url('seeweb:static/doc_host/%s.png' % hostname) }}" />
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div id="host_local" class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>local:</label>
+            <input class="btn btn-default btn-file" type="file" name="local_file" />
+            <button class="btn btn-warning" type="submit" name="submit_local">submit</button>
+        </div>
+    </div>
+</div>
+
 <div class="form-group">
   <label for="doc">Documentation:</label>
   <textarea class="form-control" rows="20" id="doc" name='documentation' {% if project.doc == "" %}placeholder='write some documentation in restructured text here'{% endif %}>{{ project.doc }}</textarea>

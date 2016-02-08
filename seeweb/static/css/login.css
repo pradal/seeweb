@@ -1,0 +1,15 @@
+.well {
+    margin-top: 1em;
+}
+
+form.form-signin {
+    width: 300px;
+}
+
+form.form-signin h3 {
+    margin-top: 0;
+}
+
+form.form-signin input {
+    margin: 0 0 0.2em 0;
+}

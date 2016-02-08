@@ -1,0 +1,50 @@
+#header .description .owner {
+    padding: 1em 1em 0 0;
+}
+
+.comment {
+    margin: 0 1em 1em 1em;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #dddddd;
+}
+
+.comment .score {
+    width: 100%;
+    text-align: center;
+    padding: 0.3em 0 0.3em 0;
+}
+
+.gallery_item {
+    float: left;
+    min-width: 180px;
+    padding: 1em;
+}
+
+.gallery_item .avatar {
+   display: inline;
+}
+
+.gallery_item .avatar img {
+    width: 128px
+}
+
+.gallery_item .descr {
+    display: inline;
+    vertical-align: middle;
+}
+
+.host_list {
+    padding-top: 1em;
+}
+
+button img {
+    width: 64px;
+}
+
+#host_local .btn-file {
+    display: inline-block;
+}
+
+#host_descr img {
+    width: 32px;
+}

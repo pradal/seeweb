@@ -1,4 +1,4 @@
-{% extends "project_view.html" %}
+{% extends "layout_view.jinja2" %}
 
 {% block project_view_body %}
 
@@ -32,7 +32,7 @@
                     unknown
                 {% endif %}
               </td>
-              <td>{% if role == 1 %}read{% elif role==2 %}edit{% else %}denied{% endif %}</td>
+              <td>{{ role }}</td>
             </tr>
             {% endfor %}
           </tbody>

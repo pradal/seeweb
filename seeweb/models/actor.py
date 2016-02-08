@@ -3,6 +3,10 @@ from models import Base
 
 
 class PActor(Base):
+    """Project actor class.
+
+    Store the type of action a given user|team can do on a project
+    """
     __tablename__ = 'p_actors'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
@@ -17,6 +21,10 @@ class PActor(Base):
 
 
 class TActor(Base):
+    """Team actor class.
+
+    Store the type of action a given user|team can do on a project
+    """
     __tablename__ = 't_actors'
 
     id = Column(Integer, autoincrement=True, primary_key=True)

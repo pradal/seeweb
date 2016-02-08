@@ -2,8 +2,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.models.access import get_comment, get_project
-from seeweb.models.edit import recompute_project_ratings
+from seeweb.model_access import get_comment, get_project
+from seeweb.model_edit import recompute_project_ratings
 
 
 @view_config(route_name='comment_edit_score',
@@ -12,6 +12,14 @@ def view(request):
     session = DBSession()
     cid = request.matchdict['cid']
     comment = get_comment(session, cid)
+    if comment is None:
+        request.session.flash("Invalid comment", 'warning')
+        return HTTPFound(location=request.session['last'])
+
+    # check user credentials
+    if request.unauthenticated_userid is None:
+        request.session.flash("Action non authorized for anonymous users", 'warning')
+        return HTTPFound(location=request.session['last'])
 
     if 'up' in request.params:
         vote = 'up'
@@ -21,11 +29,6 @@ def view(request):
         request.session.flash("Invalid vote", 'warning')
         return HTTPFound(location=request.session['last'])
 
-    # check user credentials
-    if request.unauthenticated_userid is None:
-        request.session.flash("Action non authorized for anonymous users", 'warning')
-        return HTTPFound(location=request.session['last'])
-
     if 'validate' in request.params:
         if vote == 'up':
             comment.score += 1
@@ -33,7 +36,8 @@ def view(request):
             comment.score -= 1
 
         # recompute project ratings
-        recompute_project_ratings(session, get_project(session, comment.project))
+        recompute_project_ratings(session,
+                                  get_project(session, comment.project))
 
         request.session.flash("Comment voted %s" % vote, 'success')
         return HTTPFound(location=request.session['last'])

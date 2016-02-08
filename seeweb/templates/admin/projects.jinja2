@@ -1,15 +1,15 @@
-{% extends "admin_layout.html" %}
+{% extends "layout.jinja2" %}
 
 {% block admin_body %}
-    {% if search_pattern == "" %}
-    <h1>All Projects</h1>
-    {% else %}
-    <h1>Projects starting with: '{{ search_pattern }}'</h1>
-    {% endif %}
-
-    {% if search_pattern != "" %}
-        <button type="all" class="btn btn-default" name="all">Display all</button>
-    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All projects</h1>
+            {% else %}
+            <h1>Projects starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('admin_projects') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
 
     {% if projects|length == 0 %}
     <h2>No project found</h2>
@@ -27,7 +27,7 @@
           <tbody>
             {% for project in projects %}
             <tr>
-              <td><input type="checkbox" name="select_{{ project.id }}""></td>
+              <td><input type="checkbox" name="select_{{ project.id }}" /></td>
               <td><a href="{{ request.route_url('project_view_home', pid=project.id) }}">{{ project.id }}</a></td>
               <td><a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a></td>
               <td>{% if project.public %}public{% else %}private{% endif %}</td>

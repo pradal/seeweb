@@ -10,6 +10,7 @@ from seeweb.models.team import Team
 def view(request):
     session = DBSession()
     query = session.query(Team)
+
     search_pattern = request.params.get("main_search", "")
     if search_pattern != "":
         query = query.filter(Team.id.like("%s%%" % search_pattern))

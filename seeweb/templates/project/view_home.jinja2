@@ -1,7 +1,8 @@
-{% from 'templates/comment/macro.html' import list_comments with context %}
-{% from 'templates/comment/macro.html' import comment_edit_form %}
+{% from 'templates/comment/macro.jinja2' import list_comments with context %}
+{% from 'templates/comment/macro.jinja2' import comment_submit_form %}
+{% from 'macro.jinja2' import gallery_item with context %}
 
-{% extends "project_view.html" %}
+{% extends "layout_view.jinja2" %}
 
 {% block project_view_body %}
 
@@ -12,10 +13,10 @@
             <h3 class="panel-title">Description</h3>
           </div>
           <div class="panel-body">
-            {% if short_description|length == 0 %}
+            {% if description|length == 0 %}
                 Small description to be written
             {% else %}
-                {{short_description }}
+                {{ description }}
             {% endif %}
           </div>
          </div>
@@ -32,11 +33,11 @@
             {% if gallery|length == 0 %}
                 <p>Empty gallery</p>
             {% else %}
-                {% for img_name in gallery %}
-                    <a href="{{ request.static_url('seeweb:gallery/%s/%s.png' % (project.id, img_name)) }}">
-                        <img src="{{ request.static_url('seeweb:gallery/%s/%s_small.png' % (project.id, img_name)) }}" />
-                    </a>
-                {% endfor %}
+                <div class="row">
+                    {% for img_name in gallery %}
+                        {{ gallery_item(project, img_name, "description") }}
+                    {% endfor %}
+                </div>
             {% endif %}
           </div>
          </div>
@@ -56,10 +57,10 @@
                 {% else %}
                     {{ list_comments(comments) }}
                 {% endif %}
-                {% if current_uid != None %}
+                {% if request.unauthenticated_userid != None %}
                     <div class="list-group-item">
                         <form action="{{ request.route_url('comment_edit_new') }}" method='POST'>
-                            {{ comment_edit_form(request, current_uid, project.id, "", ratings, True) }}
+                            {{ comment_submit_form(request, project.id, "", ratings) }}
                         </form>
                     </div>
                 {% endif %}

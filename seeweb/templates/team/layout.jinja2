@@ -1,0 +1,11 @@
+{% extends "templates/layout.jinja2" %}
+{% block css %}
+  <link href="{{request.static_url('seeweb:static/css/team_theme.css')}}" rel="stylesheet">
+  {% block team_css %}
+  {% endblock team_css %}
+{% endblock css %}
+
+{% block body %}
+  {% block team_body %}
+  {% endblock %}
+{% endblock %}

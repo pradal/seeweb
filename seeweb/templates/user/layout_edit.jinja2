@@ -1,0 +1,44 @@
+{% extends "layout.jinja2" %}
+
+{% block user_body %}
+<form action="{{ request.route_url('user_edit_%s' % tab, uid=user.id) }}" method='POST'
+      enctype="multipart/form-data">
+
+<div id="header" class="row">
+    <div class="partner-table">
+        <div class="col-md-3 partner avatar">
+            <a href="{{ request.route_url('user_view_home', uid=user.id) }}">
+                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/user/%s.png' % user.id) }}" />
+            </a>
+        </div>
+        <div class="col-md-9 partner description">
+            <div class="h1">{{ user.id }}</div>
+            <div class="input-group">
+                <span class="input-group-addon">Name</span>
+                <input type="text" class="form-control" name="name" value="{{ user.name }}" />
+            </div>
+            <div class="spacer"></div>
+            <ul class="nav nav-tabs">
+                {% for tab_title, tab_id in tabs %}
+                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_edit_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="content" class="row">
+    <div id="action-tools" class="col-md-3">
+        <button class="btn btn-primary" type="submit" name="update">Update</button>
+        <button class="btn" type="submit" name="default">Default</button>
+        <button class="btn pull-right" type="submit" name="back">Back</button>
+    </div>
+
+    <div class="col-md-9">
+        {% block user_edit_body %}
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}

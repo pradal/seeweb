@@ -3,12 +3,24 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.models.access import get_team, get_user, is_member
+from seeweb.model_access import get_team, get_user, is_member
+from seeweb.model_edit import add_team_auth, remove_auth, update_auth
 
-from .tools import edit_common, edit_init, tabs
+from .commons import edit_init
 
 
 def register_new_user(request, session, team, new_uid):
+    """Register a new user according to info in form
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+        team: (Team)
+        new_uid: (str) id of user to add to team auth
+
+    Returns:
+        (bool): whether team has changed and need to be reloaded
+    """
     if new_uid == team.id:
         msg = "Cannot be a member of itself"
         request.session.flash(msg, 'warning')
@@ -19,26 +31,26 @@ def register_new_user(request, session, team, new_uid):
     member = get_user(session, new_uid)
     if member is not None:
         if team.get_actor(new_uid) is not None:
-            request.session.flash("%s already a member" % new_uid, 'warning')
+            request.session.flash("%s already a member" % member.id, 'warning')
             return False
 
-        team.add_auth(session, new_uid, role)
+        add_team_auth(session, team, member, role)
         request.session.flash("New member %s added" % member.id, 'success')
         return True
 
     member = get_team(session, new_uid)
     if member is not None:
         if is_member(session, team, new_uid):
-            request.session.flash("%s already a member" % new_uid, 'warning')
+            request.session.flash("%s already a member" % member.id, 'warning')
             return False
 
         if is_member(session, member, team.id):
-            msg = "Circular reference %s is a member of %s" % (team.id, new_uid)
+            msg = "Circular reference %s is a member of %s" % (team.id, member.id)
             request.session.flash(msg, 'warning')
             return False
 
-        team.add_auth(session, new_uid, role, is_team=True)
-        request.session.flash("New member %s added" % new_uid, 'success')
+        add_team_auth(session, team, member, role)
+        request.session.flash("New member %s added" % member.id, 'success')
         return True
 
     request.session.flash("User %s does not exists" % new_uid, 'warning')
@@ -49,12 +61,7 @@ def register_new_user(request, session, team, new_uid):
              renderer='templates/team/edit_members.jinja2')
 def view(request):
     session = DBSession()
-    team, current_uid = edit_init(request, session)
-
-    if 'back' in request.params:
-        request.session.flash("Edition stopped", 'success')
-        return HTTPFound(location=request.route_url('team_view_members',
-                                                    tid=team.id))
+    team, view_params = edit_init(request, session, 'members')
 
     need_update = 'update' in request.params
     if not need_update:
@@ -63,12 +70,8 @@ def view(request):
             if rm_button_id in request.params:
                 need_update = True
 
-    if 'default' in request.params:
-        # reload default values for this team
-        # actually already done
-        pass
-    elif need_update:
-        need_reload = edit_common(request, session, team)
+    if need_update:
+        need_reload = False
 
         # check for new members
         new_uid = request.params['new_member']
@@ -79,7 +82,7 @@ def view(request):
         for actor in team.auth:
             # check need to remove
             if "rm_%s" % actor.user in request.params:
-                team.remove_auth(session, actor.user)
+                remove_auth(session, team, actor.user)
                 request.session.flash("User %s removed" % actor.user, 'success')
                 need_reload = True
             else:  # update roles
@@ -91,11 +94,11 @@ def view(request):
                 new_role = Role.from_str(new_role_str)
 
                 if new_role != actor.role:
-                    team.update_auth(session, actor.user, new_role)
+                    update_auth(session, team, actor.user, new_role)
                     need_reload = True
 
         if need_reload:
-            loc = request.route_url('team_edit_members', tid=team.id)
+            loc = request.current_route_url()
             return HTTPFound(location=loc)
     else:
         pass
@@ -109,7 +112,6 @@ def view(request):
             typ = 'user'
         members.append((typ, actor.role, actor.user))
 
-    return {'team': team,
-            "tabs": tabs,
-            'tab': 'members',
-            'members': members}
+    view_params["members"] = members
+
+    return view_params

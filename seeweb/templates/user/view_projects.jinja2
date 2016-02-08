@@ -1,6 +1,6 @@
-{% from 'templates/project/macro.html' import list_projects with context %}
+{% from 'templates/project/macro.jinja2' import project_condensed with context %}
 
-{% extends "user_view.html" %}
+{% extends "layout_view.jinja2" %}
 
 {% block user_view_body %}
 
@@ -11,11 +11,11 @@
   <div class="panel-body">
     {% if allow_edit %}
         <div class="row">
-            <div class="container col-md-12">
+            <div class="col-md-12">
                 <form action="{{ request.route_url('user_view_projects', uid=user.id) }}" method='POST'>
                     <div class="form-group">
                         <button class="btn btn-primary pull-right" type="submit" name="new_project">Create</button>
-                        <input type='text' name='project_id' placeholder='new project id'>
+                        <input type='text' name='project_id' placeholder='new project id' />
                     </div>
                 </form>
             </div>
@@ -30,33 +30,37 @@
             {% endif %}
         </div>
     {% else %}
-        <div class="container-fluid">
-            <div class="list-group">
-                {{ list_projects(projects) }}
+        <div class="container">
+            <div class="row">
+                {% for role, project in projects %}
+                    {{ project_condensed(project, role) }}
+                {% endfor %}
             </div>
         </div>
     {% endif %}
   </div>
 </div>
 
-{% if allow_install %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Installed</h3>
-  </div>
-  <div class="panel-body">
-    {% if installed|length == 0 %}
-        <div class="row">
-            You have not installed any project yet.
-        </div>
-    {% else %}
-        <div class="container-fluid">
-            <div class="list-group">
-                {{ list_projects(installed) }}
+{% if user.id == request.unauthenticated_userid %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Installed</h3>
+      </div>
+      <div class="panel-body">
+        {% if installed_projects|length == 0 %}
+            <div class="row">
+                Nothing installed yet.
             </div>
-        </div>
-    {% endif %}
-  </div>
-</div>
+        {% else %}
+            <div class="container">
+                <div class="row">
+                    {% for role, project in installed_projects %}
+                        {{ project_condensed(project, role) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+      </div>
+    </div>
 {% endif %}
 {% endblock %}

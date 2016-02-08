@@ -1,4 +1,4 @@
-{% extends "team_view.html" %}
+{% extends "layout_view.jinja2" %}
 
 {% block team_view_body %}
 
@@ -8,36 +8,36 @@
   </div>
   <div class="panel-body">
     {% if members|length == 0 %}
-    <div class="row">
-        This team has no members.
-    </div>
+        <div class="row">
+            This team has no members.
+        </div>
     {% else %}
-    <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>user</th>
-              <th>role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for type, role, user in members %}
-            <tr>
-              <td>
-                {% if type == 'user' %}
-                    <a href="{{ request.route_url('user_view_home', uid=user) }}">{{ user }}</a>
-                {% elif type == 'team' %}
-                    <a href="{{ request.route_url('team_view_members', tid=user) }}">{{ user }}</a>
-                {% else %}
-                    unknown
-                {% endif %}
-              </td>
-              <td>{% if role == 1 %}read{% elif role==2 %}edit{% else %}denied{% endif %}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>user</th>
+                  <th>role</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for type, role, user in members %}
+                <tr>
+                  <td>
+                    {% if type == 'user' %}
+                        <a href="{{ request.route_url('user_view_home', uid=user) }}">{{ user }}</a>
+                    {% elif type == 'team' %}
+                        <a href="{{ request.route_url('team_view_members', tid=user) }}">{{ user }}</a>
+                    {% else %}
+                        unknown
+                    {% endif %}
+                  </td>
+                  <td>{{ role }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
     {% endif %}
   </div>
 </div>

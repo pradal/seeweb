@@ -1,9 +1,8 @@
-from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
 
-from .tools import edit_common, edit_init, tabs
+from .commons import edit_init
 
 
 @view_config(route_name='user_edit_projects',
@@ -11,14 +10,5 @@ from .tools import edit_common, edit_init, tabs
 def view(request):
     session = DBSession()
     user, view_params = edit_init(request, session, 'projects')
-
-    if 'default' in request.params:
-        # reload default values for this user
-        # actually already done
-        pass
-    elif 'update' in request.params:
-        edit_common(request, session, user)
-    else:
-        pass
 
     return view_params

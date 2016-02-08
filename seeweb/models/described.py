@@ -16,8 +16,12 @@ class Described(object):
         if self.description == "":
             return ""
         else:
-            html = publish_parts(self.description,
-                                 writer_name='html')['html_body']
+            try:
+                html = publish_parts(self.description,
+                                     writer_name='html')['html_body']
+            except AttributeError as e:
+                html = "<body>Error %s</body>" % str(e)
+
             return html
 
     def store_description(self, rst):

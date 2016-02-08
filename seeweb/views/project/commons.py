@@ -132,16 +132,13 @@ def edit_init(request, session, tab):
             request.session.flash("Unable to find suitable readme file",
                                   'warning')
 
-    if 'fetch_dependencies' in request.params:
-        request.session.flash("TODO dependencies submitted", 'success')
-
     if 'fetch_gallery' in request.params:
         imgs = fetch_gallery(project.id)
         if len(imgs) > 0:
             for img, name in imgs:
                 add_gallery_image(project, img, name)
 
-            request.session.flash("TODO gallery submitted", 'success')
+            request.session.flash("gallery submitted", 'success')
 
     if "confirm_delete" in request.params:
         if request.unauthenticated_userid != project.owner:

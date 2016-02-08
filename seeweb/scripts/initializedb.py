@@ -33,6 +33,11 @@ def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
 
+    # create extra dirs
+    for pth in ("data", "data/session", "../see_repo"):
+        if not os.path.exists(pth):
+            os.mkdir(pth)
+
     # remove sqlite file
     sqlite_pth = "data/seeweb.sqlite"
     if os.path.exists(sqlite_pth):

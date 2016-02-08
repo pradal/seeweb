@@ -105,6 +105,7 @@ def upload_avatar(img, item, item_type):
     thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
 
     pth = avatar_pth(item_type, item.id, small=False)
+    print "pth\n" * 10, pth
 
     if exists(pth):
         os.remove(pth)

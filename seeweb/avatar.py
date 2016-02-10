@@ -208,7 +208,8 @@ def generate_default_user_avatar(user):
 def _remove_avatar(item, item_typ):
     for pth in (_avatar_pth(item, item_typ),
                 _avatar_pth(item, item_typ, True)):
-        os.remove(pth)
+        if exists(pth):
+            os.remove(pth)
 
 
 def remove_project_avatar(project):

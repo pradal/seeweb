@@ -105,5 +105,5 @@ def view(request):
             request.session.flash("Unable to find suitable readme file",
                                   'warning')
 
-    loc = request.route_url('project_edit_home', pid=pid)
+    loc = request.route_url('project_view_home', pid=pid)
     return HTTPFound(location=loc)

@@ -2,8 +2,9 @@
 """
 from os import mkdir
 from os.path import dirname, exists, join
-from shutil import rmtree
 from urlparse import urlsplit
+
+from seeweb.io import rmtree
 
 from .provider import github_git, local_git
 
@@ -51,9 +52,7 @@ def delete_source(pid):
         try:
             rmtree(source_pth(pid))
         except OSError:
-            print "unable to destroy %s" % source_pth(pid)
-        except UnicodeDecodeError:
-            print "TODO remove this problem when deleting source dir"
+            print "unable to destroy %s" % source_pth(pid), "\n" * 10
 
 
 def parse_vcs(url):

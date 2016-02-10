@@ -1,8 +1,9 @@
 from os import listdir, remove, walk
 from os.path import exists, splitext
 from os.path import join as pj
-from shutil import rmtree
 from sys import argv
+
+from seeweb.io import rmtree
 
 
 def clean(rep="."):

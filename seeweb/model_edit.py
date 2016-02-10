@@ -158,6 +158,10 @@ def remove_project(session, project):
     for actor in project.auth:
         session.delete(actor)
 
+    # remove dependencies
+    for dep in project.dependencies:
+        session.delete(dep)
+
     # delete project
     session.delete(project)
 

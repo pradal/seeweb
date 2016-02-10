@@ -3,7 +3,8 @@
 import os
 from os.path import dirname, exists, join, splitext
 from PIL import Image
-from shutil import rmtree
+
+from seeweb.io import rmtree
 
 
 def gallery_pth(project):

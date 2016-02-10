@@ -4,11 +4,11 @@ import sys
 from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
-from shutil import rmtree
 from sqlalchemy import engine_from_config
 import transaction
 
 from seeweb.avatar import upload_user_avatar
+from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
@@ -34,7 +34,7 @@ def main(argv=sys.argv):
         usage(argv)
 
     # create extra dirs
-    for pth in ("data", "data/session", "../see_repo"):
+    for pth in ("data", "data/sessions", "../see_repo"):
         if not os.path.exists(pth):
             os.mkdir(pth)
 

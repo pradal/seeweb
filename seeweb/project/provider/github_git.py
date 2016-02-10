@@ -1,8 +1,31 @@
 """Clone git repository hosted on github
 """
 import os
-from os.path import exists, normpath
+from os.path import exists
 from subprocess import call
+from urlparse import urlsplit
+
+
+def parse_url(url):
+    """Parse a repository url to extract owner and project name
+
+    Args:
+        url: (str) url of project repository on github
+
+    Returns:
+        (str, str): owner, project name
+    """
+    url = urlsplit(url)
+    if url.netloc != "github.com":
+        return None, None
+
+    gr = url.path.split("/")
+    if len(gr) != 3:
+        return None, None
+
+    dmy, owner, name = gr
+
+    return owner, name.split(".")[0]
 
 
 def fetch_sources(repo_url, dst):

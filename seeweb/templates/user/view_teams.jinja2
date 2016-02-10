@@ -9,7 +9,7 @@
     {% if allow_edit %}
         <div class="row">
             <div class="col-md-12">
-                <form action="{{ request.route_url('user_view_teams', uid=user.id) }}" method='POST'>
+                <form action="{{ request.current_route_url() }}" method='POST'>
                     <div class="form-group">
                         <button class="btn btn-primary pull-right" type="submit" name="new_team">Create</button>
                         <input type='text' name='team_id' placeholder='new team id' />

@@ -12,9 +12,10 @@
     {% if allow_edit %}
         <div class="row">
             <div class="col-md-12">
-                <form action="{{ request.route_url('user_view_projects', uid=user.id) }}" method='POST'>
+                <form action="{{ request.current_route_url() }}" method='POST'>
                     <div class="form-group">
-                        <button class="btn btn-primary pull-right" type="submit" name="new_project">Create</button>
+                        <a class="btn btn-success pull-right" href="{{ request.route_url('site_suck') }}">Clone</a>
+                        <button class="btn btn-primary" type="submit" name="new_project">Create</button>
                         <input type='text' name='project_id' placeholder='new project id' />
                     </div>
                 </form>

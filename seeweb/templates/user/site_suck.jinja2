@@ -1,0 +1,35 @@
+{% extends "layout.jinja2" %}
+
+{% block user_body %}
+<h1>Clone project from remote host</h1>
+
+ <form action="{{ request.current_route_url() }}" method='POST'>
+
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-warning pull-right" type="submit">Clone</button>
+        <div class="input-group">
+            <span class="input-group-addon">url</span>
+            <input type="text" class="form-control" name="src_url" {% if src_url %}value="{{ src_url }}"
+            {% else %}placeholder="url of project to clone e.g. https://github.com/revesansparole/seeweb.git"{% endif %}/>
+        </div>
+    </div>
+</div>
+
+{% if project_name %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group">
+            <span class="input-group-addon">Import name</span>
+            <input type="text" class="form-control" name="project_name" value="{{ project_name }}"
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <a class="btn btn-danger" href="{{ request.route_url('home') }}">Cancel</a>
+</div>
+</form>
+
+{% endblock %}

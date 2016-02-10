@@ -27,7 +27,6 @@ def view(request):
             clear_dependencies(session, project)
             for name, ver in fetch_dependencies(project.id):
                 add_dependency(session, project, name, ver)
-                print name, ver, "\n" * 10
 
             loc = request.route_url('project_view_source', pid=project.id)
             return HTTPFound(location=loc)

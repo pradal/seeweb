@@ -39,11 +39,13 @@
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">I already have a project on Github!</h3>
+                <h3 class="panel-title">I already have a public project on Github!</h3>
             </div>
             <div class="panel-body">
-                <p>Log in and try our direct interface to github which create a new
-                project and fetch all relevant information from your github project:</p>
+                <p><a href="{{ request.route_url('user_login') }}">Log in</a>
+                and try our <a href="{{ request.route_url('site_suck') }}">direct interface to github</a>
+                which create a new project and fetch all relevant information
+                from your github project:</p>
                 <ul>
                     <li>some general information if you already have a README file.</li>
                     <li>an avatar to represent your project if a file "avatar.png"

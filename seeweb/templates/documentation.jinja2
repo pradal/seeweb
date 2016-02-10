@@ -1,0 +1,59 @@
+{% extends "layout.jinja2" %}
+
+{% block body %}
+<div class="container">
+    <h1>Simple entry points to the community</h1>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">New to the community?</h3>
+            </div>
+            <div class="panel-body">
+                <p>Start browsing public projects
+                <a href="{{ request.route_url('project_list') }}">here</a>
+                then
+                <a href="{{ request.route_url('user_register') }}">register</a>
+                to create an account and participate to the community.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create a project from scratch</h3>
+            </div>
+            <div class="panel-body">
+                <p><a href="{{ request.route_url('user_login') }}">Log in</a>,
+                then in your home page on the project tab type the name
+                of a new project to create. Click create and you'll be redirected
+                to the edit page of your new project where you'll be able to add
+                more information to describe your project, manage the people you
+                want to collaborate with and upload some sources for other users
+                to benefit from your work.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">I already have a project on Github!</h3>
+            </div>
+            <div class="panel-body">
+                <p>Log in and try our direct interface to github which create a new
+                project and fetch all relevant information from your github project:</p>
+                <ul>
+                    <li>some general information if you already have a README file.</li>
+                    <li>an avatar to represent your project if a file "avatar.png"
+                    exists in your repository</li>
+                    <li>a gallery of images if your have a 'gallery' directory with pictures
+                    in it</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

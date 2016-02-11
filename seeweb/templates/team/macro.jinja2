@@ -1,11 +1,11 @@
 {% macro team_condensed(team) -%}
-<div class="team">
+<div class="team condensed">
     <div class="avatar">
         <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
             <img class="img-circle" src="{{ request.static_url('seeweb:data/avatar/team/%s_small.png' % team.id) }}" />
         </a>
     </div>
-    <div class="name">
+    <div class="description">
         <a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a>
     </div>
 </div>

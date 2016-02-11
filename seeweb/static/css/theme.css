@@ -83,58 +83,30 @@ a {
   color: #bc2131;
 }
 
-/* Wrapper for project summary elements */
+/* Wrapper for item summary elements */
 
-.project {
+.condensed {
     float: left;
-    padding: 1em;
-    min-width: 180px;
+    display: table
 }
 
-.project .avatar {
-   float: left;
+.condensed .avatar {
+    display: table-cell;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 
-.project .avatar img {
-   width: 64px;
+.condensed .avatar img {
+    width: 64px;
 }
 
-.project .name {
+.condensed .description {
+    display: table-cell;
     vertical-align: bottom;
-}
-
-/* Wrapper for team summary elements */
-
-.team {
-    float: left;
-    padding: 1em;
-    min-width: 180px;
-}
-
-.team .avatar {
-   display: inline;
-}
-
-.team .name {
-    display: inline;
-    vertical-align: bottom;
-}
-
-/* Wrapper for user summary elements */
-
-.user {
-    float: left;
-    min-width: 180px;
-    padding: 1em;
-}
-
-.user .avatar {
-   display: inline;
-}
-
-.user .name {
-    display: inline;
-    vertical-align: bottom;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 
 /* Wrapper for 'view' pages */

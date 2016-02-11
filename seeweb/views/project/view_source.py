@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_project
+from seeweb.model_access import get_project, get_project_content
 from seeweb.project.source import parse_vcs, parse_hostname
 from seeweb.project.explore_sources import find_all
 
@@ -38,6 +38,14 @@ def view(request):
     # explore sources
     src_items = find_all(project.id)
     view_params.update(src_items)
+
+    cnt = get_project_content(session, project.id)
+    if cnt is not None:
+        nbs = []
+        for nb in cnt.notebooks:
+            nbs.append(("path", nb.name))
+
+        view_params['notebooks'] = nbs
 
     view_params["sections"] = src_items.keys()
 

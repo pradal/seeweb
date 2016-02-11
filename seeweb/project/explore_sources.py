@@ -101,6 +101,7 @@ def find_workflow_nodes(pid):
 
     return nodes
 
+
 def find_workflows(pid):
     """Find all defined workflows in the project.
 

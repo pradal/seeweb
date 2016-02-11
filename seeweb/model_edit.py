@@ -1,18 +1,21 @@
 """Set of functions used to edit objects in models
 """
 from datetime import datetime
+import transaction
 
 from .avatar import (generate_default_project_avatar,
                      generate_default_team_avatar,
                      generate_default_user_avatar,
                      remove_project_avatar,
                      remove_team_avatar)
-from .model_access import fetch_comments
+from .model_access import fetch_comments, get_project_content
 from models.actor import PActor, TActor
 from models.comment import Comment
 from models.dependency import Dependency
 from models.installed import Installed
 from models.project import Project
+from models.project_content.content import Content
+from models.project_content.notebook import Notebook
 from models.team import Team
 from models.user import User
 from project.source import delete_source
@@ -42,6 +45,22 @@ def create_comment(session, pid, uid, msg, ratings=None):
     return cmt
 
 
+def add_content(session, project):
+    """Add project content to a project.
+
+    Args:
+        session: (DBSession)
+        project: (Project)
+
+    Returns:
+        (Content)
+    """
+    cnt = Content(id=project.id)
+    session.add(cnt)
+
+    return cnt
+
+
 def create_user(session, uid, name, email):
     """Create a new user.
 
@@ -63,6 +82,27 @@ def create_user(session, uid, name, email):
     generate_default_user_avatar(user)
 
     return user
+
+
+def create_notebook(session, project, name):
+    """Create a new notebook description and associate it to a project.
+
+    Args:
+        session: (DBSession)
+        project: (Project) an already existing project
+        name: (str) name of the notebook
+
+    Returns:
+        (Notebook)
+    """
+    cnt = get_project_content(session, project.id)
+    if cnt is None:
+        cnt = add_content(session, project)
+
+    notebook = Notebook(cnt=cnt.id, name=name)
+    session.add(notebook)
+
+    return notebook
 
 
 def create_project(session, owner_id, name, public=False):

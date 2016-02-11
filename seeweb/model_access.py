@@ -3,6 +3,7 @@
 from models.auth import Role
 from models.comment import Comment
 from models.project import Project
+from models.project_content.content import Content
 from models.team import Team
 from models.user import User
 
@@ -43,6 +44,25 @@ def get_project(session, pid):
     project, = projects
 
     return project
+
+
+def get_project_content(session, pid):
+    """Fetch the content of a given project in the database.
+
+    Args:
+        session: (DBSession)
+        pid: (str) project id
+
+    Returns:
+        (Content) or None if no project with this id is found
+    """
+    contents = session.query(Content).filter(Content.id == pid).all()
+    if len(contents) == 0:
+        return None
+
+    cnt, = contents
+
+    return cnt
 
 
 def get_team(session, tid):

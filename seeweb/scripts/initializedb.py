@@ -205,11 +205,11 @@ This project is part of OpenAlea_.
         workflow.public = True
         add_project_auth(session, workflow, oa, Role.view)
 
-        toto = create_project(session, 'revesansparole', 'toto')
-        toto.public = False
-        toto.src_url = "C:/Users/jerome/Desktop/see/toto/.git"
-        add_dependency(session, toto, "numpy", "1.0")
-        add_dependency(session, toto, "pkglts", "1.0")
+        spl = create_project(session, 'revesansparole', 'sample_project')
+        spl.public = True
+        spl.src_url = "C:/Users/jerome/Desktop/see/sample_project/.git"
+        add_dependency(session, spl, "numpy", "1.0")
+        add_dependency(session, spl, "pkglts", "1.0")
 
         for i in range(5):
             create_project(session, 'doofus%d' % i, "stoopid%d" % i)
@@ -220,5 +220,3 @@ This project is part of OpenAlea_.
                            'pkglts',
                            "doofus%d" % i,
                            "very nasty comment (%d)" % i)
-
-        print "dependencies", pkglts.dependencies, "\n" * 10

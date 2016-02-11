@@ -1,9 +1,8 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_project, get_user
-# from seeweb.playground.workspace import has_workspace
-from seeweb.project.source import has_source, parse_vcs, parse_hostname
+from seeweb.model_access import get_project
+from seeweb.project.source import parse_vcs, parse_hostname
 from seeweb.project.explore_sources import find_all
 
 from .commons import view_init
@@ -39,15 +38,6 @@ def view(request):
     # explore sources
     src_items = find_all(project.id)
     view_params.update(src_items)
-
-    playground = False
-    # user = get_user(session, view_params["current_uid"])
-    # view_params["user"] = user
-    # if user is not None and project in user.installed:
-    #     if has_workspace(user.id):
-    #         playground = True
-
-    view_params["playground"] = playground
 
     view_params["sections"] = src_items.keys()
 

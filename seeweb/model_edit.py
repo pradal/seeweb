@@ -14,7 +14,7 @@ from models.comment import Comment
 from models.dependency import Dependency
 from models.installed import Installed
 from models.project import Project
-from models.project_content.content import Content
+from models.project_content.content import Content, item_types
 from models.project_content.executable import Executable
 from models.project_content.notebook import Notebook
 from models.project_content.workflow_node import WorkflowNode
@@ -489,3 +489,24 @@ def uninstall_project(session, user, project):
         if installed.project == project.id:
             session.delete(installed)
             return
+
+
+def clear_project_content(session, project):
+    """Remove all items in project content and delete content object.
+
+    Args:
+        session: (DBSession)
+        project: (Project)
+
+    Returns:
+        None
+    """
+    cnt = get_project_content(session, project.id)
+    if cnt is None:
+        return
+
+    for item_typ in item_types:
+        for item in getattr(cnt, item_typ):
+            session.delete(item)
+
+    session.delete(cnt)

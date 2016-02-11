@@ -4,6 +4,12 @@ from sqlalchemy.orm import relationship
 from ...models import Base
 
 
+item_types = ["executables",
+              "notebooks",
+              "workflow_nodes",
+              "workflows"]
+
+
 class Content(Base):
     """Describe the potential content of a project
     in terms of objects recognized by the platform.

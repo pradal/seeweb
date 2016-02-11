@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
+from seeweb.models.project_content.content import item_types
 from seeweb.model_access import get_project, get_project_content
 from seeweb.project.source import parse_vcs, parse_hostname
 from seeweb.project.explore_sources import find_all
@@ -38,10 +39,7 @@ def view(request):
     # explore sources
     cnt = get_project_content(session, project.id)
     if cnt is not None:
-        view_params["sections"] = ['executables',
-                                   'notebooks',
-                                   'workflow_nodes',
-                                   'workflows']
+        view_params["sections"] = item_types
         for item_type in view_params["sections"]:
             view_params[item_type] = list(getattr(cnt, item_type))
 

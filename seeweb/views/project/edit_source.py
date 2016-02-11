@@ -2,8 +2,18 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_edit import add_dependency, clear_dependencies
-from seeweb.project.explore_sources import fetch_dependencies
+from seeweb.model_edit import (add_dependency,
+                               clear_dependencies,
+                               clear_project_content,
+                               create_executable,
+                               create_notebook,
+                               create_workflow_node,
+                               create_workflow)
+from seeweb.project.explore_sources import (fetch_dependencies,
+                                            find_executables,
+                                            find_notebooks,
+                                            find_workflow_nodes,
+                                            find_workflows)
 from seeweb.project.source import (fetch_sources,
                                    host_src_url,
                                    parse_vcs,
@@ -27,6 +37,19 @@ def view(request):
             clear_dependencies(session, project)
             for name, ver in fetch_dependencies(project.id):
                 add_dependency(session, project, name, ver)
+
+            clear_project_content(session, project)
+            for executable in find_executables(project.id):
+                create_executable(session, project, executable)
+
+            for notebook in find_notebooks(project.id):
+                create_notebook(session, project, notebook[1])
+
+            for node in find_workflow_nodes(project.id):
+                create_workflow_node(session, project, node['name'])
+
+            for workflow in find_workflows(project.id):
+                create_workflow(session, project, workflow['name'])
 
             loc = request.route_url('project_view_source', pid=project.id)
             return HTTPFound(location=loc)

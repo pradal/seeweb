@@ -10,11 +10,20 @@
         <form class="form-signin" action="{{ request.route_url('user_register') }}" method='POST'>
             <h3 class="form-signin-heading">New user registration</h3>
             <label for="user_id" class="sr-only">Username</label>
-            <input type="text" id="user_id" class="form-control" placeholder="login" name="user_id" required autofocus />
+            <input type="text" id="user_id" class="form-control"
+                   placeholder="login" name="user_id"
+                   {% if user_id %}value="{{ user_id }}"{% endif %}
+                   required autofocus />
             <label for="user_name" class="sr-only">Full name</label>
-            <input type="text" id="user_name" class="form-control" placeholder="Jean Dupond" name="user_name" required autofocus />
+            <input type="text" id="user_name" class="form-control"
+                   placeholder="Jean Dupond" name="user_name"
+                   {% if user_name %}value="{{ user_name }}"{% endif %}
+                   required autofocus />
             <label for="user_email" class="sr-only">Email</label>
-            <input type="text" id="user_email" class="form-control" placeholder="toto@email.com" name="user_email" required autofocus />
+            <input type="text" id="user_email" class="form-control"
+                   placeholder="toto@email.com" name="user_email"
+                   {% if user_email %}value="{{ user_email }}"{% endif %}
+                   required autofocus />
             <label for="password" class="sr-only">Password</label>
             <input type="password" id="password" class="form-control" placeholder="Password" name="password" required />
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="ok">Register</button>

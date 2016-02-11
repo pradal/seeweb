@@ -4,9 +4,7 @@ from seeweb.models import DBSession
 from seeweb.model_access import get_project, get_user
 # from seeweb.playground.workspace import has_workspace
 from seeweb.project.source import has_source, parse_vcs, parse_hostname
-from seeweb.project.explore_sources import (find_executables,
-                                            find_notebooks,
-                                            find_workflow_nodes)
+from seeweb.project.explore_sources import find_all
 
 from .commons import view_init
 
@@ -39,13 +37,8 @@ def view(request):
     view_params["dependencies"] = dependencies
 
     # explore sources
-    for name in ["notebooks", "executables", "nodes"]:
-        view_params[name] = []
-
-    if has_source(project.id):
-        view_params["notebooks"] = find_notebooks(project.id)
-        view_params["executables"] = find_executables(project.id)
-        view_params["nodes"] = find_workflow_nodes(project.id)
+    src_items = find_all(project.id)
+    view_params.update(src_items)
 
     playground = False
     # user = get_user(session, view_params["current_uid"])
@@ -56,9 +49,6 @@ def view(request):
 
     view_params["playground"] = playground
 
-    view_params["sections"] = ["dependencies",
-                               "notebooks",
-                               "executables",
-                               "nodes"]
+    view_params["sections"] = src_items.keys()
 
     return view_params

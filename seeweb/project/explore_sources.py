@@ -9,7 +9,7 @@ from os.path import exists, splitext
 from os.path import join as pj
 from PIL import Image
 
-from .source import source_pth
+from .source import has_source, source_pth
 
 
 def find_notebooks(pid):
@@ -100,6 +100,58 @@ def find_workflow_nodes(pid):
                         nodes.append(node_def)
 
     return nodes
+
+def find_workflows(pid):
+    """Find all defined workflows in the project.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (list of Workflow): list of defined workflows
+    """
+    pth = source_pth(pid)
+
+    plugin_pth = pj(pth, "src", "%s_plugin" % pid)
+    if not exists(plugin_pth):
+        return []
+
+    workflows = []
+    for root, dirnames, filenames in walk(plugin_pth):
+        # avoid hidden directories
+        for i in range(len(dirnames) - 1, -1, -1):
+            if dirnames[i].startswith("."):
+                del dirnames[i]
+
+        # find notebooks
+        for name in filenames:
+            if splitext(name)[1] == ".json":
+                with open(pj(root, name), 'r') as f:
+                    workflow_def = json.load(f)
+                    if workflow_def["category"] == "oaworkflow":
+                        workflows.append(workflow_def)
+
+    return workflows
+
+
+def find_all(pid):
+    """Find all objects in project source the platform
+    knows how to analyse.
+
+    Args:
+        pid: (str) project id
+
+    Returns:
+        (dict of (str, items)) category: list of items
+    """
+    if not has_source(pid):
+        return {}
+
+    items = dict(executables=find_executables(pid),
+                 notebooks=find_notebooks(pid),
+                 nodes=find_workflow_nodes(pid),
+                 workflows=find_workflows(pid))
+    return items
 
 
 def fetch_avatar(pid):

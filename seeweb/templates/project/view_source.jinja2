@@ -100,7 +100,26 @@
                 <div class="panel-body">
                     <ul>
                         {% for node in nodes %}
-                            <li>{{ node['name'] }}: {{ project.id }}:{{ node['module'] }}.{{ node['function'] }} ({{ node['info1'] }})</li>
+                            <li>{{ node['name'] }}: {{ project.id }}:{{ node['module'] }}.{{ node['function'] }} ({{ node['description'] }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if workflows|length > 0 %}
+    <div class="row" id="workflows">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Workflows</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for workflow in workflows %}
+                            <li>{{ workflow['name'] }}: {{ workflow['description'] }}</li>
                         {% endfor %}
                     </ul>
                 </div>

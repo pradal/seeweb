@@ -57,5 +57,26 @@
         </div>
     </div>
 
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Can I make a project with a single file?</h3>
+            </div>
+            <div class="panel-body">
+                <p>Sure! <a href="{{ request.route_url('user_login') }}">Log in</a>
+                and <a href="{{ request.route_url('file_suck') }}">upload your file</a>.
+                Provided your file is recognized by the system (i.e. notebook, workflow)
+                we will extract some information from it to create a relevant project.</p>
+                <ul>
+                    <li>Name of the project will be the file name or title by default</li>
+                    <li>The first cells of the notebook or header of your file will
+                    be used for description.</li>
+                    <li>If your script produces an image as a result, this one will
+                    be used as an avatar of your project.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

@@ -165,3 +165,7 @@ a {
     display: inline-block;
 }
 
+#upload_file .btn-file {
+    display: inline-block;
+}
+

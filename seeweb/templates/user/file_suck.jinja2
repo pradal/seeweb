@@ -1,0 +1,34 @@
+{% extends "layout.jinja2" %}
+
+{% block user_body %}
+<h1>Create project from file</h1>
+
+ <form action="{{ request.current_route_url() }}" method='POST' enctype="multipart/form-data">
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="upload_file" class="form-group">
+            <label for="upload">Upload some file</label>
+            <input id="upload" class="btn btn-default btn-file" name="upload" type="file" value="" />
+            <button class="btn btn-warning" type="submit" name="submit_upload">submit</button>
+        </div>
+    </div>
+</div>
+
+{% if project_name %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group">
+            <span class="input-group-addon">Import name</span>
+            <input type="text" class="form-control" name="project_name" value="{{ project_name }}"
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <a class="btn btn-danger" href="{{ request.route_url('home') }}">Cancel</a>
+</div>
+</form>
+
+{% endblock %}

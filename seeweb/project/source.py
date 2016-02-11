@@ -146,3 +146,26 @@ def fetch_sources(project):
         return local_git.fetch_sources(dirname(project.src_url), pth)
 
     return False
+
+
+def upload_src_file(field_storage, pid):
+    """Write the content of field_storage in the src space.
+
+    Args:
+        field_storage: (FieldStorage) html structure
+        pid: (str) project id
+
+    Returns:
+        (str) name of file written
+    """
+    pth = source_pth(pid)
+    if not exists(pth):
+        mkdir(pth)
+
+    file_name = str(field_storage.filename)
+    input_file = field_storage.file
+    input_file.seek(0)
+    with open(join(pth, file_name), 'wb') as f:
+        f.write(input_file.read())
+
+    return file_name

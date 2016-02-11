@@ -103,6 +103,7 @@ def main(global_config, **settings):
 
     # user
     config.add_route('site_suck', 'user/site_suck')
+    config.add_route('file_suck', 'user/file_suck')
     for tab_title, tab_id in user_tabs:
         config.add_route('user_edit_%s' % tab_id, 'user/{uid}/edit/%s' % tab_id)
         config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)

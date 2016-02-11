@@ -4,20 +4,22 @@
 <div class="container">
     <h1>Simple entry points to the community</h1>
 
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">New to the community?</h3>
-            </div>
-            <div class="panel-body">
-                <p>Start browsing public projects
-                <a href="{{ request.route_url('project_list') }}">here</a>
-                then
-                <a href="{{ request.route_url('user_register') }}">register</a>
-                to create an account and participate to the community.</p>
+    {% if request.unauthenticated_userid == None %}
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">New to the community?</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Start browsing public projects
+                    <a href="{{ request.route_url('project_list') }}">here</a>
+                    then
+                    <a href="{{ request.route_url('user_register') }}">register</a>
+                    to create an account and interact with the community.</p>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
     <div class="col-md-4">
         <div class="panel panel-default">
@@ -26,12 +28,19 @@
             </div>
             <div class="panel-body">
                 <p><a href="{{ request.route_url('user_login') }}">Log in</a>,
-                then in your home page on the project tab type the name
-                of a new project to create. Click create and you'll be redirected
-                to the edit page of your new project where you'll be able to add
-                more information to describe your project, manage the people you
-                want to collaborate with and upload some sources for other users
-                to benefit from your work.</p>
+                then in
+                {% if request.unauthenticated_userid != None %}
+                    <a href="{{ request.route_url('user_view_projects', uid=request.unauthenticated_userid) }}">
+                {% endif %}
+                your home page on the project tab
+                {% if request.unauthenticated_userid != None %}
+                    </a>
+                {% endif %}
+                type the name of a new project to create. Click create and you'll
+                be redirected to the edit page of your new project where you'll
+                be able to add more information to describe your project, manage
+                the people you want to collaborate with and upload some sources
+                for other users to benefit from your work.</p>
             </div>
         </div>
     </div>

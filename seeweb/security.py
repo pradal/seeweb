@@ -29,7 +29,7 @@ def is_good_name(txt):  # TODO
     Returns:
         (bool)
     """
-    return " " not in txt
+    return True
 
 
 def is_good_email(txt):  # TODO
@@ -89,10 +89,13 @@ def log_user_in(request, uid, edit=False):
         (HTTPFound)
     """
     headers = remember(request, uid)
-    if edit:
-        loc = request.route_url('user_edit_home', uid=uid)
+    if 'last' in request.session:
+        loc = request.session['last']
     else:
-        loc = request.route_url('user_view_home', uid=uid)
+        if edit:
+            loc = request.route_url('user_edit_home', uid=uid)
+        else:
+            loc = request.route_url('user_view_home', uid=uid)
 
     return HTTPFound(location=loc, headers=headers)
 

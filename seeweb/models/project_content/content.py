@@ -11,7 +11,10 @@ class Content(Base):
     __tablename__ = 'pjt_contents'
 
     id = Column(String(255), ForeignKey("projects.id"), primary_key=True)
+    executables = relationship("Executable")
     notebooks = relationship("Notebook")
+    workflow_nodes = relationship("WorkflowNode")
+    workflows = relationship("Workflow")
 
     def __repr__(self):
         return "<Content(id='%s')>" % self.id

@@ -36,17 +36,13 @@ def view(request):
     view_params["dependencies"] = dependencies
 
     # explore sources
-    src_items = find_all(project.id)
-    view_params.update(src_items)
-
     cnt = get_project_content(session, project.id)
     if cnt is not None:
-        nbs = []
-        for nb in cnt.notebooks:
-            nbs.append(("path", nb.name))
-
-        view_params['notebooks'] = nbs
-
-    view_params["sections"] = src_items.keys()
+        view_params["sections"] = ['executables',
+                                   'notebooks',
+                                   'workflow_nodes',
+                                   'workflows']
+        for item_type in view_params["sections"]:
+            view_params[item_type] = list(getattr(cnt, item_type))
 
     return view_params

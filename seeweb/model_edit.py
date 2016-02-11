@@ -15,7 +15,10 @@ from models.dependency import Dependency
 from models.installed import Installed
 from models.project import Project
 from models.project_content.content import Content
+from models.project_content.executable import Executable
 from models.project_content.notebook import Notebook
+from models.project_content.workflow_node import WorkflowNode
+from models.project_content.workflow import Workflow
 from models.team import Team
 from models.user import User
 from project.source import delete_source
@@ -84,6 +87,42 @@ def create_user(session, uid, name, email):
     return user
 
 
+def _ensure_project_content(session, project):
+    """Ensure project has a project content.
+
+    Args:
+        session: (DBSession)
+        project: (Project)
+
+    Returns:
+        (ProjectContent)
+    """
+    cnt = get_project_content(session, project.id)
+    if cnt is None:
+        cnt = add_content(session, project)
+
+    return cnt
+
+
+def create_executable(session, project, name):
+    """Create a new executable description and associate it to a project.
+
+    Args:
+        session: (DBSession)
+        project: (Project) an already existing project
+        name: (str) name of the executable
+
+    Returns:
+        (Executable)
+    """
+    cnt = _ensure_project_content(session, project)
+
+    executable = Executable(cnt=cnt.id, name=name)
+    session.add(executable)
+
+    return executable
+
+
 def create_notebook(session, project, name):
     """Create a new notebook description and associate it to a project.
 
@@ -95,14 +134,50 @@ def create_notebook(session, project, name):
     Returns:
         (Notebook)
     """
-    cnt = get_project_content(session, project.id)
-    if cnt is None:
-        cnt = add_content(session, project)
+    cnt = _ensure_project_content(session, project)
 
     notebook = Notebook(cnt=cnt.id, name=name)
     session.add(notebook)
 
     return notebook
+
+
+def create_workflow_node(session, project, name):
+    """Create a new node description and associate it to a project.
+
+    Args:
+        session: (DBSession)
+        project: (Project) an already existing project
+        name: (str) name of the node
+
+    Returns:
+        (Notebook)
+    """
+    cnt = _ensure_project_content(session, project)
+
+    node = WorkflowNode(cnt=cnt.id, name=name)
+    session.add(node)
+
+    return node
+
+
+def create_workflow(session, project, name):
+    """Create a new workflow description and associate it to a project.
+
+    Args:
+        session: (DBSession)
+        project: (Project) an already existing project
+        name: (str) name of the workflow
+
+    Returns:
+        (Workflow)
+    """
+    cnt = _ensure_project_content(session, project)
+
+    workflow = Workflow(cnt=cnt.id, name=name)
+    session.add(workflow)
+
+    return workflow
 
 
 def create_project(session, owner_id, name, public=False):

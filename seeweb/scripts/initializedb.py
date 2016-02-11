@@ -13,10 +13,13 @@ from seeweb.models import Base, DBSession
 from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
 from seeweb.model_edit import (create_comment,
+                               create_executable,
                                create_notebook,
                                create_project,
                                create_team,
                                create_user,
+                               create_workflow,
+                               create_workflow_node,
                                add_project_auth,
                                add_team_auth,
                                add_dependency)
@@ -206,7 +209,17 @@ This project is part of OpenAlea_.
         workflow.public = True
         add_project_auth(session, workflow, oa, Role.view)
         for i in range(5):
+            create_executable(session, workflow, "executable%d" % i)
+
+        for i in range(5):
             create_notebook(session, workflow, "notebook%d" % i)
+
+        for i in range(5):
+            create_workflow_node(session, workflow, "node%d" % i)
+
+        for i in range(5):
+            create_workflow(session, workflow, "workflow%d" % i)
+
 
         spl = create_project(session, 'revesansparole', 'sample_project')
         spl.public = True

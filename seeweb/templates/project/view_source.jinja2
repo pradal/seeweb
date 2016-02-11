@@ -48,25 +48,6 @@
     </div>
 </div>
 
-{% if notebooks|length > 0 %}
-    <div class="row" id="notebooks">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Notebooks</h3>
-                </div>
-                <div class="panel-body">
-                    <ul>
-                        {% for pth, name in notebooks %}
-                            <li>{{ pth }}: {{ name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-             </div>
-        </div>
-    </div>
-{% endif %}
-
 {% if executables|length > 0 %}
     <div class="row" id="executables">
         <div class="col-md-12">
@@ -76,8 +57,8 @@
                 </div>
                 <div class="panel-body">
                     <ul>
-                        {% for name, descr in executables %}
-                            <li>{{ name }}: {{ descr }}</li>
+                        {% for executable in executables %}
+                            <li>{{ executable.name }}: exe</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -86,7 +67,26 @@
     </div>
 {% endif %}
 
-{% if nodes|length > 0 %}
+{% if notebooks|length > 0 %}
+    <div class="row" id="notebooks">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Notebooks</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for notebook in notebooks %}
+                            <li>{{ notebook.name }}: nb</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if workflow_nodes|length > 0 %}
     <div class="row" id="nodes">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -95,8 +95,8 @@
                 </div>
                 <div class="panel-body">
                     <ul>
-                        {% for node in nodes %}
-                            <li>{{ node['name'] }}: {{ project.id }}:{{ node['module'] }}.{{ node['function'] }} ({{ node['description'] }})</li>
+                        {% for node in workflow_nodes %}
+                            <li>{{ node.name }}: node</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -115,7 +115,7 @@
                 <div class="panel-body">
                     <ul>
                         {% for workflow in workflows %}
-                            <li>{{ workflow['name'] }}: {{ workflow['description'] }}</li>
+                            <li>{{ workflow.name }}: workflow</li>
                         {% endfor %}
                     </ul>
                 </div>

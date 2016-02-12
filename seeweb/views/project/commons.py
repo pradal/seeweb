@@ -86,6 +86,12 @@ def edit_init(request, session, tab):
         request.session.flash(msg, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
+    # debug
+    if 'default' in request.params:
+        from seeweb.project.content.explore import explore_sources
+        explore_sources(session, project)
+        print "default\n" * 10
+
     if 'back' in request.params:
         # request.session.flash("Edition stopped", 'success')
         loc = request.route_url('project_view_%s' % tab, pid=project.id)

@@ -1,5 +1,6 @@
 {% from 'macro.jinja2' import project_condensed with context %}
 {% from 'macro.jinja2' import project_fake with context %}
+{% from 'content/workflow_node.jinja2' import node_condensed with context %}
 
 {% extends "layout_view.jinja2" %}
 
@@ -94,11 +95,9 @@
                     <h3 class="panel-title">Workflow nodes</h3>
                 </div>
                 <div class="panel-body">
-                    <ul>
-                        {% for node in workflow_nodes %}
-                            <li>{{ node.name }}: node</li>
-                        {% endfor %}
-                    </ul>
+                    {% for node in workflow_nodes %}
+                        {{ node_condensed(node) }}
+                    {% endfor %}
                 </div>
              </div>
         </div>

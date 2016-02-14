@@ -17,7 +17,9 @@ from models.project import Project
 from models.project_content.content import Content, item_types
 from models.project_content.executable import Executable
 from models.project_content.notebook import Notebook
-from models.project_content.workflow_node import WorkflowNode
+from models.project_content.workflow_node import (NodeInput,
+                                                  NodeOutput,
+                                                  WorkflowNode)
 from models.project_content.workflow import Workflow
 from models.team import Team
 from models.user import User
@@ -142,21 +144,38 @@ def create_notebook(session, project, name):
     return notebook
 
 
-def create_workflow_node(session, project, name):
+def create_workflow_node(session, project, node_def):
     """Create a new node description and associate it to a project.
 
     Args:
         session: (DBSession)
         project: (Project) an already existing project
-        name: (str) name of the node
+        node: (dict of node prop) node definition
 
     Returns:
-        (Notebook)
+        (WorkflowNode)
     """
     cnt = _ensure_project_content(session, project)
 
-    node = WorkflowNode(cnt=cnt.id, name=name)
+    node = WorkflowNode(cnt=cnt.id, name=node_def['name'])
     session.add(node)
+    node.store_description(node_def['description'])
+    node.author = node_def['author']
+    node.function = node_def['function']
+    for input_def in node_def['inputs']:
+        input = NodeInput(node=node.id, name=input_def['name'])
+        session.add(input)
+        input.store_description(input_def['descr'])
+        input.interface = input_def['interface']
+        input.value = str(input_def['value'])
+        node.inputs.append(input)
+
+    for output_def in node_def['outputs']:
+        output = NodeOutput(node=node.id, name=output_def['name'])
+        session.add(output)
+        output.store_description(output_def['descr'])
+        output.interface = output_def['interface']
+        node.outputs.append(output)
 
     return node
 

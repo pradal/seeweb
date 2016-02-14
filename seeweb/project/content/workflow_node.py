@@ -34,4 +34,4 @@ def analyse(pth):
     with open(pth, 'r') as f:
         node_def = json.load(f)
 
-    return node_def['name']
+    return node_def

@@ -214,12 +214,23 @@ This project is part of OpenAlea_.
         for i in range(5):
             create_notebook(session, workflow, "notebook%d" % i)
 
-        for i in range(5):
-            create_workflow_node(session, workflow, "node%d" % i)
+        node_def = dict(name="read",
+                        category="oanode",
+                        description="toto was here",
+                        author="revesansparole",
+                        function="testio:read",
+                        inputs=[dict(name="in1", interface="IInt",
+                                     value="0", descr="counter"),
+                                dict(name="in2", interface="IStr",
+                                     value="a", descr="unit")],
+                        outputs=[dict(name="ret", interface="IInt",
+                                      descr="important result")])
+
+        for i in range(1):
+            create_workflow_node(session, workflow, node_def)
 
         for i in range(5):
             create_workflow(session, workflow, "workflow%d" % i)
-
 
         spl = create_project(session, 'revesansparole', 'sample_project')
         spl.public = True

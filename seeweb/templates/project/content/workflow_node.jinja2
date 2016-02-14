@@ -1,0 +1,42 @@
+{% macro node_condensed(node) -%}
+<div class="node condensed">
+    <ul>
+        <li>Name: {{ node.name }}</li>
+        <li>Descr: {{ node.description }}</li>
+        <li>Function: {{ node.function }}</li>
+        <li>Inputs:
+            {% if node.inputs|length == 0 %}
+                None
+            {% else %}
+                <ul>
+                    {% for port_def in node.inputs %}
+                        <li>name: {{ port_def.name }}
+                            <ul>
+                                <li>descr: {{ port_def.description }}</li>
+                                <li>interface: {{ port_def.interface }}</li>
+                                <li>default: {{ port_def.value }}</li>
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+        <li>Outputs:
+            {% if node.outputs|length == 0 %}
+                None
+            {% else %}
+                <ul>
+                    {% for port_def in node.outputs %}
+                        <li>name: {{ port_def.name }}
+                            <ul>
+                                <li>descr: {{ port_def.description }}</li>
+                                <li>interface: {{ port_def.interface }}</li>
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    </ul>
+</div>
+{%- endmacro %}

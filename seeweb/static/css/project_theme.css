@@ -48,3 +48,15 @@ button img {
 #host_descr img {
     width: 32px;
 }
+
+.executable {
+    padding: 1em;
+}
+
+.notebook {
+    padding: 1em;
+}
+
+.workflow {
+    padding: 1em;
+}

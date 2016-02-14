@@ -16,7 +16,7 @@ import transaction
 
 tabs = [('Home', 'home'),
         ('Documentation', 'doc'),
-        ('Source', 'source'),
+        ('Content', 'content'),
         ('Contributors', 'contributors'),
         ('Comments', 'comments')]
 

@@ -37,6 +37,7 @@ def main(global_config, **settings):
     Returns:
         (WSGI app)
     """
+    del global_config
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine

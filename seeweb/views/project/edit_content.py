@@ -23,11 +23,11 @@ from seeweb.project.source import (fetch_sources,
 from .commons import edit_init
 
 
-@view_config(route_name='project_edit_source',
-             renderer='templates/project/edit_source.jinja2')
+@view_config(route_name='project_edit_content',
+             renderer='templates/project/edit_content.jinja2')
 def view(request):
     session = DBSession()
-    project, view_params = edit_init(request, session, 'source')
+    project, view_params = edit_init(request, session, 'content')
 
     if "submit_local" in request.params:
         field_storage = request.params["local_file"]
@@ -51,7 +51,7 @@ def view(request):
             for workflow in find_workflows(project.id):
                 create_workflow(session, project, workflow['name'])
 
-            loc = request.route_url('project_view_source', pid=project.id)
+            loc = request.route_url('project_view_content', pid=project.id)
             return HTTPFound(location=loc)
         else:
             request.session.flash("Unable to fetch sources", 'warning')

@@ -229,8 +229,18 @@ This project is part of OpenAlea_.
         for i in range(1):
             create_workflow_node(session, workflow, node_def)
 
-        for i in range(5):
-            create_workflow(session, workflow, "workflow%d" % i)
+        workflow_def = dict(name="sample_workflow",
+                            category="oaworkflow",
+                            description="trying some stuff",
+                            author="revesansparole",
+                            nodes=[("node1", 100, 10),
+                                   ("node2", 200, 10),
+                                   ("node3", 150, 100)],
+                            connections=[(0, "res", 2, "in1"),
+                                         (1, "res", 2, "in2")])
+
+        for i in range(1):
+            create_workflow(session, workflow, workflow_def)
 
         spl = create_project(session, 'revesansparole', 'sample_project')
         spl.public = True

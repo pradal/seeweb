@@ -21,13 +21,12 @@ tabs = [('Home', 'home'),
         ('Comments', 'comments')]
 
 
-def view_init(request, session, tab):
-    """Common init for all 'view'.
+def init_min(request, session):
+    """Common init for all project views.
 
     Args:
         request: (Request)
         session: (DBSession)
-        tab: (str) current tab in view
 
     Returns:
         (User, dict of (str: any)): user, view_params
@@ -39,18 +38,35 @@ def view_init(request, session, tab):
         request.session.flash("Project %s does not exists" % pid, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    current_uid = request.unauthenticated_userid
-    role = project_access_role(session, project, current_uid)
+    role = project_access_role(session, project, request.unauthenticated_userid)
     if role == Role.denied:
         request.session.flash("Access to %s not granted for you" % pid,
                               'warning')
         raise HTTPFound(location=request.route_url('home'))
 
+    view_params = {'project': project}
+
+    return project, role, view_params
+
+
+def view_init(request, session, tab):
+    """Common init for all 'view'.
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+        tab: (str) current tab in view
+
+    Returns:
+        (User, dict of (str: any)): user, view_params
+    """
+    project, role, view_params = init_min(request, session)
+
     # potential install
-    if current_uid is None:  # TODO can do better
+    if request.unauthenticated_userid is None:  # TODO can do better
         install_action = None
     else:
-        user = get_user(session, current_uid)
+        user = get_user(session, request.unauthenticated_userid)
         if is_installed(session, user, project):
             install_action = "uninstall"
         else:
@@ -174,24 +190,11 @@ def install_init(request, session):
     Returns:
         (Project, dict of (str, any)): project, view_params
     """
-    pid = request.matchdict['pid']
+    project, role, view_params = init_min(request, session)
 
     if 'cancel' in request.params:
         # back to project page
-        loc = request.route_url('project_view_home', pid=pid)
+        loc = request.route_url('project_view_home', pid=project.id)
         raise HTTPFound(location=loc)
-
-    project = get_project(session, pid)
-    if project is None:
-        request.session.flash("Project %s does not exists" % pid, 'warning')
-        raise HTTPFound(location=request.route_url('home'))
-
-    role = project_access_role(session, project, request.unauthenticated_userid)
-    if role == Role.denied:
-        request.session.flash("Access to %s not granted for you" % pid,
-                              'warning')
-        raise HTTPFound(location=request.route_url('home'))
-
-    view_params = {'project': project}
 
     return project, view_params

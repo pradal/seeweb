@@ -2,6 +2,10 @@
     padding: 1em 1em 0 0;
 }
 
+#header .description .author {
+    padding: 1em 1em 0 0;
+}
+
 .comment {
     margin: 0 1em 1em 1em;
     padding-bottom: 0.2em;

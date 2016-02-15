@@ -4,6 +4,7 @@ from models.auth import Role
 from models.comment import Comment
 from models.project import Project
 from models.project_content.content import Content
+from models.project_content.workflow import Workflow
 from models.team import Team
 from models.user import User
 
@@ -89,7 +90,7 @@ def get_user(session, uid):
 
     Args:
         session: (DBSession)
-        uid: (str) project id
+        uid: (str) user id
 
     Returns:
         (User) or None if no user with this id is found
@@ -104,6 +105,28 @@ def get_user(session, uid):
     user, = users
 
     return user
+
+
+def get_workflow(session, wid):
+    """Fetch a given workflow in the database.
+
+    Args:
+        session: (DBSession)
+        wid: (int) workflow id
+
+    Returns:
+        (Workflow) or None if no workflow with this id is found
+    """
+    if wid is None:
+        return None
+
+    workflows = session.query(Workflow).filter(Workflow.id == wid).all()
+    if len(workflows) == 0:
+        return None
+
+    workflow, = workflows
+
+    return workflow
 
 
 def fetch_comments(session, pid, limit=None):

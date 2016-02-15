@@ -99,7 +99,7 @@
                 </div>
                 <div class="panel-body">
                     {% for node in workflow_nodes %}
-                        {{ node_condensed(node) }}
+                        {{ node_condensed(node, node.load_definition()) }}
                     {% endfor %}
                 </div>
              </div>

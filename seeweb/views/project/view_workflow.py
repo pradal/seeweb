@@ -16,10 +16,6 @@ def view(request):
     workflow = get_workflow(session, wid)
 
     view_params["workflow"] = workflow
-
-    print "nodes", workflow.nodes, "\n" * 10
-    print "links", workflow.links, "\n" * 10
-    for link in workflow.links:
-        print "link", workflow.nodes[link.source], "\n" * 10
+    view_params["wdef"] = workflow.load_definition()
 
     return view_params

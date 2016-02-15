@@ -1,7 +1,6 @@
 """Set of functions used to edit objects in models
 """
 from datetime import datetime
-import transaction
 
 from .avatar import (generate_default_project_avatar,
                      generate_default_team_avatar,
@@ -17,10 +16,8 @@ from models.project import Project
 from models.project_content.content import Content, item_types
 from models.project_content.executable import Executable
 from models.project_content.notebook import Notebook
-from models.project_content.workflow_node import (NodeInput,
-                                                  NodeOutput,
-                                                  WorkflowNode)
-from models.project_content.workflow import LinkItem, NodeItem, Workflow
+from models.project_content.workflow_node import WorkflowNode
+from models.project_content.workflow import Workflow
 from models.team import Team
 from models.user import User
 from project.source import delete_source
@@ -160,22 +157,7 @@ def create_workflow_node(session, project, node_def):
     node = WorkflowNode(cnt=cnt.id, name=node_def['name'])
     session.add(node)
     node.store_description(node_def['description'])
-    node.author = node_def['author']
-    node.function = node_def['function']
-    for input_def in node_def['inputs']:
-        input = NodeInput(node=node.id, name=input_def['name'])
-        session.add(input)
-        input.store_description(input_def['descr'])
-        input.interface = input_def['interface']
-        input.value = str(input_def['value'])
-        node.inputs.append(input)
-
-    for output_def in node_def['outputs']:
-        output = NodeOutput(node=node.id, name=output_def['name'])
-        session.add(output)
-        output.store_description(output_def['descr'])
-        output.interface = output_def['interface']
-        node.outputs.append(output)
+    node.store_definition(node_def)
 
     return node
 
@@ -195,24 +177,8 @@ def create_workflow(session, project, workflow_def):
 
     workflow = Workflow(cnt=cnt.id, name=workflow_def['name'])
     session.add(workflow)
-    workflow.author = workflow_def['author']
-    for name, x, y in workflow_def['nodes']:
-        item = NodeItem(workflow=workflow.id)
-        session.add(item)
-        item.node = name
-        item.x = x
-        item.y = y
-        workflow.nodes.append(item)
-
-    for src, src_port, tgt, tgt_port in workflow_def['connections']:
-        item = LinkItem(source=workflow.nodes[src].id,
-                        source_port=src_port,
-                        target=workflow.nodes[tgt].id,
-                        target_port=tgt_port)
-        session.add(item)
-        workflow.links.append(item)
-        workflow.nodes[src].out_links.append(item)
-        workflow.nodes[tgt].in_links.append(item)
+    workflow.store_description(workflow_def['description'])
+    workflow.store_definition(workflow_def)
 
     return workflow
 

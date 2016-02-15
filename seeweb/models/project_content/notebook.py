@@ -1,16 +1,15 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer
 
 from ...models import Base
+from .content_item import ContentItem
 
 
-class Notebook(Base):
+class Notebook(Base, ContentItem):
     """Store the properties of a notebook.
     """
     __tablename__ = 'notebooks'
 
-    id = Column(Integer, autoincrement=True, primary_key=True)
     cnt = Column(Integer, ForeignKey("pjt_contents.id"), nullable=False)
-    name = Column(String(255), nullable=False)
 
     def __repr__(self):
         return "<Notebook(id='%s')>" % self.id

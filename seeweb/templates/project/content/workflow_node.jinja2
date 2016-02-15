@@ -1,20 +1,20 @@
-{% macro node_condensed(node) -%}
+{% macro node_condensed(node, ndef) -%}
 <div class="node condensed">
     <ul>
         <li>Name: {{ node.name }}</li>
         <li>Descr: {{ node.description }}</li>
-        <li>Function: {{ node.function }}</li>
+        <li>Function: {{ ndef['function'] }}</li>
         <li>Inputs:
-            {% if node.inputs|length == 0 %}
+            {% if ndef['inputs']|length == 0 %}
                 None
             {% else %}
                 <ul>
-                    {% for port_def in node.inputs %}
-                        <li>name: {{ port_def.name }}
+                    {% for port_def in ndef['inputs'] %}
+                        <li>name: {{ port_def['name'] }}
                             <ul>
-                                <li>descr: {{ port_def.description }}</li>
-                                <li>interface: {{ port_def.interface }}</li>
-                                <li>default: {{ port_def.value }}</li>
+                                <li>descr: {{ port_def['description'] }}</li>
+                                <li>interface: {{ port_def['interface'] }}</li>
+                                <li>default: {{ port_def['value'] }}</li>
                             </ul>
                         </li>
                     {% endfor %}
@@ -22,15 +22,15 @@
             {% endif %}
         </li>
         <li>Outputs:
-            {% if node.outputs|length == 0 %}
+            {% if ndef['outputs']|length == 0 %}
                 None
             {% else %}
                 <ul>
-                    {% for port_def in node.outputs %}
-                        <li>name: {{ port_def.name }}
+                    {% for port_def in ndef['outputs'] %}
+                        <li>name: {{ port_def['name'] }}
                             <ul>
-                                <li>descr: {{ port_def.description }}</li>
-                                <li>interface: {{ port_def.interface }}</li>
+                                <li>descr: {{ port_def['description'] }}</li>
+                                <li>interface: {{ port_def['interface'] }}</li>
                             </ul>
                         </li>
                     {% endfor %}

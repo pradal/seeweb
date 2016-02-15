@@ -18,4 +18,11 @@ def view(request):
     view_params["workflow"] = workflow
     view_params["wdef"] = workflow.load_definition()
 
+    wdef = view_params["wdef"]
+    for src, src_port, tgt, tgt_port in wdef['connections']:
+        print wdef['nodes'][src][1], wdef['nodes'][src][2]
+        print wdef['nodes'][tgt][1], wdef['nodes'][tgt][2]
+        print "\n" * 10
+
+
     return view_params

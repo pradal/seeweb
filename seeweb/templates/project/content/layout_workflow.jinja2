@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-9 partner description">
             <div class="owner pull-right">
-                <p>Author: <a href="{{ request.route_url('user_view_home', uid=workflow.author) }}">{{ workflow.author }}</a></p>
+                <p>Author: <a href="{{ request.route_url('user_view_home', uid=wdef['author']) }}">{{ wdef['author'] }}</a></p>
             </div>
             <div class="h1">{{ workflow.name }}</div>
             <div class="spacer"></div>

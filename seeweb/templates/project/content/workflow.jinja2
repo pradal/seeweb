@@ -1,0 +1,67 @@
+{% extends "layout_workflow.jinja2" %}
+
+{% block project_css %}
+    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+{% endblock project_css %}
+
+{% block workflow_body %}
+
+<h2>About to see a workflow</h2>
+
+<body onload="init();">
+    <canvas id="workflow_canvas" width="500" height="300">
+        <p>Workflow visual display</p>
+    </canvas>
+</body>
+
+{% endblock %}
+
+{% block project_js %}
+<script>
+    var stage, output;
+
+    function init() {
+        stage = new createjs.Stage("workflow_canvas");
+        stage.enableMouseOver();
+
+        output = new createjs.Text("Test press, click, doubleclick, mouseover, and mouseout", "14px Arial");
+        output.x = output.y = 10;
+        stage.addChild(output);
+
+        {% for src, src_port, tgt, tgt_port in wdef['connections']%}
+            var item = new createjs.Shape();
+            g = item.graphics.setStrokeStyle(1);
+            g.beginStroke("#000000");
+            g.moveTo({{ wdef['nodes'][src][1] }}, 50 + {{ wdef['nodes'][src][2] }});
+            g.lineTo({{ wdef['nodes'][tgt][1] }}, 50 + {{ wdef['nodes'][tgt][2] }});
+            stage.addChild(item);
+        {% endfor %}
+
+        {% for node, x, y in wdef['nodes'] %}
+            var item = new createjs.Shape();
+            item.graphics.beginFill("green").drawRect(-40, -20, 80, 40);
+            item.x = {{ x }};
+            item.y = 50 + {{ y }};
+            item.name = "{{ node }}";
+            item.on("click", handleMouseEvent);
+            item.on("dblclick", handleMouseEvent);
+            item.on("mouseover", handleMouseEvent);
+            stage.addChild(item);
+
+            var label = new createjs.Text("{{ node }}", "14px Arial");
+            label.x = item.x - 30;
+            label.y = item.y - 5;
+            stage.addChild(label);
+        {% endfor %}
+
+        stage.update();
+    }
+
+    function handleMouseEvent(evt) {
+        output.text = "evt.target: "+evt.target+", evt.type: "+evt.type;
+
+        // to save CPU, we're only updating when we need to, instead of on a tick:1
+        stage.update();
+    }
+</script>
+{% endblock %}

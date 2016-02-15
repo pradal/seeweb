@@ -46,10 +46,10 @@ def view(request):
                 create_notebook(session, project, notebook[1])
 
             for node in find_workflow_nodes(project.id):
-                create_workflow_node(session, project, node['name'])
+                create_workflow_node(session, project, node)
 
             for workflow in find_workflows(project.id):
-                create_workflow(session, project, workflow['name'])
+                create_workflow(session, project, workflow)
 
             loc = request.route_url('project_view_content', pid=project.id)
             return HTTPFound(location=loc)

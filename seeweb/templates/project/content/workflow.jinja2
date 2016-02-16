@@ -155,6 +155,17 @@
     function handleMouseEvent(evt) {
         output.text = "evt.target: "+evt.target+", evt.type: "+evt.type;
 
+        if (evt.type == "click") {
+            {% for nid, node_def in nodes.items() %}
+                {% if node_def == None %}
+                output.text = "no such node definition";
+                {% else %}
+                if (evt.target.name == '{{ nid }}') {
+                    window.location = "{{ request.route_url('project_view_workflow_node', pid=project.id, nid=nid) }}";
+                }
+                {% endif %}
+            {% endfor %}
+        }
         // to save CPU, we're only updating when we need to, instead of on a tick:1
         stage.update();
     }

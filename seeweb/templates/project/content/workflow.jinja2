@@ -1,7 +1,7 @@
 {% extends "layout_workflow.jinja2" %}
 
 {% block project_css %}
-    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+    <script src="{{ request.static_url('seeweb:static/js/easeljs-0.8.2.min.js') }}"></script>
 {% endblock project_css %}
 
 {% block workflow_body %}

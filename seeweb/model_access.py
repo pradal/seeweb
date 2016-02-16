@@ -5,8 +5,33 @@ from models.comment import Comment
 from models.project import Project
 from models.project_content.content import Content
 from models.project_content.workflow import Workflow
+from models.project_content.workflow_node import WorkflowNode
 from models.team import Team
 from models.user import User
+
+
+def _get_by_id(session, object_type, obj_id):
+    """Internal function used to retrieve an object from
+    the database using its id.
+
+    Args:
+        session: (DBSession)
+        object_type: (Class)
+        obj_id: (any)
+
+    Returns:
+        (Object or None) if no object found
+    """
+    if obj_id is None:
+        return None
+
+    items = session.query(object_type).filter(object_type.id == obj_id).all()
+    if len(items) == 0:
+        return None
+
+    item, = items
+
+    return item
 
 
 def get_comment(session, cid):
@@ -19,13 +44,7 @@ def get_comment(session, cid):
     Returns:
         (Comment) or None if no comment with this id is found
     """
-    comments = session.query(Comment).filter(Comment.id == cid).all()
-    if len(comments) == 0:
-        return None
-
-    comment, = comments
-
-    return comment
+    return _get_by_id(session, Comment, cid)
 
 
 def get_project(session, pid):
@@ -38,13 +57,7 @@ def get_project(session, pid):
     Returns:
         (Project) or None if no project with this id is found
     """
-    projects = session.query(Project).filter(Project.id == pid).all()
-    if len(projects) == 0:
-        return None
-
-    project, = projects
-
-    return project
+    return _get_by_id(session, Project, pid)
 
 
 def get_project_content(session, pid):
@@ -57,13 +70,7 @@ def get_project_content(session, pid):
     Returns:
         (Content) or None if no project with this id is found
     """
-    contents = session.query(Content).filter(Content.id == pid).all()
-    if len(contents) == 0:
-        return None
-
-    cnt, = contents
-
-    return cnt
+    return _get_by_id(session, Content, pid)
 
 
 def get_team(session, tid):
@@ -76,13 +83,7 @@ def get_team(session, tid):
     Returns:
         (Team) or None if no team with this id is found
     """
-    teams = session.query(Team).filter(Team.id == tid).all()
-    if len(teams) == 0:
-        return None
-
-    team, = teams
-
-    return team
+    return _get_by_id(session, Team, tid)
 
 
 def get_user(session, uid):
@@ -95,16 +96,7 @@ def get_user(session, uid):
     Returns:
         (User) or None if no user with this id is found
     """
-    if uid is None:
-        return None
-
-    users = session.query(User).filter(User.id == uid).all()
-    if len(users) == 0:
-        return None
-
-    user, = users
-
-    return user
+    return _get_by_id(session, User, uid)
 
 
 def get_workflow(session, wid):
@@ -112,21 +104,25 @@ def get_workflow(session, wid):
 
     Args:
         session: (DBSession)
-        wid: (int) workflow id
+        wid: (str) workflow id
 
     Returns:
         (Workflow) or None if no workflow with this id is found
     """
-    if wid is None:
-        return None
+    return _get_by_id(session, Workflow, wid)
 
-    workflows = session.query(Workflow).filter(Workflow.id == wid).all()
-    if len(workflows) == 0:
-        return None
 
-    workflow, = workflows
+def get_workflow_node(session, nid):
+    """Fetch a given workflow node in the database.
 
-    return workflow
+    Args:
+        session: (DBSession)
+        nid: (str) workflow node id
+
+    Returns:
+        (WorkflowNode) or None if no node with this id is found
+    """
+    return _get_by_id(session, WorkflowNode, nid)
 
 
 def fetch_comments(session, pid, limit=None):

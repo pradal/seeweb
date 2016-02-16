@@ -1,7 +1,9 @@
+import json
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_workflow
+from seeweb.model_access import get_workflow, get_workflow_node
 
 from .commons import init_min
 
@@ -14,15 +16,32 @@ def view(request):
 
     wid = request.matchdict['wid']
     workflow = get_workflow(session, wid)
+    if workflow is None:
+        loc = request.route_url('project_view_content', pid=project.id)
+        return HTTPFound(location=loc)
 
     view_params["workflow"] = workflow
-    view_params["wdef"] = workflow.load_definition()
 
-    wdef = view_params["wdef"]
-    for src, src_port, tgt, tgt_port in wdef['connections']:
-        print wdef['nodes'][src][1], wdef['nodes'][src][2]
-        print wdef['nodes'][tgt][1], wdef['nodes'][tgt][2]
-        print "\n" * 10
+    wdef = workflow.load_definition()
+    view_params["wdef"] = wdef
 
+    ndef = {}
+    for node_def in wdef['nodes']:
+        nid = node_def['id']
+        wnode = get_workflow_node(session, nid)
+        if wnode is None:
+            ndef[nid] = None
+        else:
+            ndef[nid] = wnode.load_definition()
+
+    print ndef, "\n" * 10
+
+    view_params["nodes"] = ndef
+    view_params["ndef"] = json.dumps(ndef)
+
+    # for src, src_port, tgt, tgt_port in wdef['connections']:
+    #     print wdef['nodes'][src]['x'], wdef['nodes'][src]['y']
+    #     print wdef['nodes'][tgt]['x'], wdef['nodes'][tgt]['y']
+    #     print "\n" * 10
 
     return view_params

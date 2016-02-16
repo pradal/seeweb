@@ -6,6 +6,7 @@ from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 import transaction
+from uuid import uuid1
 
 from seeweb.avatar import upload_user_avatar
 from seeweb.io import rmtree
@@ -214,33 +215,43 @@ This project is part of OpenAlea_.
         for i in range(5):
             create_notebook(session, workflow, "notebook%d" % i)
 
-        node_def = dict(name="read",
-                        category="oanode",
-                        description="toto was here",
-                        author="revesansparole",
-                        function="testio:read",
-                        inputs=[dict(name="in1", interface="IInt",
-                                     value="0", descr="counter"),
-                                dict(name="in2", interface="IStr",
-                                     value="a", descr="unit")],
-                        outputs=[dict(name="ret", interface="IInt",
-                                      descr="important result")])
+        ndefs = []
 
-        for i in range(1):
+        for i in range(3):
+            node_def = dict(id=uuid1().hex,
+                            name="read%d" % i,
+                            category="oanode",
+                            description="toto was here",
+                            author="revesansparole",
+                            function="testio:read",
+                            inputs=[dict(name="in1", interface="IInt",
+                                         value="0", descr="counter"),
+                                    dict(name="in2", interface="IStr",
+                                         value="a", descr="unit")],
+                            outputs=[dict(name="ret", interface="IInt",
+                                          descr="important result")])
+
             create_workflow_node(session, workflow, node_def)
+            ndefs.append(node_def)
 
-        workflow_def = dict(name="sample_workflow",
+        workflow_def = dict(id=uuid1().hex,
+                            name="sample_workflow",
                             category="oaworkflow",
                             description="trying some stuff",
                             author="revesansparole",
-                            nodes=[("node1", 100, 10),
-                                   ("node2", 200, 10),
-                                   ("node3", 150, 100)],
-                            connections=[(0, "res", 2, "in1"),
-                                         (1, "res", 2, "in2")])
+                            nodes=[dict(id=ndefs[0]['id'], label="node1",
+                                        x=100, y=10),
+                                   dict(id=ndefs[1]['id'], label="node2",
+                                        x=200, y=10),
+                                   dict(id=ndefs[2]['id'], label="node3",
+                                        x=150, y=100),
+                                   dict(id=uuid1().hex, label="fail",
+                                        x=150, y=200)],
+                            connections=[(0, "ret", 2, "in1"),
+                                         (1, "ret", 2, "in2"),
+                                         (2, "ret", 3, "in")])
 
-        for i in range(1):
-            create_workflow(session, workflow, workflow_def)
+        create_workflow(session, workflow, workflow_def)
 
         spl = create_project(session, 'revesansparole', 'sample_project')
         spl.public = True

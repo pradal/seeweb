@@ -6,10 +6,8 @@
 
 {% block workflow_body %}
 
-<h2>About to see a workflow</h2>
-
 <body onload="init();">
-    <canvas id="workflow_canvas" width="500" height="300">
+    <canvas id="workflow_canvas" width="800" height="600">
         <p>Workflow visual display</p>
     </canvas>
 </body>
@@ -19,40 +17,137 @@
 {% block project_js %}
 <script>
     var stage, output;
+    var x_offset = 0;
+    var y_offset = 50;
+    var nw = 80;
+    var nh = 40;
+    var pr = 5;
+
+    function draw_node(stage, workflow, nodes, node) {
+        var nf = nodes[node['id']];
+        var container = new createjs.Container();
+        container.x = x_offset + node['x'];
+        container.y = y_offset + node['y'];
+
+        // background
+        var item = new createjs.Shape();
+        var g = item.graphics;
+        if (nf == null) {
+            g.beginFill("#ff8cff").beginStroke("#ff8080");
+        } else {
+            g.beginFill("#c88cff").beginStroke("#808080");
+        }
+        g.drawRoundRect(-nw / 2., -nh / 2., nw, nh, 5, 5, 5, 5);
+        item.name = node['id'];
+        item.on("click", handleMouseEvent);
+        item.on("dblclick", handleMouseEvent);
+        item.on("mouseover", handleMouseEvent);
+        container.addChild(item);
+
+        if (nf != null) {
+            // ports
+            var nb = nf.inputs.length;
+            for (i in nf.inputs){
+                var item = new createjs.Shape();
+                var g = item.graphics.beginFill("#3333ff").beginStroke("#000000");
+                g.drawCircle(0, 0, pr);
+                item.x = -(nb - 1) * 2 * pr + i * pr * 4;
+                item.y = -nh / 2.;
+                container.addChild(item);
+            }
+
+            nb = nf.outputs.length;
+            for (i in nf.outputs){
+                var item = new createjs.Shape();
+                var g = item.graphics.beginFill("#ff3333").beginStroke("#000000");
+                g.drawCircle(0, 0, 5);
+                item.x = -(nb - 1) * 2 * pr + i * pr * 4;
+                item.y = nh / 2.;
+                container.addChild(item);
+            }
+        }
+        stage.addChild(container);
+
+        // label
+        var label = new createjs.Text(node['label'], "14px Arial");
+        var bounds = label.getBounds();
+        label.x = container.x - bounds.width / 2;
+        label.y = container.y - bounds.height / 2;
+        stage.addChild(label);
+    }
+
+    function in_port_index(nf, port_name) {
+        for (i in nf.inputs) {
+            if (nf.inputs[i]['name'] == port_name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function out_port_index(nf, port_name) {
+        for (i in nf.outputs) {
+            if (nf.outputs[i]['name'] == port_name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function draw_link(stage, workflow, nodes, link) {
+        var item = new createjs.Shape();
+        var g = item.graphics.setStrokeStyle(1).beginStroke("#000000");
+        var src = workflow['nodes'][link[0]];
+        var nf = nodes[src['id']];
+        if (nf == null) {
+            g.moveTo(x_offset + src['x'], y_offset + src['y']);
+        }
+        else {
+            var i = out_port_index(nf, link[1]);
+            if (i == -1) {
+                //g.setStrokeDash([2, 1], 0);
+                g.moveTo(x_offset + src['x'], y_offset + src['y']);
+            } else {
+                var nb = nf.outputs.length;
+                g.moveTo(x_offset + src['x'] - (nb - 1) * 2 * pr + i * pr * 4, y_offset + src['y'] + nh / 2.);
+            }
+        }
+        var tgt = workflow['nodes'][link[2]];
+        nf = nodes[tgt['id']];
+        if (nf == null) {
+            g.lineTo(x_offset + tgt['x'], y_offset + tgt['y']);
+        }
+        else {
+            var i = in_port_index(nf, link[3]);
+            if (i == -1) {
+                //g.setStrokeDash([2, 1], 0);
+                g.lineTo(x_offset + tgt['x'], y_offset + tgt['y']);
+            } else {
+                var nb = nf.inputs.length;
+                g.lineTo(x_offset + tgt['x'] - (nb - 1) * 2 * pr + i * pr * 4, y_offset + tgt['y'] - nh / 2.);
+            }
+        }
+        stage.addChild(item);
+    }
 
     function init() {
+        var wkf = JSON.parse('{{ workflow.definition|safe }}');
+        var nodes = JSON.parse('{{ ndef|safe }}');
+
         stage = new createjs.Stage("workflow_canvas");
         stage.enableMouseOver();
 
-        output = new createjs.Text("Test press, click, doubleclick, mouseover, and mouseout", "14px Arial");
+        output = new createjs.Text(wkf['name'], "14px Arial");
         output.x = output.y = 10;
         stage.addChild(output);
 
-        {% for src, src_port, tgt, tgt_port in wdef['connections']%}
-            var item = new createjs.Shape();
-            g = item.graphics.setStrokeStyle(1);
-            g.beginStroke("#000000");
-            g.moveTo({{ wdef['nodes'][src][1] }}, 50 + {{ wdef['nodes'][src][2] }});
-            g.lineTo({{ wdef['nodes'][tgt][1] }}, 50 + {{ wdef['nodes'][tgt][2] }});
-            stage.addChild(item);
-        {% endfor %}
+        for (i in wkf['connections']) {
+            draw_link(stage, wkf, nodes, wkf['connections'][i]);
+        }
 
-        {% for node, x, y in wdef['nodes'] %}
-            var item = new createjs.Shape();
-            item.graphics.beginFill("green").drawRect(-40, -20, 80, 40);
-            item.x = {{ x }};
-            item.y = 50 + {{ y }};
-            item.name = "{{ node }}";
-            item.on("click", handleMouseEvent);
-            item.on("dblclick", handleMouseEvent);
-            item.on("mouseover", handleMouseEvent);
-            stage.addChild(item);
-
-            var label = new createjs.Text("{{ node }}", "14px Arial");
-            label.x = item.x - 30;
-            label.y = item.y - 5;
-            stage.addChild(label);
-        {% endfor %}
+        for (i in wkf['nodes']) {
+            draw_node(stage, wkf, nodes, wkf['nodes'][i]);
+        }
 
         stage.update();
     }

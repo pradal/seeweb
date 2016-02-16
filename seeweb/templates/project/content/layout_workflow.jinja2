@@ -5,7 +5,7 @@
 <div id="header" class="row">
     <div class="partner-table">
         <div class="col-md-3 partner avatar">
-            <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
+            <a href="{{ request.route_url('project_view_content', pid=project.id) }}">
                 <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/project/%s.png' % project.id) }}" />
             </a>
         </div>
@@ -13,8 +13,8 @@
             <div class="owner pull-right">
                 <p>Author: <a href="{{ request.route_url('user_view_home', uid=wdef['author']) }}">{{ wdef['author'] }}</a></p>
             </div>
-            <div class="h1">{{ workflow.name }}</div>
-            <div class="spacer"></div>
+            <div class="h1">{{ project.id }}</div>
+            <div class="h2">{{ workflow.name }}</div>
             <div class="spacer"></div>
             <div class="spacer"></div>
         </div>

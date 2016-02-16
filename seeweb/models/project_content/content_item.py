@@ -1,5 +1,5 @@
 import json
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, String, Text
 
 from seeweb.models.described import Described
 
@@ -7,7 +7,7 @@ from seeweb.models.described import Described
 class ContentItem(Described):
     """Base class for content items.
     """
-    id = Column(Integer, autoincrement=True, primary_key=True)
+    id = Column(String(32), nullable=False, primary_key=True)
     name = Column(String(255), nullable=False)
     definition = Column(Text, default="")
 

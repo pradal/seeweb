@@ -1,6 +1,7 @@
 """Set of functions used to edit objects in models
 """
 from datetime import datetime
+from uuid import uuid1
 
 from .avatar import (generate_default_project_avatar,
                      generate_default_team_avatar,
@@ -116,7 +117,7 @@ def create_executable(session, project, name):
     """
     cnt = _ensure_project_content(session, project)
 
-    executable = Executable(cnt=cnt.id, name=name)
+    executable = Executable(id=uuid1().hex, cnt=cnt.id, name=name)
     session.add(executable)
 
     return executable
@@ -135,7 +136,7 @@ def create_notebook(session, project, name):
     """
     cnt = _ensure_project_content(session, project)
 
-    notebook = Notebook(cnt=cnt.id, name=name)
+    notebook = Notebook(id=uuid1().hex, cnt=cnt.id, name=name)
     session.add(notebook)
 
     return notebook
@@ -154,7 +155,9 @@ def create_workflow_node(session, project, node_def):
     """
     cnt = _ensure_project_content(session, project)
 
-    node = WorkflowNode(cnt=cnt.id, name=node_def['name'])
+    node = WorkflowNode(id=node_def['id'],
+                        cnt=cnt.id,
+                        name=node_def['name'])
     session.add(node)
     node.store_description(node_def['description'])
     node.store_definition(node_def)
@@ -175,7 +178,9 @@ def create_workflow(session, project, workflow_def):
     """
     cnt = _ensure_project_content(session, project)
 
-    workflow = Workflow(cnt=cnt.id, name=workflow_def['name'])
+    workflow = Workflow(id=workflow_def['id'],
+                        cnt=cnt.id,
+                        name=workflow_def['name'])
     session.add(workflow)
     workflow.store_description(workflow_def['description'])
     workflow.store_definition(workflow_def)

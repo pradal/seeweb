@@ -1,7 +1,6 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.model_edit import change_project_owner
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
 from seeweb.models.user import User
@@ -127,7 +126,7 @@ def edit_init(request, session, tab):
             request.session.flash(msg, 'warning')
             raise HTTPFound(location=request.current_route_url())
 
-        change_project_owner(session, project, user)
+        project.change_owner(session, user)
         loc = request.route_url("project_view_home", pid=project.id)
         transaction.commit()
         raise HTTPFound(location=loc)

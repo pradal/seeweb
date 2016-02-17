@@ -162,20 +162,6 @@ def create_workflow(session, project, workflow_def):
 
 
 
-def change_project_owner(session, project, user):
-    """Change ownership of a project
-
-    Args:
-        session: (DBSession)
-        project: (Project)
-        user: (User) new owner for the project
-
-    Returns:
-        (None)
-    """
-    del session
-    project.owner = user.id
-
 
 def add_project_auth(session, project, user, role):
     """Add a new authorization for this project

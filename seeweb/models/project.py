@@ -110,6 +110,19 @@ class Project(Base, Rated, Described):
 
         return True
 
+    def change_owner(self, session, user):
+        """Change ownership of the project
+
+        Args:
+            session: (DBSession)
+            user: (User) new owner for the project
+
+        Returns:
+            (None)
+        """
+        del session
+        self.owner = user.id
+
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.
 

@@ -48,21 +48,27 @@
             // ports
             var nb = nf.inputs.length;
             for (i in nf.inputs){
+                var input = nf.inputs[i];
                 var item = new createjs.Shape();
                 var g = item.graphics.beginFill("#3333ff").beginStroke("#000000");
                 g.drawCircle(0, 0, pr);
                 item.x = -(nb - 1) * 2 * pr + i * pr * 4;
                 item.y = -nh / 2.;
+                item.name = node['id'] + "/in:" + input['name'];
+                item.on("mouseover", handleMouseEvent);
                 container.addChild(item);
             }
 
             nb = nf.outputs.length;
             for (i in nf.outputs){
+                var output = nf.outputs[i];
                 var item = new createjs.Shape();
                 var g = item.graphics.beginFill("#ff3333").beginStroke("#000000");
                 g.drawCircle(0, 0, 5);
                 item.x = -(nb - 1) * 2 * pr + i * pr * 4;
                 item.y = nh / 2.;
+                item.name = node['id'] + "/out:" + output['name'];
+                item.on("mouseover", handleMouseEvent);
                 container.addChild(item);
             }
         }
@@ -169,7 +175,23 @@
                 }
                 {% endif %}
             {% endfor %}
+        } else if (evt.type == "mouseover") {
+            {% for nid, node_def in nodes.items() %}
+                {% if node_def != None %}
+                    {% for input in node_def['inputs'] %}
+                    if (evt.target.name == '{{ nid }}/in:{{ input["name"] }}') {
+                        output.text = "input port: {{ input['name'] }}";
+                    }
+                    {% endfor %}
+                    {% for output in node_def['outputs'] %}
+                    if (evt.target.name == '{{ nid }}/out:{{ output["name"] }}') {
+                        output.text = "output port: {{ output['name'] }}";
+                    }
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
         }
+
         // to save CPU, we're only updating when we need to, instead of on a tick:1
         stage.update();
     }

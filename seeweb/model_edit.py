@@ -190,37 +190,6 @@ def recompute_project_ratings(session, project):
 
     project.affect_ratings(new_ratings)
 
-
-def add_dependency(session, project, name, version):
-    """Add a new dependency for the project
-
-    Args:
-        session: (DBSession)
-        project: (Project)
-        name: (str) name of project|package
-        version: (str) version min to use
-
-    Returns:
-        (None)
-    """
-    dep = Dependency(project=project.id, name=name, version=version)
-    session.add(dep)
-
-
-def clear_dependencies(session, project):
-    """Remove all dependecies from the project
-
-    Args:
-        session: (DBSession)
-        project: (Project)
-
-    Returns:
-        (None)
-    """
-    for dep in list(project.dependencies):
-        session.delete(dep)
-
-
 def install_project(session, user, project):
     """Install project in user installed projects
 

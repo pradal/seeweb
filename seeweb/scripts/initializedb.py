@@ -21,8 +21,7 @@ from seeweb.model_edit import (create_executable,
                                create_interface,
                                create_notebook,
                                create_workflow,
-                               create_workflow_node,
-                               add_dependency)
+                               create_workflow_node)
 from seeweb.project.gallery import add_gallery_image
 
 
@@ -273,5 +272,5 @@ This project is part of OpenAlea_.
         # spl = Project.create(session, 'revesansparole', 'sample_project')
         # spl.public = True
         # spl.src_url = "C:/Users/jerome/Desktop/see/sample_project/.git"
-        # add_dependency(session, spl, "numpy", "1.0")
-        # add_dependency(session, spl, "pkglts", "1.0")
+        # spl.add_dependency(session, "numpy", "1.0")
+        # spl.add_dependency(session, "pkglts", "1.0")

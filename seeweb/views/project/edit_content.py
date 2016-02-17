@@ -2,9 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_edit import (add_dependency,
-                               clear_dependencies,
-                               clear_project_content,
+from seeweb.model_edit import (clear_project_content,
                                create_executable,
                                create_notebook,
                                create_workflow_node,
@@ -34,9 +32,9 @@ def view(request):
         project.src_url = field_storage.filename
     elif "confirm_fetch_src" in request.params:
         if fetch_sources(project):
-            clear_dependencies(session, project)
+            project.clear_dependencies(session)
             for name, ver in fetch_dependencies(project.id):
-                add_dependency(session, project, name, ver)
+                project.add_dependency(session, name, ver)
 
             clear_project_content(session, project)
             for executable in find_executables(project.id):

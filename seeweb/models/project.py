@@ -8,6 +8,7 @@ from seeweb.project.source import delete_source
 from .actor import PActor
 from .auth import Authorized, Role
 from .comment import Comment
+from .dependency import Dependency
 from .described import Described
 from .models import Base, get_by_id
 from .rated import Rated
@@ -126,6 +127,20 @@ class Project(Base, Rated, Described, Authorized):
         session.add(actor)
         actor.is_team = isinstance(user, Team)
 
+    def add_dependency(self, session, name, version):
+        """Add a new dependency for the project
+
+        Args:
+            session: (DBSession)
+            name: (str) name of project|package
+            version: (str) version min to use
+
+        Returns:
+            (None)
+        """
+        dep = Dependency(project=self.id, name=name, version=version)
+        session.add(dep)
+
     def change_owner(self, session, user):
         """Change ownership of the project
 
@@ -138,6 +153,18 @@ class Project(Base, Rated, Described, Authorized):
         """
         del session
         self.owner = user.id
+
+    def clear_dependencies(self, session):
+        """Remove all dependencies from the project
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            (None)
+        """
+        for dep in list(self.dependencies):
+            session.delete(dep)
 
     def fetch_comments(self, session, limit=None):
         """Fetch all comments associated to this project.

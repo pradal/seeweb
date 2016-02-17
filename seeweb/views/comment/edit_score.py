@@ -4,7 +4,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.comment import Comment
 from seeweb.models.project import Project
-from seeweb.model_edit import recompute_project_ratings
 
 
 @view_config(route_name='comment_edit_score',
@@ -37,8 +36,8 @@ def view(request):
             comment.score -= 1
 
         # recompute project ratings
-        recompute_project_ratings(session,
-                                  Project.get(session, comment.project))
+        project = Project.get(session, comment.project)
+        project.recompute_ratings(session)
 
         request.session.flash("Comment voted %s" % vote, 'success')
         return HTTPFound(location=request.session['last'])

@@ -4,7 +4,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession, rated
 from seeweb.models.comment import Comment
 from seeweb.models.project import Project
-from seeweb.model_edit import recompute_project_ratings
 
 
 def validate_comment(request, session, author, pid, txt, ratings):
@@ -26,7 +25,7 @@ def validate_comment(request, session, author, pid, txt, ratings):
     Comment.create(session, pid, author, txt, ratings)
 
     # recompute project ratings
-    recompute_project_ratings(session, project)
+    project.recompute_ratings(session)
 
     return True
 

@@ -112,6 +112,40 @@ class Project(Base, Rated, Described, Authorized):
 
         return True
 
+    def access_role(self, session, uid):
+        """Check the type of access granted to a user.
+
+        Args:
+            session: (DBSession)
+            uid: id of user to test
+
+        Returns:
+            (Role) type of role given to this user
+        """
+        # user own project
+        if self.owner == uid:
+            return Role.edit
+
+        # check team auth for this user, supersede sub_team auth
+        actor = self.get_actor(uid)
+        if actor is not None:
+            return actor.role
+
+        if self.public:
+            role = Role.view
+        else:
+            role = Role.denied
+
+        # check team auth in subteams
+        for actor in self.auth:
+            if actor.is_team:
+                team = Team.get(session, actor.user)
+                if team.has_member(session, uid):
+                    role = max(role, actor.role)
+                    # useful in case user is member of multiple teams
+
+        return role
+
     def add_auth(self, session, user, role):
         """Add a new authorization for this project
 
@@ -185,36 +219,32 @@ class Project(Base, Rated, Described, Authorized):
 
         return comments
 
-    def access_role(self, session, uid):
-        """Check the type of access granted to a user.
+    def recompute_ratings(self, session):
+        """Recompute ratings from the list of comments.
 
         Args:
             session: (DBSession)
-            uid: id of user to test
 
         Returns:
-            (Role) type of role given to this user
+            None
         """
-        # user own project
-        if self.owner == uid:
-            return Role.edit
+        ratings = dict((name.lower(), [0, 0])
+                       for name, rating in self.format_ratings())
 
-        # check team auth for this user, supersede sub_team auth
-        actor = self.get_actor(uid)
-        if actor is not None:
-            return actor.role
+        for comment in self.fetch_comments(session):
+            nb = comment.score
+            if nb > 0:
+                for name, rating in comment.format_ratings():
+                    key = name.lower()
+                    ratings[key][0] += nb
+                    ratings[key][1] += rating * nb
 
-        if self.public:
-            role = Role.view
-        else:
-            role = Role.denied
+        new_ratings = []
+        for key, (nb, val) in ratings.items():
+            if nb == 0:
+                rating = 2.5
+            else:
+                rating = val / nb
+            new_ratings.append((key, rating))
 
-        # check team auth in subteams
-        for actor in self.auth:
-            if actor.is_team:
-                team = Team.get(session, actor.user)
-                if team.has_member(session, uid):
-                    role = max(role, actor.role)
-                    # useful in case user is member of multiple teams
-
-        return role
+        self.affect_ratings(new_ratings)

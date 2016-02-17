@@ -1,25 +1,13 @@
 """Set of functions used to edit objects in models
 """
-from datetime import datetime
 from uuid import uuid1
 
-from .avatar import (generate_default_project_avatar,
-                     generate_default_team_avatar,
-                     remove_project_avatar,
-                     remove_team_avatar)
-from models.actor import PActor, TActor
-from models.comment import Comment
-from models.dependency import Dependency
-from models.installed import Installed
-from models.project import Project
 from models.project_content.content import Content, item_types
 from models.project_content.executable import Executable
 from models.project_content.interface import Interface
 from models.project_content.notebook import Notebook
 from models.project_content.workflow_node import WorkflowNode
 from models.project_content.workflow import Workflow
-from models.team import Team
-from project.source import delete_source
 
 
 def add_content(session, project):
@@ -156,39 +144,6 @@ def create_workflow(session, project, workflow_def):
     workflow.store_definition(workflow_def)
 
     return workflow
-
-
-
-def recompute_project_ratings(session, project):
-    """Recompute project ratings from the list of comments.
-
-    Args:
-        session: (DBSession)
-        project: (Project)
-
-    Returns:
-        None
-    """
-    ratings = dict((name.lower(), [0, 0])
-                   for name, rating in project.format_ratings())
-
-    for comment in project.fetch_comments(session):
-        nb = comment.score
-        if nb > 0:
-            for name, rating in comment.format_ratings():
-                key = name.lower()
-                ratings[key][0] += nb
-                ratings[key][1] += rating * nb
-
-    new_ratings = []
-    for key, (nb, val) in ratings.items():
-        if nb == 0:
-            rating = 2.5
-        else:
-            rating = val / nb
-        new_ratings.append((key, rating))
-
-    project.affect_ratings(new_ratings)
 
 
 def clear_project_content(session, project):

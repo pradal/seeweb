@@ -42,3 +42,22 @@ class User(Base, Described):
 
     def md5(self):
         return hashlib.md5(self.email.strip().lower()).hexdigest()
+
+    def has_installed(self, session, project):
+        """Check whether the project has already been installed for this user
+
+        Args:
+            session: (DBSession)
+            user: (User)
+            project: (Project)
+
+        Returns:
+            (bool): True if project already in user installed list
+        """
+        del session
+
+        for installed in self.installed:
+            if installed.project == project.id:
+                return True
+
+        return False

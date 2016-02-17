@@ -1,8 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.model_access import (is_installed,
-                                 project_access_role)
+from seeweb.model_access import project_access_role
 from seeweb.model_edit import change_project_owner, remove_project
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
@@ -67,7 +66,7 @@ def view_init(request, session, tab):
         install_action = None
     else:
         user = User.get(session, request.unauthenticated_userid)
-        if is_installed(session, user, project):
+        if user.has_installed(session, project):
             install_action = "uninstall"
         else:
             install_action = "install"

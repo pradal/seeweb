@@ -143,23 +143,3 @@ def team_access_role(session, team, uid):
                 # useful in case user is member of multiple teams
 
     return role
-
-
-def is_installed(session, user, project):
-    """Check whether the project has already been installed for this user
-
-    Args:
-        session: (DBSession)
-        user: (User)
-        project: (Project)
-
-    Returns:
-        (bool): True if project already in user installed list
-    """
-    del session
-
-    for installed in user.installed:
-        if installed.project == project.id:
-            return True
-
-    return False

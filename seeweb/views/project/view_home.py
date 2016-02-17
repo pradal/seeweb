@@ -2,7 +2,6 @@ from jinja2 import Markup
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import fetch_comments
 from seeweb.project.gallery import fetch_gallery_images
 
 from .commons import view_init
@@ -29,6 +28,6 @@ def view(request):
     view_params["gallery"] = fetch_gallery_images(project)
 
     # comments
-    view_params["comments"] = fetch_comments(session, project.id, 2)
+    view_params["comments"] = project.fetch_comments(session, 2)
 
     return view_params

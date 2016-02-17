@@ -1,29 +1,7 @@
 """Set of functions used to access objects in models
 """
 from models.auth import Role
-from models.comment import Comment
 from models.team import Team
-
-
-def fetch_comments(session, pid, limit=None):
-    """Fetch all comments associated to a project.
-
-    Args:
-        session: (DBSession)
-        pid: (str) project id
-        limit: (int) maximum number of items to return
-
-    Returns:
-        (list of Comment) sorted by score
-    """
-    query = session.query(Comment).filter(Comment.project == pid)
-    query = query.order_by(Comment.score.desc())
-    if limit is not None:
-        query = query.limit(limit)
-
-    comments = query.all()
-
-    return comments
 
 
 def is_member(session, team, uid):

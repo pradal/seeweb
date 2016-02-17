@@ -1,7 +1,6 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import fetch_comments
 
 from .commons import view_init
 
@@ -16,6 +15,6 @@ def view(request):
     if request.unauthenticated_userid is not None:
         view_params["sections"] = ['edit comment']
 
-    view_params["comments"] = fetch_comments(session, project.id)
+    view_params["comments"] = project.fetch_comments(session)
 
     return view_params

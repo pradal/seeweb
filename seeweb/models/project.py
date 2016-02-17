@@ -1,6 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
+from .comment import Comment
 from .described import Described
 from .models import Base, get_by_id
 from .rated import Rated
@@ -55,3 +56,24 @@ class Project(Base, Rated, Described):
                 return actor
 
         return None
+
+    def fetch_comments(self, session, limit=None):
+        """Fetch all comments associated to this project.
+
+        Args:
+            session: (DBSession)
+            limit: (int) maximum number of items to return
+
+        Returns:
+            (list of Comment) sorted by score
+        """
+        query = session.query(Comment).filter(Comment.project == self.id)
+        query = query.order_by(Comment.score.desc())
+        if limit is not None:
+            query = query.limit(limit)
+
+        comments = query.all()
+
+        return comments
+
+

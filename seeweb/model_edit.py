@@ -8,7 +8,6 @@ from .avatar import (generate_default_project_avatar,
                      generate_default_user_avatar,
                      remove_project_avatar,
                      remove_team_avatar)
-from .model_access import fetch_comments
 from models.actor import PActor, TActor
 from models.comment import Comment
 from models.dependency import Dependency
@@ -431,7 +430,7 @@ def recompute_project_ratings(session, project):
     ratings = dict((name.lower(), [0, 0])
                    for name, rating in project.format_ratings())
 
-    for comment in fetch_comments(session, project.id):
+    for comment in project.fetch_comments(session):
         nb = comment.score
         if nb > 0:
             for name, rating in comment.format_ratings():

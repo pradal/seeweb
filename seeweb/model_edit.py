@@ -190,44 +190,6 @@ def recompute_project_ratings(session, project):
 
     project.affect_ratings(new_ratings)
 
-def install_project(session, user, project):
-    """Install project in user installed projects
-
-    Warnings: Does not test if user has permission to do that.
-
-    Args:
-        session: (DBSession)
-        user: (User)
-        project: (Project)
-
-    Returns:
-        None
-    """
-    installed = Installed(user=user.id,
-                          project=project.id,
-                          date=datetime.now(),
-                          version="0.0.0")
-    session.add(installed)
-
-
-def uninstall_project(session, user, project):
-    """Uninstall project from user installed projects
-
-    Raises: UserWarning if project is not installed
-
-    Args:
-        session: (DBSession)
-        user: (User)
-        project: (Project)
-
-    Returns:
-        None
-    """
-    for installed in user.installed:
-        if installed.project == project.id:
-            session.delete(installed)
-            return
-
 
 def clear_project_content(session, project):
     """Remove all items in project content and delete content object.

@@ -3,7 +3,6 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.user import User
-from seeweb.model_edit import install_project
 
 from .commons import install_init
 
@@ -21,7 +20,7 @@ def view(request):
             loc = request.route_url('project_view_home', pid=project.id)
             return HTTPFound(location=loc)
 
-        install_project(session, user, project)
+        user.install_project(session, project)
 
         loc = request.route_url('user_view_projects',
                                 uid=request.unauthenticated_userid)

@@ -1,3 +1,4 @@
+from datetime import datetime
 import hashlib
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
@@ -5,6 +6,7 @@ from sqlalchemy.orm import relationship
 from seeweb.avatar import generate_default_user_avatar
 
 from .described import Described
+from .installed import Installed
 from .models import Base, get_by_id
 
 
@@ -109,3 +111,39 @@ class User(Base, Described):
                 return True
 
         return False
+
+    def install_project(self, session, project):
+        """Install project in user installed projects
+
+        Warnings: Does not test if user has permission to do that.
+
+        Args:
+            session: (DBSession)
+            project: (Project)
+
+        Returns:
+            None
+        """
+        installed = Installed(user=self.id,
+                              project=project.id,
+                              date=datetime.now(),
+                              version="0.0.0")
+        session.add(installed)
+
+    def uninstall_project(self, session, project):
+        """Uninstall project from user installed projects
+
+        Raises: UserWarning if project is not installed
+
+        Args:
+            session: (DBSession)
+            project: (Project)
+
+        Returns:
+            None
+        """
+        for installed in self.installed:
+            if installed.project == project.id:
+                session.delete(installed)
+                return
+

@@ -1,10 +1,12 @@
 from sqlalchemy import Boolean, Column, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
+from .auth import Role
 from .comment import Comment
 from .described import Described
 from .models import Base, get_by_id
 from .rated import Rated
+from .team import Team
 
 
 class Project(Base, Rated, Described):
@@ -75,5 +77,3 @@ class Project(Base, Rated, Described):
         comments = query.all()
 
         return comments
-
-

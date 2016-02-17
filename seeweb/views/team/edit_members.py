@@ -5,7 +5,6 @@ from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
 from seeweb.models.user import User
-from seeweb.model_access import is_member
 from seeweb.model_edit import add_team_auth, remove_auth, update_auth
 
 from .commons import edit_init
@@ -42,12 +41,13 @@ def register_new_user(request, session, team, new_uid):
 
     member = Team.get(session, new_uid)
     if member is not None:
-        if is_member(session, team, new_uid):
+        if team.has_member(session, new_uid):
             request.session.flash("%s already a member" % member.id, 'warning')
             return False
 
-        if is_member(session, member, team.id):
-            msg = "Circular reference %s is a member of %s" % (team.id, member.id)
+        if member.has_member(session, team.id):
+            msg = "Circular reference %s is a member of %s" % (team.id,
+                                                               member.id)
             request.session.flash(msg, 'warning')
             return False
 

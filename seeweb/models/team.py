@@ -1,6 +1,7 @@
-from sqlalchemy import Column, String, Text
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
+from .auth import Role
 from .described import Described
 from .models import Base, get_by_id
 
@@ -30,7 +31,6 @@ class Team(Base, Described):
         """
         return get_by_id(session, Team, tid)
 
-
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.
 
@@ -45,3 +45,28 @@ class Team(Base, Described):
                 return actor
 
         return None
+
+    def has_member(self, session, uid):
+        """Check whether the team has a given member.
+
+        Also check sub teams recursively.
+
+        Args:
+            session: (DBSession)
+            uid: (str) user id
+
+        Returns:
+            (Bool) True if user is appears in the team or one
+            of the sub teams recursively and its role is not
+            'denied'.
+        """
+        actors = list(self.auth)
+        while len(actors) > 0:
+            actor = actors.pop(0)
+            if actor.user == uid:
+                return actor.role != Role.denied
+
+            if actor.is_team:
+                actors.extend(Team.get(session, actor.user).auth)
+
+        return False

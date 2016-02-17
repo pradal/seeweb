@@ -4,33 +4,6 @@ from models.auth import Role
 from models.team import Team
 
 
-def is_member(session, team, uid):
-    """Check whether team has a given member.
-
-    Also check sub teams recursively.
-
-    Args:
-        session: (DBSession)
-        team: (Team)
-        uid: (str) user id
-
-    Returns:
-        (Bool) True if user is appears in the team or one
-        of the sub teams recursively and its role is not
-        'denied'.
-    """
-    actors = list(team.auth)
-    while len(actors) > 0:
-        actor = actors.pop(0)
-        if actor.user == uid:
-            return actor.role != Role.denied
-
-        if actor.is_team:
-            actors.extend(Team.get(session, actor.user).auth)
-
-    return False
-
-
 def is_contributor(session, project, uid):
     """Check whether project has a given member.
 
@@ -86,8 +59,8 @@ def project_access_role(session, project, uid):
     # check team auth in subteams
     for actor in project.auth:
         if actor.is_team:
-            tid = actor.user
-            if is_member(session, Team.get(session, tid), uid):
+            team = Team.get(session, actor.user)
+            if team.has_member(session, uid):
                 role = max(role, actor.role)
                 # useful in case user is member of multiple teams
 
@@ -115,8 +88,8 @@ def team_access_role(session, team, uid):
 
     for actor in team.auth:
         if actor.is_team:
-            tid = actor.user
-            if is_member(session, Team.get(session, tid), uid):
+            team = Team.get(session, actor.user)
+            if team.has_member(session, uid):
                 role = max(role, actor.role)
                 # useful in case user is member of multiple teams
 

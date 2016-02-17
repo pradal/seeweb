@@ -77,3 +77,37 @@ class Project(Base, Rated, Described):
         comments = query.all()
 
         return comments
+
+    def access_role(self, session, uid):
+        """Check the type of access granted to a user.
+
+        Args:
+            session: (DBSession)
+            uid: id of user to test
+
+        Returns:
+            (Role) type of role given to this user
+        """
+        # user own project
+        if self.owner == uid:
+            return Role.edit
+
+        # check team auth for this user, supersede sub_team auth
+        actor = self.get_actor(uid)
+        if actor is not None:
+            return actor.role
+
+        if self.public:
+            role = Role.view
+        else:
+            role = Role.denied
+
+        # check team auth in subteams
+        for actor in self.auth:
+            if actor.is_team:
+                team = Team.get(session, actor.user)
+                if team.has_member(session, uid):
+                    role = max(role, actor.role)
+                    # useful in case user is member of multiple teams
+
+        return role

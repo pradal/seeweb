@@ -3,7 +3,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
-from seeweb.model_access import project_access_role
 
 
 @view_config(route_name='project_list',
@@ -19,7 +18,7 @@ def view(request):
     query = query.order_by(Project.id)
     projects = []
     for project in query.all():
-        role = project_access_role(session, project, request.unauthenticated_userid)
+        role = project.access_role(session, request.unauthenticated_userid)
         if role != Role.denied:
             projects.append((Role.to_str(role), project))
 

@@ -1,7 +1,6 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.model_access import project_access_role
 from seeweb.model_edit import change_project_owner, remove_project
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
@@ -37,7 +36,7 @@ def init_min(request, session):
         request.session.flash("Project %s does not exists" % pid, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    role = project_access_role(session, project, request.unauthenticated_userid)
+    role = project.access_role(session, request.unauthenticated_userid)
     if role == Role.denied:
         request.session.flash("Access to %s not granted for you" % pid,
                               'warning')

@@ -5,12 +5,12 @@ from seeweb.avatar import (generate_default_team_avatar,
                            remove_team_avatar)
 
 from .actor import TActor
-from .auth import Role
+from .auth import Authorized, Role
 from .described import Described
 from .models import Base, get_by_id
 
 
-class Team(Base, Described):
+class Team(Base, Described, Authorized):
     """Group of users used to manage auth at a coarser level
     """
     __tablename__ = 'teams'

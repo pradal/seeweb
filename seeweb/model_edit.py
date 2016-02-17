@@ -158,38 +158,6 @@ def create_workflow(session, project, workflow_def):
     return workflow
 
 
-def remove_auth(session, parent, uid):
-    """Remove access granted to user
-
-    Args:
-        session: (DBSession)
-        parent: (Project|Team)
-        uid: (str) id of user or team
-
-    Returns:
-        None
-    """
-    actor = parent.get_actor(uid)
-    if actor is not None:
-        session.delete(actor)
-
-
-def update_auth(session, parent, uid, new_role):
-    """Update role of user.
-
-    Args:
-        session: (DBSession)
-        parent: (Project[Team)
-        uid: (str) user id
-        new_role: (Role)
-
-    Returns:
-        None
-    """
-    del session
-    actor = parent.get_actor(uid)
-    actor.role = new_role
-
 
 def recompute_project_ratings(session, project):
     """Recompute project ratings from the list of comments.

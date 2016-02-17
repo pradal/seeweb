@@ -6,7 +6,7 @@ from seeweb.avatar import (generate_default_project_avatar,
 from seeweb.project.source import delete_source
 
 from .actor import PActor
-from .auth import Role
+from .auth import Authorized, Role
 from .comment import Comment
 from .described import Described
 from .models import Base, get_by_id
@@ -14,7 +14,7 @@ from .rated import Rated
 from .team import Team
 
 
-class Project(Base, Rated, Described):
+class Project(Base, Rated, Described, Authorized):
     """Basic unit of management.
     """
     __tablename__ = 'projects'
@@ -138,21 +138,6 @@ class Project(Base, Rated, Described):
         """
         del session
         self.owner = user.id
-
-    def get_actor(self, uid):
-        """Retrieve actor associated with this uid.
-
-        Args:
-            uid: (str) id of user
-
-        Returns:
-            (PActor) or None if no user in auth list
-        """
-        for actor in self.auth:
-            if actor.user == uid:
-                return actor
-
-        return None
 
     def fetch_comments(self, session, limit=None):
         """Fetch all comments associated to this project.

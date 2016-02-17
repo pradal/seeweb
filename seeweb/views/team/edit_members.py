@@ -5,7 +5,6 @@ from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
 from seeweb.models.user import User
-from seeweb.model_edit import remove_auth, update_auth
 
 from .commons import edit_init
 
@@ -84,7 +83,7 @@ def view(request):
         for actor in team.auth:
             # check need to remove
             if "rm_%s" % actor.user in request.params:
-                remove_auth(session, team, actor.user)
+                team.remove_auth(session, actor.user)
                 request.session.flash("User %s removed" % actor.user, 'success')
                 need_reload = True
             else:  # update roles
@@ -96,7 +95,7 @@ def view(request):
                 new_role = Role.from_str(new_role_str)
 
                 if new_role != actor.role:
-                    update_auth(session, team, actor.user, new_role)
+                    team.update_auth(session, actor.user, new_role)
                     need_reload = True
 
         if need_reload:

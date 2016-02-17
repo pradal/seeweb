@@ -15,6 +15,7 @@ from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
 from seeweb.model_edit import (create_comment,
                                create_executable,
+                               create_interface,
                                create_notebook,
                                create_project,
                                create_team,
@@ -226,6 +227,9 @@ This project is part of OpenAlea_.
 
         nodelib = create_project(session, 'revesansparole', 'nodelib')
         nodelib.public = True
+
+        create_interface(session, nodelib, "IInt")
+        create_interface(session, nodelib, "IStr")
 
         ndefs = []
         for i in range(3):

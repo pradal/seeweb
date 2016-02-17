@@ -16,6 +16,7 @@ from models.installed import Installed
 from models.project import Project
 from models.project_content.content import Content, item_types
 from models.project_content.executable import Executable
+from models.project_content.interface import Interface
 from models.project_content.notebook import Notebook
 from models.project_content.workflow_node import WorkflowNode
 from models.project_content.workflow import Workflow
@@ -121,6 +122,25 @@ def create_executable(session, project, name):
     session.add(executable)
 
     return executable
+
+
+def create_interface(session, project, name):
+    """Create a new interface description and associate it to a project.
+
+    Args:
+        session: (DBSession)
+        project: (Project) an already existing project
+        name: (str) name of the interface
+
+    Returns:
+        (Interface)
+    """
+    cnt = _ensure_project_content(session, project)
+
+    item = Interface(id=uuid1().hex, cnt=cnt.id, name=name)
+    session.add(item)
+
+    return item
 
 
 def create_notebook(session, project, name):

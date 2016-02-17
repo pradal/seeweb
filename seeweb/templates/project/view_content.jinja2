@@ -1,6 +1,7 @@
 {% from 'macro.jinja2' import project_condensed with context %}
 {% from 'macro.jinja2' import project_fake with context %}
 {% from 'content/executable_macro.jinja2' import executable_condensed with context %}
+{% from 'content/interface_macro.jinja2' import interface_condensed with context %}
 {% from 'content/notebook_macro.jinja2' import notebook_condensed with context %}
 {% from 'content/workflow_macro.jinja2' import workflow_condensed with context %}
 {% from 'content/workflow_node_macro.jinja2' import node_condensed with context %}
@@ -84,6 +85,23 @@
                             {{ notebook_condensed(notebook) }}
                         {% endfor %}
                     </ul>
+                </div>
+             </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if interfaces|length > 0 %}
+    <div class="row" id="nodes">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Interfaces</h3>
+                </div>
+                <div class="panel-body">
+                    {% for item in interfaces %}
+                        {{ interface_condensed(item) }}
+                    {% endfor %}
                 </div>
              </div>
         </div>

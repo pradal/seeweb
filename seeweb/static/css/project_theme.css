@@ -53,14 +53,6 @@ button img {
     width: 32px;
 }
 
-.executable {
-    padding: 1em;
-}
-
-.notebook {
-    padding: 1em;
-}
-
-.workflow {
+.condensed {
     padding: 1em;
 }

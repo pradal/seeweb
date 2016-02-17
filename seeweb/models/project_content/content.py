@@ -6,6 +6,7 @@ from ...models import Base
 
 item_types = ["executables",
               "notebooks",
+              "interfaces",
               "workflow_nodes",
               "workflows"]
 
@@ -18,6 +19,7 @@ class Content(Base):
 
     id = Column(String(255), ForeignKey("projects.id"), primary_key=True)
     executables = relationship("Executable")
+    interfaces = relationship("Interface")
     notebooks = relationship("Notebook")
     workflow_nodes = relationship("WorkflowNode")
     workflows = relationship("Workflow")

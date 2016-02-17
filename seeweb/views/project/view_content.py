@@ -38,8 +38,11 @@ def view(request):
     # explore sources
     cnt = get_project_content(session, project.id)
     if cnt is not None:
-        view_params["sections"] = item_types
+        view_params["sections"] = []
         for item_type in item_types:
-            view_params[item_type] = list(getattr(cnt, item_type))
+            items = list(getattr(cnt, item_type))
+            view_params[item_type] = items
+            if len(items) > 0:
+                view_params["sections"].append(item_type)
 
     return view_params

@@ -4,6 +4,7 @@ from models.auth import Role
 from models.comment import Comment
 from models.project import Project
 from models.project_content.content import Content
+from models.project_content.interface import Interface
 from models.project_content.workflow import Workflow
 from models.project_content.workflow_node import WorkflowNode
 from models.team import Team
@@ -45,6 +46,19 @@ def get_comment(session, cid):
         (Comment) or None if no comment with this id is found
     """
     return _get_by_id(session, Comment, cid)
+
+
+def get_interface(session, iid):
+    """Fetch a given interface from the database.
+
+    Args:
+        session: (DBSession)
+        iid: (int) interface id
+
+    Returns:
+        (Interface) or None if no comment with this id is found
+    """
+    return _get_by_id(session, Interface, iid)
 
 
 def get_project(session, pid):

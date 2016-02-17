@@ -2,7 +2,6 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
-from seeweb.model_edit import remove_team
 import transaction
 
 
@@ -67,7 +66,7 @@ def edit_init(request, session, tab):
         raise HTTPFound(location=loc)
 
     if "confirm_delete" in request.params:
-        if remove_team(session, team):
+        if Team.remove(session, team):
             transaction.commit()
             request.session.flash("Team '%s' deleted" % team.id, 'success')
         else:

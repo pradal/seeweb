@@ -2,6 +2,8 @@ import hashlib
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
+from seeweb.avatar import generate_default_user_avatar
+
 from .described import Described
 from .models import Base, get_by_id
 
@@ -39,6 +41,52 @@ class User(Base, Described):
             (User) or None if no user with this id is found
         """
         return get_by_id(session, User, uid)
+
+    @staticmethod
+    def create(session, uid, name, email):
+        """Create a new user.
+
+        Also create default avatar for this user.
+
+        Args:
+            session: (DBSession)
+            uid: (str) user id
+            name: (str) display name
+            email: (str) email address
+
+        Returns:
+            (User)
+        """
+        user = User(id=uid, name=name, email=email)
+        session.add(user)
+
+        # create avatar
+        generate_default_user_avatar(user)
+
+        return user
+
+    @staticmethod
+    def remove(session, user):
+        """Remove a user from database.
+
+        Also remove user's avatar.
+
+        Raises: UserWarning if user still own projects
+
+        Args:
+            session: (DBSession)
+            user: (User)
+
+        Returns:
+            (True)
+        """
+        del session
+        del user
+
+        # remove avatar
+        # TODO
+
+        return True
 
     def md5(self):
         return hashlib.md5(self.email.strip().lower()).hexdigest()

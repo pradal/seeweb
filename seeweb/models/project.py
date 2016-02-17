@@ -1,6 +1,10 @@
 from sqlalchemy import Boolean, Column, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
+from seeweb.avatar import (generate_default_project_avatar,
+                           remove_project_avatar)
+from seeweb.project.source import delete_source
+
 from .auth import Role
 from .comment import Comment
 from .described import Described
@@ -43,6 +47,68 @@ class Project(Base, Rated, Described):
             (Project) or None if no project with this id is found
         """
         return get_by_id(session, Project, pid)
+
+    @staticmethod
+    def create(session, owner_id, name, public=False):
+        """Create a new project.
+
+        Also create default avatar for the project.
+
+        Args:
+            session: (DBSession)
+            owner_id: (uid) id of future owner of the project
+            name: (str) id the project
+            public: (bool) visibility of the project (default False)
+
+        Returns:
+            (Project): project has been added to user project list
+        """
+        project = Project(id=name,
+                          owner=owner_id,
+                          public=public)
+        session.add(project)
+
+        # create avatar
+        generate_default_project_avatar(project)
+
+        return project
+
+    @staticmethod
+    def remove(session, project):
+        """Remove a given project from the database.
+
+        Also remove project's avatar and all associated comments.
+
+        Args:
+            session: (DBSession)
+            project: (Project)
+
+        Returns:
+            (True)
+        """
+        # remove avatar
+        remove_project_avatar(project)
+
+        # remove sources
+        delete_source(project.id)
+
+        # remove associated comments
+        query = session.query(Comment).filter(Comment.project == project.id)
+        for comment in query.all():
+            session.delete(comment)
+
+        # remove authorizations
+        for actor in project.auth:
+            session.delete(actor)
+
+        # remove dependencies
+        for dep in project.dependencies:
+            session.delete(dep)
+
+        # delete project
+        session.delete(project)
+
+        return True
 
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.

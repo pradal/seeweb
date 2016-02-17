@@ -13,13 +13,13 @@ from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
-from seeweb.model_edit import (create_comment,
-                               create_executable,
+from seeweb.models.comment import Comment
+from seeweb.models.team import Team
+from seeweb.models.project import Project
+from seeweb.models.user import User
+from seeweb.model_edit import (create_executable,
                                create_interface,
                                create_notebook,
-                               create_project,
-                               create_team,
-                               create_user,
                                create_workflow,
                                create_workflow_node,
                                add_project_auth,
@@ -85,48 +85,48 @@ def main(argv=sys.argv):
         session = DBSession()
 
         # users
-        doofus0 = create_user(session,
+        doofus0 = User.create(session,
                               uid='doofus%d' % 0,
                               name="Dummy Doofus",
                               email="dummy.doofus@email.com")
 
-        doofus1 = create_user(session,
+        doofus1 = User.create(session,
                               uid='doofus%d' % 1,
                               name="Dummy Doofus",
                               email="dummy.doofus@email.com")
 
-        doofus2 = create_user(session,
+        doofus2 = User.create(session,
                               uid='doofus%d' % 2,
                               name="Dummy Doofus",
                               email="dummy.doofus@email.com")
 
-        doofus3 = create_user(session,
+        doofus3 = User.create(session,
                               uid='doofus%d' % 3,
                               name="Dummy Doofus",
                               email="dummy.doofus@email.com")
 
-        revesansparole = create_user(session,
+        revesansparole = User.create(session,
                                      uid='revesansparole',
                                      name="Jerome Chopard",
                                      email="revesansparole@gmail.com")
         img = Image.open("seeweb/scripts/avatar/revesansparole.png")
         upload_user_avatar(img, revesansparole)
 
-        pradal = create_user(session,
+        pradal = User.create(session,
                              uid='pradal',
                              name="Christophe Pradal",
                              email="christophe.pradal@inria.fr")
         img = Image.open("seeweb/scripts/avatar/pradal.png")
         upload_user_avatar(img, pradal)
 
-        sartzet = create_user(session,
+        sartzet = User.create(session,
                               uid='sartzet',
                               name="Simon Artzet",
                               email="simon.aertzet@inria.fr")
         img = Image.open("seeweb/scripts/avatar/sartzet.png")
         upload_user_avatar(img, sartzet)
 
-        fboudon = create_user(session,
+        fboudon = User.create(session,
                               uid='fboudon',
                               name="Fred Boudon",
                               email="fred.boudon@inria.fr")
@@ -134,22 +134,22 @@ def main(argv=sys.argv):
         upload_user_avatar(img, fboudon)
 
         for i in range(30):
-            create_user(session,
+            User.create(session,
                         uid="zzzz%d" % i,
                         name="John Doe%d" % i,
                         email="john%d@emil.com" % i)
 
         # teams
-        subsub_team = create_team(session, tid="subsubteam")
+        subsub_team = Team.create(session, tid="subsubteam")
         subsub_team.description = """Test team only"""
         add_team_auth(session, subsub_team, doofus0, Role.edit)
 
-        sub_team = create_team(session, tid="subteam")
+        sub_team = Team.create(session, tid="subteam")
         sub_team.description = """Test team only"""
         add_team_auth(session, sub_team, doofus1, Role.edit)
         add_team_auth(session, sub_team, subsub_team, Role.edit)
 
-        vplants = create_team(session, tid="vplants")
+        vplants = Team.create(session, tid="vplants")
         vplants.description = """
 Team
 ----
@@ -160,7 +160,7 @@ INRIA team based in Montpellier
         add_team_auth(session, vplants, pradal, Role.edit)
         add_team_auth(session, vplants, fboudon, Role.view)
 
-        oa = create_team(session, tid="openalea")
+        oa = Team.create(session, tid="openalea")
         oa.description = """
 Community
 ---------
@@ -180,9 +180,9 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
 
         # projects
         for i in range(5):
-            create_project(session, 'doofus%d' % i, "stoopid%d" % i)
+            Project.create(session, 'doofus%d' % i, "stoopid%d" % i)
 
-        pkglts = create_project(session, 'revesansparole', 'pkglts')
+        pkglts = Project.create(session, 'revesansparole', 'pkglts')
         pkglts.public = True
         pkglts.doc_url = "http://pkglts.readthedocs.org/en/latest/"
         pkglts.src_url = " C:/Users/jerome/Desktop/pkglts/.git"
@@ -207,17 +207,17 @@ This project is part of OpenAlea_.
 
         # comments
         for i in range(4):
-            create_comment(session,
+            Comment.create(session,
                            'pkglts',
                            "doofus%d" % i,
                            "very nasty comment (%d)" % i)
 
-        svgdraw = create_project(session, 'revesansparole', 'svgdraw')
+        svgdraw = Project.create(session, 'revesansparole', 'svgdraw')
         svgdraw.public = True
         svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
         add_project_auth(session, svgdraw, sartzet, Role.view)
 
-        notebook = create_project(session, 'revesansparole', 'notebook')
+        notebook = Project.create(session, 'revesansparole', 'notebook')
         notebook.public = True
         for i in range(5):
             create_executable(session, notebook, "executable%d" % i)
@@ -225,7 +225,7 @@ This project is part of OpenAlea_.
         for i in range(5):
             create_notebook(session, notebook, "notebook%d" % i)
 
-        nodelib = create_project(session, 'revesansparole', 'nodelib')
+        nodelib = Project.create(session, 'revesansparole', 'nodelib')
         nodelib.public = True
 
         create_interface(session, nodelib, "IInt")
@@ -249,7 +249,7 @@ This project is part of OpenAlea_.
             create_workflow_node(session, nodelib, node_def)
             ndefs.append(node_def)
 
-        workflow = create_project(session, 'revesansparole', 'workflow')
+        workflow = Project.create(session, 'revesansparole', 'workflow')
         workflow.public = True
         add_project_auth(session, workflow, oa, Role.view)
 
@@ -272,7 +272,7 @@ This project is part of OpenAlea_.
 
         create_workflow(session, workflow, workflow_def)
 
-        # spl = create_project(session, 'revesansparole', 'sample_project')
+        # spl = Project.create(session, 'revesansparole', 'sample_project')
         # spl.public = True
         # spl.src_url = "C:/Users/jerome/Desktop/see/sample_project/.git"
         # add_dependency(session, spl, "numpy", "1.0")

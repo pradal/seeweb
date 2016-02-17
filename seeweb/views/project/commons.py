@@ -1,7 +1,7 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.model_edit import change_project_owner, remove_project
+from seeweb.model_edit import change_project_owner
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
 from seeweb.models.user import User
@@ -166,7 +166,7 @@ def edit_init(request, session, tab):
             request.session.flash("Action non authorized for you", 'warning')
             raise HTTPFound(location=request.route_url('home'))
 
-        if remove_project(session, project):
+        if Project.remove(session, project):
             transaction.commit()
             request.session.flash("Project '%s' deleted" % project.id,
                                   'success')

@@ -1,6 +1,9 @@
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
+from seeweb.avatar import (generate_default_team_avatar,
+                           remove_team_avatar)
+
 from .auth import Role
 from .described import Described
 from .models import Base, get_by_id
@@ -30,6 +33,52 @@ class Team(Base, Described):
             (Team) or None if no team with this id is found
         """
         return get_by_id(session, Team, tid)
+
+    @staticmethod
+    def create(session, tid):
+        """Create a new team.
+
+        Also create default avatar for the team.
+
+        Args:
+            session: (DBSession)
+            tid: (str) team id
+
+        Returns:
+            (Team)
+        """
+        team = Team(id=tid)
+        session.add(team)
+
+        # create avatar
+        generate_default_team_avatar(team)
+
+        return team
+
+    @staticmethod
+    def remove(session, team):
+        """Remove a given team from the database.
+
+        Also remove team's avatar.
+
+        Args:
+            session: (DBSession)
+            team: (Team)
+
+        Returns:
+            (True)
+        """
+        # remove avatar
+        remove_team_avatar(team)
+
+        # remove authorizations
+        for actor in team.auth:
+            session.delete(actor)
+
+        # remove team
+        session.delete(team)
+
+        return True
 
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.

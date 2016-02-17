@@ -5,7 +5,6 @@ from uuid import uuid1
 
 from .avatar import (generate_default_project_avatar,
                      generate_default_team_avatar,
-                     generate_default_user_avatar,
                      remove_project_avatar,
                      remove_team_avatar)
 from models.actor import PActor, TActor
@@ -20,32 +19,7 @@ from models.project_content.notebook import Notebook
 from models.project_content.workflow_node import WorkflowNode
 from models.project_content.workflow import Workflow
 from models.team import Team
-from models.user import User
 from project.source import delete_source
-
-
-def create_comment(session, pid, uid, msg, ratings=None):
-    """Create a new comment.
-
-    Creation attribute of the comment will be now.
-
-    Args:
-        session: (DNSession)
-        pid: (str) project id
-        uid: (str) user id
-        msg: (str) content of the comment
-        ratings: (list of (str, float)) ratings proposed by this comment
-
-    Returns:
-        (Comment)
-    """
-    cmt = Comment(project=pid, author=uid, creation=datetime.now(), message=msg)
-    session.add(cmt)
-
-    if ratings is not None:
-        cmt.affect_ratings(ratings)
-
-    return cmt
 
 
 def add_content(session, project):
@@ -62,29 +36,6 @@ def add_content(session, project):
     session.add(cnt)
 
     return cnt
-
-
-def create_user(session, uid, name, email):
-    """Create a new user.
-
-    Also create default avatar for this user.
-
-    Args:
-        session: (DBSession)
-        uid: (str) user id
-        name: (str) display name
-        email: (str) email address
-
-    Returns:
-        (User)
-    """
-    user = User(id=uid, name=name, email=email)
-    session.add(user)
-
-    # create avatar
-    generate_default_user_avatar(user)
-
-    return user
 
 
 def _ensure_project_content(session, project):
@@ -207,132 +158,8 @@ def create_workflow(session, project, workflow_def):
     return workflow
 
 
-def create_project(session, owner_id, name, public=False):
-    """Create a new project.
-
-    Also create default avatar for the project.
-
-    Args:
-        session: (DBSession)
-        owner_id: (uid) id of future owner of the project
-        name: (str) id the project
-        public: (bool) visibility of the project (default False)
-
-    Returns:
-        (Project): project has been added to user project list
-    """
-    project = Project(id=name,
-                      owner=owner_id,
-                      public=public)
-    session.add(project)
-
-    # create avatar
-    generate_default_project_avatar(project)
-
-    return project
 
 
-def create_team(session, tid):
-    """Create a new team.
-
-    Also create default avatar for the team.
-
-    Args:
-        session: (DBSession)
-        tid: (str) team id
-
-    Returns:
-        (Team)
-    """
-    team = Team(id=tid)
-    session.add(team)
-
-    # create avatar
-    generate_default_team_avatar(team)
-
-    return team
-
-
-def remove_user(session, user):
-    """Remove a user from database.
-
-    Also remove user's avatar.
-
-    Raises: UserWarning if user still own projects
-
-    Args:
-        session: (DBSession)
-        user: (User)
-
-    Returns:
-        (True)
-    """
-    # remove avatar
-    # TODO
-
-    return True
-
-
-def remove_project(session, project):
-    """Remove a given project from the database.
-
-    Also remove project's avatar and all associated comments.
-
-    Args:
-        session: (DBSession)
-        project: (Project)
-
-    Returns:
-        (True)
-    """
-    # remove avatar
-    remove_project_avatar(project)
-
-    # remove sources
-    delete_source(project.id)
-
-    # remove associated comments
-    query = session.query(Comment).filter(Comment.project == project.id)
-    for comment in query.all():
-        session.delete(comment)
-
-    # remove authorizations
-    for actor in project.auth:
-        session.delete(actor)
-
-    # remove dependencies
-    for dep in project.dependencies:
-        session.delete(dep)
-
-    # delete project
-    session.delete(project)
-
-    return True
-
-
-def remove_team(session, team):
-    """Remove a given team from the database.
-
-    Also remove team's avatar.
-
-    Args:
-        session: (DBSession)
-        team: (Team)
-
-    Returns:
-        (True)
-    """
-    # remove avatar
-    remove_team_avatar(team)
-
-    # remove authorizations
-    for actor in team.auth:
-        session.delete(actor)
-
-    # remove team
-    session.delete(team)
-
-    return True
 
 
 def change_project_owner(session, project, user):

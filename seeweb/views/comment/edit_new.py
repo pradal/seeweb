@@ -1,10 +1,10 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
-from seeweb.models import DBSession
-from seeweb.models import rated
+from seeweb.models import DBSession, rated
+from seeweb.models.comment import Comment
 from seeweb.models.project import Project
-from seeweb.model_edit import create_comment, recompute_project_ratings
+from seeweb.model_edit import recompute_project_ratings
 
 
 def validate_comment(request, session, author, pid, txt, ratings):
@@ -23,7 +23,7 @@ def validate_comment(request, session, author, pid, txt, ratings):
         return False
 
     # register new comment
-    create_comment(session, pid, author, txt, ratings)
+    Comment.create(session, pid, author, txt, ratings)
 
     # recompute project ratings
     recompute_project_ratings(session, project)

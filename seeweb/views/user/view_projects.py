@@ -5,7 +5,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.project import Project
-from seeweb.model_edit import create_project
 
 from .commons import view_init
 
@@ -46,7 +45,7 @@ def register_new_project(request, session, uid):
         return None
 
     # create new project
-    create_project(session, uid, pid)
+    Project.create(session, uid, pid)
     request.session.flash("New project %s created" % pid, 'success')
     return pid
 

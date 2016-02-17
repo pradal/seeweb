@@ -5,7 +5,7 @@ from pyramid.view import view_config
 from seeweb.avatar import upload_project_avatar
 from seeweb.models import DBSession
 from seeweb.models.project import Project
-from seeweb.model_edit import add_dependency, clear_dependencies, create_project
+from seeweb.model_edit import add_dependency, clear_dependencies
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_dependencies,
                                             fetch_gallery,
@@ -67,7 +67,7 @@ def view(request):
         return view_params
 
     # create project
-    project = create_project(session,
+    project = Project.create(session,
                              request.unauthenticated_userid,
                              pid,
                              public=True)

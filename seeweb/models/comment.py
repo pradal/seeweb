@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 
 from .models import Base, get_by_id
@@ -21,6 +22,30 @@ class Comment(Base, Rated):
         return "<Comment(id='%s')>" % self.id
 
     @staticmethod
+    def create(session, pid, uid, msg, ratings=None):
+        """Create a new comment.
+
+        Creation attribute of the comment will be now.
+
+        Args:
+            session: (DNSession)
+            pid: (str) project id
+            uid: (str) user id
+            msg: (str) content of the comment
+            ratings: (list of (str, float)) ratings proposed by this comment
+
+        Returns:
+            (Comment)
+        """
+        cmt = Comment(project=pid, author=uid, creation=datetime.now(), message=msg)
+        session.add(cmt)
+
+        if ratings is not None:
+            cmt.affect_ratings(ratings)
+
+        return cmt
+
+    @staticmethod
     def get(session, cid):
         """Fetch a given comment from the database.
 
@@ -31,6 +56,6 @@ class Comment(Base, Rated):
         Returns:
             (Comment) or None if no comment with this id is found
         """
-        return _get_by_id(session, Comment, cid)
+        return get_by_id(session, Comment, cid)
 
 

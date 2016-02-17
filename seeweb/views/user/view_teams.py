@@ -5,7 +5,7 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
-from seeweb.model_edit import add_team_auth, create_team
+from seeweb.model_edit import add_team_auth
 
 from .commons import view_init
 
@@ -41,7 +41,7 @@ def register_new_team(request, session, user):
         return None
 
     # create new team
-    team = create_team(session, tid)
+    team = Team.create(session, tid)
     add_team_auth(session, team, user, Role.edit)
     request.session.flash("New team %s created" % tid, 'success')
     return tid

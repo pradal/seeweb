@@ -5,7 +5,6 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.project import Project
-from seeweb.model_edit import create_project
 from seeweb.project.source import upload_src_file
 
 
@@ -53,7 +52,7 @@ def view(request):
         return view_params
 
     # create project
-    project = create_project(session,
+    project = Project.create(session,
                              request.unauthenticated_userid,
                              pid,
                              public=False)

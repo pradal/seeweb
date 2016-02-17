@@ -4,7 +4,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.team import Team
 from seeweb.models.user import User
-from seeweb.model_edit import create_user
 
 from seeweb.security import (is_good_email,
                              is_good_id,
@@ -56,7 +55,7 @@ def view(request):
             return view_params
 
         # register new user
-        create_user(session, uid, name, email)
+        User.create(session, uid, name, email)
         return log_user_in(request, uid, True)
 
     else:

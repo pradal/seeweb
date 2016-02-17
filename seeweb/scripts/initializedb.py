@@ -178,6 +178,9 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
         add_team_auth(session, oa, sub_team, Role.edit)
 
         # projects
+        for i in range(5):
+            create_project(session, 'doofus%d' % i, "stoopid%d" % i)
+
         pkglts = create_project(session, 'revesansparole', 'pkglts')
         pkglts.public = True
         pkglts.doc_url = "http://pkglts.readthedocs.org/en/latest/"
@@ -201,22 +204,30 @@ This project is part of OpenAlea_.
             img = Image.open("seeweb/scripts/gallery/%s" % img_name)
             add_gallery_image(pkglts, img, img_name)
 
+        # comments
+        for i in range(4):
+            create_comment(session,
+                           'pkglts',
+                           "doofus%d" % i,
+                           "very nasty comment (%d)" % i)
+
         svgdraw = create_project(session, 'revesansparole', 'svgdraw')
         svgdraw.public = True
         svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
         add_project_auth(session, svgdraw, sartzet, Role.view)
 
-        workflow = create_project(session, 'revesansparole', 'workflow')
-        workflow.public = True
-        add_project_auth(session, workflow, oa, Role.view)
+        notebook = create_project(session, 'revesansparole', 'notebook')
+        notebook.public = True
         for i in range(5):
-            create_executable(session, workflow, "executable%d" % i)
+            create_executable(session, notebook, "executable%d" % i)
 
         for i in range(5):
-            create_notebook(session, workflow, "notebook%d" % i)
+            create_notebook(session, notebook, "notebook%d" % i)
+
+        nodelib = create_project(session, 'revesansparole', 'nodelib')
+        nodelib.public = True
 
         ndefs = []
-
         for i in range(3):
             node_def = dict(id=uuid1().hex,
                             name="read%d" % i,
@@ -231,8 +242,12 @@ This project is part of OpenAlea_.
                             outputs=[dict(name="ret", interface="IInt",
                                           descr="important result")])
 
-            create_workflow_node(session, workflow, node_def)
+            create_workflow_node(session, nodelib, node_def)
             ndefs.append(node_def)
+
+        workflow = create_project(session, 'revesansparole', 'workflow')
+        workflow.public = True
+        add_project_auth(session, workflow, oa, Role.view)
 
         workflow_def = dict(id=uuid1().hex,
                             name="sample_workflow",
@@ -253,18 +268,8 @@ This project is part of OpenAlea_.
 
         create_workflow(session, workflow, workflow_def)
 
-        spl = create_project(session, 'revesansparole', 'sample_project')
-        spl.public = True
-        spl.src_url = "C:/Users/jerome/Desktop/see/sample_project/.git"
-        add_dependency(session, spl, "numpy", "1.0")
-        add_dependency(session, spl, "pkglts", "1.0")
-
-        for i in range(5):
-            create_project(session, 'doofus%d' % i, "stoopid%d" % i)
-
-        # comments
-        for i in range(4):
-            create_comment(session,
-                           'pkglts',
-                           "doofus%d" % i,
-                           "very nasty comment (%d)" % i)
+        # spl = create_project(session, 'revesansparole', 'sample_project')
+        # spl.public = True
+        # spl.src_url = "C:/Users/jerome/Desktop/see/sample_project/.git"
+        # add_dependency(session, spl, "numpy", "1.0")
+        # add_dependency(session, spl, "pkglts", "1.0")

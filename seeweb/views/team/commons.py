@@ -2,7 +2,6 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
-from seeweb.model_access import team_access_role
 from seeweb.model_edit import remove_team
 import transaction
 
@@ -33,7 +32,7 @@ def view_init(request, session, tab):
 
     # allow edition
     allow_edit = (current_uid is not None and
-                  team_access_role(session, team, current_uid) == Role.edit)
+                  team.access_role(session, current_uid) == Role.edit)
 
     view_params = {"team": team,
                    "tabs": tabs,

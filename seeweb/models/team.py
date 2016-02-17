@@ -70,3 +70,30 @@ class Team(Base, Described):
                 actors.extend(Team.get(session, actor.user).auth)
 
         return False
+
+    def access_role(self, session, uid):
+        """Check the type of access granted to a user.
+
+        Args:
+            session: (DBSession)
+            uid: id of user to test
+
+        Returns:
+            (Role) type of role given to this user
+        """
+        # check team auth for this user, supersede sub_team auth
+        actor = self.get_actor(uid)
+        if actor is not None:
+            return actor.role
+
+        # check team auth in subteams
+        role = Role.view  # teams are public by default
+
+        for actor in self.auth:
+            if actor.is_team:
+                team = Team.get(session, actor.user)
+                if team.has_member(session, uid):
+                    role = max(role, actor.role)
+                    # useful in case user is member of multiple teams
+
+        return role

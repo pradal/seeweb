@@ -5,7 +5,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
-from seeweb.model_access import team_access_role
 from seeweb.model_edit import add_team_auth, create_team
 
 from .commons import view_init
@@ -63,7 +62,7 @@ def view(request):
     teams = []
     for actor in user.teams:
         team = Team.get(session, actor.team)
-        role = team_access_role(session, team, request.unauthenticated_userid)
+        role = team.access_role(session, request.unauthenticated_userid)
         if role != Role.denied:
             teams.append((role, team))
 

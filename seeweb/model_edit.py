@@ -158,45 +158,6 @@ def create_workflow(session, project, workflow_def):
     return workflow
 
 
-
-
-
-
-
-def add_project_auth(session, project, user, role):
-    """Add a new authorization for this project
-
-    Args:
-        session: (DBsession)
-        project: (Project)
-        user: (User|Team)
-        role: (Role) role to grant to user
-
-    Returns:
-        None
-    """
-    actor = PActor(project=project.id, user=user.id, role=role)
-    session.add(actor)
-    actor.is_team = isinstance(user, Team)
-
-
-def add_team_auth(session, team, user, role):
-    """Add a new authorization for this project
-
-    Args:
-        session: (DBsession)
-        team: (Team)
-        user: (User|Team)
-        role: (Role) role to grant to user
-
-    Returns:
-        None
-    """
-    actor = TActor(team=team.id, user=user.id, role=role)
-    session.add(actor)
-    actor.is_team = isinstance(user, Team)
-
-
 def remove_auth(session, parent, uid):
     """Remove access granted to user
 

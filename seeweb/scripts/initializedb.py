@@ -22,8 +22,6 @@ from seeweb.model_edit import (create_executable,
                                create_notebook,
                                create_workflow,
                                create_workflow_node,
-                               add_project_auth,
-                               add_team_auth,
                                add_dependency)
 from seeweb.project.gallery import add_gallery_image
 
@@ -142,12 +140,12 @@ def main(argv=sys.argv):
         # teams
         subsub_team = Team.create(session, tid="subsubteam")
         subsub_team.description = """Test team only"""
-        add_team_auth(session, subsub_team, doofus0, Role.edit)
+        subsub_team.add_auth(session, doofus0, Role.edit)
 
         sub_team = Team.create(session, tid="subteam")
         sub_team.description = """Test team only"""
-        add_team_auth(session, sub_team, doofus1, Role.edit)
-        add_team_auth(session, sub_team, subsub_team, Role.edit)
+        sub_team.add_auth(session, doofus1, Role.edit)
+        sub_team.add_auth(session, subsub_team, Role.edit)
 
         vplants = Team.create(session, tid="vplants")
         vplants.description = """
@@ -157,8 +155,8 @@ INRIA team based in Montpellier
 
         """
 
-        add_team_auth(session, vplants, pradal, Role.edit)
-        add_team_auth(session, vplants, fboudon, Role.view)
+        vplants.add_auth(session, pradal, Role.edit)
+        vplants.add_auth(session, fboudon, Role.view)
 
         oa = Team.create(session, tid="openalea")
         oa.description = """
@@ -172,11 +170,11 @@ OpenAlea includes modules to analyse, visualize and model the functioning and gr
 
         """
 
-        add_team_auth(session, oa, revesansparole, Role.edit)
-        add_team_auth(session, oa, pradal, Role.view)
-        add_team_auth(session, oa, sartzet, Role.view)
-        add_team_auth(session, oa, vplants, Role.edit)
-        add_team_auth(session, oa, sub_team, Role.edit)
+        oa.add_auth(session, revesansparole, Role.edit)
+        oa.add_auth(session, pradal, Role.view)
+        oa.add_auth(session, sartzet, Role.view)
+        oa.add_auth(session, vplants, Role.edit)
+        oa.add_auth(session, sub_team, Role.edit)
 
         # projects
         for i in range(5):
@@ -196,7 +194,7 @@ This project is part of OpenAlea_.
 .. _OpenAlea: http://localhost:6543/team/openalea
 
         """)
-        add_project_auth(session, pkglts, sartzet, Role.edit)
+        pkglts.add_auth(session, sartzet, Role.edit)
         for img_name in ["Chrysanthemum.png",
                          "Desert.png",
                          "Jellyfish.png",
@@ -215,7 +213,7 @@ This project is part of OpenAlea_.
         svgdraw = Project.create(session, 'revesansparole', 'svgdraw')
         svgdraw.public = True
         svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
-        add_project_auth(session, svgdraw, sartzet, Role.view)
+        svgdraw.add_auth(session, sartzet, Role.view)
 
         notebook = Project.create(session, 'revesansparole', 'notebook')
         notebook.public = True
@@ -251,7 +249,7 @@ This project is part of OpenAlea_.
 
         workflow = Project.create(session, 'revesansparole', 'workflow')
         workflow.public = True
-        add_project_auth(session, workflow, oa, Role.view)
+        workflow.add_auth(session, oa, Role.view)
 
         workflow_def = dict(id=uuid1().hex,
                             name="sample_workflow",

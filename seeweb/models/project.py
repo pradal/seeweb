@@ -5,6 +5,7 @@ from seeweb.avatar import (generate_default_project_avatar,
                            remove_project_avatar)
 from seeweb.project.source import delete_source
 
+from .actor import PActor
 from .auth import Role
 from .comment import Comment
 from .described import Described
@@ -109,6 +110,21 @@ class Project(Base, Rated, Described):
         session.delete(project)
 
         return True
+
+    def add_auth(self, session, user, role):
+        """Add a new authorization for this project
+
+        Args:
+            session: (DBsession)
+            user: (User|Team)
+            role: (Role) role to grant to user
+
+        Returns:
+            None
+        """
+        actor = PActor(project=self.id, user=user.id, role=role)
+        session.add(actor)
+        actor.is_team = isinstance(user, Team)
 
     def change_owner(self, session, user):
         """Change ownership of the project

@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from seeweb.avatar import (generate_default_team_avatar,
                            remove_team_avatar)
 
+from .actor import TActor
 from .auth import Role
 from .described import Described
 from .models import Base, get_by_id
@@ -79,6 +80,21 @@ class Team(Base, Described):
         session.delete(team)
 
         return True
+
+    def add_auth(self, session, user, role):
+        """Add a new authorization for this team
+
+        Args:
+            session: (DBsession)
+            user: (User|Team)
+            role: (Role) role to grant to user
+
+        Returns:
+            None
+        """
+        actor = TActor(team=self.id, user=user.id, role=role)
+        session.add(actor)
+        actor.is_team = isinstance(user, Team)
 
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.

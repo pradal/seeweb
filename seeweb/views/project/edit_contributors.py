@@ -5,7 +5,7 @@ from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.team import Team
 from seeweb.models.user import User
-from seeweb.model_edit import add_project_auth, remove_auth, update_auth
+from seeweb.model_edit import remove_auth, update_auth
 
 from .commons import edit_init
 
@@ -30,7 +30,7 @@ def register_new_user(request, session, project, new_uid):
             request.session.flash("%s already a member" % new_uid, 'warning')
             return False
 
-        add_project_auth(session, project, user, role)
+        project.add_auth(session, user, role)
         request.session.flash("New member %s added" % new_uid, 'success')
         return True
 
@@ -40,7 +40,7 @@ def register_new_user(request, session, project, new_uid):
             request.session.flash("%s already a member" % new_uid, 'warning')
             return False
 
-        add_project_auth(session, project, team, role)
+        project.add_auth(session, team, role)
         request.session.flash("New member %s added" % new_uid, 'success')
         return True
 

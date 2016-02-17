@@ -1,8 +1,8 @@
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.models.project_content.content import item_types
-from seeweb.model_access import get_project, get_project_content
+from seeweb.models.project import Project
+from seeweb.models.project_content.content import Content, item_types
 from seeweb.project.source import parse_vcs, parse_hostname
 
 from .commons import view_init
@@ -27,7 +27,7 @@ def view(request):
     # dependencies
     dependencies = []
     for dep in project.dependencies:
-        pjt = get_project(session, dep.name)
+        pjt = Project.get(session, dep.name)
         if pjt is None:
             dependencies.append((dep.name, "ver: %s" % dep.version, False))
         else:
@@ -36,7 +36,7 @@ def view(request):
     view_params["dependencies"] = dependencies
 
     # explore sources
-    cnt = get_project_content(session, project.id)
+    cnt = Content.get(session, project.id)
     if cnt is not None:
         view_params["sections"] = []
         for item_type in item_types:

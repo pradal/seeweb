@@ -4,7 +4,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_project
+from seeweb.models.project import Project
 from seeweb.model_edit import create_project
 from seeweb.project.source import upload_src_file
 
@@ -38,7 +38,7 @@ def view(request):
         request.session.flash("Project names can not contains spaces", 'warning')
         return view_params
 
-    project = get_project(session, pid)
+    project = Project.get(session, pid)
     if project is not None:
         if project.public:
             project_url = request.route_url('project_view_home',

@@ -3,7 +3,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_user
+from seeweb.models.user import User
 
 from seeweb.security import log_user_in, check_password
 
@@ -18,7 +18,7 @@ def view(request):
         session = DBSession()
 
         uid = request.params["user_id"]
-        user = get_user(session, uid)
+        user = User.get(session, uid)
         if user is None:
             msg = "No such user! <a href='%s'>Register?</a>" % request.route_url('user_register')
             request.session.flash(Markup(msg), 'warning')

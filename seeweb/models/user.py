@@ -3,7 +3,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 from .described import Described
-from .models import Base
+from .models import Base, get_by_id
 
 
 class User(Base, Described):
@@ -26,6 +26,19 @@ class User(Base, Described):
         return "<User(id='%s', name='%s', email='%s')>" % (self.id,
                                                            self.name,
                                                            self.email)
+
+    @staticmethod
+    def get(session, uid):
+        """Fetch a given user in the database.
+
+        Args:
+            session: (DBSession)
+            uid: (str) user id
+
+        Returns:
+            (User) or None if no user with this id is found
+        """
+        return get_by_id(session, User, uid)
 
     def md5(self):
         return hashlib.md5(self.email.strip().lower()).hexdigest()

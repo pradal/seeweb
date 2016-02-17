@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 
-from .models import Base
+from .models import Base, get_by_id
 from .rated import Rated
 
 
@@ -19,3 +19,18 @@ class Comment(Base, Rated):
 
     def __repr__(self):
         return "<Comment(id='%s')>" % self.id
+
+    @staticmethod
+    def get(session, cid):
+        """Fetch a given comment from the database.
+
+        Args:
+            session: (DBSession)
+            cid: (int) comment id
+
+        Returns:
+            (Comment) or None if no comment with this id is found
+        """
+        return _get_by_id(session, Comment, cid)
+
+

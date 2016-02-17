@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship
 
 from .described import Described
-from .models import Base
+from .models import Base, get_by_id
 
 
 class Team(Base, Described):
@@ -16,6 +16,20 @@ class Team(Base, Described):
 
     def __repr__(self):
         return "<Team(id='%s')>" % self.id
+
+    @staticmethod
+    def get(session, tid):
+        """Fetch a given team in the database.
+
+        Args:
+            session: (DBSession)
+            tid: (str) team id
+
+        Returns:
+            (Team) or None if no team with this id is found
+        """
+        return get_by_id(session, Team, tid)
+
 
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.

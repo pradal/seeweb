@@ -1,7 +1,8 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.models.auth import Role
-from seeweb.model_access import get_team, team_access_role
+from seeweb.models.team import Team
+from seeweb.model_access import team_access_role
 from seeweb.model_edit import remove_team
 import transaction
 
@@ -23,7 +24,7 @@ def view_init(request, session, tab):
         (Team, dict of (str: any)): team, view_params
     """
     tid = request.matchdict['tid']
-    team = get_team(session, tid)
+    team = Team.get(session, tid)
     if team is None:
         request.session.flash("Team %s does not exists" % tid, 'warning')
         raise HTTPFound(location=request.route_url('home'))

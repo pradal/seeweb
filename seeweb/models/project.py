@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
 from .described import Described
-from .models import Base
+from .models import Base, get_by_id
 from .rated import Rated
 
 
@@ -27,6 +27,19 @@ class Project(Base, Rated, Described):
         return "<Project(id='%s', owner='%s', public='%s')>" % (self.id,
                                                                 self.owner,
                                                                 self.public)
+
+    @staticmethod
+    def get(session, pid):
+        """Fetch a given project in the database.
+
+        Args:
+            session: (DBSession)
+            pid: (str) project id
+
+        Returns:
+            (Project) or None if no project with this id is found
+        """
+        return get_by_id(session, Project, pid)
 
     def get_actor(self, uid):
         """Retrieve actor associated with this uid.

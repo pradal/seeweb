@@ -2,7 +2,8 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.model_access import get_user, project_access_role
+from seeweb.models.user import User
+from seeweb.model_access import project_access_role
 
 from .commons import view_init
 
@@ -16,7 +17,7 @@ def view(request):
     projects = {}
     for actor in team.auth:
         if actor.role != Role.denied and not actor.is_team:
-            user = get_user(session, actor.user)
+            user = User.get(session, actor.user)
 
             for pjt in user.projects:
                 if pjt.id not in projects:

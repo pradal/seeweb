@@ -2,7 +2,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_team, get_user
+from seeweb.models.team import Team
+from seeweb.models.user import User
 from seeweb.model_edit import create_user
 
 from seeweb.security import (is_good_email,
@@ -42,13 +43,13 @@ def view(request):
 
         # check user does not exist already
         # as a user
-        user = get_user(session, uid)
+        user = User.get(session, uid)
         if user is not None:
             request.session.flash("User %s already exists" % uid, 'warning')
             return view_params
 
         # as a team
-        team = get_team(session, uid)
+        team = Team.get(session, uid)
         if team is not None:
             msg = "User %s already exists as a team name" % uid
             request.session.flash(msg, 'warning')

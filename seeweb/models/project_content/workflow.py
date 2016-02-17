@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer
 
-from ...models import Base
+from seeweb.models.models import Base, get_by_id
 from .content_item import ContentItem
 
 
@@ -13,3 +13,17 @@ class Workflow(Base, ContentItem):
 
     def __repr__(self):
         return "<Workflow(id='%s')>" % self.id
+
+    @staticmethod
+    def get(session, wid):
+        """Fetch a given workflow in the database.
+
+        Args:
+            session: (DBSession)
+            wid: (str) workflow id
+
+        Returns:
+            (Workflow) or None if no workflow with this id is found
+        """
+        return get_by_id(session, Workflow, wid)
+

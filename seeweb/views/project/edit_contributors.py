@@ -3,7 +3,8 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.model_access import get_team, get_user
+from seeweb.models.team import Team
+from seeweb.models.user import User
 from seeweb.model_edit import add_project_auth, remove_auth, update_auth
 
 from .commons import edit_init
@@ -23,7 +24,7 @@ def register_new_user(request, session, project, new_uid):
     """
     role = Role.from_str(request.params.get("role_new", "denied"))
 
-    user = get_user(session, new_uid)
+    user = User.get(session, new_uid)
     if user is not None:
         if project.get_actor(new_uid) is not None:
             request.session.flash("%s already a member" % new_uid, 'warning')
@@ -33,7 +34,7 @@ def register_new_user(request, session, project, new_uid):
         request.session.flash("New member %s added" % new_uid, 'success')
         return True
 
-    team = get_team(session, new_uid)
+    team = Team.get(session, new_uid)
     if team is not None:
         if project.get_actor(new_uid) is not None:
             request.session.flash("%s already a member" % new_uid, 'warning')

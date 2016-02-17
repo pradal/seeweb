@@ -2,7 +2,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_comment, get_project
+from seeweb.models.comment import Comment
+from seeweb.models.project import Project
 from seeweb.model_edit import recompute_project_ratings
 
 
@@ -11,7 +12,7 @@ from seeweb.model_edit import recompute_project_ratings
 def view(request):
     session = DBSession()
     cid = request.matchdict['cid']
-    comment = get_comment(session, cid)
+    comment = Comment.get(session, cid)
     if comment is None:
         request.session.flash("Invalid comment", 'warning')
         return HTTPFound(location=request.session['last'])
@@ -37,7 +38,7 @@ def view(request):
 
         # recompute project ratings
         recompute_project_ratings(session,
-                                  get_project(session, comment.project))
+                                  Project.get(session, comment.project))
 
         request.session.flash("Comment voted %s" % vote, 'success')
         return HTTPFound(location=request.session['last'])

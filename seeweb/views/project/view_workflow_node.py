@@ -2,7 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.model_access import get_workflow_node
+from seeweb.models.project_content.workflow_node import WorkflowNode
 
 from .commons import init_min
 
@@ -14,7 +14,7 @@ def view(request):
     project, role, view_params = init_min(request, session)
 
     nid = request.matchdict['nid']
-    node = get_workflow_node(session, nid)
+    node = WorkflowNode.get(session, nid)
     if node is None:
         loc = request.route_url('project_view_content', pid=project.id)
         return HTTPFound(location=loc)

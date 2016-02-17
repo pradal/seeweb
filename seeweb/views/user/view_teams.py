@@ -4,7 +4,8 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.model_access import get_team, team_access_role
+from seeweb.models.team import Team
+from seeweb.model_access import team_access_role
 from seeweb.model_edit import add_team_auth, create_team
 
 from .commons import view_init
@@ -32,7 +33,7 @@ def register_new_team(request, session, user):
         request.session.flash(msg, 'warning')
         return None
 
-    team = get_team(session, tid)
+    team = Team.get(session, tid)
     if team is not None:
         team_url = request.route_url('team_view_home', tid=tid)
         msg = "Team <a href='%s'>'%s'</a> already exists" % (team_url,
@@ -61,7 +62,7 @@ def view(request):
 
     teams = []
     for actor in user.teams:
-        team = get_team(session, actor.team)
+        team = Team.get(session, actor.team)
         role = team_access_role(session, team, request.unauthenticated_userid)
         if role != Role.denied:
             teams.append((role, team))

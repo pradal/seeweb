@@ -1,6 +1,6 @@
 from pyramid.httpexceptions import HTTPFound
 
-from seeweb.model_access import get_user
+from seeweb.models.user import User
 
 
 tabs = [('Home', 'home'),
@@ -20,7 +20,7 @@ def view_init(request, session, tab):
         (User, dict of (str: any)): user, view_params
     """
     uid = request.matchdict['uid']
-    user = get_user(session, uid)
+    user = User.get(session, uid)
     if user is None:
         request.session.flash("User %s does not exists" % uid, 'warning')
         raise HTTPFound(location=request.route_url('home'))

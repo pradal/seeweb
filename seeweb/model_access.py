@@ -2,141 +2,7 @@
 """
 from models.auth import Role
 from models.comment import Comment
-from models.project import Project
-from models.project_content.content import Content
-from models.project_content.interface import Interface
-from models.project_content.workflow import Workflow
-from models.project_content.workflow_node import WorkflowNode
 from models.team import Team
-from models.user import User
-
-
-def _get_by_id(session, object_type, obj_id):
-    """Internal function used to retrieve an object from
-    the database using its id.
-
-    Args:
-        session: (DBSession)
-        object_type: (Class)
-        obj_id: (any)
-
-    Returns:
-        (Object or None) if no object found
-    """
-    if obj_id is None:
-        return None
-
-    items = session.query(object_type).filter(object_type.id == obj_id).all()
-    if len(items) == 0:
-        return None
-
-    item, = items
-
-    return item
-
-
-def get_comment(session, cid):
-    """Fetch a given comment from the database.
-
-    Args:
-        session: (DBSession)
-        cid: (int) comment id
-
-    Returns:
-        (Comment) or None if no comment with this id is found
-    """
-    return _get_by_id(session, Comment, cid)
-
-
-def get_interface(session, iid):
-    """Fetch a given interface from the database.
-
-    Args:
-        session: (DBSession)
-        iid: (int) interface id
-
-    Returns:
-        (Interface) or None if no comment with this id is found
-    """
-    return _get_by_id(session, Interface, iid)
-
-
-def get_project(session, pid):
-    """Fetch a given project in the database.
-
-    Args:
-        session: (DBSession)
-        pid: (str) project id
-
-    Returns:
-        (Project) or None if no project with this id is found
-    """
-    return _get_by_id(session, Project, pid)
-
-
-def get_project_content(session, pid):
-    """Fetch the content of a given project in the database.
-
-    Args:
-        session: (DBSession)
-        pid: (str) project id
-
-    Returns:
-        (Content) or None if no project with this id is found
-    """
-    return _get_by_id(session, Content, pid)
-
-
-def get_team(session, tid):
-    """Fetch a given team in the database.
-
-    Args:
-        session: (DBSession)
-        tid: (str) team id
-
-    Returns:
-        (Team) or None if no team with this id is found
-    """
-    return _get_by_id(session, Team, tid)
-
-
-def get_user(session, uid):
-    """Fetch a given user in the database.
-
-    Args:
-        session: (DBSession)
-        uid: (str) user id
-
-    Returns:
-        (User) or None if no user with this id is found
-    """
-    return _get_by_id(session, User, uid)
-
-
-def get_workflow(session, wid):
-    """Fetch a given workflow in the database.
-
-    Args:
-        session: (DBSession)
-        wid: (str) workflow id
-
-    Returns:
-        (Workflow) or None if no workflow with this id is found
-    """
-    return _get_by_id(session, Workflow, wid)
-
-
-def get_workflow_node(session, nid):
-    """Fetch a given workflow node in the database.
-
-    Args:
-        session: (DBSession)
-        nid: (str) workflow node id
-
-    Returns:
-        (WorkflowNode) or None if no node with this id is found
-    """
-    return _get_by_id(session, WorkflowNode, nid)
 
 
 def fetch_comments(session, pid, limit=None):
@@ -182,7 +48,7 @@ def is_member(session, team, uid):
             return actor.role != Role.denied
 
         if actor.is_team:
-            actors.extend(get_team(session, actor.user).auth)
+            actors.extend(Team.get(session, actor.user).auth)
 
     return False
 
@@ -209,7 +75,7 @@ def is_contributor(session, project, uid):
             return actor.role != Role.denied
 
         if actor.is_team:
-            actors.extend(get_team(session, actor.user).auth)
+            actors.extend(Team.get(session, actor.user).auth)
 
     return False
 
@@ -243,7 +109,7 @@ def project_access_role(session, project, uid):
     for actor in project.auth:
         if actor.is_team:
             tid = actor.user
-            if is_member(session, get_team(session, tid), uid):
+            if is_member(session, Team.get(session, tid), uid):
                 role = max(role, actor.role)
                 # useful in case user is member of multiple teams
 
@@ -272,7 +138,7 @@ def team_access_role(session, team, uid):
     for actor in team.auth:
         if actor.is_team:
             tid = actor.user
-            if is_member(session, get_team(session, tid), uid):
+            if is_member(session, Team.get(session, tid), uid):
                 role = max(role, actor.role)
                 # useful in case user is member of multiple teams
 

@@ -1,12 +1,12 @@
 from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
-from seeweb.model_access import (get_project,
-                                 get_user,
-                                 is_installed,
+from seeweb.model_access import (is_installed,
                                  project_access_role)
 from seeweb.model_edit import change_project_owner, remove_project
 from seeweb.models.auth import Role
+from seeweb.models.project import Project
+from seeweb.models.user import User
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
@@ -33,7 +33,7 @@ def init_min(request, session):
     """
     pid = request.matchdict['pid']
 
-    project = get_project(session, pid)
+    project = Project.get(session, pid)
     if project is None:
         request.session.flash("Project %s does not exists" % pid, 'warning')
         raise HTTPFound(location=request.route_url('home'))
@@ -66,7 +66,7 @@ def view_init(request, session, tab):
     if request.unauthenticated_userid is None:  # TODO can do better
         install_action = None
     else:
-        user = get_user(session, request.unauthenticated_userid)
+        user = User.get(session, request.unauthenticated_userid)
         if is_installed(session, user, project):
             install_action = "uninstall"
         else:
@@ -123,7 +123,7 @@ def edit_init(request, session, tab):
             request.session.flash("Action non authorized for you", 'warning')
             raise HTTPFound(location=request.route_url('home'))
 
-        user = get_user(session, request.params["new_owner"])
+        user = User.get(session, request.params["new_owner"])
         if user is None:
             msg = "User '%s' is unknown" % request.params["new_owner"]
             request.session.flash(msg, 'warning')

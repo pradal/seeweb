@@ -4,7 +4,8 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.model_access import get_project, project_access_role
+from seeweb.models.project import Project
+from seeweb.model_access import project_access_role
 from seeweb.model_edit import create_project
 
 from .commons import view_init
@@ -32,7 +33,7 @@ def register_new_project(request, session, uid):
         request.session.flash(msg, 'warning')
         return None
 
-    project = get_project(session, pid)
+    project = Project.get(session, pid)
     if project is not None:
         if project.public:
             project_url = request.route_url('project_view_home',
@@ -77,7 +78,7 @@ def view(request):
 
     installed_projects = []
     for installed in user.installed:
-        project = get_project(session, installed.project)
+        project = Project.get(session, installed.project)
         installed_projects.append((installed.date.strftime("%Y-%m-%d"),
                                    project))
 

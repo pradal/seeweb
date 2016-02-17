@@ -8,7 +8,7 @@ from .avatar import (generate_default_project_avatar,
                      generate_default_user_avatar,
                      remove_project_avatar,
                      remove_team_avatar)
-from .model_access import fetch_comments, get_project_content
+from .model_access import fetch_comments
 from models.actor import PActor, TActor
 from models.comment import Comment
 from models.dependency import Dependency
@@ -98,7 +98,7 @@ def _ensure_project_content(session, project):
     Returns:
         (ProjectContent)
     """
-    cnt = get_project_content(session, project.id)
+    cnt = Content.get(session, project.id)
     if cnt is None:
         cnt = add_content(session, project)
 
@@ -529,7 +529,7 @@ def clear_project_content(session, project):
     Returns:
         None
     """
-    cnt = get_project_content(session, project.id)
+    cnt = Content.get(session, project.id)
     if cnt is None:
         return
 

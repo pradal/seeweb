@@ -4,7 +4,7 @@ from pyramid.view import view_config
 
 from seeweb.avatar import upload_project_avatar
 from seeweb.models import DBSession
-from seeweb.model_access import get_project
+from seeweb.models.project import Project
 from seeweb.model_edit import add_dependency, clear_dependencies, create_project
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_dependencies,
@@ -52,7 +52,7 @@ def view(request):
         request.session.flash("Project names can not contains spaces", 'warning')
         return view_params
 
-    project = get_project(session, pid)
+    project = Project.get(session, pid)
     if project is not None:
         if project.public:
             project_url = request.route_url('project_view_home',

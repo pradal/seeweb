@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
 
-from ...models import Base
+from seeweb.models.models import Base, get_by_id
 
 
 item_types = ["executables",
@@ -26,3 +26,18 @@ class Content(Base):
 
     def __repr__(self):
         return "<Content(id='%s')>" % self.id
+
+    @staticmethod
+    def get(session, pid):
+        """Fetch the content of a given project in the database.
+
+        Args:
+            session: (DBSession)
+            pid: (str) project id
+
+        Returns:
+            (Content) or None if no project with this id is found
+        """
+        return get_by_id(session, Content, pid)
+
+

@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models import rated
-from seeweb.model_access import get_project
+from seeweb.models.project import Project
 from seeweb.model_edit import create_comment, recompute_project_ratings
 
 
@@ -13,7 +13,7 @@ def validate_comment(request, session, author, pid, txt, ratings):
         request.session.flash("Action non authorized", 'warning')
         raise HTTPFound(location=request.session['last'])
 
-    project = get_project(session, pid)
+    project = Project.get(session, pid)
     if project is None:
         request.session.flash("Comment associated to unknown project", 'warning')
         raise HTTPFound(location=request.session['last'])

@@ -19,7 +19,7 @@
           <tbody>
             <tr>
                 <td>
-                    <input type='text' name='new_member' placeholder='new user id' />
+                    <input id="new_member" type='text' name='new_member' placeholder='new user id' />
                 </td>
                 <td>
                     <select name="role_new">
@@ -63,4 +63,12 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block project_js %}
+<script type="text/javascript" language="JavaScript">
+    window.onload = function() {
+        document.getElementById("new_member").focus();
+    };
+</script>
 {% endblock %}

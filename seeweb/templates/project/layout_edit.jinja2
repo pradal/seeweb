@@ -15,6 +15,8 @@
             <div class="owner pull-right">
                 <p>Owner: <a href="{{ request.route_url('user_view_home', uid=project.owner) }}">{{ project.owner }}</a>
                     {% if request.unauthenticated_userid == project.owner %}
+                        <!-- protect form submission when hitting enter -->
+                        <button style="position: fixed; left: -1000px; top: -1000px;" type="submit" name="update" value="default action"/>
                         <button  class="btn btn-default"  data-toggle="modal" data-target="#transfer_ownership">Transfer ownership</button>
                     {% endif %}
                 </p>

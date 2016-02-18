@@ -3,10 +3,9 @@
 from os import walk
 from os.path import join as pj
 
-from seeweb.model_edit import (clear_project_content,
-                               create_notebook,
-                               create_workflow_node,
-                               create_workflow)
+from seeweb.models.project_content.notebook import Notebook
+from seeweb.models.project_content.workflow import Workflow
+from seeweb.models.project_content.workflow_node import WorkflowNode
 from seeweb.project.source import has_source, source_pth
 
 import notebook
@@ -14,9 +13,9 @@ import workflow_node
 import workflow
 
 
-fac = dict(notebook=(notebook, create_notebook),
-           workflow_node=(workflow_node, create_workflow_node),
-           workflow=(workflow, create_workflow))
+fac = dict(notebook=(notebook, Notebook.create),
+           workflow=(workflow, Workflow.create),
+           workflow_node=(workflow_node, WorkflowNode.create))
 
 
 def explore_sources(session, project):
@@ -38,7 +37,7 @@ def explore_sources(session, project):
 
     pth = source_pth(project.id).replace("\\", "/")
 
-    clear_project_content(session, project)
+    project.clear_content(session)
     n = len(pth)
 
     for root, dirnames, filenames in walk(pth):
@@ -65,7 +64,7 @@ def explore_sources(session, project):
     #     create_notebook(session, project, notebook[1])
     #
     # for node in find_workflow_nodes(project.id):
-    #     create_workflow_node(session, project, node['name'])
+    #     WorkflowNode.create(session, project, node['name'])
     #
     # for workflow in find_workflows(project.id):
-    #     create_workflow(session, project, workflow['name'])
+    #     Workflow.create(session, project, workflow['name'])

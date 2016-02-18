@@ -17,11 +17,11 @@ from seeweb.models.comment import Comment
 from seeweb.models.team import Team
 from seeweb.models.project import Project
 from seeweb.models.user import User
-from seeweb.model_edit import (create_executable,
-                               create_interface,
-                               create_notebook,
-                               create_workflow,
-                               create_workflow_node)
+from seeweb.models.project_content.executable import Executable
+from seeweb.models.project_content.interface import Interface
+from seeweb.models.project_content.notebook import Notebook
+from seeweb.models.project_content.workflow import Workflow
+from seeweb.models.project_content.workflow_node import WorkflowNode
 from seeweb.project.gallery import add_gallery_image
 
 
@@ -217,16 +217,16 @@ This project is part of OpenAlea_.
         notebook = Project.create(session, 'revesansparole', 'notebook')
         notebook.public = True
         for i in range(5):
-            create_executable(session, notebook, "executable%d" % i)
+            Executable.create(session, notebook, "executable%d" % i)
 
         for i in range(5):
-            create_notebook(session, notebook, "notebook%d" % i)
+            Notebook.create(session, notebook, "notebook%d" % i)
 
         nodelib = Project.create(session, 'revesansparole', 'nodelib')
         nodelib.public = True
 
-        create_interface(session, nodelib, "IInt")
-        create_interface(session, nodelib, "IStr")
+        Interface.create(session, nodelib, "IInt")
+        Interface.create(session, nodelib, "IStr")
 
         ndefs = []
         for i in range(3):
@@ -243,7 +243,7 @@ This project is part of OpenAlea_.
                             outputs=[dict(name="ret", interface="IInt",
                                           descr="important result")])
 
-            create_workflow_node(session, nodelib, node_def)
+            WorkflowNode.create(session, nodelib, node_def)
             ndefs.append(node_def)
 
         workflow = Project.create(session, 'revesansparole', 'workflow')
@@ -267,7 +267,7 @@ This project is part of OpenAlea_.
                                          (1, "ret", 2, "in2"),
                                          (2, "ret", 3, "in")])
 
-        create_workflow(session, workflow, workflow_def)
+        Workflow.create(session, workflow, workflow_def)
 
         # spl = Project.create(session, 'revesansparole', 'sample_project')
         # spl.public = True

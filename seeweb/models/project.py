@@ -8,6 +8,7 @@ from seeweb.project.source import delete_source
 from .actor import PActor
 from .auth import Authorized, Role
 from .comment import Comment
+from .project_content.content import Content, item_types
 from .dependency import Dependency
 from .described import Described
 from .models import Base, get_by_id
@@ -73,6 +74,10 @@ class Project(Base, Rated, Described, Authorized):
         # create avatar
         generate_default_project_avatar(project)
 
+        # create content
+        cnt = Content(id=project.id)
+        session.add(cnt)
+
         return project
 
     @staticmethod
@@ -88,6 +93,10 @@ class Project(Base, Rated, Described, Authorized):
         Returns:
             (True)
         """
+        # remove content
+        cnt = project.clear_content(session)
+        session.delete(cnt)
+
         # remove avatar
         remove_project_avatar(project)
 
@@ -188,6 +197,25 @@ class Project(Base, Rated, Described, Authorized):
         del session
         self.owner = user.id
 
+    def clear_content(self, session):
+        """Remove all items in project content.
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            None
+        """
+        cnt = self.get_content(session)
+        if cnt is None:
+            return
+
+        for item_typ in item_types:
+            for item in getattr(cnt, item_typ):
+                session.delete(item)
+
+        return cnt
+
     def clear_dependencies(self, session):
         """Remove all dependencies from the project
 
@@ -218,6 +246,17 @@ class Project(Base, Rated, Described, Authorized):
         comments = query.all()
 
         return comments
+
+    def get_content(self, session):
+        """Retrieve Content object associated to this project.
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            (Content)
+        """
+        return Content.get(session, self.id)
 
     def recompute_ratings(self, session):
         """Recompute ratings from the list of comments.

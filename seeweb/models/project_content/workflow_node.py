@@ -27,4 +27,25 @@ class WorkflowNode(Base, ContentItem):
         """
         return get_by_id(session, WorkflowNode, nid)
 
+    @staticmethod
+    def create(session, project, node_def):
+        """Create a new node description and associate it to a project.
 
+        Args:
+            session: (DBSession)
+            project: (Project) an already existing project
+            node_def: (dict of node prop) node definition
+
+        Returns:
+            (WorkflowNode)
+        """
+        cnt = project.get_content(session)
+
+        node = WorkflowNode(id=node_def['id'],
+                            cnt=cnt.id,
+                            name=node_def['name'])
+        session.add(node)
+        node.store_description(node_def['description'])
+        node.store_definition(node_def)
+
+        return node

@@ -27,3 +27,26 @@ class Workflow(Base, ContentItem):
         """
         return get_by_id(session, Workflow, wid)
 
+    @staticmethod
+    def create(session, project, workflow_def):
+        """Create a new workflow description and associate it to a project.
+
+        Args:
+            session: (DBSession)
+            project: (Project) an already existing project
+            workflow_def: (dict of (str, any)) workflow definition
+
+        Returns:
+            (Workflow)
+        """
+        cnt = project.get_content(session)
+
+        workflow = Workflow(id=workflow_def['id'],
+                            cnt=cnt.id,
+                            name=workflow_def['name'])
+        session.add(workflow)
+        workflow.store_description(workflow_def['description'])
+        workflow.store_definition(workflow_def)
+
+        return workflow
+

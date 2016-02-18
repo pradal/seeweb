@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer
+from uuid import uuid1
 
 from seeweb.models.models import Base, get_by_id
 from .content_item import ContentItem
@@ -26,5 +27,24 @@ class Interface(Base, ContentItem):
             (Interface) or None if no comment with this id is found
         """
         return get_by_id(session, Interface, iid)
+
+    @staticmethod
+    def create(session, project, name):
+        """Create a new interface description and associate it to a project.
+
+        Args:
+            session: (DBSession)
+            project: (Project) an already existing project
+            name: (str) name of the interface
+
+        Returns:
+            (Interface)
+        """
+        cnt = project.get_content(session)
+
+        item = Interface(id=uuid1().hex, cnt=cnt.id, name=name)
+        session.add(item)
+
+        return item
 
 

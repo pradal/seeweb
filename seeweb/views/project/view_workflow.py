@@ -35,14 +35,7 @@ def view(request):
         else:
             ndef[nid] = wnode.load_definition()
 
-    print ndef, "\n" * 10
-
     view_params["nodes"] = ndef
     view_params["ndef"] = json.dumps(ndef)
-
-    # for src, src_port, tgt, tgt_port in wdef['connections']:
-    #     print wdef['nodes'][src]['x'], wdef['nodes'][src]['y']
-    #     print wdef['nodes'][tgt]['x'], wdef['nodes'][tgt]['y']
-    #     print "\n" * 10
 
     return view_params

@@ -1,4 +1,5 @@
 {% macro project_condensed(project, msg) -%}
+
 <div class="project condensed">
     <div class="avatar">
         <a href="{{ request.route_url('project_view_home', pid=project.id) }}">
@@ -14,10 +15,12 @@
         {% endif %}
     </div>
 </div>
+
 {%- endmacro %}
 
 
 {% macro project_fake(name, msg) -%}
+
 <div class="project condensed">
     <div class="avatar">
         <a href="#">
@@ -33,10 +36,12 @@
         {% endif %}
     </div>
 </div>
+
 {%- endmacro %}
 
 
 {% macro gallery_item(project, img_name, descr) -%}
+
 <div class="gallery_item">
     <div class="avatar">
         <a href="{{ request.static_url('seeweb:data/gallery/%s/%s.png' % (project.id, img_name)) }}">
@@ -47,4 +52,5 @@
         <span>{{ descr }}</span>
     </div>
 </div>
+
 {%- endmacro %}

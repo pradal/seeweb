@@ -1,6 +1,7 @@
 {% extends "layout.jinja2" %}
 
-{% block project_body %}
+{% block project_body -%}
+
 <form action="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}" method='POST'
       enctype="multipart/form-data">
 
@@ -156,4 +157,5 @@
 </div>
 
 </form>
-{% endblock %}
+
+{%- endblock %}

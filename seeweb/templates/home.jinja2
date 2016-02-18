@@ -1,43 +1,45 @@
 {% extends "layout.jinja2" %}
 
-{% block css %}
-  <link href="{{ request.static_url('seeweb:static/css/home.css') }}" rel="stylesheet">
-{% endblock css %}
+{% block css -%}
+    <link href="{{ request.static_url('seeweb:static/css/home.css') }}" rel="stylesheet">
+{%- endblock %}
 
-{% block body %}
+{% block body -%}
+
 <div class="container frontpage">
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <div class="jumbotron">
-            <div class="container">
-                <p class="lead">Welcome to <span class="font-normal">SEE community</span>,
-                a door to a better view on the world around :)</p>
-                <p><a class="btn btn-primary btn-lg" href="{{ request.route_url('documentation') }}" role="button">Learn more »</a></p>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="jumbotron">
+                <div class="container">
+                    <p class="lead">Welcome to <span class="font-normal">SEE community</span>,
+                    a door to a better view on the world around :)</p>
+                    <p><a class="btn btn-primary btn-lg" href="{{ request.route_url('documentation') }}" role="button">Learn more »</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Projects of the week</h3>
+              </div>
+              <div class="panel-body">
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Random Projects</h3>
+              </div>
+              <div class="panel-body">
+              </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Projects of the week</h3>
-          </div>
-          <div class="panel-body">
-          </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Random Projects</h3>
-          </div>
-          <div class="panel-body">
-          </div>
-        </div>
-    </div>
-</div>
-</div>
-{% endblock %}
+
+{%- endblock %}

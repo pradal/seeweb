@@ -8,7 +8,7 @@
 
 {% extends "layout_view.jinja2" %}
 
-{% block project_view_body %}
+{% block project_view_body -%}
 
 <div id="host_descr" class="row">
     <div class="col-md-12">
@@ -36,16 +36,14 @@
                 {% if dependencies|length == 0 %}
                     <p>None</p>
                 {% else %}
-                    <div class="container">
-                        <div class="row">
-                            {% for pjt, version, exists in dependencies %}
-                                {% if exists %}
-                                    {{ project_condensed(pjt, version) }}
-                                {% else %}
-                                    {{ project_fake(pjt, version) }}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                    <div class="row">
+                        {% for pjt, version, exists in dependencies %}
+                            {% if exists %}
+                                {{ project_condensed(pjt, version) }}
+                            {% else %}
+                                {{ project_fake(pjt, version) }}
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 {% endif %}
             </div>
@@ -61,11 +59,9 @@
                     <h3 class="panel-title">Executables</h3>
                 </div>
                 <div class="panel-body">
-                    <ul>
-                        {% for executable in executables %}
-                            {{ executable_condensed(executable) }}
-                        {% endfor %}
-                    </ul>
+                    {% for executable in executables %}
+                        {{ executable_condensed(executable) }}
+                    {% endfor %}
                 </div>
              </div>
         </div>
@@ -80,11 +76,9 @@
                     <h3 class="panel-title">Notebooks</h3>
                 </div>
                 <div class="panel-body">
-                    <ul>
-                        {% for notebook in notebooks %}
-                            {{ notebook_condensed(notebook) }}
-                        {% endfor %}
-                    </ul>
+                    {% for notebook in notebooks %}
+                        {{ notebook_condensed(notebook) }}
+                    {% endfor %}
                 </div>
              </div>
         </div>
@@ -133,15 +127,13 @@
                     <h3 class="panel-title">Workflows</h3>
                 </div>
                 <div class="panel-body">
-                    <ul>
-                        {% for workflow in workflows %}
-                            {{ workflow_condensed(workflow) }}
-                        {% endfor %}
-                    </ul>
+                    {% for workflow in workflows %}
+                        {{ workflow_condensed(workflow) }}
+                    {% endfor %}
                 </div>
              </div>
         </div>
     </div>
 {% endif %}
 
-{% endblock %}
+{%- endblock %}

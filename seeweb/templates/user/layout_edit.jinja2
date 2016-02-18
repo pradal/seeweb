@@ -1,6 +1,7 @@
 {% extends "layout.jinja2" %}
 
-{% block user_body %}
+{% block user_body -%}
+
 <form action="{{ request.route_url('user_edit_%s' % tab, uid=user.id) }}" method='POST'
       enctype="multipart/form-data">
 
@@ -41,4 +42,4 @@
     </div>
 </div>
 
-{% endblock %}
+{%- endblock %}

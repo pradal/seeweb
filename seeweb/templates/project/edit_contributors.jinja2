@@ -1,6 +1,6 @@
 {% extends "layout_edit.jinja2" %}
 
-{% block project_edit_body %}
+{% block project_edit_body -%}
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -63,12 +63,14 @@
   </div>
 </div>
 
-{% endblock %}
+{%- endblock %}
 
-{% block project_js %}
+{% block project_js -%}
+
 <script type="text/javascript" language="JavaScript">
     window.onload = function() {
         document.getElementById("new_member").focus();
     };
 </script>
-{% endblock %}
+
+{%- endblock %}

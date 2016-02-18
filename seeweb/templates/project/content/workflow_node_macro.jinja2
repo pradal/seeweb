@@ -1,4 +1,5 @@
 {% macro node_condensed(node, ndef) -%}
+
 <div class="node condensed">
     <ul>
         <li>Name: <a href="{{ request.route_url('project_view_workflow_node', pid=project.id, nid=ndef['id']) }}">{{ node.name }}</a></li>
@@ -39,4 +40,5 @@
         </li>
     </ul>
 </div>
+
 {%- endmacro %}

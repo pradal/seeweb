@@ -1,11 +1,16 @@
 {% extends "templates/layout.jinja2" %}
-{% block css %}
-  <link href="{{request.static_url('seeweb:static/css/user_theme.css')}}" rel="stylesheet">
-  {% block user_css %}
-  {% endblock user_css %}
-{% endblock css %}
 
-{% block body %}
-  {% block user_body %}
-  {% endblock %}
+{% block css -%}
+
+<link href="{{request.static_url('seeweb:static/css/user_theme.css')}}" rel="stylesheet">
+{% block user_css %}
 {% endblock %}
+
+{%- endblock css %}
+
+{% block body -%}
+
+    {% block user_body %}
+    {% endblock %}
+
+{%- endblock %}

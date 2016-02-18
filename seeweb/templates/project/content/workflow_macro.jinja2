@@ -1,5 +1,7 @@
 {% macro workflow_condensed(workflow) -%}
+
 <div class="workflow condensed">
     <a href="{{ request.route_url('project_view_workflow', pid=project.id, wid=workflow.id) }}">{{ workflow.name }}</a>
 </div>
+
 {%- endmacro %}

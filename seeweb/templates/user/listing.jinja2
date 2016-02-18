@@ -2,29 +2,31 @@
 
 {% extends "layout.jinja2" %}
 
-{% block user_body %}
+{% block user_body -%}
+
+<div class="row">
+    <div class="col-md-12">
+        {% if search_pattern == "" %}
+        <h1>All Users</h1>
+        {% else %}
+        <h1>Users starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('user_list') }}">All</a></span></h1>
+        {% endif %}
+    </div>
+</div>
+
+{% if users|length == 0 %}
     <div class="row">
-        <div class="col-md-12">
-            {% if search_pattern == "" %}
-            <h1>All Users</h1>
-            {% else %}
-            <h1>Users starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('user_list') }}">All</a></span></h1>
-            {% endif %}
+        <p>No user found.</p>
+    </div>
+{% else %}
+    <div class="container">
+        <div class="row">
+            {% for user in users %}
+                {{ user_condensed(user) }}
+            {% endfor %}
         </div>
     </div>
+{% endif %}
 
-    {% if users|length == 0 %}
-        <div class="row">
-            No user found.
-        </div>
-    {% else %}
-        <div class="container">
-            <div class="row">
-                {% for user in users %}
-                    {{ user_condensed(user) }}
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-{% endblock %}
+{%- endblock %}
 

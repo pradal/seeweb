@@ -1,6 +1,7 @@
 {% extends "layout_edit.jinja2" %}
 
-{% block project_edit_body %}
+{% block project_edit_body -%}
+
 <div class="row">
     <div class="col-md-12">
         <button type="submit" class="btn pull-right" name="fetch_doc">Fetch</button>
@@ -35,7 +36,10 @@
 </div>
 
 <div class="form-group">
-  <label for="doc">Documentation:</label>
-  <textarea class="form-control" rows="20" id="doc" name='documentation' {% if project.doc == "" %}placeholder='write some documentation in restructured text here'{% endif %}>{{ project.doc }}</textarea>
+    <label for="doc">Documentation:</label>
+    <textarea class="form-control" rows="20" id="doc" name='documentation' {% if project.doc == "" %}placeholder='write some documentation in restructured text here'{% endif %}>
+        {{ project.doc }}
+    </textarea>
 </div>
-{% endblock %}
+
+{%- endblock %}

@@ -4,7 +4,7 @@
     <script src="{{ request.static_url('seeweb:static/js/easeljs-0.8.2.min.js') }}"></script>
 {% endblock project_css %}
 
-{% block workflow_body %}
+{% block workflow_body -%}
 
 <body onload="init();">
     <canvas id="workflow_canvas" width="800" height="600">
@@ -196,4 +196,5 @@
         stage.update();
     }
 </script>
-{% endblock %}
+
+{%- endblock %}

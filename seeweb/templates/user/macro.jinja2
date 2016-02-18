@@ -1,4 +1,5 @@
 {% macro user_condensed(user) -%}
+
 <div class="user condensed">
     <div class="avatar">
         <a href="{{ request.route_url('user_view_home', uid=user.id) }}">
@@ -9,4 +10,5 @@
         <a href="{{ request.route_url('user_view_home', uid=user.id) }}">{{ user.id }}</a>
     </div>
 </div>
+
 {%- endmacro %}

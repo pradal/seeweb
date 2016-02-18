@@ -2,6 +2,6 @@
 
 {% extends "layout_workflow_node.jinja2" %}
 
-{% block workflow_body %}
-{{ node_condensed(node, node.load_definition()) }}
-{% endblock %}
+{% block workflow_body -%}
+    {{ node_condensed(node, node.load_definition()) }}
+{%- endblock %}

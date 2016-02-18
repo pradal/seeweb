@@ -1,10 +1,11 @@
 {% extends "layout.jinja2" %}
 
-{% block css %}
-  <link href="{{ request.static_url('seeweb:static/css/login.css') }}" rel="stylesheet">
-{% endblock css %}
+{% block css -%}
+    <link href="{{ request.static_url('seeweb:static/css/login.css') }}" rel="stylesheet">
+{%- endblock %}
 
-{% block body %}
+{% block body -%}
+
 <div class="col-md-6 col-md-offset-3">
     <div class="well">
         <form class="form-signin" action="{{ request.route_url('user_register') }}" method='POST'>
@@ -30,5 +31,5 @@
         </form>
     </div>
 </div>
-{% endblock %}
 
+{%- endblock %}

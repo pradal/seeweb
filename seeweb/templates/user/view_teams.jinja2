@@ -2,7 +2,7 @@
 
 {% extends "layout_view.jinja2" %}
 
-{% block user_view_body %}
+{% block user_view_body -%}
 
 <div class="panel panel-default">
   <div class="panel-body teams">
@@ -20,7 +20,7 @@
     {% endif %}
     {% if teams|length == 0 %}
         <div class="row">
-            This user does not belong to any public team.
+            <p>This user does not belong to any public team.</p>
         </div>
     {% else %}
         <div class="container">
@@ -34,4 +34,4 @@
   </div>
 </div>
 
-{% endblock %}
+{%- endblock %}

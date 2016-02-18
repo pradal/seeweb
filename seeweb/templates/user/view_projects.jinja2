@@ -2,7 +2,7 @@
 
 {% extends "layout_view.jinja2" %}
 
-{% block user_view_body %}
+{% block user_view_body -%}
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -24,20 +24,16 @@
         </div>
     {% endif %}
     {% if projects|length == 0 %}
-        <div class="row">
-            {% if allow_edit %}
-            None yet. Create one?
-            {% else %}
-            This user has no public project.
-            {% endif %}
-        </div>
+        {% if allow_edit %}
+        <p>None yet. Create one?</p>
+        {% else %}
+        <p>This user has no public project.</p>
+        {% endif %}
     {% else %}
-        <div class="container">
-            <div class="row">
-                {% for role, project in projects %}
-                    {{ project_condensed(project, role) }}
-                {% endfor %}
-            </div>
+        <div class="row">
+            {% for role, project in projects %}
+                {{ project_condensed(project, role) }}
+            {% endfor %}
         </div>
     {% endif %}
   </div>
@@ -51,10 +47,10 @@
       <div class="panel-body">
         {% if installed_projects|length == 0 %}
             <div class="row">
-                Nothing installed yet.
+                <p>Nothing installed yet.</p>
             </div>
         {% else %}
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     {% for role, project in installed_projects %}
                         {{ project_condensed(project, role) }}
@@ -65,4 +61,5 @@
       </div>
     </div>
 {% endif %}
-{% endblock %}
+
+{%- endblock %}

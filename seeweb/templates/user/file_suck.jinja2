@@ -1,6 +1,7 @@
 {% extends "layout.jinja2" %}
 
-{% block user_body %}
+{% block user_body -%}
+
 <h1>Create project from file</h1>
 
  <form action="{{ request.current_route_url() }}" method='POST' enctype="multipart/form-data">
@@ -31,4 +32,4 @@
 </div>
 </form>
 
-{% endblock %}
+{%- endblock %}

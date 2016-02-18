@@ -2,7 +2,7 @@
 
 {% extends "layout_view.jinja2" %}
 
-{% block team_view_body %}
+{% block team_view_body -%}
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -14,14 +14,13 @@
             <p>This team has no public project.</p>
         </div>
     {% else %}
-        <div class="container">
-            <div class="row">
-                {% for role, project in projects %}
-                    {{ project_condensed(project, role) }}
-                {% endfor %}
-            </div>
+        <div class="row">
+            {% for role, project in projects %}
+                {{ project_condensed(project, role) }}
+            {% endfor %}
         </div>
     {% endif %}
   </div>
 </div>
-{% endblock %}
+
+{%- endblock %}

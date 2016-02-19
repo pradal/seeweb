@@ -14,8 +14,8 @@
             <div class="col-md-12">
                 <form action="{{ request.current_route_url() }}" method='POST'>
                     <div class="form-group">
-                        <a class="btn btn-success pull-right" href="{{ request.route_url('site_suck') }}">Clone</a>
-                        <a class="btn btn-success pull-right" href="{{ request.route_url('file_suck') }}">Single File</a>
+                        <a class="btn btn-primary pull-right" href="{{ request.route_url('site_suck') }}">Clone</a>
+                        <a class="btn btn-primary pull-right" href="{{ request.route_url('file_suck') }}">Single File</a>
                         <button class="btn btn-primary" type="submit" name="new_project">Create</button>
                         <input type='text' name='project_id' placeholder='new project id' />
                     </div>

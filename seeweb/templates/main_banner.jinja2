@@ -45,7 +45,7 @@
             <button type="submit" class="btn btn-default">Submit</button>
           </form>
           <ul class="nav navbar-nav navbar-right">
-              {% if request.unauthenticated_userid != None %}
+              {% if request.unauthenticated_userid == 'revesansparole' %}
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">admin <span class="caret"></span></a>
                   <ul class="dropdown-menu">
@@ -56,13 +56,13 @@
                   </ul>
                 </li>
               {% endif %}
-            <li class="dropdown">
+            <!--<li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">lang <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#">English</a></li>
                 <li><a href="#">Français</a></li>
               </ul>
-            </li>
+            </li>-->
             {% if request.unauthenticated_userid == None %}
                 <li><a href="{{ request.route_url('user_login') }}">login</a></li>
             {% else %}

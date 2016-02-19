@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.avatar import load_image, upload_project_avatar
@@ -24,6 +25,8 @@ def view(request):
                 img = load_image(field_storage)
                 upload_project_avatar(img, project)
                 request.session.flash("Avatar submitted", 'success')
+                loc = request.route_url('project_view_home', pid=project.id)
+                return HTTPFound(location=loc)
             except IOError:
                 request.session.flash("Unable to read image", 'warning')
     else:

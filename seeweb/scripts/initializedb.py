@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config
 import transaction
 from uuid import uuid1
 
-from seeweb.avatar import upload_user_avatar
+from seeweb.avatar import upload_team_avatar, upload_user_avatar
 from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models import installed  # used to create the associated table
@@ -146,6 +146,8 @@ def main(argv=sys.argv):
         sub_team.add_auth(session, subsub_team, Role.edit)
 
         vplants = Team.create(session, tid="vplants")
+        img = Image.open("seeweb/scripts/avatar/vplants.png")
+        upload_team_avatar(img, vplants)
         vplants.description = """
 Team
 ----
@@ -157,6 +159,8 @@ INRIA team based in Montpellier
         vplants.add_auth(session, fboudon, Role.view)
 
         oa = Team.create(session, tid="openalea")
+        img = Image.open("seeweb/scripts/avatar/openalea.png")
+        upload_team_avatar(img, oa)
         oa.description = """
 Community
 ---------

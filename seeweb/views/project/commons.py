@@ -218,6 +218,7 @@ def content_init(request, session):
         raise HTTPFound(location=loc)
 
     view_params["cnt_item"] = item
-    view_params["cnt_def"] = item.load_definition()
+    item_def = item.load_definition()
+    view_params["cnt_def"] = item_def
 
-    return project, item, view_params
+    return project, item, item_def, view_params

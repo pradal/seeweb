@@ -8,6 +8,6 @@ from seeweb.views.project.commons import content_init
              renderer='../templates/view_item.jinja2')
 def view(request):
     session = DBSession()
-    project, interface, view_params = content_init(request, session)
+    project, interface, interface_def, view_params = content_init(request, session)
 
     return view_params

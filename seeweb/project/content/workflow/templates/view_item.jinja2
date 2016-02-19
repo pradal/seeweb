@@ -1,10 +1,13 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
 {% block project_css -%}
+<link href="{{ request.static_url('seeweb:project/content/workflow/static/style.css') }}" rel="stylesheet">
 
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/requires.js') }}"></script>
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/eve.js') }}"></script>
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.js') }}"></script>
+//<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.pan-zoom.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael-zpd.js') }}"></script>
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/workflow.js') }}"></script>
 
 {%- endblock %}
@@ -15,6 +18,10 @@
 
 <div id="workflow_canvas">
     <p id="workflow_canvas_placeholder">Workflow visual display</p>
+    <div id="canvas_controls">
+        <a id="up" href="#"></a>
+        <a id="down" href="#"></a>
+    </div>
 </div>
 
 {%- endblock %}
@@ -28,8 +35,24 @@
 
         var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
         document.getElementById('workflow_canvas_placeholder').style.display = 'none';
+        //var zpd = new RaphaelZPD(paper, { zoom: true, pan: true, drag: false });
+        var panZoom = paper.panzoom({ initialZoom: 5,
+                                      initialPosition: { x: 200, y: 150} });
+        panZoom.enable();
 
+        wv.x_offset = 400;
+        wv.y_offset = 300;
         wv.draw_workflow(paper, wkf, nodes);
+
+        $("#canvas_controls #up").click(function (e) {
+            panZoom.zoomIn(1);
+            e.preventDefault();
+        });
+
+        $("#canvas_controls #down").click(function (e) {
+            panZoom.zoomOut(1);
+            e.preventDefault();
+        });
     }
 </script>
 

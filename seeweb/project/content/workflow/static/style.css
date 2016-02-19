@@ -1,0 +1,28 @@
+
+#workflow_canvas {
+    background: #f0000;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+}
+
+#workflow_canvas #canvas_controls {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 29px;
+}
+
+#workflow_canvas #canvas_controls #up {
+    background: url(iconUp.png) no-repeat center top;
+    display: block;
+    height: 26px;
+    width: 29px;
+}
+
+#workflow_canvas #canvas_controls #down {
+    background: url(iconDown.png) no-repeat center top;
+    display: block;
+    height: 27px;
+    width: 29px;
+}

@@ -1,0 +1,7 @@
+
+#node_canvas {
+    background: #f0000;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+}

@@ -41,6 +41,7 @@ def main(session):
         item.name = node_def['name']
         item.author = node_def['author']
         item.store_definition(node_def)
+        item.store_description(node_def['description'])
         ndefs.append(node_def)
 
     workflow = Project.create(session, 'revesansparole', 'workflow')

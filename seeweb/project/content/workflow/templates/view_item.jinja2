@@ -1,13 +1,13 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
 {% block project_css -%}
+
 <link href="{{ request.static_url('seeweb:project/content/workflow/static/style.css') }}" rel="stylesheet">
 
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/requires.js') }}"></script>
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/eve.js') }}"></script>
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.js') }}"></script>
-//<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.pan-zoom.js') }}"></script>
-<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael-zpd.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.pan-zoom.js') }}"></script>
 <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/workflow.js') }}"></script>
 
 {%- endblock %}
@@ -25,7 +25,8 @@
 {%- endblock %}
 
 
-{% block project_js %}
+{% block project_js -%}
+
 <script>
     window.onload = function() {
         var wkf = JSON.parse('{{ cnt_item.definition|safe }}');
@@ -33,7 +34,6 @@
 
         var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
         document.getElementById('workflow_canvas_placeholder').style.display = 'none';
-        //var zpd = new RaphaelZPD(paper, { zoom: true, pan: true, drag: false });
         var panZoom = paper.panzoom({ initialZoom: 5,
                                       initialPosition: { x: 200, y: 150} });
         panZoom.enable();

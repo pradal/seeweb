@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from seeweb.avatar import upload_project_avatar
 from seeweb.models.auth import Role
+from seeweb.models.content_item import ContentItem
 from seeweb.models.project import Project
 from seeweb.models.user import User
 from seeweb.project.explore_sources import (fetch_avatar,
@@ -195,3 +196,27 @@ def install_init(request, session):
         raise HTTPFound(location=loc)
 
     return project, view_params
+
+
+def content_init(request, session):
+    """Common actions for content items views
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+
+    Returns:
+        (Project, ContentItem, dict of (str, any)): project, item, view_params
+    """
+    project, role, view_params = init_min(request, session)
+    cid = request.matchdict['cid']
+    item = ContentItem.get(session, cid)
+    if item is None:
+        # back to project page
+        request.session.flash("Object does not exist", 'warning')
+        loc = request.route_url('project_view_content', pid=project.id)
+        raise HTTPFound(location=loc)
+
+    view_params["cnt_item"] = item
+
+    return project, item, view_params

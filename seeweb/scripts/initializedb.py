@@ -215,7 +215,7 @@ This project is part of OpenAlea_.
         svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
         svgdraw.add_auth(session, sartzet, Role.view)
 
-        notebook = Project.create(session, 'revesansparole', 'notebook')
+        notebook = Project.create(session, 'revesansparole', 'notebook_pjt')
         notebook.public = True
         # for i in range(5):
         #     item = ContentItem.create(session, uuid1().hex, "executable",
@@ -226,6 +226,7 @@ This project is part of OpenAlea_.
             item = ContentItem.create(session, uuid1().hex, "notebook",
                                       notebook)
             item.name = "notebook%d" % i
+            item.author = "revesansparole"
 
         nodelib = Project.create(session, 'revesansparole', 'nodelib')
         nodelib.public = True

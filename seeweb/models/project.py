@@ -8,6 +8,7 @@ from seeweb.project.source import delete_source
 from .actor import PActor
 from .auth import Authorized, Role
 from .comment import Comment
+from .content_item import ContentItem
 # from .project_content.content import Content, item_types
 from .dependency import Dependency
 from .described import Described
@@ -246,6 +247,24 @@ class Project(Base, Rated, Described, Authorized):
         comments = query.all()
 
         return comments
+
+    def fetch_content(self, session):
+        """Fetch all content items in this project.
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            (dict of (str,[ContentItem])): category, list of items
+        """
+        query = session.query(ContentItem)
+        query = query.filter(ContentItem.project == self.id)
+
+        cnt = {}
+        for item in query.all():
+            cnt.setdefault(item.category, []).append(item)
+
+        return cnt
 
     # def get_content(self, session):
     #     """Retrieve Content object associated to this project.

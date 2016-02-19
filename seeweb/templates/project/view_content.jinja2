@@ -1,10 +1,7 @@
 {% from 'macro.jinja2' import project_condensed with context %}
 {% from 'macro.jinja2' import project_fake with context %}
-{% from 'content/executable_macro.jinja2' import executable_condensed with context %}
-{% from 'content/interface_macro.jinja2' import interface_condensed with context %}
-{% from 'content/notebook_macro.jinja2' import notebook_condensed with context %}
-{% from 'content/workflow_macro.jinja2' import workflow_condensed with context %}
-{% from 'content/workflow_node_macro.jinja2' import node_condensed with context %}
+{% from 'content_item.jinja2' import content_item_condensed with context %}
+
 
 {% extends "layout_view.jinja2" %}
 
@@ -51,89 +48,23 @@
     </div>
 </div>
 
-{% if executables|length > 0 %}
-    <div class="row" id="executables">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Executables</h3>
-                </div>
-                <div class="panel-body">
-                    {% for executable in executables %}
-                        {{ executable_condensed(executable) }}
-                    {% endfor %}
-                </div>
-             </div>
+{% for category, items in content.items() %}
+    {% if items|length > 0 %}
+        <div class="row" id="category">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ category|capitalize }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% for item in items %}
+                            {{ content_item_condensed(item) }}
+                        {% endfor %}
+                    </div>
+                 </div>
+            </div>
         </div>
-    </div>
-{% endif %}
-
-{% if notebooks|length > 0 %}
-    <div class="row" id="notebooks">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Notebooks</h3>
-                </div>
-                <div class="panel-body">
-                    {% for notebook in notebooks %}
-                        {{ notebook_condensed(notebook) }}
-                    {% endfor %}
-                </div>
-             </div>
-        </div>
-    </div>
-{% endif %}
-
-{% if interfaces|length > 0 %}
-    <div class="row" id="nodes">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Interfaces</h3>
-                </div>
-                <div class="panel-body">
-                    {% for item in interfaces %}
-                        {{ interface_condensed(item) }}
-                    {% endfor %}
-                </div>
-             </div>
-        </div>
-    </div>
-{% endif %}
-
-{% if workflow_nodes|length > 0 %}
-    <div class="row" id="nodes">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Workflow nodes</h3>
-                </div>
-                <div class="panel-body">
-                    {% for node in workflow_nodes %}
-                        {{ node_condensed(node, node.load_definition()) }}
-                    {% endfor %}
-                </div>
-             </div>
-        </div>
-    </div>
-{% endif %}
-
-{% if workflows|length > 0 %}
-    <div class="row" id="workflows">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Workflows</h3>
-                </div>
-                <div class="panel-body">
-                    {% for workflow in workflows %}
-                        {{ workflow_condensed(workflow) }}
-                    {% endfor %}
-                </div>
-             </div>
-        </div>
-    </div>
-{% endif %}
+    {% endif %}
+{% endfor %}
 
 {%- endblock %}

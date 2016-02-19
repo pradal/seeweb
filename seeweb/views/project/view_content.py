@@ -36,13 +36,8 @@ def view(request):
     view_params["dependencies"] = dependencies
 
     # explore sources
-    # cnt = Content.get(session, project.id)
-    # if cnt is not None:
-    #     view_params["sections"] = []
-    #     for item_type in item_types:
-    #         items = list(getattr(cnt, item_type))
-    #         view_params[item_type] = items
-    #         if len(items) > 0:
-    #             view_params["sections"].append(item_type)
+    cnt = project.fetch_content(session)
+    view_params["content"] = cnt
+    view_params["sections"] = cnt.keys()
 
     return view_params

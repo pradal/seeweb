@@ -23,36 +23,13 @@
 {% block project_js %}
 <script>
     window.onload = function() {
+        var wkf = JSON.parse('{{ cnt_item.definition|safe }}');
+        var nodes = JSON.parse('{{ ndef|safe }}');
+
         var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
         document.getElementById('workflow_canvas_placeholder').style.display = 'none';
 
-        //var circle = paper.circle(100, 100, 80);
-        var tetronimo = paper.path("M 250 250 l 0 -50 l -50 0 l 0 -50 l -50 0 l 0 50 l -50 0 l 0 50 z");
-        //tetronimo.attr({fill: '#9cf', stroke: '#ddd', 'stroke-width': 5});
-        tetronimo.attr(
-            {
-            gradient: '90-#526c7a-#64a0c1',
-            stroke: '#3b4449',
-            'stroke-width': 10,
-            'stroke-linejoin': 'round',
-            transform: "r-90"
-            }
-        );
-        tetronimo.animate({transform:"r360"}, 2000, 'bounce');
-
-        var circ = paper.circle(250, 250, 40);
-        circ.attr({fill: '#000', stroke: 'none'});
-        var text = paper.text(150, 250, 'Bye Bye Circle!');
-        text.attr({opacity: 0, 'font-size': 12}).toBack();
-
-        circ.node.onmouseover = function() {
-            this.style.cursor = 'pointer';
-        }
-
-        circ.node.onclick = function() {
-            text.attr({opacity: 1});
-        }
-
+        wv.draw_workflow(paper, wkf, nodes);
     }
 </script>
 

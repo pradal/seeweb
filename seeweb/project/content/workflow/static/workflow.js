@@ -3,71 +3,59 @@ var wv = {
     y_offset: 50,
     nw: 80,
     nh: 40,
-    pr: 5,
-    handleMouseEvent: null
+    pr: 5
 };
 
-wv.draw_node = function (stage, workflow, nodes, node) {
+wv.draw_node = function (paper, workflow, nodes, node) {
     var nf = nodes[node['id']];
-    var container = new createjs.Container();
-    container.x = wv.x_offset + node['x'];
-    container.y = wv.y_offset + node['y'];
+    var loc_x = wv.x_offset + node['x'];
+    var loc_y = wv.y_offset + node['y'];
 
     // background
-    var item = new createjs.Shape();
-    var g = item.graphics;
+    var bg = paper.rect(loc_x + -wv.nw / 2., loc_y + -wv.nh / 2., wv.nw, wv.nh, 5);
+    bg.attr({'stroke-width': 1,
+             'stroke-linejoin': 'round'});
     if (nf == null) {
-        g.beginFill("#ff8cff").beginStroke("#ff8080");
+        bg.attr({'gradient': '90-#ff8cff-#c8c8c8',
+                 'stroke': '#ff8080'});
     } else {
-        g.beginFill("#c88cff").beginStroke("#808080");
+        bg.attr({'gradient': '90-#8c8cff-#c8c8c8',
+                 'stroke': '#808080',
+                 'href': nf['url']});
     }
-    g.drawRoundRect(-wv.nw / 2., -wv.nh / 2., wv.nw, wv.nh, 5, 5, 5, 5);
-    item.name = node['id'];
-        item.on("click", handleMouseEvent);
-        item.on("dblclick", handleMouseEvent);
-        item.on("mouseover", handleMouseEvent);
-    container.addChild(item);
 
     if (nf != null) {
         // ports
         var nb = nf.inputs.length;
         for (i in nf.inputs){
             var input = nf.inputs[i];
-            var item = new createjs.Shape();
-            var g = item.graphics.beginFill("#3333ff").beginStroke("#000000");
-            g.drawCircle(0, 0, wv.pr);
-            item.x = -(nb - 1) * 2 * wv.pr + i * wv.pr * 4;
-            item.y = -wv.nh / 2.;
-            item.name = node['id'] + "/in:" + input['name'];
-                item.on("mouseover", handleMouseEvent);
-            container.addChild(item);
+            var port = paper.circle(loc_x + -(nb - 1) * 2 * wv.pr + i * wv.pr * 4,
+                                    loc_y + -wv.nh / 2.,
+                                    wv.pr);
+            port.attr({'gradient': '180-#3333ff-#2222ff',
+                       'stroke': '#000000',
+                       'stroke-width': 1});
         }
 
         nb = nf.outputs.length;
         for (i in nf.outputs){
             var output = nf.outputs[i];
-            var item = new createjs.Shape();
-            var g = item.graphics.beginFill("#ff3333").beginStroke("#000000");
-            g.drawCircle(0, 0, wv.pr);
-            item.x = -(nb - 1) * 2 * wv.pr + i * wv.pr * 4;
-            item.y = wv.nh / 2.;
-            item.name = node['id'] + "/out:" + output['name'];
-                item.on("mouseover", handleMouseEvent);
-            container.addChild(item);
+            var port = paper.circle(loc_x + -(nb - 1) * 2 * wv.pr + i * wv.pr * 4,
+                                    loc_y + wv.nh / 2.,
+                                    wv.pr);
+            port.attr({'gradient': '180-#ffff33-#9a9a00',
+                       'stroke': '#000000',
+                       'stroke-width': 1});
         }
     }
-    stage.addChild(container);
 
     // label
     var label_txt = node['label'];
     if (label_txt == null) {
         label_txt = nf['name'];
     }
-    var label = new createjs.Text(label_txt, "14px Arial");
-    var bounds = label.getBounds();
-    label.x = container.x - bounds.width / 2;
-    label.y = container.y - bounds.height / 2;
-    stage.addChild(label);
+    var label = paper.text(loc_x, loc_y, label_txt);
+    label.attr({'fill': '#000000'});
 };
 
 wv.in_port_index = function (nf, port_name) {
@@ -88,48 +76,45 @@ wv.out_port_index = function (nf, port_name) {
     return -1;
 };
 
-wv.draw_link = function (stage, workflow, nodes, link) {
-    var item = new createjs.Shape();
-    var g = item.graphics.setStrokeStyle(1).beginStroke("#000000");
+wv.draw_link = function (paper, workflow, nodes, link) {
     var src = workflow['nodes'][link[0]];
+    var src_x = wv.x_offset + src['x'];
+    var src_y = wv.y_offset + src['y'];
+
     var nf = nodes[src['id']];
-    if (nf == null) {
-        g.moveTo(wv.x_offset + src['x'], wv.y_offset + src['y']);
-    }
-    else {
+    if (nf != null) {
         var i = wv.out_port_index(nf, link[1]);
-        if (i == -1) {
-            //g.setStrokeDash([2, 1], 0);
-            g.moveTo(wv.x_offset + src['x'], wv.y_offset + src['y']);
-        } else {
+        if (i != -1) {
             var nb = nf.outputs.length;
-            g.moveTo(wv.x_offset + src['x'] - (nb - 1) * 2 * wv.pr + i * wv.pr * 4, wv.y_offset + src['y'] + wv.nh / 2.);
+            src_x += i * wv.pr * 4 - (nb - 1) * 2 * wv.pr;
+            src_y += wv.nh / 2.;
         }
     }
     var tgt = workflow['nodes'][link[2]];
+    var tgt_x = wv.x_offset + tgt['x'];
+    var tgt_y = wv.y_offset + tgt['y'];
+
     nf = nodes[tgt['id']];
-    if (nf == null) {
-        g.lineTo(wv.x_offset + tgt['x'], wv.y_offset + tgt['y']);
-    }
-    else {
+    if (nf != null) {
         var i = wv.in_port_index(nf, link[3]);
-        if (i == -1) {
-            //g.setStrokeDash([2, 1], 0);
-            g.lineTo(wv.x_offset + tgt['x'], wv.y_offset + tgt['y']);
-        } else {
+        if (i != -1) {
             var nb = nf.inputs.length;
-            g.lineTo(wv.x_offset + tgt['x'] - (nb - 1) * 2 * wv.pr + i * wv.pr * 4, wv.y_offset + tgt['y'] - wv.nh / 2.);
+            tgt_x += i * wv.pr * 4 - (nb - 1) * 2 * wv.pr;
+            tgt_y -= wv.nh / 2.;
         }
     }
-    stage.addChild(item);
+
+    pth = paper.path("M" + src_x + " " + src_y + "L" + tgt_x + " " + tgt_y);
+    pth.attr({'stroke': '#000000',
+              'stroke-width': 1});
 };
 
-wv.draw_workflow = function(stage, workflow, nodes) {
+wv.draw_workflow = function(paper, workflow, nodes) {
     for (i in workflow['connections']) {
-        wv.draw_link(stage, workflow, nodes, workflow['connections'][i]);
+        wv.draw_link(paper, workflow, nodes, workflow['connections'][i]);
     }
 
     for (i in workflow['nodes']) {
-        wv.draw_node(stage, workflow, nodes, workflow['nodes'][i]);
+        wv.draw_node(paper, workflow, nodes, workflow['nodes'][i]);
     }
 };

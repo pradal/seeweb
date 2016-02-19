@@ -2,8 +2,10 @@
 
 {% block project_css -%}
 
-<script src="{{ request.static_url('seeweb:static/js/easeljs-0.8.2.min.js') }}"></script>
-<script src="{{ request.static_url('seeweb:project/content/workflow/static/workflow.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/requires.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/eve.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/workflow.js') }}"></script>
 
 {%- endblock %}
 
@@ -11,71 +13,47 @@
 
 <p>uid: {{ cnt_item.id }}</p>
 
-<body onload="init();">
-    <canvas id="workflow_canvas" width="800" height="600">
-        <p>Workflow visual display</p>
-    </canvas>
-</body>
+<div id="workflow_canvas">
+    <p id="workflow_canvas_placeholder">Workflow visual display</p>
+</div>
 
 {%- endblock %}
 
 
 {% block project_js %}
 <script>
-    var stage, output;
+    window.onload = function() {
+        var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
+        document.getElementById('workflow_canvas_placeholder').style.display = 'none';
 
-    function handleMouseEvent(evt) {
-        output.text = "evt.target: "+evt.target+", evt.type: "+evt.type;
+        //var circle = paper.circle(100, 100, 80);
+        var tetronimo = paper.path("M 250 250 l 0 -50 l -50 0 l 0 -50 l -50 0 l 0 50 l -50 0 l 0 50 z");
+        //tetronimo.attr({fill: '#9cf', stroke: '#ddd', 'stroke-width': 5});
+        tetronimo.attr(
+            {
+            gradient: '90-#526c7a-#64a0c1',
+            stroke: '#3b4449',
+            'stroke-width': 10,
+            'stroke-linejoin': 'round',
+            transform: "r-90"
+            }
+        );
+        tetronimo.animate({transform:"r360"}, 2000, 'bounce');
 
-        if (evt.type == "click") {
-            {% for nid, node_def in nodes.items() %}
-                {% if node_def == None %}
-                output.text = "no such node definition";
-                {% else %}
-                if (evt.target.name == '{{ nid }}') {
-                    window.location = "{{ node_def['url'] }}";
-                }
-                {% endif %}
-            {% endfor %}
-        } else if (evt.type == "mouseover") {
-            {% for nid, node_def in nodes.items() %}
-                {% if node_def != None %}
-                    {% for input in node_def['inputs'] %}
-                    if (evt.target.name == '{{ nid }}/in:{{ input["name"] }}') {
-                        output.text = "input port: {{ input['name'] }}";
-                    }
-                    {% endfor %}
-                    {% for output in node_def['outputs'] %}
-                    if (evt.target.name == '{{ nid }}/out:{{ output["name"] }}') {
-                        output.text = "output port: {{ output['name'] }}";
-                    }
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+        var circ = paper.circle(250, 250, 40);
+        circ.attr({fill: '#000', stroke: 'none'});
+        var text = paper.text(150, 250, 'Bye Bye Circle!');
+        text.attr({opacity: 0, 'font-size': 12}).toBack();
+
+        circ.node.onmouseover = function() {
+            this.style.cursor = 'pointer';
         }
 
-        // to save CPU, we're only updating when we need to, instead of on a tick:1
-        stage.update();
+        circ.node.onclick = function() {
+            text.attr({opacity: 1});
+        }
+
     }
-
-    wv.handleMouseEvent = handleMouseEvent;
-
-    function init() {
-        var wkf = JSON.parse('{{ cnt_item.definition|safe }}');
-        var nodes = JSON.parse('{{ ndef|safe }}');
-
-        stage = new createjs.Stage("workflow_canvas");
-        stage.enableMouseOver();
-
-        output = new createjs.Text(wkf['name'], "14px Arial");
-        output.x = output.y = 10;
-        stage.addChild(output);
-
-        wv.draw_workflow(stage, wkf, nodes);
-
-        stage.update();
-    }
-
 </script>
 
 {%- endblock %}

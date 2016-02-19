@@ -1,5 +1,5 @@
 from glob import glob
-from os.path import basename, dirname, splitext
+from os.path import basename, dirname, exists, splitext
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
@@ -90,7 +90,14 @@ def main(global_config, **settings):
 
     # project content
     for dname in glob("seeweb/project/content/*/"):
+        dname = dname.replace("\\", "/")
         category = basename(dirname(dname))
+        static_pth = dname + "static"
+        if exists(static_pth):
+            config.add_static_view(name='static_%s' % category,
+                                   path='seeweb:%s' % static_pth[7:],
+                                   cache_max_age=3600)
+
         for view_pth in glob(dname + "views/*.py"):
             view_name = splitext(basename(view_pth))[0]
             if view_name != "__init__":

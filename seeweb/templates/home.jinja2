@@ -1,3 +1,5 @@
+{% from 'project/content_item.jinja2' import content_item_condensed with context %}
+
 {% extends "layout.jinja2" %}
 
 {% block css -%}
@@ -22,20 +24,14 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h3 class="panel-title">Projects of the week</h3>
+                <h3 class="panel-title">Hall of fame</h3>
               </div>
               <div class="panel-body">
-              </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Random Projects</h3>
-              </div>
-              <div class="panel-body">
+                <div class="row">
+                    {% for item in items %}
+                        {{ content_item_condensed(item) }}
+                    {% endfor %}
+                </div>
               </div>
             </div>
         </div>

@@ -18,9 +18,8 @@ class ContentItem(Base, Described):
     definition = Column(Text, default="")
 
     def __repr__(self):
-        return "<ContentItem(id='%s', type='%s', project='%s')>" % (self.id,
-                                                                    self.type,
-                                                                    self.project)
+        tup = (self.id, self.category, self.project)
+        return "<ContentItem(id='%s', category='%s', project='%s')>" % tup
 
     @staticmethod
     def get(session, cid):

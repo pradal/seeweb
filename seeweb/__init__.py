@@ -112,8 +112,6 @@ def main(global_config, **settings):
 
     config.add_route('project_install', 'project/{pid}/install')
     config.add_route('project_uninstall', 'project/{pid}/uninstall')
-    config.add_route('project_view_workflow', 'project/{pid}/workflow/{wid}')
-    config.add_route('project_view_workflow_node', 'project/{pid}/workflow_node/{nid}')
     config.add_route('project_view_home_default', 'project/{pid}')
 
     # team
@@ -131,12 +129,6 @@ def main(global_config, **settings):
         config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
 
     config.add_route('user_view_home_default', 'user/{uid}')
-
-    # from see_executable.view import view as myview
-    # from project.content.executable.view_item import view as myview
-    # config.add_route('project_content_executable_view_item', '/view_exec')
-    # config.add_route('project_content_notebook_view_item', '/view_note')
-    # config.add_view(myview, route_name='myroute', renderer="view_item.jinja2")
 
     config.scan()
 

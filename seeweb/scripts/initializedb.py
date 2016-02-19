@@ -14,14 +14,15 @@ from seeweb.models import Base, DBSession
 from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
 from seeweb.models.comment import Comment
+from seeweb.models.content_item import ContentItem
 from seeweb.models.team import Team
 from seeweb.models.project import Project
 from seeweb.models.user import User
-from seeweb.models.project_content.executable import Executable
-from seeweb.models.project_content.interface import Interface
-from seeweb.models.project_content.notebook import Notebook
-from seeweb.models.project_content.workflow import Workflow
-from seeweb.models.project_content.workflow_node import WorkflowNode
+# from seeweb.models.project_content.executable import Executable
+# from seeweb.models.project_content.interface import Interface
+# from seeweb.models.project_content.notebook import Notebook
+# from seeweb.models.project_content.workflow import Workflow
+# from seeweb.models.project_content.workflow_node import WorkflowNode
 from seeweb.project.gallery import add_gallery_image
 
 
@@ -216,58 +217,62 @@ This project is part of OpenAlea_.
 
         notebook = Project.create(session, 'revesansparole', 'notebook')
         notebook.public = True
-        for i in range(5):
-            Executable.create(session, notebook, "executable%d" % i)
+        # for i in range(5):
+        #     item = ContentItem.create(session, uuid1().hex, "executable",
+        #                               notebook)
+        #     item.name = "executable%d" % i
 
         for i in range(5):
-            Notebook.create(session, notebook, "notebook%d" % i)
+            item = ContentItem.create(session, uuid1().hex, "notebook",
+                                      notebook)
+            item.name = "notebook%d" % i
 
         nodelib = Project.create(session, 'revesansparole', 'nodelib')
         nodelib.public = True
 
-        Interface.create(session, nodelib, "IInt")
-        Interface.create(session, nodelib, "IStr")
+        # Interface.create(session, nodelib, "IInt")
+        # Interface.create(session, nodelib, "IStr")
 
-        ndefs = []
-        for i in range(3):
-            node_def = dict(id=uuid1().hex,
-                            name="read%d" % i,
-                            category="oanode",
-                            description="toto was here",
-                            author="revesansparole",
-                            function="testio:read",
-                            inputs=[dict(name="in1", interface="IInt",
-                                         value="0", descr="counter"),
-                                    dict(name="in2", interface="IStr",
-                                         value="a", descr="unit")],
-                            outputs=[dict(name="ret", interface="IInt",
-                                          descr="important result")])
-
-            WorkflowNode.create(session, nodelib, node_def)
-            ndefs.append(node_def)
+        # ndefs = []
+        # for i in range(3):
+        #     node_def = dict(id=uuid1().hex,
+        #                     name="read%d" % i,
+        #                     category="oanode",
+        #                     description="toto was here",
+        #                     author="revesansparole",
+        #                     function="testio:read",
+        #                     inputs=[dict(name="in1", interface="IInt",
+        #                                  value="0", descr="counter"),
+        #                             dict(name="in2", interface="IStr",
+        #                                  value="a", descr="unit")],
+        #                     outputs=[dict(name="ret", interface="IInt",
+        #                                   descr="important result")])
+        #
+        #     WorkflowNode.create(session, nodelib, node_def)
+        #     ndefs.append(node_def)
 
         workflow = Project.create(session, 'revesansparole', 'workflow')
         workflow.public = True
         workflow.add_auth(session, oa, Role.view)
 
-        workflow_def = dict(id=uuid1().hex,
-                            name="sample_workflow",
-                            category="oaworkflow",
-                            description="trying some stuff",
-                            author="revesansparole",
-                            nodes=[dict(id=ndefs[0]['id'], label="node1",
-                                        x=100, y=10),
-                                   dict(id=ndefs[1]['id'], label=None,
-                                        x=200, y=10),
-                                   dict(id=ndefs[2]['id'], label=None,
-                                        x=150, y=100),
-                                   dict(id=uuid1().hex, label="fail",
-                                        x=150, y=200)],
-                            connections=[(0, "ret", 2, "in1"),
-                                         (1, "ret", 2, "in2"),
-                                         (2, "ret", 3, "in")])
-
-        Workflow.create(session, workflow, workflow_def)
+        # workflow_def = dict(id=uuid1().hex,
+        #                     name="sample_workflow",
+        #                     category="oaworkflow",
+        #                     description="trying some stuff",
+        #                     author="revesansparole",
+        #                     nodes=[dict(id=ndefs[0]['id'], label="node1",
+        #                                 x=100, y=10),
+        #                            dict(id=ndefs[1]['id'], label=None,
+        #                                 x=200, y=10),
+        #                            dict(id=ndefs[2]['id'], label=None,
+        #                                 x=150, y=100),
+        #                            dict(id=uuid1().hex, label="fail",
+        #                                 x=150, y=200)],
+        #                     connections=[(0, "ret", 2, "in1"),
+        #                                  (1, "ret", 2, "in2"),
+        #                                  (2, "ret", 3, "in")])
+        #
+        # Workflow.create(session, workflow, workflow_def)
 
         # spl = Project.create(session, 'revesansparole', 'sample_project')
         # spl.public = True

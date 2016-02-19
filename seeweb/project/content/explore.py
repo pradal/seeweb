@@ -3,9 +3,9 @@
 from os import walk
 from os.path import join as pj
 
-from seeweb.models.project_content.notebook import Notebook
-from seeweb.models.project_content.workflow import Workflow
-from seeweb.models.project_content.workflow_node import WorkflowNode
+# from seeweb.models.project_content.notebook import Notebook
+# from seeweb.models.project_content.workflow import Workflow
+# from seeweb.models.project_content.workflow_node import WorkflowNode
 from seeweb.project.source import has_source, source_pth
 
 import notebook
@@ -13,10 +13,10 @@ import workflow_node
 import workflow
 
 
-fac = dict(notebook=(notebook, Notebook.create),
-           workflow=(workflow, Workflow.create),
-           workflow_node=(workflow_node, WorkflowNode.create))
-
+# fac = dict(notebook=(notebook, Notebook.create),
+#            workflow=(workflow, Workflow.create),
+#            workflow_node=(workflow_node, WorkflowNode.create))
+fac = dict()
 
 def explore_sources(session, project):
     """Explore source files associated to a project.

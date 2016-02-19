@@ -1,3 +1,5 @@
+from glob import glob
+from os.path import basename, dirname, splitext
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
@@ -86,6 +88,16 @@ def main(global_config, **settings):
     config.add_route('comment_edit_new', 'comment/new')
     config.add_route('comment_edit_score', 'comment/{cid}/score')
 
+    # project content
+    for dname in glob("seeweb/project/content/*/"):
+        cnt_type = basename(dirname(dname))
+        for view_pth in glob(dname + "views/*.py"):
+            view_name = splitext(basename(view_pth))[0]
+            if view_name != "__init__":
+                route_name = 'project_content_%s_%s' % (cnt_type, view_name)
+                route_url = 'project/{pid}/content/%s/{cid}' % cnt_type
+                config.add_route(route_name, route_url)
+
     # project
     for tab_title, tab_id in project_tabs:
         config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
@@ -112,6 +124,12 @@ def main(global_config, **settings):
         config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
 
     config.add_route('user_view_home_default', 'user/{uid}')
+
+    # from see_executable.view import view as myview
+    # from project.content.executable.view_item import view as myview
+    # config.add_route('project_content_executable_view_item', '/view_exec')
+    # config.add_route('project_content_notebook_view_item', '/view_note')
+    # config.add_view(myview, route_name='myroute', renderer="view_item.jinja2")
 
     config.scan()
 

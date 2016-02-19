@@ -3,8 +3,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.models.project_content.workflow import Workflow
-from seeweb.models.project_content.workflow_node import WorkflowNode
+# from seeweb.models.project_content.workflow import Workflow
+# from seeweb.models.project_content.workflow_node import WorkflowNode
 
 from .commons import init_min
 
@@ -16,26 +16,26 @@ def view(request):
     project, role, view_params = init_min(request, session)
 
     wid = request.matchdict['wid']
-    workflow = Workflow.get(session, wid)
-    if workflow is None:
-        loc = request.route_url('project_view_content', pid=project.id)
-        return HTTPFound(location=loc)
-
-    view_params["workflow"] = workflow
-
-    wdef = workflow.load_definition()
-    view_params["wdef"] = wdef
-
-    ndef = {}
-    for node_def in wdef['nodes']:
-        nid = node_def['id']
-        wnode = WorkflowNode.get(session, nid)
-        if wnode is None:
-            ndef[nid] = None
-        else:
-            ndef[nid] = wnode.load_definition()
-
-    view_params["nodes"] = ndef
-    view_params["ndef"] = json.dumps(ndef)
+    # workflow = Workflow.get(session, wid)
+    # if workflow is None:
+    #     loc = request.route_url('project_view_content', pid=project.id)
+    #     return HTTPFound(location=loc)
+    #
+    # view_params["workflow"] = workflow
+    #
+    # wdef = workflow.load_definition()
+    # view_params["wdef"] = wdef
+    #
+    # ndef = {}
+    # for node_def in wdef['nodes']:
+    #     nid = node_def['id']
+    #     wnode = WorkflowNode.get(session, nid)
+    #     if wnode is None:
+    #         ndef[nid] = None
+    #     else:
+    #         ndef[nid] = wnode.load_definition()
+    #
+    # view_params["nodes"] = ndef
+    # view_params["ndef"] = json.dumps(ndef)
 
     return view_params

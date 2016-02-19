@@ -2,10 +2,10 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.models.project_content.executable import Executable
-from seeweb.models.project_content.notebook import Notebook
-from seeweb.models.project_content.workflow import Workflow
-from seeweb.models.project_content.workflow_node import WorkflowNode
+# from seeweb.models.project_content.executable import Executable
+# from seeweb.models.project_content.notebook import Notebook
+# from seeweb.models.project_content.workflow import Workflow
+# from seeweb.models.project_content.workflow_node import WorkflowNode
 from seeweb.project.explore_sources import (fetch_dependencies,
                                             find_executables,
                                             find_notebooks,
@@ -35,18 +35,18 @@ def view(request):
             for name, ver in fetch_dependencies(project.id):
                 project.add_dependency(session, name, ver)
 
-            project.clear_content(session)
-            for executable in find_executables(project.id):
-                Executable.create(session, project, executable)
-
-            for notebook in find_notebooks(project.id):
-                Notebook.create(session, project, notebook[1])
-
-            for node in find_workflow_nodes(project.id):
-                WorkflowNode.create(session, project, node)
-
-            for workflow in find_workflows(project.id):
-                Workflow.create(session, project, workflow)
+            # project.clear_content(session)
+            # for executable in find_executables(project.id):
+            #     Executable.create(session, project, executable)
+            #
+            # for notebook in find_notebooks(project.id):
+            #     Notebook.create(session, project, notebook[1])
+            #
+            # for node in find_workflow_nodes(project.id):
+            #     WorkflowNode.create(session, project, node)
+            #
+            # for workflow in find_workflows(project.id):
+            #     Workflow.create(session, project, workflow)
 
             loc = request.route_url('project_view_content', pid=project.id)
             return HTTPFound(location=loc)

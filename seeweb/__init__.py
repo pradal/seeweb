@@ -90,12 +90,12 @@ def main(global_config, **settings):
 
     # project content
     for dname in glob("seeweb/project/content/*/"):
-        cnt_type = basename(dirname(dname))
+        category = basename(dirname(dname))
         for view_pth in glob(dname + "views/*.py"):
             view_name = splitext(basename(view_pth))[0]
             if view_name != "__init__":
-                route_name = 'project_content_%s_%s' % (cnt_type, view_name)
-                route_url = 'project/{pid}/content/%s/{cid}' % cnt_type
+                route_name = 'project_content_%s_%s' % (category, view_name)
+                route_url = 'project/{pid}/content/%s/{cid}' % category
                 config.add_route(route_name, route_url)
 
     # project

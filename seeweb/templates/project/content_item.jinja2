@@ -2,7 +2,7 @@
 
 <div class="{{ item.category }} condensed">
     <p>{{ item.name }}</p>
-    <a href="{{ request.route_url('project_content_notebook_view_item', pid=project.id, cid=item.id) }}">{{ item.name }}</a>
+    <a href="{{ request.route_url('project_content_%s_view_item' % item.category, pid=project.id, cid=item.id) }}">{{ item.name }}</a>
 </div>
 
 {%- endmacro %}

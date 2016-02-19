@@ -5,4 +5,42 @@
 <p>uid: {{ cnt_item.id }}</p>
 <p>Def: {{ cnt_item.definition }}</p>
 
+<ul>
+    <li>Descr: {{ cnt_item.description }}</li>
+    <li>Function: {{ cnt_def['function'] }}</li>
+    <li>Inputs:
+        {% if cnt_def['inputs']|length == 0 %}
+            None
+        {% else %}
+            <ul>
+                {% for port_def in cnt_def['inputs'] %}
+                    <li>name: {{ port_def['name'] }}
+                        <ul>
+                            <li>descr: {{ port_def['description'] }}</li>
+                            <li>interface: {{ port_def['interface'] }}</li>
+                            <li>default: {{ port_def['value'] }}</li>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+    <li>Outputs:
+        {% if cnt_def['outputs']|length == 0 %}
+            None
+        {% else %}
+            <ul>
+                {% for port_def in cnt_def['outputs'] %}
+                    <li>name: {{ port_def['name'] }}
+                        <ul>
+                            <li>descr: {{ port_def['description'] }}</li>
+                            <li>interface: {{ port_def['interface'] }}</li>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+</ul>
+
 {%- endblock %}

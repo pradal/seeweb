@@ -11,7 +11,7 @@ class ContentItem(Base, Described):
     __tablename__ = 'pjt_content_items'
 
     id = Column(String(32), nullable=False, primary_key=True)
-    type = Column(String(255), nullable=False)
+    category = Column(String(255), nullable=False)
     project = Column(String(255), ForeignKey("projects.id"), nullable=False)
     name = Column(String(255), nullable=False)
     author = Column(String(255), default="")
@@ -36,20 +36,20 @@ class ContentItem(Base, Described):
         return get_by_id(session, ContentItem, cid)
 
     @staticmethod
-    def create(session, cid, item_type, project):
+    def create(session, cid, category, project):
         """Create a new content item for this project.
 
         Args:
             session: (DBSession)
             cid: (uuid) id of the content
-            item_type: (str)
+            category: (str)
             project: (Project) project that will own the content
 
         Returns:
             (ContentItem)
         """
         item = ContentItem(id=cid,
-                           type=item_type,
+                           category=category,
                            project=project.id)
         session.add(item)
 

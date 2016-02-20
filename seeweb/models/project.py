@@ -198,24 +198,20 @@ class Project(Base, Rated, Described, Authorized):
         del session
         self.owner = user.id
 
-    # def clear_content(self, session):
-    #     """Remove all items in project content.
-    #
-    #     Args:
-    #         session: (DBSession)
-    #
-    #     Returns:
-    #         None
-    #     """
-    #     cnt = self.get_content(session)
-    #     if cnt is None:
-    #         return
-    #
-    #     for item_typ in item_types:
-    #         for item in getattr(cnt, item_typ):
-    #             session.delete(item)
-    #
-    #     return cnt
+    def clear_content(self, session):
+        """Remove all items associated with this project.
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            None
+        """
+        query = session.query(ContentItem)
+        query = query.filter(ContentItem.project == self.id)
+
+        for item in query.all():
+            ContentItem.remove(session, item)
 
     def clear_dependencies(self, session):
         """Remove all dependencies from the project

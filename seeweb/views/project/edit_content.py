@@ -6,6 +6,7 @@ from seeweb.models import DBSession
 # from seeweb.models.project_content.notebook import Notebook
 # from seeweb.models.project_content.workflow import Workflow
 # from seeweb.models.project_content.workflow_node import WorkflowNode
+from seeweb.project.content.explore import explore_sources
 from seeweb.project.explore_sources import (fetch_dependencies,
                                             find_executables,
                                             find_notebooks,
@@ -35,6 +36,7 @@ def view(request):
             for name, ver in fetch_dependencies(project.id):
                 project.add_dependency(session, name, ver)
 
+            explore_sources(session, project)
             # project.clear_content(session)
             # for executable in find_executables(project.id):
             #     Executable.create(session, project, executable)

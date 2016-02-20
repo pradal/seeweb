@@ -38,6 +38,6 @@ def view(request):
     # explore sources
     cnt = project.fetch_content(session)
     view_params["content"] = cnt
-    view_params["sections"] = cnt.keys()
+    view_params["sections"] = ["dependencies"] + cnt.keys()
 
     return view_params

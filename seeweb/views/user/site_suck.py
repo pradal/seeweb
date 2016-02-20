@@ -10,8 +10,7 @@ from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
 from seeweb.project.gallery import add_gallery_image, clear_gallery
-from seeweb.project.source import fetch_sources, parse_hostname
-from seeweb.project.provider import github_git
+from seeweb.project.source import fetch_sources, parse_hostname, parse_url
 
 
 @view_config(route_name='site_suck',
@@ -33,14 +32,13 @@ def view(request):
     view_params["src_url"] = src_url
 
     hostname = parse_hostname(src_url)
-    if hostname != 'github':
-        request.session.flash("Unrecognized host name: %s" % hostname,
-                              'warning')
+    if hostname == 'unknown':
+        request.session.flash("Unrecognized host name", 'warning')
         return view_params
 
-    owner, project_name = github_git.parse_url(src_url)
-    if owner is None:
-        request.session.flash("Unrecognized url, must be https://github.com/owner/project.git", 'warning')
+    project_name = parse_url(src_url, hostname)
+    if project_name is None:
+        request.session.flash("Unable to parse url", 'warning')
         return view_params
 
     if "project_name" in request.params:
@@ -48,7 +46,8 @@ def view(request):
 
     pid = project_name.lower().strip()
     if " " in pid:
-        request.session.flash("Project names can not contains spaces", 'warning')
+        request.session.flash("Project names can not contains spaces",
+                              'warning')
         return view_params
 
     project = Project.get(session, pid)

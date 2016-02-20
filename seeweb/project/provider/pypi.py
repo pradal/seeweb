@@ -1,7 +1,5 @@
-"""Default API for source providers
+"""Clone git repository hosted on github
 """
-import os
-from os.path import exists
 
 
 def project_default_url(project):
@@ -13,37 +11,41 @@ def project_default_url(project):
     Returns:
         (str): url where to find the project
     """
-    del project
-    raise NotImplementedError
+    return "https://pypi.python.org/pypi/%s" % project.id
 
 
 def parse_url(url):
     """Parse a repository url to extract project name
 
     Args:
-        url: (urlsplit) url of project repository
+        url: (urlsplit) url of project repository on github
 
     Returns:
-        (str): project name
+        (str): project name or None if url not recognized
     """
-    del url
-    raise NotImplementedError
+    if url.netloc != "pypi.python.org":
+        return None
+
+    gr = url.path.split("/")
+    if len(gr) != 3:
+        return None
+
+    dmy, pypi, name = gr
+
+    return name
 
 
-def fetch_sources(src_url, dst):
+def fetch_sources(repo_url, dst):
     """Fetch sources located in src_url
     and copy them into a pid directory in dst.
 
     Args:
-        src_url: (str) a valid url to fetch sources from
+        repo_url: (str) a valid url to fetch sources from
         dst: (str) a local path to copy files in
 
     Returns:
         (bool): whether sources have been retrieved or not
     """
-    del src_url
-
-    if not exists(dst):
-        os.mkdir(dst)
-
-    return True
+    del repo_url
+    del dst
+    return False

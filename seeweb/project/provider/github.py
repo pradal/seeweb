@@ -6,22 +6,33 @@ from subprocess import call
 from urlparse import urlsplit
 
 
-def parse_url(url):
-    """Parse a repository url to extract owner and project name
+def project_default_url(project):
+    """Generate the default url of the project for this provider
 
     Args:
-        url: (str) url of project repository on github
+        project: (Project)
 
     Returns:
-        (str, str): owner, project name
+        (str): url where to find the project
     """
-    url = urlsplit(url)
+    return "https://github.com/%s/%s.git" % (project.owner, project.id)
+
+
+def parse_url(url):
+    """Parse a repository url to extract project name
+
+    Args:
+        url: (urlsplit) url of project repository on github
+
+    Returns:
+        (str): project name or None if url not recognized
+    """
     if url.netloc != "github.com":
-        return None, None
+        return None
 
     gr = url.path.split("/")
     if len(gr) != 3:
-        return None, None
+        return None
 
     dmy, owner, name = gr
 

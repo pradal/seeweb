@@ -14,7 +14,6 @@ from seeweb.project.explore_sources import (fetch_dependencies,
                                             find_workflows)
 from seeweb.project.source import (fetch_sources,
                                    host_src_url,
-                                   parse_vcs,
                                    parse_hostname,
                                    recognized_hosts)
 
@@ -58,20 +57,17 @@ def view(request):
         if "src_url" in request.params:
             project.src_url = request.params['src_url']
 
-    for host in recognized_hosts.keys():
+    for host in recognized_hosts:
         if host in request.params:
             project.src_url = host_src_url(project, host)
 
     if len(project.src_url) > 0:
-        vcs = parse_vcs(project.src_url)
         hostname = parse_hostname(project.src_url)
     else:
-        vcs = ""
         hostname = ""
 
-    view_params["vcs"] = vcs
     view_params["current_hostname"] = hostname
 
-    view_params["src_hosts"] = recognized_hosts.keys()
+    view_params["src_hosts"] = recognized_hosts
 
     return view_params

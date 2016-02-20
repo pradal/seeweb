@@ -35,7 +35,7 @@ def view(request):
         else:
             project.doc = doc
 
-    for host in recognized_hosts.keys():
+    for host in recognized_hosts:
         if host in request.params:
             project.doc_url = host_doc_url(project, host)
 
@@ -46,6 +46,6 @@ def view(request):
 
     view_params["current_hostname"] = hostname
 
-    view_params["doc_hosts"] = recognized_hosts.keys()
+    view_params["doc_hosts"] = recognized_hosts
 
     return view_params

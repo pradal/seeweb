@@ -9,11 +9,11 @@ from urlparse import urlsplit
 from seeweb.io import rmtree
 
 fac = dict()
-for pth in glob("%s/provider/*.py" % dirname(__file__)):
+for pth in glob("%s/src_provider/*.py" % dirname(__file__)):
     fname = basename(pth)
     if fname not in("__init__.py", "default.py"):
         pname = splitext(fname)[0]
-        cmd = "from seeweb.project.provider import %s as provider" % pname
+        cmd = "from seeweb.project.src_provider import %s as provider" % pname
         code = compile(cmd, "<string>", 'exec')
         eval(code)
         fac[pname] = globals()['provider']

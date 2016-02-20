@@ -36,21 +36,22 @@
 
         var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
         document.getElementById('workflow_canvas_placeholder').style.display = 'none';
-        var panZoom = paper.panzoom({ initialZoom: 5,
-                                      initialPosition: { x: 200, y: 150} });
-        panZoom.enable();
 
         wv.x_offset = 400;
         wv.y_offset = 300;
         wv.draw_workflow(paper, wkf, nodes);
 
+        var pan_zoom = paper.panzoom({ initialZoom: 5,
+                                      initialPosition: { x: 200, y: 150} });
+        pan_zoom.enable();
+
         $("#canvas_controls #up").click(function (e) {
-            panZoom.zoomIn(1);
+            pan_zoom.zoomIn(1);
             e.preventDefault();
         });
 
         $("#canvas_controls #down").click(function (e) {
-            panZoom.zoomOut(1);
+            pan_zoom.zoomOut(1);
             e.preventDefault();
         });
     }

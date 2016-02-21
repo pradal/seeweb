@@ -21,7 +21,7 @@
             {% if hostname == 'unknown' %}
                 <p>Unrecognized host</p>
             {% else %}
-                <p>hosted on <a href="{{ project.src_url }}">{{ hostname }}<img src="{{ request.static_url('seeweb:static/src_host/%s.png' % hostname) }}" /></a></p>
+                <p>hosted on <a href="{{ project.src_url }}">{{ hostname }}<img src="{{ request.static_url('seeweb:static/remote_host/%s.png' % hostname) }}" /></a></p>
             {% endif %}
         {% endif %}
     </div>

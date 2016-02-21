@@ -19,7 +19,7 @@
             {% for hostname in src_hosts %}
                 <button class="btn btn-{% if hostname == current_hostname %}primary{% else %}default{%endif%}" type="submit" name="{{ hostname }}" {% if hostname == current_hostname %}disabled{% endif %}>
                     {{ hostname }}
-                    <img src="{{request.static_url('seeweb:static/src_host/%s.png' % hostname) }}" />
+                    <img src="{{request.static_url('seeweb:static/remote_host/%s.png' % hostname) }}" />
                 </button>
             {% endfor %}
         </div>

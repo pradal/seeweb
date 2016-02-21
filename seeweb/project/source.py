@@ -90,6 +90,7 @@ def parse_url(url, hostname):
         (str, str): owner, project name
     """
     if hostname in fac:
+        url = urlsplit(url)
         return fac[hostname].parse_url(url)
 
     return None

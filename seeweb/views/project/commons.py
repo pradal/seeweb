@@ -5,6 +5,8 @@ from seeweb.models.auth import Role
 from seeweb.models.content_item import ContentItem
 from seeweb.models.project import Project
 from seeweb.models.user import User
+from seeweb.project.content.explore import explore_sources
+
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
@@ -100,12 +102,6 @@ def edit_init(request, session, tab):
         request.session.flash(msg, 'warning')
         raise HTTPFound(location=request.route_url('home'))
 
-    # debug
-    if 'default' in request.params:
-        from seeweb.project.content.explore import explore_sources
-        explore_sources(session, project)
-        print "default\n" * 10
-
     if 'back' in request.params:
         # request.session.flash("Edition stopped", 'success')
         loc = request.route_url('project_view_%s' % tab, pid=project.id)
@@ -160,6 +156,9 @@ def edit_init(request, session, tab):
                 add_gallery_image(project, img, name)
 
             request.session.flash("gallery submitted", 'success')
+
+    if 'fetch_content' in request.params:
+        explore_sources(session, project)
 
     if "confirm_delete" in request.params:
         if request.unauthenticated_userid != project.owner:

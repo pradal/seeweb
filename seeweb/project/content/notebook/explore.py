@@ -1,6 +1,5 @@
 """Explore the content of a project to find its workflow nodes.
 """
-import json
 from os import walk
 from os.path import splitext
 from os.path import join as pj

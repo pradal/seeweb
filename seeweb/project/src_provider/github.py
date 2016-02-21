@@ -36,7 +36,7 @@ def parse_url(url):
 
     dmy, owner, name = gr
 
-    return owner, name.split(".")[0]
+    return name.split(".")[0]
 
 
 def fetch_sources(repo_url, dst):

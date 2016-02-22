@@ -26,7 +26,9 @@
 
 <div id="content" class="row">
     <div class="col-md-3">
-        <button class="btn btn-primary"  data-toggle="modal" data-target="#add_to_gallery">Add to gallery</button>
+        {% if allow_edition %}
+            <button class="btn btn-primary"  data-toggle="modal" data-target="#add_to_gallery">Add to gallery</button>
+        {% endif %}
     </div>
 
     <div class="col-md-9">
@@ -35,29 +37,31 @@
     </div>
 </div>
 
-<!-- Modal transfer ownership -->
-<div id="add_to_gallery" class="modal fade" role="dialog" data-keyboard="true">
-  <div class="modal-dialog">
+{% if allow_edition %}
+    <!-- Modal add to gallery -->
+    <div id="add_to_gallery" class="modal fade" role="dialog" data-keyboard="true">
+      <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add this item to project's gallery?</h4>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-            <textarea class="form-control" rows="5" placeholder="some description"></textarea>
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add this item to project's gallery?</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <textarea class="form-control" rows="5" name="gallery_item_description" placeholder="some description"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" name="confirm_gallery_addition">Add</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_gallery_addition">Cancel</button>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" name="confirm_gallery_addition">Add</a>
-        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_gallery_addition">Cancel</button>
+
       </div>
     </div>
-
-  </div>
-</div>
+{% endif %}
 
 </form>
 

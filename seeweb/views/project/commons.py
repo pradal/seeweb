@@ -216,6 +216,14 @@ def content_init(request, session):
         loc = request.route_url('project_view_content', pid=project.id)
         raise HTTPFound(location=loc)
 
+    allow_edition = role == Role.edit
+
+    if allow_edition:
+        if "confirm_gallery_addition" in request.params:
+            descr = request.params["gallery_item_description"]
+            print descr, "add to gallery\n" * 10
+
+    view_params["allow_edition"] = allow_edition
     view_params["cnt_item"] = item
     item_def = item.load_definition()
     view_params["cnt_def"] = item_def

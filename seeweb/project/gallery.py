@@ -14,14 +14,14 @@ def gallery_pth(project):
     Warnings: does not test if path exists
 
     Args:
-        project: (Project)
+        project: (str) project id
 
     Returns:
         (str): pth to gallery dir
     """
     root = dirname(dirname(__file__))
 
-    return join(root, "data", "gallery", project.id)
+    return join(root, "data", "gallery", project)
 
 
 def delete_gallery(project):
@@ -33,9 +33,37 @@ def delete_gallery(project):
     Returns:
         (None)
     """
-    gal_dir = gallery_pth(project)
+    gal_dir = gallery_pth(project.id)
     if exists(gal_dir):
         rmtree(gal_dir)
+
+
+def upload_gallery_thumbnail(img, item):
+    """Convert image to thumbnail and save it for item
+
+    Args:
+        img: (Image)
+        item: (GalleryItem)
+
+    Returns:
+        None
+    """
+    gal_dir = gallery_pth(item.project)
+    if not exists(gal_dir):
+        os.mkdir(gal_dir)
+
+    # thumbnail
+    s = 256
+    thumb = Image.new('RGBA', (s, s))
+    img.thumbnail((s, s))
+    thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
+
+    th_name = "%s_thumb.png" % item.id
+    th_pth = join(gal_dir, th_name)
+    if exists(th_pth):
+        os.remove(th_pth)
+
+    thumb.save(th_pth)
 
 
 def add_gallery_image(session, project, img, img_name):
@@ -50,7 +78,7 @@ def add_gallery_image(session, project, img, img_name):
     Returns:
         None
     """
-    gal_dir = gallery_pth(project)
+    gal_dir = gallery_pth(project.id)
     if not exists(gal_dir):
         os.mkdir(gal_dir)
 
@@ -67,14 +95,4 @@ def add_gallery_image(session, project, img, img_name):
     session.flush()
 
     # thumbnail
-    s = 256
-    thumb = Image.new('RGBA', (s, s))
-    img.thumbnail((s, s))
-    thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
-
-    th_name = "%s_thumb.png" % item.id
-    th_pth = join(gal_dir, th_name)
-    if exists(th_pth):
-        os.remove(th_pth)
-
-    thumb.save(th_pth)
+    upload_gallery_thumbnail(img, item)

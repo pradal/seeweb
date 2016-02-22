@@ -3,14 +3,16 @@ from pyramid.httpexceptions import HTTPFound
 from seeweb.avatar import upload_project_avatar
 from seeweb.models.auth import Role
 from seeweb.models.content_item import ContentItem
+from seeweb.models.gallery_item import GalleryItem
 from seeweb.models.project import Project
 from seeweb.models.user import User
 from seeweb.project.content.explore import explore_sources
+from seeweb.project.content.thumbnail import create_thumbnail
 
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
-from seeweb.project.gallery import add_gallery_image
+from seeweb.project.gallery import add_gallery_image, upload_gallery_thumbnail
 from seeweb.project.source import has_source
 import transaction
 
@@ -220,8 +222,19 @@ def content_init(request, session):
 
     if allow_edition:
         if "confirm_gallery_addition" in request.params:
-            descr = request.params["gallery_item_description"]
-            print descr, "add to gallery\n" * 10
+            thumb = create_thumbnail(item, view=None)
+            if thumb is None:
+                request.session.flash("Unable to generate a thumbnail from this", 'warning')
+            else:
+                descr = request.params["gallery_item_description"]
+                url = request.route_url('project_content_%s_view_item' % item.category,
+                                        pid=project.id, cid=item.id)
+                gal_item = GalleryItem.create(session, project, item.name, url)
+                gal_item.author = item.author
+                gal_item.store_description(descr)
+                session.flush()
+
+                upload_gallery_thumbnail(thumb, gal_item)
 
     view_params["allow_edition"] = allow_edition
     view_params["cnt_item"] = item

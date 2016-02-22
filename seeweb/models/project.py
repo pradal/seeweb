@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from seeweb.avatar import (generate_default_project_avatar,
                            remove_project_avatar)
+from seeweb.project.gallery import delete_gallery
 from seeweb.project.source import delete_source
 
 from .actor import PActor
@@ -11,6 +12,7 @@ from .comment import Comment
 from .content_item import ContentItem
 from .dependency import Dependency
 from .described import Described
+from .gallery_item import GalleryItem
 from .installed import Installed
 from .models import Base, get_by_id
 from .rated import Rated
@@ -96,6 +98,9 @@ class Project(Base, Rated, Described, Authorized):
         """
         # remove content
         project.clear_content(session)
+
+        # remove gallery items
+        project.clear_gallery(session)
 
         # remove avatar
         remove_project_avatar(project)
@@ -229,6 +234,21 @@ class Project(Base, Rated, Described, Authorized):
         for dep in list(self.dependencies):
             session.delete(dep)
 
+    def clear_gallery(self, session):
+        """Remove all items associated with this project.
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            None
+        """
+        query = session.query(GalleryItem)
+        query = query.filter(GalleryItem.project == self.id)
+
+        for item in query.all():
+            GalleryItem.remove(session, item)
+
     def fetch_comments(self, session, limit=None):
         """Fetch all comments associated to this project.
 
@@ -266,16 +286,19 @@ class Project(Base, Rated, Described, Authorized):
 
         return cnt
 
-    # def get_content(self, session):
-    #     """Retrieve Content object associated to this project.
-    #
-    #     Args:
-    #         session: (DBSession)
-    #
-    #     Returns:
-    #         (Content)
-    #     """
-    #     return Content.get(session, self.id)
+    def fetch_gallery_items(self, session):
+        """Fetch all gallery items in this project.
+
+        Args:
+            session: (DBSession)
+
+        Returns:
+            (list of GalleryItem): list of items
+        """
+        query = session.query(GalleryItem)
+        query = query.filter(GalleryItem.project == self.id)
+
+        return query.all()
 
     def recompute_ratings(self, session):
         """Recompute ratings from the list of comments.

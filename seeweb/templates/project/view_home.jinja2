@@ -34,8 +34,8 @@
                 <p>Empty gallery</p>
             {% else %}
                 <div class="row">
-                    {% for img_name in gallery %}
-                        {{ gallery_item(project, img_name, "description") }}
+                    {% for item in gallery %}
+                        {{ gallery_item(item) }}
                     {% endfor %}
                 </div>
             {% endif %}

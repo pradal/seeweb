@@ -1,10 +1,11 @@
 """Set of functions used to manage galleries
 """
 import os
-from os.path import dirname, exists, join, splitext
+from os.path import dirname, exists, join
 from PIL import Image
 
 from seeweb.io import rmtree
+from seeweb.models.gallery_item import GalleryItem
 
 
 def gallery_pth(project):
@@ -23,30 +24,7 @@ def gallery_pth(project):
     return join(root, "data", "gallery", project.id)
 
 
-def fetch_gallery_images(project):
-    """List all available image in gallery associated
-    to the given project.
-
-    Args:
-        project: (Project)
-
-    Returns:
-        (list of str): path to gallery images
-    """
-    gal_dir = gallery_pth(project)
-    imgs = []
-    if not exists(gal_dir):
-        return imgs
-
-    for img_name in os.listdir(gal_dir):
-        name, ext = splitext(img_name)
-        if ext == ".png" and not name.endswith("_small"):
-            imgs.append(name)
-
-    return imgs
-
-
-def clear_gallery(project):
+def delete_gallery(project):
     """Remove all images from gallery.
 
     Args:
@@ -60,10 +38,11 @@ def clear_gallery(project):
         rmtree(gal_dir)
 
 
-def add_gallery_image(project, img, img_name):
+def add_gallery_image(session, project, img, img_name):
     """Save a new image in the gallery of a project.
 
     Args:
+        session: (DBSession)
         project: (Project)
         img: (Image)
         img_name: (str) name to use to store image
@@ -81,13 +60,19 @@ def add_gallery_image(project, img, img_name):
 
     img.save(img_pth)
 
+    # create gallery item
+    url = "seeweb:data/gallery/%s/%s" % (project.id, img_name)
+    item = GalleryItem.create(session, project, img_name, url)
+    item.author = project.owner
+    session.flush()
+
     # thumbnail
     s = 256
     thumb = Image.new('RGBA', (s, s))
     img.thumbnail((s, s))
     thumb.paste(img, ((s - img.size[0]) / 2, (s - img.size[1]) / 2))
 
-    th_name = "%s_small%s" % splitext(img_name)
+    th_name = "%s_thumb.png" % item.id
     th_pth = join(gal_dir, th_name)
     if exists(th_pth):
         os.remove(th_pth)

@@ -10,7 +10,7 @@ from seeweb.project.content.explore import explore_sources
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
-from seeweb.project.gallery import add_gallery_image, clear_gallery
+from seeweb.project.gallery import add_gallery_image
 from seeweb.project.source import has_source
 import transaction
 
@@ -149,11 +149,11 @@ def edit_init(request, session, tab):
                                   'warning')
 
     if 'fetch_gallery' in request.params:
-        clear_gallery(project)
+        project.clear_gallery(session)
         imgs = fetch_gallery(project.id)
         if len(imgs) > 0:
             for img, name in imgs:
-                add_gallery_image(project, img, name)
+                add_gallery_image(session, project, img, name)
 
             request.session.flash("gallery submitted", 'success')
 

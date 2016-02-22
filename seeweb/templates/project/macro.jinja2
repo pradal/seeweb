@@ -40,16 +40,23 @@
 {%- endmacro %}
 
 
-{% macro gallery_item(project, img_name, descr) -%}
+{% macro gallery_item(item) -%}
 
 <div class="gallery_item">
     <div class="avatar">
-        <a href="{{ request.static_url('seeweb:data/gallery/%s/%s.png' % (project.id, img_name)) }}">
-            <img class="img-rounded" src="{{ request.static_url('seeweb:data/gallery/%s/%s_small.png' % (project.id, img_name)) }}" />
+        <a href="{% if item.url != "" -%}
+                     {% if item.url.startswith("seeweb:") -%}
+                         {{ request.static_url(item.url) }}
+                     {% else %}
+                         {{ item.url }}
+                     {%- endif %}
+                 {%- endif %}">
+            <img class="img-rounded" src="{{ request.static_url('seeweb:data/gallery/%s/%s_thumb.png' % (item.project, item.id)) }}" />
         </a>
+        <p>{{ item.name }}</p>
     </div>
     <div class="descr">
-        <span>{{ descr }}</span>
+        <span>{{ item.description }}</span>
     </div>
 </div>
 

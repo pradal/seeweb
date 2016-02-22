@@ -10,7 +10,7 @@ from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_dependencies,
                                             fetch_gallery,
                                             fetch_readme)
-from seeweb.project.gallery import add_gallery_image, clear_gallery
+from seeweb.project.gallery import add_gallery_image
 from seeweb.project.source import fetch_sources, parse_hostname, parse_url
 
 
@@ -92,11 +92,11 @@ def view(request):
             request.session.flash("Unable to read image", 'warning')
 
         # fetch gallery
-        clear_gallery(project)
+        project.clear_gallery(session)
         imgs = fetch_gallery(project.id)
         if len(imgs) > 0:
             for img, name in imgs:
-                add_gallery_image(project, img, name)
+                add_gallery_image(session, project, img, name)
 
         # fetch readme
         try:

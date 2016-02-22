@@ -65,7 +65,7 @@ class ContentItem(Base, Described):
         Returns:
             (True)
         """
-        # delete project
+        # delete item
         session.delete(item)
 
         return True

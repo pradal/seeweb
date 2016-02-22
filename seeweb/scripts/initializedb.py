@@ -203,7 +203,7 @@ This project is part of OpenAlea_.
                          "Koala.png",
                          "Penguins.png"]:
             img = Image.open("seeweb/scripts/gallery/%s" % img_name)
-            add_gallery_image(pkglts, img, img_name)
+            add_gallery_image(session, pkglts, img, img_name)
 
         # comments
         for i in range(4):

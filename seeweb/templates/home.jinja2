@@ -1,4 +1,3 @@
-{% from 'project/content_item.jinja2' import content_item_condensed with context %}
 
 {% extends "layout.jinja2" %}
 
@@ -29,7 +28,12 @@
               <div class="panel-body">
                 <div class="row">
                     {% for item in items %}
-                        {{ content_item_condensed(item) }}
+                        <div class="wrapper">
+                            <a href="">
+                                <img class="img-rounded" src="{{ request.static_url('seeweb:data/gallery/%s/%s_thumb.png' % (item.project, item.id)) }}" />
+                            </a>
+                            <span class="btn btn-default label" disabled>{{ item.project }}</span>
+                        </div>
                     {% endfor %}
                 </div>
               </div>

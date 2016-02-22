@@ -1,3 +1,4 @@
+import json
 from uuid import uuid1
 
 from seeweb.models.content_item import ContentItem
@@ -19,4 +20,6 @@ def main(session):
     item = ContentItem.create(session, uuid1().hex, "scene3d", scnpjt)
     item.name = "multi box"
     item.author = "revesansparole"
-    # item.store_definition(node_def)
+    with open("seeweb/scripts/scene.json", 'r') as f:
+        sc_def = json.load(f)
+        item.store_definition(sc_def)

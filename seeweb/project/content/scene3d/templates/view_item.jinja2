@@ -1,6 +1,9 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
 {% block project_content_body -%}
+<div>
+    <p id="debug">debug</p>
+</div>
 
 <div id="scene3d_canvas">
 </div>
@@ -16,6 +19,8 @@
         var camera, scene, raycaster, renderer;
 
         var mouse = new THREE.Vector2(), INTERSECTED;
+        mouse.x = -100;
+        mouse.y = -100;
         var radius = 100, theta = 0;
 
         init();
@@ -34,27 +39,18 @@
             light.position.set( 1, 1, 1 ).normalize();
             scene.add( light );
 
-            var geometry = new THREE.BoxGeometry( 20, 20, 20 );
-
-            for ( var i = 0; i < 2000; i ++ ) {
-
-            var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-
-            object.position.x = Math.random() * 800 - 400;
-            object.position.y = Math.random() * 800 - 400;
-            object.position.z = Math.random() * 800 - 400;
-
-            object.rotation.x = Math.random() * 2 * Math.PI;
-            object.rotation.y = Math.random() * 2 * Math.PI;
-            object.rotation.z = Math.random() * 2 * Math.PI;
-
-            object.scale.x = Math.random() + 0.5;
-            object.scale.y = Math.random() + 0.5;
-            object.scale.z = Math.random() + 0.5;
-
-            scene.add( object );
-
+            var loader = new THREE.ObjectLoader();
+            var mesh = loader.parse(JSON.parse('{{ cnt_item.definition|safe }}'));
+            if (mesh.type == "Scene") {
+                for (i in mesh.children) {
+                    $("#debug").text(i);
+                    scene.add(mesh.children[i]);
+                }
+            } else {
+                scene.add(mesh);
             }
+            //$("#debug").text(mesh.type);
+
 
             raycaster = new THREE.Raycaster();
 

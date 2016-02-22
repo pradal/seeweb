@@ -2,7 +2,7 @@
 
 {% block project_body -%}
 
-<form action="{{ request.route_url('project_edit_%s' % tab, pid=project.id) }}" method='POST'
+<form action="{{ request.current_route_url() }}" method='POST'
       enctype="multipart/form-data">
 
 <div id="header" class="row">

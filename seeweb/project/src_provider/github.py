@@ -3,7 +3,6 @@
 import os
 from os.path import exists
 from subprocess import call
-from urlparse import urlsplit
 
 
 def project_default_url(project):
@@ -57,7 +56,6 @@ def fetch_sources(repo_url, dst):
         call(["git", "init"])
 
     cmd = "git pull %s" % repo_url
-    print "cmd:", cmd, "\n" * 10
 
     res = 1
     try:

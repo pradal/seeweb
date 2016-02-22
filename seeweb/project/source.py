@@ -1,10 +1,11 @@
 """Set of function used to fetch sources on remote hosts
 """
 from glob import glob
-from os import mkdir
+from os import mkdir, remove
 from os.path import basename, dirname, exists, splitext
 from os.path import join as pj
 from urlparse import urlsplit
+from zipfile import BadZipfile, ZipFile
 
 from seeweb.io import rmtree
 
@@ -154,5 +155,15 @@ def upload_src_file(field_storage, pid):
     input_file.seek(0)
     with open(pj(pth, file_name), 'wb') as f:
         f.write(input_file.read())
+
+    # try to unpack zip files
+    try:
+        with ZipFile(pj(pth, file_name), 'r') as myzip:
+            myzip.extractall(pth)
+
+        remove(pj(pth, file_name))
+    except BadZipfile:
+        # not a zip file, do nothing
+        pass
 
     return file_name

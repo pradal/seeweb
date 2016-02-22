@@ -5,6 +5,8 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.project import Project
+from seeweb.project.content.explore import explore_sources
+from seeweb.project.explore_sources import fetch_dependencies
 from seeweb.project.source import upload_src_file
 
 
@@ -61,6 +63,10 @@ def view(request):
     try:
         upload_src_file(field_storage, pid)
         request.session.flash("File submitted", 'success')
+        for name, ver in fetch_dependencies(project.id):
+            project.add_dependency(session, name, ver)
+
+        explore_sources(session, project)
     except IOError:
         request.session.flash("Unable to read file", 'warning')
 

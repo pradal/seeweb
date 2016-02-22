@@ -4,10 +4,12 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.project.content.explore import explore_sources
 from seeweb.project.explore_sources import fetch_dependencies
-from seeweb.project.source import (fetch_sources,
+from seeweb.project.source import (delete_source,
+                                   fetch_sources,
                                    host_src_url,
                                    parse_hostname,
-                                   recognized_hosts)
+                                   recognized_hosts,
+                                   upload_src_file)
 
 from .commons import edit_init
 
@@ -20,7 +22,9 @@ def view(request):
 
     if "submit_local" in request.params:
         field_storage = request.params["local_file"]
-        project.src_url = field_storage.filename
+        delete_source(project.id)
+        if upload_src_file(field_storage, project.id) is not None:
+            explore_sources(session, project)
     elif "confirm_fetch_src" in request.params:
         if fetch_sources(project):
             project.clear_dependencies(session)

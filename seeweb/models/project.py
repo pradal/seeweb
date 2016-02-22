@@ -1,4 +1,5 @@
-from sqlalchemy import Boolean, Column, ForeignKey, String, Text
+from datetime import datetime
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
 from seeweb.avatar import (generate_default_project_avatar,
@@ -27,6 +28,7 @@ class Project(Base, Rated, Described, Authorized):
     id = Column(String(255), unique=True, primary_key=True)
     owner = Column(String(255), ForeignKey("users.id"))
     public = Column(Boolean)
+    creation_date = Column(DateTime, nullable=False)
     auth = relationship("PActor")
 
     doc_url = Column(Text, default="")
@@ -71,7 +73,8 @@ class Project(Base, Rated, Described, Authorized):
         """
         project = Project(id=name,
                           owner=owner_id,
-                          public=public)
+                          public=public,
+                          creation_date=datetime.now())
         session.add(project)
 
         # create avatar
@@ -101,6 +104,7 @@ class Project(Base, Rated, Described, Authorized):
 
         # remove gallery items
         project.clear_gallery(session)
+        delete_gallery(project)
 
         # remove avatar
         remove_project_avatar(project)

@@ -1,6 +1,5 @@
 from jinja2 import Markup
 from pyramid.view import view_config
-from urlparse import urlsplit
 
 from seeweb.models import DBSession
 from seeweb.project.documentation import parse_hostname

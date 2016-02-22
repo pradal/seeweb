@@ -1,17 +1,24 @@
 """Set of function used to fetch sources on remote hosts
 """
+from glob import glob
 from os import mkdir
-from os.path import dirname, exists, join
+from os.path import basename, dirname, exists, splitext
+from os.path import join as pj
 from urlparse import urlsplit
 
 from seeweb.io import rmtree
 
-from .provider import github_git, local_git
+fac = dict()
+for pth in glob("%s/src_provider/*.py" % dirname(__file__)):
+    fname = basename(pth)
+    if fname not in("__init__.py", "default.py"):
+        pname = splitext(fname)[0]
+        cmd = "from seeweb.project.src_provider import %s as provider" % pname
+        code = compile(cmd, "<string>", 'exec')
+        eval(code)
+        fac[pname] = globals()['provider']
 
-recognized_hosts = {"github": "github.com",
-                    "pypi": "pypi.python.org",
-                    "zenodo": "zenodo.org",
-                    "gforge": "gforge.inria.fr"}
+recognized_hosts = fac.keys()
 
 
 def source_pth(pid):
@@ -24,7 +31,7 @@ def source_pth(pid):
         (str): path, may miss last dirname
     """
     root = dirname(dirname(dirname(dirname(__file__))))
-    return join(root, "see_repo", pid)
+    return pj(root, "see_repo", pid)
 
 
 def has_source(pid):
@@ -55,22 +62,6 @@ def delete_source(pid):
             print "unable to destroy %s" % source_pth(pid), "\n" * 10
 
 
-def parse_vcs(url):
-    """Find vcs associated to a given url
-
-    Args:
-        url: (str)
-
-    Returns:
-        (str) name of vcs
-    """
-    pth = urlsplit(url).path
-    if pth.split(".")[-1] == "git":
-        return "git"
-
-    return "unknown"
-
-
 def parse_hostname(url):
     """Find host name associated to a given url
 
@@ -81,19 +72,28 @@ def parse_hostname(url):
         (str) name of host
     """
     url = urlsplit(url)
-    if len(url.netloc) == 0:
-        if "/" in url.path:
-            return "local"
-        else:
-            return "unknown"
-
-    ref_url = url.netloc.lower()
-
-    for name, host_url in recognized_hosts.items():
-        if host_url in ref_url:
-            return name
+    for pname, provider in fac.items():
+        if provider.parse_url(url) is not None:
+            return pname
 
     return "unknown"
+
+
+def parse_url(url, hostname):
+    """Parse a repository url to extract owner and project name
+
+    Args:
+        url: (urlsplit) url of project repository
+        hostname: (str) remote host name
+
+    Returns:
+        (str, str): owner, project name
+    """
+    if hostname in fac:
+        url = urlsplit(url)
+        return fac[hostname].parse_url(url)
+
+    return None
 
 
 def host_src_url(project, hostname):
@@ -106,17 +106,8 @@ def host_src_url(project, hostname):
     Returns:
         str
     """
-    if hostname == 'github':
-        return "https://github.com/%s/%s.git" % (project.owner, project.id)
-
-    if hostname == 'pypi':
-        return "https://pypi.python.org/pypi/%s" % project.id
-
-    if hostname == 'zenodo':
-        return "https://zenodo.org/record/%s" % project.id
-
-    if hostname == 'gforge':
-        return "https://gforge.inria.fr/projects/%s" % project.id
+    if hostname in fac:
+        return fac[hostname].project_default_url(project)
 
     return "unknown host: %s" % hostname
 
@@ -130,22 +121,18 @@ def fetch_sources(project):
     Returns:
         (bool): whether fetch has been successful
     """
-    vcs = parse_vcs(project.src_url)
-    if vcs != "git":
+    if project.src_url == "":
+        return False
+
+    hostname = parse_hostname(project.src_url)
+    if hostname == "unknown":
         return False
 
     pth = source_pth(project.id)
     if not exists(pth):
         mkdir(pth)
 
-    host = parse_hostname(project.src_url)
-    if host == 'github':
-        return github_git.fetch_sources(project.src_url, pth)
-
-    if host == 'local':
-        return local_git.fetch_sources(dirname(project.src_url), pth)
-
-    return False
+    return fac[hostname].fetch_sources(project.src_url, pth)
 
 
 def upload_src_file(field_storage, pid):
@@ -165,7 +152,7 @@ def upload_src_file(field_storage, pid):
     file_name = str(field_storage.filename)
     input_file = field_storage.file
     input_file.seek(0)
-    with open(join(pth, file_name), 'wb') as f:
+    with open(pj(pth, file_name), 'wb') as f:
         f.write(input_file.read())
 
     return file_name

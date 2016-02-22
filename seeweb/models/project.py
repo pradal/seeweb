@@ -9,9 +9,9 @@ from .actor import PActor
 from .auth import Authorized, Role
 from .comment import Comment
 from .content_item import ContentItem
-# from .project_content.content import Content, item_types
 from .dependency import Dependency
 from .described import Described
+from .installed import Installed
 from .models import Base, get_by_id
 from .rated import Rated
 from .team import Team
@@ -95,8 +95,7 @@ class Project(Base, Rated, Described, Authorized):
             (True)
         """
         # remove content
-        cnt = project.clear_content(session)
-        session.delete(cnt)
+        project.clear_content(session)
 
         # remove avatar
         remove_project_avatar(project)
@@ -116,6 +115,11 @@ class Project(Base, Rated, Described, Authorized):
         # remove dependencies
         for dep in project.dependencies:
             session.delete(dep)
+
+        # remove project from all users installations
+        query = session.query(Installed).filter(Installed.project == project.id)
+        for installed in query.all():
+            session.delete(installed)
 
         # delete project
         session.delete(project)

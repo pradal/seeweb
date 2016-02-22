@@ -1,12 +1,20 @@
 """Set of function used to fetch documentation on remote hosts
 """
-from bs4 import BeautifulSoup
-import urllib2
-from urllib2 import HTTPError
-from urlparse import urlsplit, urlunsplit
+from glob import glob
+from os.path import basename, dirname, splitext
+from urlparse import urlsplit
 
-recognized_hosts = {"readthedocs": "readthedocs.org",
-                    "pypi": "pythonhosted.org"}
+fac = dict()
+for pth in glob("%s/doc_provider/*.py" % dirname(__file__)):
+    fname = basename(pth)
+    if fname not in("__init__.py", "default.py"):
+        pname = splitext(fname)[0]
+        cmd = "from seeweb.project.doc_provider import %s as provider" % pname
+        code = compile(cmd, "<string>", 'exec')
+        eval(code)
+        fac[pname] = globals()['provider']
+
+recognized_hosts = fac.keys()
 
 
 def parse_hostname(url):
@@ -19,21 +27,9 @@ def parse_hostname(url):
         (str) name of host
     """
     url = urlsplit(url)
-    if len(url.netloc) == 0:
-        if "/" in url.path:
-            return "local"
-        else:
-            return "unknown"
-
-    gr = [v.lower() for v in url.netloc.split(".")]
-    if len(gr) < 2:
-        return "unknown"
-
-    hurl = "%s.%s" % (gr[-2], gr[-1])
-
-    for host, host_url in recognized_hosts.items():
-        if hurl == host_url:
-            return host
+    for pname, provider in fac.items():
+        if provider.parse_url(url) is not None:
+            return pname
 
     return "unknown"
 
@@ -48,36 +44,27 @@ def host_doc_url(project, hostname):
     Returns:
         str
     """
-    if hostname == 'readthedocs':
-        return "https://%s.readthedocs.org/en/latest/" % project.id
-
-    if hostname == 'pypi':
-        return "https://pythonhosted.org/%s" % project.id
+    if hostname in fac:
+        return fac[hostname].project_default_url(project)
 
     return "unknown host: %s" % hostname
 
 
 def fetch_documentation(url, pid):
-    """Try to fetch documentation from given url
-    return html home page for doc
+    """Fetch documentation home page.
+
+    Args:
+        url: (str) a valid url to fetch documentation from
+        pid: (str) project id
+
+    Returns:
+        (str): home page of documentation or None
     """
-    try:
-        scheme = urlsplit(url).scheme
-        netloc = "%s.readthedocs.org/en/latest" % pid
-
-        response = urllib2.urlopen(url)
-        html = response.read()
-        soup = BeautifulSoup(html, "html.parser")
-        section = soup.find('div', {'class': 'section'})
-        if section is None:
-            return None
-
-        for link in section.find_all('a'):
-            url = urlsplit(link["href"])
-            if url.netloc == "":
-                link["href"] = urlunsplit((scheme, netloc) + url[2:])
-
-        txt = section.prettify()
-        return txt
-    except HTTPError:
+    if url == "":
         return None
+
+    hostname = parse_hostname(url)
+    if hostname == "unknown":
+        return None
+
+    return fac[hostname].fetch_documentation(url, pid)

@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.project import Project
 # from seeweb.models.project_content.content import Content, item_types
-from seeweb.project.source import parse_vcs, parse_hostname
+from seeweb.project.source import parse_hostname
 
 from .commons import view_init
 
@@ -15,13 +15,10 @@ def view(request):
     project, view_params = view_init(request, session, 'content')
 
     if len(project.src_url) > 0:
-        vcs = parse_vcs(project.src_url)
         hostname = parse_hostname(project.src_url)
     else:
-        vcs = ""
         hostname = ""
 
-    view_params["vcs"] = vcs
     view_params["hostname"] = hostname
 
     # dependencies

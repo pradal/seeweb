@@ -5,6 +5,13 @@
     <p id="debug">debug</p>
 </div>
 
+<div class="btn btn-default">
+    <label>
+        <input id="toggle_mouse_capture" type="checkbox"/>
+        Capture mouse in 3d window
+    </label>
+</div>
+
 <div id="scene3d_canvas">
 </div>
 
@@ -13,15 +20,24 @@
 
 {% block project_js -%}
     <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/scene3d/static/three.min.js') }}"></script>
+    <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/scene3d/static/TrackballControls.js') }}"></script>
 
     <script>
         var container;
-        var camera, scene, raycaster, renderer;
+        var camera, controls, scene, renderer;
 
-        var mouse = new THREE.Vector2(), INTERSECTED;
-        mouse.x = -100;
-        mouse.y = -100;
-        var radius = 100, theta = 0;
+        $(function() {
+            $('#toggle_mouse_capture').change(function() {
+                if ($('#toggle_mouse_capture').prop('checked')) {
+                    window.addEventListener('DOMMouseScroll',wheel,false);
+                    controls.addEventListener( 'change', render );
+                } else {
+                    window.removeEventListener('DOMMouseScroll', wheel);
+                    controls.removeEventListener( 'change', render );
+                }
+            })
+          })
+
 
         init();
         animate();
@@ -32,6 +48,22 @@
             container.style.height = '600px';
 
             camera = new THREE.PerspectiveCamera( 70, 800 / 600, 1, 10000 );
+            camera.position.z = 50;
+
+            controls = new THREE.TrackballControls( camera );
+
+            controls.rotateSpeed = 1.0;
+            controls.zoomSpeed = 1.2;
+            controls.panSpeed = 0.8;
+
+            controls.noZoom = false;
+            controls.noPan = false;
+
+            controls.staticMoving = true;
+            controls.dynamicDampingFactor = 0.3;
+
+            controls.keys = [ 65, 83, 68 ];
+
 
             scene = new THREE.Scene();
 
@@ -43,16 +75,11 @@
             var mesh = loader.parse(JSON.parse('{{ cnt_item.definition|safe }}'));
             if (mesh.type == "Scene") {
                 for (i in mesh.children) {
-                    $("#debug").text(i);
                     scene.add(mesh.children[i]);
                 }
             } else {
                 scene.add(mesh);
             }
-            //$("#debug").text(mesh.type);
-
-
-            raycaster = new THREE.Raycaster();
 
             renderer = new THREE.WebGLRenderer();
             renderer.setClearColor( 0xf0f0f0 );
@@ -61,92 +88,36 @@
             renderer.sortObjects = false;
             container.appendChild(renderer.domElement);
 
-            document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
-            //
 
             window.addEventListener( 'resize', onWindowResize, false );
 
+            render();
+        }
+
+        function wheel(event)
+        {
+            event.preventDefault();
+            event.returnValue=false;
         }
 
         function onWindowResize() {
+                camera.aspect = 800 / 600.;
+                camera.updateProjectionMatrix();
 
-            //camera.aspect = window.innerWidth / window.innerHeight;
-            //camera.updateProjectionMatrix();
+                renderer.setSize( 800, 600 );
 
-            //renderer.setSize( window.innerWidth, window.innerHeight );
+                controls.handleResize();
 
-        }
-
-        function onDocumentMouseMove( event ) {
-
-            event.preventDefault();
-            var rect = container.getBoundingClientRect();
-
-            mouse.x = ( ( event.clientX - rect.left ) / 800 ) * 2 - 1;
-            mouse.y = - ( (event.clientY - rect.top ) / 600 ) * 2 + 1;
-
-        }
-
-        //
+                render();
+            }
 
         function animate() {
-
             requestAnimationFrame( animate );
-
-            render();
-
+            controls.update();
         }
 
         function render() {
-
-            theta += 0.1;
-
-            camera.position.x = radius * Math.sin( THREE.Math.degToRad( theta ) );
-            camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-            camera.position.z = radius * Math.cos( THREE.Math.degToRad( theta ) );
-            camera.lookAt( scene.position );
-
-            camera.updateMatrixWorld();
-
-            // find intersections
-
-            raycaster.setFromCamera( mouse, camera );
-
-            var intersects = raycaster.intersectObjects( scene.children );
-
-            if ( intersects.length > 0 ) {
-
-                if ( INTERSECTED != intersects[ 0 ].object ) {
-
-                    if ( INTERSECTED ) {
-                        if ( INTERSECTED.material.emissive ) {
-                            INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-                        }
-                    }
-
-                    INTERSECTED = intersects[ 0 ].object;
-                    if ( INTERSECTED.material.emissive ) {
-                        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-                        INTERSECTED.material.emissive.setHex( 0xff0000 );
-                    }
-
-                }
-
-            } else {
-
-                if ( INTERSECTED ) {
-                    if ( INTERSECTED.material.emissive ) {
-                        INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-                    }
-                }
-
-                INTERSECTED = null;
-
-            }
-
             renderer.render( scene, camera );
-
         }
 </script>
 

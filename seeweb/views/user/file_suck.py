@@ -31,7 +31,7 @@ def view(request):
 
     project_name = splitext(field_storage.filename)[0]
 
-    if "project_name" in request.params:
+    if request.params["project_name"] != "":
         project_name = request.params["project_name"]
 
     pid = project_name.lower().strip()

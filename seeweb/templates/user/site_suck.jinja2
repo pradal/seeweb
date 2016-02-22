@@ -17,16 +17,14 @@
     </div>
 </div>
 
-{% if project_name %}
 <div class="row">
     <div class="col-md-12">
         <div class="input-group">
-            <span class="input-group-addon">Import name</span>
+            <span class="input-group-addon">Project name</span>
             <input type="text" class="form-control" name="project_name" value="{{ project_name }}"
         </div>
     </div>
 </div>
-{% endif %}
 
 <div class="row">
     <a class="btn btn-danger" href="{{ request.route_url('home') }}">Cancel</a>

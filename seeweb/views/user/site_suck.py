@@ -42,7 +42,7 @@ def view(request):
         request.session.flash("Unable to parse url", 'warning')
         return view_params
 
-    if "project_name" in request.params:
+    if request.params["project_name"]:
         project_name = request.params["project_name"]
 
     pid = project_name.lower().strip()

@@ -5,6 +5,7 @@ from pyramid.view import view_config
 from seeweb.avatar import upload_project_avatar
 from seeweb.models import DBSession
 from seeweb.models.project import Project
+from seeweb.project.content.explore import explore_sources
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_dependencies,
                                             fetch_gallery,
@@ -77,6 +78,8 @@ def view(request):
         project.clear_dependencies(session)
         for name, ver in fetch_dependencies(project.id):
             project.add_dependency(session, name, ver)
+
+        explore_sources(session, project)
 
         # fetch avatar
         try:

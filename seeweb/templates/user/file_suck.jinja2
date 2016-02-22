@@ -20,14 +20,24 @@
     <div class="col-md-12">
         <div class="input-group">
             <span class="input-group-addon">Project name</span>
-            <input type="text" class="form-control" name="project_name" value="{{ project_name }}"
+            <input id="project_name" type="text" class="form-control" name="project_name" value="{{ project_name }}"
         </div>
     </div>
 </div>
 
 <div class="row">
-    <a class="btn btn-danger" href="{{ request.route_url('home') }}">Cancel</a>
+    <a class="btn btn-danger" href="{{ request.session['last'] }}">Cancel</a>
 </div>
 </form>
+
+{%- endblock %}
+
+{% block javascripts_end -%}
+<script>
+    $("#upload").change(function (e) {
+        var filename = $("#upload").val();
+        $("#project_name").val(filename.substring(0, filename.lastIndexOf('.')));
+    });
+</script>
 
 {%- endblock %}

@@ -53,6 +53,8 @@ def register_new_project(request, session, uid):
 @view_config(route_name='user_view_projects',
              renderer='templates/user/view_projects.jinja2')
 def view(request):
+    request.session['last'] = request.current_route_url()
+
     session = DBSession()
     user, view_params = view_init(request, session, 'projects')
 

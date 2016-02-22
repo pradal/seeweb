@@ -11,7 +11,7 @@
         <button class="btn btn-warning pull-right" type="submit">Clone</button>
         <div class="input-group">
             <span class="input-group-addon">url</span>
-            <input type="text" class="form-control" name="src_url" {% if src_url %}value="{{ src_url }}"
+            <input id="src_url" type="text" class="form-control" name="src_url" {% if src_url %}value="{{ src_url }}"
             {% else %}placeholder="url of project to clone e.g. https://github.com/revesansparole/seeweb.git"{% endif %}/>
         </div>
     </div>
@@ -21,14 +21,28 @@
     <div class="col-md-12">
         <div class="input-group">
             <span class="input-group-addon">Project name</span>
-            <input type="text" class="form-control" name="project_name" value="{{ project_name }}"
+            <input id="project_name" type="text" class="form-control" name="project_name" value="{{ project_name }}"
         </div>
     </div>
 </div>
 
 <div class="row">
-    <a class="btn btn-danger" href="{{ request.route_url('home') }}">Cancel</a>
+    <a class="btn btn-danger" href="{{ request.session['last'] }}">Cancel</a>
 </div>
 </form>
+
+{%- endblock %}
+
+{% block javascripts_end -%}
+<script>
+    $("#src_url").on('input', function (e) {
+        var txt = $("#src_url").val();
+        //remove first elements of path
+        txt = txt.substring(txt.lastIndexOf('/') + 1, txt.length);
+        //remove .git
+        txt = txt.substring(0, txt.lastIndexOf('.'))
+        $("#project_name").val(txt);
+    });
+</script>
 
 {%- endblock %}

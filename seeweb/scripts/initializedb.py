@@ -15,10 +15,10 @@ from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
 from seeweb.models.comment import Comment
 from seeweb.models.content_item import ContentItem
+from seeweb.models.gallery_item import GalleryItem
 from seeweb.models.team import Team
 from seeweb.models.project import Project
 from seeweb.models.user import User
-from seeweb.project.gallery import add_gallery_image
 
 import pjt_scene3d
 import pjt_workflow
@@ -203,7 +203,7 @@ This project is part of OpenAlea_.
                          "Koala.png",
                          "Penguins.png"]:
             img = Image.open("seeweb/scripts/gallery/%s" % img_name)
-            add_gallery_image(session, pkglts, img, img_name)
+            GalleryItem.create_gallery_image(session, pkglts, img, img_name)
 
         # comments
         for i in range(4):

@@ -12,7 +12,6 @@ from seeweb.project.content.thumbnail import create_thumbnail
 from seeweb.project.explore_sources import (fetch_avatar,
                                             fetch_gallery,
                                             fetch_readme)
-from seeweb.project.gallery import add_gallery_image, upload_gallery_thumbnail
 from seeweb.project.source import has_source
 import transaction
 
@@ -155,7 +154,7 @@ def edit_init(request, session, tab):
         imgs = fetch_gallery(project.id)
         if len(imgs) > 0:
             for img, name in imgs:
-                add_gallery_image(session, project, img, name)
+                GalleryItem.create_gallery_image(session, project, img, name)
 
             request.session.flash("gallery submitted", 'success')
 
@@ -234,7 +233,7 @@ def content_init(request, session):
                 gal_item.store_description(descr)
                 session.flush()
 
-                upload_gallery_thumbnail(thumb, gal_item)
+                gal_item.upload_gallery_thumbnail(thumb)
 
     view_params["allow_edition"] = allow_edition
     view_params["cnt_item"] = item

@@ -1,3 +1,5 @@
+{% from 'macro.jinja2' import edit_gallery_item with context %}
+
 {% extends "layout_edit.jinja2" %}
 
 {% block project_edit_body -%}
@@ -13,6 +15,27 @@
     <textarea class="form-control" rows="20" id="descr" name='description' {% if project.description == "" %}placeholder='write some description in restructured text here'{% endif %}>
         {{ project.description }}
     </textarea>
+</div>
+
+<div class="row" id="gallery">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Gallery</h3>
+          </div>
+          <div class="panel-body">
+            {% if gallery|length == 0 %}
+                <p>Empty gallery</p>
+            {% else %}
+                <div class="row">
+                    {% for item in gallery %}
+                        {{ edit_gallery_item(item) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+          </div>
+         </div>
+    </div>
 </div>
 
 {%- endblock %}

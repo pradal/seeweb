@@ -3,6 +3,7 @@ from pyramid.view import view_config
 
 from seeweb.avatar import load_image, upload_project_avatar
 from seeweb.models import DBSession
+from seeweb.models.gallery_item import GalleryItem
 
 from .commons import edit_init
 
@@ -31,5 +32,14 @@ def view(request):
                 request.session.flash("Unable to read image", 'warning')
     else:
         pass
+
+    # gallery
+    items = project.fetch_gallery_items(session)
+    for item in list(items):
+        if "remove_gallery_item_%s" % item.id in request.params:
+            GalleryItem.remove(session, item)
+            items.remove(item)
+
+    view_params["gallery"] = items
 
     return view_params

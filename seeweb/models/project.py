@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 
 from seeweb.avatar import (generate_default_project_avatar,
                            remove_project_avatar)
-from seeweb.project.gallery import delete_gallery
 from seeweb.project.source import delete_source
 
 from .actor import PActor
@@ -104,7 +103,7 @@ class Project(Base, Rated, Described, Authorized):
 
         # remove gallery items
         project.clear_gallery(session)
-        delete_gallery(project)
+        GalleryItem.delete_gallery(project)
 
         # remove avatar
         remove_project_avatar(project)

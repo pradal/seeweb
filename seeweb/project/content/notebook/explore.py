@@ -1,5 +1,6 @@
 """Explore the content of a project to find its workflow nodes.
 """
+import json
 from os import walk
 from os.path import splitext
 from os.path import join as pj
@@ -32,11 +33,16 @@ def explore_pth(session, root_pth, project):
         for fname in filenames:
             nb_name, ext = splitext(fname)
             if ext == ".ipynb":
-                nb = ContentItem.create(session,
-                                        uuid1().hex,
-                                        "notebook",
-                                        project)
-                nb.author = project.owner
-                nb.name = nb_name
-                nb.store_description(pj(root, fname))
-                nb.store_definition("")
+                try:
+                    with open(pj(root, fname), 'r') as f:
+                        nbdef = json.load(f)
+                        nb = ContentItem.create(session,
+                                                uuid1().hex,
+                                                "notebook",
+                                                project)
+                        nb.author = project.owner
+                        nb.name = nb_name
+                        nb.store_description(pj(root, fname))
+                        nb.store_definition(nbdef)
+                except ValueError:
+                    print "unable to load %s" % fname

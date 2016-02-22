@@ -1,0 +1,22 @@
+
+#notebook .nbcell .code {
+    padding: 0.4em;
+    background: #eeeeee;
+    border: solid 1px #aaaaaa;
+}
+
+#notebook .nbcell .code p {
+    margin-bottom: 0;
+}
+
+#notebook .nbcell .outputs {
+    padding: 0.4em;
+    background: #ffffff;
+}
+
+#notebook .nbcell .outputs .stream{
+}
+
+#notebook .nbcell .outputs .error{
+    background: #ffdddd;
+}

@@ -1,6 +1,37 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
+{% block project_css -%}
+
+<link href="{{ request.static_url('seeweb:project/content/notebook/static/notebook.css') }}" rel="stylesheet">
+
+{%- endblock %}
+
 {% block project_content_body -%}
+
+<div id="notebook">
+    {% for cell_code, cell_res in nbcells %}
+        <div class="nbcell">
+            <div class="code">
+                {% for line in cell_code %}
+                    <p>{{ line }}</p>
+                {% endfor %}
+            </div>
+            <div class="outputs">
+                {% for res_type, res in cell_res %}
+                    <div class="{{ res_type }}">
+                        {% if res_type == "display_data" %}
+                            <img src="data:image/png;base64,{{ res }}" />
+                        {% else %}
+                            {% for line in res %}
+                                <p>{{ line }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
 
 <p>Def: {{ cnt_item.definition }}</p>
 

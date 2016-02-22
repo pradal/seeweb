@@ -29,7 +29,13 @@
                 <div class="row">
                     {% for item in items %}
                         <div class="wrapper">
-                            <a href="">
+                            <a href="{% if item.url != "" -%}
+                                         {% if item.url.startswith("seeweb:") -%}
+                                             {{ request.static_url(item.url) }}
+                                         {% else %}
+                                             {{ item.url }}
+                                         {%- endif %}
+                                     {%- endif %}">
                                 <img class="img-rounded" src="{{ request.static_url('seeweb:data/gallery/%s/%s_thumb.png' % (item.project, item.id)) }}" />
                             </a>
                             <span class="btn btn-default label" disabled>{{ item.project }}</span>

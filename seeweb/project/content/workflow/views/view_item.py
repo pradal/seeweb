@@ -24,4 +24,17 @@ def view(request):
 
     view_params["nodes"] = json.dumps(ndef)
 
+    idef = {}
+    for nid, node in ndef.items():
+        for port in node['inputs']:
+            iid = port['interface']
+            iface = ContentItem.get(session, iid)
+            if iface is None:
+                idef[iid] = None
+            else:
+                idef[iid] = iface.load_definition()
+                idef[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
+
+    view_params["interfaces"] = json.dumps(idef)
+
     return view_params

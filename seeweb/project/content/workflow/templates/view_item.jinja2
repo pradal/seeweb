@@ -32,13 +32,14 @@
     window.onload = function() {
         var wkf = JSON.parse('{{ cnt_item.definition|safe }}');
         var nodes = JSON.parse('{{ nodes|safe }}');
+        var interfaces = JSON.parse('{{ interfaces|safe }}');
 
         var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
         document.getElementById('workflow_canvas_placeholder').style.display = 'none';
 
         wv.x_offset = 400;
         wv.y_offset = 300;
-        wv.draw_workflow(paper, wkf, nodes);
+        wv.draw_workflow(paper, wkf, nodes, interfaces);
 
         var pan_zoom = paper.panzoom({ initialZoom: 5,
                                       initialPosition: { x: 200, y: 150} });

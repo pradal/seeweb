@@ -6,7 +6,7 @@ var wv = {
     pr: 5
 };
 
-wv.draw_node = function (paper, workflow, nodes, node) {
+wv.draw_node = function (paper, workflow, nodes, interfaces, node) {
     var nf = nodes[node['id']];
     var loc_x = wv.x_offset + node['x'];
     var loc_y = wv.y_offset + node['y'];
@@ -29,23 +29,31 @@ wv.draw_node = function (paper, workflow, nodes, node) {
         var nb = nf.inputs.length;
         for (i in nf.inputs){
             var input = nf.inputs[i];
+            var idef = interfaces[input['interface']];
             var port = paper.circle(loc_x + -(nb - 1) * 2 * wv.pr + i * wv.pr * 4,
                                     loc_y + -wv.nh / 2.,
                                     wv.pr);
             port.attr({'gradient': '180-#3333ff-#2222ff',
                        'stroke': '#000000',
                        'stroke-width': 1});
+            if (idef != null) {
+                port.attr({'href': idef['url']});
+            }
         }
 
         nb = nf.outputs.length;
         for (i in nf.outputs){
             var output = nf.outputs[i];
+            var idef = interfaces[output['interface']];
             var port = paper.circle(loc_x + -(nb - 1) * 2 * wv.pr + i * wv.pr * 4,
                                     loc_y + wv.nh / 2.,
                                     wv.pr);
             port.attr({'gradient': '180-#ffff33-#9a9a00',
                        'stroke': '#000000',
                        'stroke-width': 1});
+            if (idef != null) {
+                port.attr({'href': idef['url']});
+            }
         }
     }
 
@@ -76,7 +84,7 @@ wv.out_port_index = function (nf, port_name) {
     return -1;
 };
 
-wv.draw_link = function (paper, workflow, nodes, link) {
+wv.draw_link = function (paper, workflow, nodes, interfaces, link) {
     var src = workflow['nodes'][link[0]];
     var src_x = wv.x_offset + src['x'];
     var src_y = wv.y_offset + src['y'];
@@ -109,12 +117,12 @@ wv.draw_link = function (paper, workflow, nodes, link) {
               'stroke-width': 1});
 };
 
-wv.draw_workflow = function(paper, workflow, nodes) {
+wv.draw_workflow = function(paper, workflow, nodes, interfaces) {
     for (i in workflow['links']) {
-        wv.draw_link(paper, workflow, nodes, workflow['links'][i]);
+        wv.draw_link(paper, workflow, nodes, interfaces, workflow['links'][i]);
     }
 
     for (i in workflow['nodes']) {
-        wv.draw_node(paper, workflow, nodes, workflow['nodes'][i]);
+        wv.draw_node(paper, workflow, nodes, interfaces, workflow['nodes'][i]);
     }
 };

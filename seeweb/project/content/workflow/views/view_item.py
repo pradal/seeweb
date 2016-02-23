@@ -22,7 +22,6 @@ def view(request):
             ndef[nid] = wnode.load_definition()
             ndef[nid]['url'] = request.route_url('project_content_workflow_node_view_item', pid=wnode.project, cid=nid)
 
-    view_params["nodes"] = ndef
-    view_params["ndef"] = json.dumps(ndef)
+    view_params["nodes"] = json.dumps(ndef)
 
     return view_params

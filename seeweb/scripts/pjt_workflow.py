@@ -67,11 +67,11 @@ def main(session):
                         version=0,
                         function="testio:read",
                         inputs=[dict(name="in1", interface="IInt",
-                                     value="0", descr="counter"),
+                                     default="0", description="counter"),
                                 dict(name="in2", interface="IStr",
-                                     value="a", descr="unit")],
+                                     default="a", description="unit")],
                         outputs=[dict(name="ret", interface="IInt",
-                                      descr="important result")])
+                                      description="important result")])
 
         item = ContentItem.create(session, node_def['id'],
                                   "workflow_node", nodelib)

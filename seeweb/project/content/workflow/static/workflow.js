@@ -20,12 +20,24 @@ wv.draw_node = function (paper, workflow, nodes, interfaces, node) {
                  'stroke': '#ff8080'});
     } else {
         bg.attr({'gradient': '90-#8c8cff-#c8c8c8',
-                 'stroke': '#808080',
-                 'href': nf['url']});
+                 'stroke': '#808080'});
     }
 
+    // label
+    var label_txt = node['label'];
+    if (label_txt == null) {
+        label_txt = nf['name'];
+    }
+    var label = paper.text(loc_x, loc_y, label_txt);
+    label.attr({'fill': '#000000'});
+
     if (nf != null) {
-        // ports
+        bg.attr({'href': nf['url']});
+        label.attr({'href': nf['url']});
+    }
+
+    // ports
+    if (nf != null) {
         var nb = nf.inputs.length;
         for (i in nf.inputs){
             var input = nf.inputs[i];
@@ -56,14 +68,6 @@ wv.draw_node = function (paper, workflow, nodes, interfaces, node) {
             }
         }
     }
-
-    // label
-    var label_txt = node['label'];
-    if (label_txt == null) {
-        label_txt = nf['name'];
-    }
-    var label = paper.text(loc_x, loc_y, label_txt);
-    label.attr({'fill': '#000000'});
 };
 
 wv.in_port_index = function (nf, port_name) {

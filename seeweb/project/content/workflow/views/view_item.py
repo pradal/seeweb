@@ -26,7 +26,7 @@ def view(request):
 
     idef = {}
     for nid, node in ndef.items():
-        for port in node['inputs']:
+        for port in node['inputs'] + node['outputs']:
             iid = port['interface']
             iface = ContentItem.get(session, iid)
             if iface is None:

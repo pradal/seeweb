@@ -110,8 +110,8 @@ wv.draw_link = function (paper, workflow, nodes, link) {
 };
 
 wv.draw_workflow = function(paper, workflow, nodes) {
-    for (i in workflow['connections']) {
-        wv.draw_link(paper, workflow, nodes, workflow['connections'][i]);
+    for (i in workflow['links']) {
+        wv.draw_link(paper, workflow, nodes, workflow['links'][i]);
     }
 
     for (i in workflow['nodes']) {

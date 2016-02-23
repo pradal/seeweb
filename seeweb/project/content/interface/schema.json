@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Data interface",
+  "description": "Schema for the interface of data passed in between workflow nodes",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Unique id for a given object",
+      "type": "string",
+      "maxLength": 32
+    },
+    "name": {
+      "description": "A display name",
+      "type": "string"
+    },
+    "author": {
+      "description": "Author who propose this interface",
+      "type": "string"
+    },
+    "version": {
+      "description": "Current version of this interface",
+      "type": "integer",
+      "minimum": 0
+    },
+    "schema": {
+      "description": "Reference a json schema for the data in this interface"
+    },
+    "ancestors": {
+      "description": "Kind of heritage structure to define same type of data",
+      "type": "array",
+      "items": {
+        "description": "Id of data interface",
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "author",
+    "version",
+    "schema",
+    "ancestors"
+  ]
+}

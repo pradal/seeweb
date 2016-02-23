@@ -1,11 +1,24 @@
 """Explore the content of a project to find its workflow nodes.
 """
 import json
+from jsonschema import validate, ValidationError
 from os import walk
-from os.path import splitext
+from os.path import dirname, splitext
 from os.path import join as pj
 
 from seeweb.models.content_item import ContentItem
+
+
+with open(pj(dirname(__file__), "schema.json"), 'r') as f:
+    schema = json.load(f)
+
+
+def check_definition(idef):
+    try:
+        validate(idef, schema)
+        return True
+    except ValidationError:
+        return False
 
 
 def explore_pth(session, root_pth, project):
@@ -35,7 +48,7 @@ def explore_pth(session, root_pth, project):
                 with open(pth, 'r') as f:
                     node_def = json.load(f)
 
-                if node_def.get("category", "") == "oanode":
+                if check_definition(node_def):
                     node = ContentItem.create(session,
                                               node_def['id'],
                                               "workflow_node",

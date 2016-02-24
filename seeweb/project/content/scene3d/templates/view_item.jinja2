@@ -72,7 +72,7 @@
             scene.add( light );
 
             var loader = new THREE.ObjectLoader();
-            var mesh = loader.parse(JSON.parse('{{ cnt_item.definition|safe }}'));
+            var mesh = loader.parse({{ cnt_item.definition|safe }});
             if (mesh.type == "Scene") {
                 for (i in mesh.children) {
                     scene.add(mesh.children[i]);

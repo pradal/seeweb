@@ -30,9 +30,9 @@
 
 <script>
     window.onload = function() {
-        var wkf = JSON.parse('{{ cnt_item.definition.replace("'", "\\'")|safe }}');
-        var nodes = JSON.parse('{{ nodes|safe }}');
-        var interfaces = JSON.parse('{{ interfaces|safe }}');
+        var wkf = {{ cnt_item.definition|safe }};
+        var nodes = {{ nodes|safe }};
+        var interfaces = {{ interfaces|safe }};
 
         var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
         document.getElementById('workflow_canvas_placeholder').style.display = 'none';

@@ -198,8 +198,8 @@ def install_init(request, session):
     return project, view_params
 
 
-def content_init(request, session):
-    """Common actions for content items views
+def content_init_min(request, session):
+    """Common minimal actions for content items views
 
     Args:
         request: (Request)
@@ -217,9 +217,27 @@ def content_init(request, session):
         loc = request.route_url('project_view_content', pid=project.id)
         raise HTTPFound(location=loc)
 
-    allow_edition = role == Role.edit
+    view_params["allow_edition"] = role == Role.edit
+    view_params["cnt_item"] = item
+    item_def = item.load_definition()
+    view_params["cnt_def"] = item_def
 
-    if allow_edition:
+    return project, item, item_def, view_params
+
+
+def content_init(request, session):
+    """Common actions for content items views
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+
+    Returns:
+        (Project, ContentItem, dict of (str, any)): project, item, view_params
+    """
+    project, item, item_def, view_params = content_init_min(request, session)
+
+    if view_params["allow_edition"]:
         if "confirm_gallery_addition" in request.params:
             thumb = create_thumbnail(item, view=None)
             if thumb is None:
@@ -234,10 +252,5 @@ def content_init(request, session):
                 session.flush()
 
                 gal_item.upload_gallery_thumbnail(thumb)
-
-    view_params["allow_edition"] = allow_edition
-    view_params["cnt_item"] = item
-    item_def = item.load_definition()
-    view_params["cnt_def"] = item_def
 
     return project, item, item_def, view_params

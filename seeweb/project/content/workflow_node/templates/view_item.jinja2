@@ -29,8 +29,8 @@
 
 <script>
     window.onload = function() {
-        var ndef = JSON.parse('{{ cnt_item.definition.replace("'", "\\'")|safe }}');
-        var interfaces = JSON.parse('{{ interfaces|safe }}');
+        var ndef = {{ cnt_item.definition|safe }};
+        var interfaces = {{ interfaces|safe }};
 
         var vw = 800;
         var vh = 300;

@@ -30,7 +30,7 @@
 
 <script>
     window.onload = function() {
-        var wkf = JSON.parse('{{ cnt_item.definition|safe }}');
+        var wkf = JSON.parse('{{ cnt_item.definition.replace("'", "\\'")|safe }}');
         var nodes = JSON.parse('{{ nodes|safe }}');
         var interfaces = JSON.parse('{{ interfaces|safe }}');
 

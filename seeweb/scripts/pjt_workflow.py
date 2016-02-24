@@ -44,6 +44,20 @@ def main(session):
     item.store_definition(idef)
     item.store_description(idef['description'])
 
+    idef = dict(id='IFloat',
+                name='float',
+                author="revesansparole",
+                description="float type",
+                version=0,
+                schema={"type": "number"},
+                ancestors=[]
+                )
+    item = ContentItem.create(session, idef['id'], "interface", nodelib)
+    item.name = idef['name']
+    item.author = idef['author']
+    item.store_definition(idef)
+    item.store_description(idef['description'])
+
     idef = dict(id='IStr',
                 name='string',
                 author="revesansparole",

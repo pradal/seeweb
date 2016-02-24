@@ -7,7 +7,7 @@ from seeweb.models import DBSession
 from seeweb.models.project import Project
 from seeweb.project.content.explore import explore_sources
 from seeweb.project.explore_sources import fetch_dependencies
-from seeweb.project.source import upload_src_file
+from seeweb.project.source import delete_source, has_source, upload_src_file
 
 
 @view_config(route_name='file_suck',
@@ -61,6 +61,9 @@ def view(request):
 
     # copy sources
     try:
+        if has_source(project.id):
+            delete_source(project.id)
+
         upload_src_file(field_storage, pid)
         request.session.flash("File submitted", 'success')
         for name, ver in fetch_dependencies(project.id):

@@ -38,7 +38,9 @@
 <script>
     $("#upload").change(function (e) {
         var filename = $("#upload").val();
-        $("#project_name").val(filename.substring(0, filename.lastIndexOf('.')));
+        filename = filename.substring(0, filename.lastIndexOf('.'));
+        filename = filename.replace(" ", "_");
+        $("#project_name").val(filename);
     });
 </script>
 

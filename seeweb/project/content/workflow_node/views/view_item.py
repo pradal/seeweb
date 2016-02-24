@@ -23,6 +23,6 @@ def view(request):
             idef[iid] = iface.load_definition()
             idef[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
 
-    view_params["interfaces"] = json.dumps(idef)
+    view_params["interfaces"] = json.dumps(idef).replace("'", "\\'")
 
     return view_params

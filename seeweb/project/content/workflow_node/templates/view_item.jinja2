@@ -25,7 +25,7 @@
 
 <script>
     window.onload = function() {
-        var ndef = JSON.parse('{{ cnt_item.definition|safe }}');
+        var ndef = JSON.parse('{{ cnt_item.definition.replace("'", "\\'")|safe }}');
         var interfaces = JSON.parse('{{ interfaces|safe }}');
 
         var vw = 800;

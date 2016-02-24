@@ -58,7 +58,7 @@ def view(request):
     session = DBSession()
     user, view_params = view_init(request, session, 'projects')
 
-    if 'new_project' in request.params:
+    if 'new_project' in request.params and user.id == request.unauthenticated_userid:
         pid = register_new_project(request,
                                    session,
                                    request.unauthenticated_userid)

@@ -16,7 +16,6 @@ def view(request):
     for port in node_def['inputs'] + node_def['outputs']:
         iid = port['interface']
         iface = ContentItem.get(session, iid)
-        print "iface", iid, iface, "\n" * 10
         if iface is None:
             idef[iid] = None
         else:

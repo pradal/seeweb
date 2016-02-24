@@ -14,6 +14,10 @@
 <div id="node_canvas">
 </div>
 
+<div class="row">
+    <a class="btn btn-warning" href="{{ request.route_url('project_content_workflow_node_usage', pid=project.id, cid=cnt_item.id) }}">Usage</a>
+</div>
+
 <p>Descr: {{ cnt_item.description }}</p>
 <p>Function: {{ cnt_def['function'] }}</p>
 

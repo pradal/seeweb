@@ -102,7 +102,8 @@ def main(global_config, **settings):
             view_name = splitext(basename(view_pth))[0]
             if view_name != "__init__":
                 route_name = 'project_content_%s_%s' % (category, view_name)
-                route_url = 'project/{pid}/content/%s/{cid}' % category
+                route_url = 'project/{pid}/content/%s/{cid}/%s' % (category,
+                                                                   view_name)
                 config.add_route(route_name, route_url)
 
     # project

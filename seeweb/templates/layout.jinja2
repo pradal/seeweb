@@ -11,7 +11,7 @@
     <link rel="shortcut icon"
           href="{{ request.static_url('seeweb:static/seeweb-16x16.png') }}">
 
-    <title>Science Everyone Everywhere</title>
+    <title>SEE: {{ request.matched_route.name }}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ request.static_url('seeweb:static/css/bootstrap.min.css') }}"
@@ -64,6 +64,18 @@
                 {% block body %}
                 {% endblock %}
             </div>
+            <!-- debug
+            <div class="well debug">
+                <ul>
+                    <li>subpath: {{ request.subpath }}</li>
+                    <li>root: {{ request.root }}</li>
+                    <li>traversed: {{ request.traversed }}</li>
+                    <li>view name: {{ request.view_name }}</li>
+                    <li>matched: {{ request.matched_route }}</li>
+                    <li>matched name: {{ request.matched_route.name }}</li>
+                </ul>
+            </div>
+            -->
         </div>
 
     </div>

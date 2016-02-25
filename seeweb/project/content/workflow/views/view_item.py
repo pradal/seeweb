@@ -24,8 +24,6 @@ def view(request):
             ndef[nid] = wnode.load_definition()
             ndef[nid]['url'] = request.route_url('project_content_workflow_node_view_item', pid=wnode.project, cid=nid)
 
-    view_params["nodes"] = json.dumps(ndef)
-
     idef = {}
     for nid, node in ndef.items():
         if node is not None:
@@ -37,8 +35,6 @@ def view(request):
                 else:
                     idef[iid] = iface.load_definition()
                     idef[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
-
-    view_params["interfaces"] = json.dumps(idef)
 
     view_params['svg_repr'] = draw_workflow(workflow_def, ndef, idef, (800, 600))
 

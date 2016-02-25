@@ -9,8 +9,8 @@
 {% block project_content_body -%}
 
 <div id="notebook">
-    {% for cell_code, cell_res in nbcells %}
-        <div class="nbcell">
+    {% for cell_code, cell_res in notebook_cells %}
+        <div class="cell">
             <div class="code">
                 {% for line in cell_code %}
                     <p>{{ line }}</p>

@@ -6,20 +6,18 @@ from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 import transaction
-from uuid import uuid1
 
 from seeweb.avatar import upload_team_avatar, upload_user_avatar
 from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
-from seeweb.models import installed  # used to create the associated table
 from seeweb.models.auth import Role
 from seeweb.models.comment import Comment
-from seeweb.models.content_item import ContentItem
 from seeweb.models.gallery_item import GalleryItem
 from seeweb.models.team import Team
 from seeweb.models.project import Project
 from seeweb.models.user import User
 
+import pjt_notebook
 import pjt_scene3d
 import pjt_workflow
 
@@ -217,18 +215,8 @@ This project is part of OpenAlea_.
         svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
         svgdraw.add_auth(session, sartzet, Role.view)
 
-        notebook = Project.create(session, 'revesansparole', 'notebook_pjt')
-        notebook.public = True
-        for i in range(5):
-            item = ContentItem.create(session, uuid1().hex, "executable",
-                                      notebook)
-            item.name = "executable%d" % i
+        revesansparole.install_project(session, svgdraw)
 
-        for i in range(5):
-            item = ContentItem.create(session, uuid1().hex, "notebook",
-                                      notebook)
-            item.name = "notebook%d" % i
-            item.author = "revesansparole"
-
+        pjt_notebook.main(session)
         pjt_workflow.main(session)
         pjt_scene3d.main(session)

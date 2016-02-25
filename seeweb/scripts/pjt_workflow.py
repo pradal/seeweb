@@ -16,7 +16,7 @@ def main(session):
     nodelib = Project.create(session, 'revesansparole', 'nodelib')
     nodelib.public = True
 
-    idef = dict(id='IAny',
+    idef = dict(id='any',
                 name='any',
                 author="revesansparole",
                 description="Any type of data",
@@ -30,7 +30,7 @@ def main(session):
     item.store_definition(idef)
     item.store_description(idef['description'])
 
-    idef = dict(id='IInt',
+    idef = dict(id='int',
                 name='int',
                 author="revesansparole",
                 description="integer type",
@@ -44,7 +44,7 @@ def main(session):
     item.store_definition(idef)
     item.store_description(idef['description'])
 
-    idef = dict(id='IFloat',
+    idef = dict(id='float',
                 name='float',
                 author="revesansparole",
                 description="float type",
@@ -58,7 +58,7 @@ def main(session):
     item.store_definition(idef)
     item.store_description(idef['description'])
 
-    idef = dict(id='IStr',
+    idef = dict(id='str',
                 name='string',
                 author="revesansparole",
                 description="string type",
@@ -80,11 +80,11 @@ def main(session):
                         author="revesansparole",
                         version=0,
                         function="testio:read",
-                        inputs=[dict(name="in1", interface="IInt",
+                        inputs=[dict(name="in1", interface="int",
                                      default="0", description="counter"),
-                                dict(name="in2", interface="IStr",
+                                dict(name="in2", interface="str",
                                      default="a", description="unit")],
-                        outputs=[dict(name="ret", interface="IInt",
+                        outputs=[dict(name="ret", interface="int",
                                       description="important result")])
 
         item = ContentItem.create(session, node_def['id'],

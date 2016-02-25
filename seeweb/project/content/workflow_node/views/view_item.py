@@ -5,6 +5,8 @@ from seeweb.models import DBSession
 from seeweb.models.content_item import ContentItem
 from seeweb.views.project.commons import content_init
 
+from seeweb.project.content.workflow_node.workflow_node_draw import draw_node
+
 
 @view_config(route_name='project_content_workflow_node_view_item',
              renderer='../templates/view_item.jinja2')
@@ -22,6 +24,8 @@ def view(request):
             idef[iid] = iface.load_definition()
             idef[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
 
-    view_params["interfaces"] = json.dumps(idef)
+    svg, viewbox = draw_node(node_def, idef, (800, 300))
+    view_params['svg_repr'] = svg
+    view_params['svg_viewbox'] = json.dumps(viewbox)
 
     return view_params

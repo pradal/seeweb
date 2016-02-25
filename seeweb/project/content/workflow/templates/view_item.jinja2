@@ -40,7 +40,7 @@
             }
         };
 
-        $("#canvas_controls #up").click(function (e) {
+        $("#canvas_controls #down").click(function (e) {
             scaling_ind = Math.min(scaling_range.length - 1, scaling_ind + 1);
             scaling = scaling_range[scaling_ind];
             var newbox = viewbox.map(function(v) {return scaling * v;});
@@ -48,7 +48,7 @@
             e.preventDefault();
         });
 
-        $("#canvas_controls #down").click(function (e) {
+        $("#canvas_controls #up").click(function (e) {
             scaling_ind = Math.max(0, scaling_ind - 1);
             scaling = scaling_range[scaling_ind];
             var newbox = viewbox.map(function(v) {return scaling * v;});

@@ -1,7 +1,11 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
 {% block project_content_body -%}
+<h4>Schema</h4>
+<p>{{ cnt_def['schema'] }}</p>
 
-<p>Def: {{ cnt_item.definition }}</p>
+<div class="well debug">
+    {{ cnt_item.definition }}
+</div>
 
 {%- endblock %}

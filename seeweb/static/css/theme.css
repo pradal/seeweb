@@ -42,6 +42,12 @@ textarea {
   font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 
+.debug {
+    padding: 1em;
+    background: #aaaaff;
+    border: solid 1px #aaaaaa;
+}
+
 .wrapper {
    position: relative;
 }

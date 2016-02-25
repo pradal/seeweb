@@ -18,8 +18,12 @@
     <a class="btn btn-warning" href="{{ request.route_url('project_content_workflow_node_usage', pid=project.id, cid=cnt_item.id) }}">Usage</a>
 </div>
 
-<p>Descr: {{ cnt_item.description }}</p>
 <p>Function: {{ cnt_def['function'] }}</p>
+<p>Descr: <br>
+{%- for line in cnt_item.description.splitlines() %}
+    &nbsp;&nbsp;&nbsp;&nbsp;{{ line }}<br>
+{% endfor -%}
+</p>
 
 <div class="well debug">
     {{ cnt_item.definition }}

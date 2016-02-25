@@ -36,6 +36,8 @@ def view(request):
                     idef[iid] = iface.load_definition()
                     idef[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
 
-    view_params['svg_repr'] = draw_workflow(workflow_def, ndef, idef, (800, 600))
+    svg, viewbox = draw_workflow(workflow_def, ndef, idef, (800, 600))
+    view_params['svg_repr'] = svg
+    view_params['svg_viewbox'] = json.dumps(viewbox)
 
     return view_params

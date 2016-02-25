@@ -145,7 +145,7 @@ def draw_workflow(workflow, nodes, interfaces, size):
     pr = 5
     padding = 20
 
-    paper = Drawing("workflow.svg", size, debug=True)
+    paper = Drawing("workflow.svg", size, id="repr")
 
     lg = paper.linearGradient((0.5, 0), (0.5, 1.), id="bg_loaded")
     lg.add_stop_color(0, color='#8c8cff')
@@ -193,4 +193,4 @@ def draw_workflow(workflow, nodes, interfaces, size):
 
     paper.viewbox(xmin, ymin, xsize, ysize)
 
-    return paper.tostring()
+    return paper.tostring(), (xmin, ymin, xsize, ysize)

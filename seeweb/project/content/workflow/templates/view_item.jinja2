@@ -4,17 +4,12 @@
 
 <link href="{{ request.static_url('seeweb:project/content/workflow/static/style.css') }}" rel="stylesheet">
 
-<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/eve.js') }}"></script>
-<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.js') }}"></script>
-<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/raphael.pan-zoom.js') }}"></script>
-<script type="text/javascript" src="{{ request.static_url('seeweb:project/content/workflow/static/workflow.js') }}"></script>
-
 {%- endblock %}
 
 {% block project_content_body -%}
 
 <div id="workflow_canvas">
-    <p id="workflow_canvas_placeholder">Workflow visual display</p>
+    <div>{{ svg_repr|safe }}</div>
     <div id="canvas_controls">
         <a id="up" href="#"></a>
         <a id="down" href="#"></a>
@@ -24,39 +19,5 @@
 <div class="well debug">
     {{ cnt_item.definition }}
 </div>
-
-{%- endblock %}
-
-
-{% block project_js -%}
-
-<script>
-    window.onload = function() {
-        var wkf = {{ cnt_item.definition|safe }};
-        var nodes = {{ nodes|safe }};
-        var interfaces = {{ interfaces|safe }};
-
-        var paper = new Raphael(document.getElementById('workflow_canvas'), 800, 600);
-        document.getElementById('workflow_canvas_placeholder').style.display = 'none';
-
-        wv.x_offset = 400;
-        wv.y_offset = 300;
-        wv.draw_workflow(paper, wkf, nodes, interfaces);
-
-        var pan_zoom = paper.panzoom({ initialZoom: 5,
-                                      initialPosition: { x: 200, y: 150} });
-        pan_zoom.enable();
-
-        $("#canvas_controls #up").click(function (e) {
-            pan_zoom.zoomIn(1);
-            e.preventDefault();
-        });
-
-        $("#canvas_controls #down").click(function (e) {
-            pan_zoom.zoomOut(1);
-            e.preventDefault();
-        });
-    }
-</script>
 
 {%- endblock %}

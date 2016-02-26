@@ -1,3 +1,4 @@
+from markdown import markdown
 import nbformat
 from pyramid.view import view_config
 
@@ -16,6 +17,10 @@ def view(request):
     else:
         nbdef = nbformat.convert(nbformat.from_dict(nbdef), 4)
         notebook_cells = nbdef.cells
+        for cell in notebook_cells:
+            if cell.cell_type == "markdown":
+                html = markdown("".join(cell.source))
+                cell.source = html
 
     view_params["notebook_cells"] = notebook_cells
 

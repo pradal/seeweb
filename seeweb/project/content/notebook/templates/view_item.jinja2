@@ -27,9 +27,7 @@
         <div class="cell {{ cell.cell_type }}">
             {% if cell.cell_type == "markdown" %}
                 <div class="source">
-                    {% for line in cell.source %}
-                        {{ line }}
-                    {% endfor %}
+                    {{ cell.source|safe }}
                 </div>
             {% elif cell.cell_type == "code" %}
                 <pre class="prettyprint source">

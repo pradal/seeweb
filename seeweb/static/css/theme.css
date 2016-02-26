@@ -58,24 +58,6 @@ textarea {
    left: 20px;
 }
 
-.frontpage .wrapper {
-    position: relative;
-    float: left;
-    margin: 0;
-    padding: 0;
-}
-
-.frontpage .wrapper img {
-    width: 128px;
-}
-
-.frontpage .wrapper .label {
-    position: absolute;
-    top: 60px;
-    left: 20px;
-    color: #000000;
-}
-
 /* related to main layout */
 
 #banner {

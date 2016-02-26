@@ -1,22 +1,44 @@
-
-#notebook .cell .code {
-    padding: 0.4em;
-    background: #eeeeee;
-    border: solid 1px #aaaaaa;
+#notebook .cell {
 }
 
-#notebook .cell .code p {
+#notebook .cell .source p {
     margin-bottom: 0;
 }
 
-#notebook .cell .outputs {
+#notebook .code .source {
+    padding: 0.4em;
+}
+
+#notebook .code .outputs {
     padding: 0.4em;
     background: #ffffff;
 }
 
-#notebook .cell .outputs .stream{
+#notebook .code .outputs .stream {
 }
 
-#notebook .cell .outputs .error{
-    background: #ffdddd;
+#notebook .code .outputs .stream p {
+    margin-bottom: 0;
+}
+
+#notebook .code .outputs .error {
+}
+
+#notebook .code .outputs .error p {
+    margin-bottom: 0;
+    color: #00aa00;
+}
+
+#notebook .code .outputs .error .ename {
+    color: #aa0000;
+}
+
+#notebook .code .outputs .error .evalue {
+    color: #cccc00;
+}
+
+#notebook .code .outputs .display_data {
+}
+
+#notebook .code .outputs .execute_result {
 }

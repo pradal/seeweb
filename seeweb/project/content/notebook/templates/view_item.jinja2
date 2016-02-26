@@ -1,3 +1,17 @@
+{% macro render_data(mime_type, data) -%}
+
+<div class="output_data_item">
+    {% if mime_type == "text/plain" %}
+        {% for line in data %}
+            {{ line }}<br>
+        {% endfor %}
+    {% elif mime_type == "image/png" %}
+        <img src="data:image/png;base64,{{ data }}" />
+    {% endif %}
+</div>
+
+{%- endmacro %}
+
 {% extends "templates/project/layout_content.jinja2" %}
 
 {% block project_css -%}
@@ -9,26 +23,49 @@
 {% block project_content_body -%}
 
 <div id="notebook">
-    {% for cell_code, cell_res in notebook_cells %}
-        <div class="cell">
-            <div class="code">
-                {% for line in cell_code %}
-                    <p>{{ line }}</p>
-                {% endfor %}
-            </div>
-            <div class="outputs">
-                {% for res_type, res in cell_res %}
-                    <div class="{{ res_type }}">
-                        {% if res_type == "display_data" %}
-                            <img src="data:image/png;base64,{{ res }}" />
-                        {% else %}
-                            {% for line in res %}
-                                <p>{{ line }}</p>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
+    {% for cell in notebook_cells %}
+        <div class="cell {{ cell.cell_type }}">
+            {% if cell.cell_type == "markdown" %}
+                <div class="source">
+                    {% for line in cell.source %}
+                        {{ line }}
+                    {% endfor %}
+                </div>
+            {% elif cell.cell_type == "code" %}
+                <pre class="prettyprint source">
+{%- for line in cell.source -%}
+{{ line }}
+{%- endfor -%}
+                </pre>
+                <div class="outputs">
+                    {% for output in cell.outputs %}
+                        <div class="{{ output.output_type }}">
+                            {% if output.output_type == "stream" %}
+                                {% for line in output.text %}
+                                    <p>{{ line }}</p>
+                                {% endfor %}
+                            {% elif output.output_type == "error" %}
+                                {% for line in output.traceback %}
+                                    <p>{{ line|safe }}</p>
+                                {% endfor %}
+                                <p>
+                                    <span class="ename">{{ output.ename }}</span>
+                                    :
+                                    <span class="evalue">{{ output.evalue }}</span>
+                                </p>
+                            {% elif output.output_type == "display_data" %}
+                                {% for mime_type, item in output.data.items() %}
+                                    {{ render_data(mime_type, item) }}
+                                {% endfor %}
+                            {% elif output.output_type == "execute_result" %}
+                                {% for mime_type, item in output.data.items() %}
+                                    {{ render_data(mime_type, item) }}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     {% endfor %}
 </div>
@@ -36,5 +73,11 @@
 <div class="well debug">
     {{ cnt_item.definition }}
 </div>
+
+{%- endblock %}
+
+{% block project_js -%}
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
 {%- endblock %}

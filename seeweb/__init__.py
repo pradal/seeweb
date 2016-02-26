@@ -89,6 +89,7 @@ def main(global_config, **settings):
     config.add_route('comment_edit_score', 'comment/{cid}/score')
 
     # project content
+    config.add_route('project_content', 'project_content/{cid}')
     for dname in glob("seeweb/project/content/*/"):
         dname = dname.replace("\\", "/")
         category = basename(dirname(dname))

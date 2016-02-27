@@ -34,7 +34,9 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 id="data_view_title" class="modal-title">Data</h4>
       </div>
-      <div id="data_view_content" class="modal-body">
+      <div class="modal-body">
+        <div id="data_schema"></div>
+        <div id="data_value"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_data">Back</button>
@@ -67,9 +69,8 @@
         {% for port_id, (iface, html_data) in wkf_data.items() %}
             $("#workflow_canvas #{{ port_id }}").click(function (e) {
                 $('#data_view #data_view_title').text('{{ port_id }}');
-                $('#data_view #data_view_content').children().remove();
-                $('#data_view #data_view_content').append('<p>Interface: {{ iface }}</p>');
-                $('#data_view #data_view_content').append('{{ html_data|safe }}');
+                $('#data_view #data_schema').html('Interface: {{ iface }}');
+                $('#data_view #data_value').html('{{ html_data|safe }}');
                 $('#data_view').modal('show');
                 e.preventDefault();
             });

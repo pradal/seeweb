@@ -20,6 +20,27 @@
     {{ cnt_item.definition }}
 </div>
 
+<!-- Modal -->
+<div id="data_view" class="modal fade" role="dialog" data-keyboard="true">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Data</h4>
+      </div>
+      <div class="modal-body">
+        <p>Data content</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_data">Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 {%- endblock %}
 
 {% block project_js -%}
@@ -41,10 +62,11 @@
         };
 
         $("#canvas_controls #down").click(function (e) {
-            scaling_ind = Math.min(scaling_range.length - 1, scaling_ind + 1);
-            scaling = scaling_range[scaling_ind];
-            var newbox = viewbox.map(function(v) {return scaling * v;});
-            $("#workflow_canvas #repr").attr('viewbox', newbox.join(', '));
+            $('#data_view').modal('show')
+            //scaling_ind = Math.min(scaling_range.length - 1, scaling_ind + 1);
+            //scaling = scaling_range[scaling_ind];
+            //var newbox = viewbox.map(function(v) {return scaling * v;});
+            //$("#workflow_canvas #repr").attr('viewbox', newbox.join(', '));
             e.preventDefault();
         });
 

@@ -94,7 +94,7 @@ def port_index(ports, port_name):
     return None
 
 
-def draw_link(paper, workflow, nodes, interfaces, link):
+def draw_link(paper, workflow, nodes, interfaces, link, ind):
     """Draw a single node of a workflow definition
 
     Args:
@@ -103,6 +103,7 @@ def draw_link(paper, workflow, nodes, interfaces, link):
         nodes:
         interfaces:
         link:
+        ind:
 
     Returns:
 
@@ -135,7 +136,8 @@ def draw_link(paper, workflow, nodes, interfaces, link):
 
     pth = paper.polyline([(src_x, src_y), (tgt_x, tgt_y)],
                          stroke='#000000',
-                         stroke_width=1)
+                         stroke_width=1,
+                         id="wkf_link_%d" % ind)
     paper.add(pth)
 
 
@@ -177,8 +179,8 @@ def draw_workflow(workflow, nodes, interfaces, size):
     lg.add_stop_color(1, color='#9a9a00')
     paper.defs.add(lg)
 
-    for link in workflow['links']:
-        draw_link(paper, workflow, nodes, interfaces, link)
+    for i,link in enumerate(workflow['links']):
+        draw_link(paper, workflow, nodes, interfaces, link, i)
 
     for node in workflow['nodes']:
         draw_node(paper, workflow, nodes, interfaces, node)

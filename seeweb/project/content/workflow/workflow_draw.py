@@ -1,7 +1,7 @@
 from svgwrite import Drawing
 
 
-def draw_node(paper, workflow, nodes, interfaces, node):
+def draw_node(paper, workflow, nodes, interfaces, node, ind):
     """Draw a single node of a workflow definition
 
     Args:
@@ -10,6 +10,7 @@ def draw_node(paper, workflow, nodes, interfaces, node):
         nodes:
         interfaces:
         node:
+        ind:
 
     Returns:
 
@@ -26,6 +27,8 @@ def draw_node(paper, workflow, nodes, interfaces, node):
         link = g
     else:
         link = g.add(paper.a(href=nf['url'], target='_top'))
+
+    link.attribs['id'] = "wkf_node_%d" % ind
 
     # background
     bg = paper.rect((-nw / 2, -nh / 2), (nw, nh), rx=5, ry=5, stroke_width=1)
@@ -58,6 +61,7 @@ def draw_node(paper, workflow, nodes, interfaces, node):
                 link = g
             else:
                 link = g.add(paper.a(href=idef['url'], target='_top'))
+            link.attribs['id'] = "wkf_node_%d_input_%s" % (ind, pdef['name'])
             px = i * pr * 4 - (nb - 1) * 2 * pr
             port = paper.circle((px, py), pr, stroke='#000000', stroke_width=1)
             port.fill("url(#in_port)")
@@ -71,6 +75,7 @@ def draw_node(paper, workflow, nodes, interfaces, node):
                 link = g
             else:
                 link = g.add(paper.a(href=idef['url'], target='_top'))
+            link.attribs['id'] = "wkf_node_%d_output_%s" % (ind, pdef['name'])
             px = i * pr * 4 - (nb - 1) * 2 * pr
             port = paper.circle((px, py), pr, stroke='#000000', stroke_width=1)
             port.fill("url(#out_port)")
@@ -182,8 +187,8 @@ def draw_workflow(workflow, nodes, interfaces, size):
     for i,link in enumerate(workflow['links']):
         draw_link(paper, workflow, nodes, interfaces, link, i)
 
-    for node in workflow['nodes']:
-        draw_node(paper, workflow, nodes, interfaces, node)
+    for i, node in enumerate(workflow['nodes']):
+        draw_node(paper, workflow, nodes, interfaces, node, i)
 
     xmin = min(node['x'] for node in workflow['nodes']) - nw / 2 - padding
     xmax = max(node['x'] for node in workflow['nodes']) + nw / 2 + padding

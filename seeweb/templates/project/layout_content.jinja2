@@ -5,19 +5,17 @@
 
 <div id="header" class="row">
     <div class="partner-table">
-        <div class="col-md-3 partner avatar">
+        <div class="col-md-1 partner avatar">
             <a href="{{ request.route_url('project_view_content', pid=project.id) }}">
-                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/project/%s.png' % project.id) }}" />
+                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/project/%s_small.png' % project.id) }}" />
             </a>
         </div>
         <div class="col-md-9 partner description">
             <div class="owner pull-right">
                 <p>Author: <a href="{{ request.route_url('user_view_home', uid=cnt_item.author) }}">{{ cnt_item.author }}</a></p>
             </div>
-            <div class="h1">{{ project.id }}</div>
-            <div class="h2">{{ cnt_item.category }}: {{ cnt_item.name }}</div>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
+            <div class="h3">{{ project.id }}</div>
+            <div class="h4">{{ cnt_item.category }}: {{ cnt_item.name }}</div>
             <p>uid: {{ cnt_item.id }}</p>
         </div>
     </div>

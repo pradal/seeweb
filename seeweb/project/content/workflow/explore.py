@@ -43,7 +43,7 @@ def explore_pth(session, root_pth, project):
 
         # find recognized content items
         for fname in filenames:
-            if splitext(fname)[1] == ".json":
+            if splitext(fname)[1] == ".wkf":
                 pth = pj(root, fname)
                 with open(pth, 'r') as f:
                     wkf_def = json.load(f)

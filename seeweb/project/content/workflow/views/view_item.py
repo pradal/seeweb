@@ -38,10 +38,17 @@ def view(request):
 
     data = {}
     if workflow.name == "Add integers":
-        query = session.query(ContentItem).filter(ContentItem.extra == workflow.id)
-        items = query.all()
-        if len(items) > 0:
-            prov = items[0].load_definition()
+        query = session.query(ContentItem)
+        query = query.filter(ContentItem.project == project.id)
+        query = query.filter(ContentItem.category == "workflow_prov")
+        provs = []
+        for prov_item in query.all():
+            prov = prov_item.load_definition()
+            if prov['workflow'] == workflow.id:
+                provs.append(prov)
+
+        if len(provs) > 0:
+            prov = provs[0]
             fmt_data = {}
             for data_obj in prov['data']:
                 dtype = data_obj['type']

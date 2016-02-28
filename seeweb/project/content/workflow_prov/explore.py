@@ -57,4 +57,3 @@ def explore_pth(session, root_pth, project):
                     prov.name = pdef['name']
                     prov.store_description("Execution of workflow")
                     prov.store_definition(pdef)
-                    prov.extra = pdef['workflow']

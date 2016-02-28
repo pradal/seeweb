@@ -16,7 +16,6 @@ class ContentItem(Base, Described):
     name = Column(String(255), nullable=False)
     author = Column(String(255), default="")
     definition = Column(Text, default="")
-    extra = Column(String(255), default="")
 
     def __repr__(self):
         tup = (self.id, self.category, self.project)

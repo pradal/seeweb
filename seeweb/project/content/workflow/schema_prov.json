@@ -22,11 +22,11 @@
     },
     "time_init": {
       "description": "Time the execution started",
-      "type": "integer"
+      "type": "number"
     },
     "time_end": {
       "description": "Time the execution ended",
-      "type": "integer"
+      "type": "number"
     },
     "data": {
       "type": "array",
@@ -69,9 +69,11 @@
             "description": "local id of input port",
             "type": "string"
           },
-          "value": {
-            "description": "Value stored on the port",
-            "type": "any"
+          "data": {
+            "description": "Id of data stored on the port",
+            "type": "string",
+            "minLength": 32,
+            "maxLength": 32
           }
         },
         "required": [
@@ -93,11 +95,11 @@
           },
           "time_init": {
             "description": "Time the execution started",
-            "type": "integer"
+            "type": "number"
           },
           "time_end": {
             "description": "Time the execution ended",
-            "type": "integer"
+            "type": "number"
           },
           "inputs": {
             "type": "array",
@@ -125,15 +127,15 @@
           "outputs": {
             "type": "array",
             "items": {
-              "description": "Data used as outputs",
+              "description": "Data produced on outputs",
               "type": "object",
               "properties": {
                 "port": {
-                  "description": "local id of input port",
+                  "description": "local id of output port",
                   "type": "string"
                 },
                 "data": {
-                  "description": "Id of data used",
+                  "description": "Id of data produced",
                   "type": "string",
                   "minLength": 32,
                   "maxLength": 32

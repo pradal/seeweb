@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Workflow provenance",
+  "description": "Schema for storing a workflow execution",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "A unique identifier for this execution",
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 32
+    },
+    "workflow": {
+      "description": "Id of workflow support of this execution",
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 32
+    },
+    "author": {
+      "description": "Actor who launched this execution",
+      "type": "string"
+    },
+    "time_init": {
+      "description": "Time the execution started",
+      "type": "integer"
+    },
+    "time_end": {
+      "description": "Time the execution ended",
+      "type": "integer"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "description": "Descriptor for data used and produced during the workflow execution",
+        "type" : "object",
+        "properties": {
+          "id": {
+            "description": "A unique identifier for this data",
+            "type": "string",
+            "minLength": 32,
+            "maxLength": 32
+          },
+          "type": {
+            "description": "Type of data stored",
+            "type": "string"
+          },
+          "value" :{
+            "description": "Data content"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "value"
+        ]
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "description": "Value stored on lonely input ports of the workflow",
+        "type": "object",
+        "properties": {
+          "node": {
+            "description": "Local id of node in the workflow",
+            "type": "integer"
+          },
+          "port": {
+            "description": "local id of input port",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value stored on the port",
+            "type": "any"
+          }
+        },
+        "required": [
+          "node",
+          "port",
+          "value"
+        ]
+      }
+    },
+    "executions": {
+      "type": "array",
+      "items": {
+        "description": "Process execution associated to a node",
+        "type": "object",
+        "properties": {
+          "node": {
+            "description": "Local id of node in the workflow",
+            "type": "integer"
+          },
+          "time_init": {
+            "description": "Time the execution started",
+            "type": "integer"
+          },
+          "time_end": {
+            "description": "Time the execution ended",
+            "type": "integer"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "description": "Data used as inputs",
+              "type": "object",
+              "properties": {
+                "port": {
+                  "description": "local id of input port",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Id of data used",
+                  "type": "string",
+                  "minLength": 32,
+                  "maxLength": 32
+                }
+              },
+              "required": [
+                "port",
+                "data"
+              ]
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "description": "Data used as outputs",
+              "type": "object",
+              "properties": {
+                "port": {
+                  "description": "local id of input port",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Id of data used",
+                  "type": "string",
+                  "minLength": 32,
+                  "maxLength": 32
+                }
+              },
+              "required": [
+                "port",
+                "data"
+              ]
+            }
+          }
+        },
+        "required": [
+          "node",
+          "time_init",
+          "time_end",
+          "inputs",
+          "outputs"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "workflow",
+    "author",
+    "time_init",
+    "time_end",
+    "data",
+    "parameters",
+    "executions"
+  ]
+}

@@ -56,30 +56,34 @@ def draw_node(paper, workflow, nodes, interfaces, node, ind):
         nb = len(nf['inputs'])
         py = -nh / 2
         for i, pdef in enumerate(nf['inputs']):
-            idef = interfaces.get(pdef['interface'], None)
-            if idef is None:
-                link = g
-            else:
-                link = g.add(paper.a(href=idef['url'], target='_top'))
-            link.attribs['id'] = "wkf_node_%d_input_%s" % (ind, pdef['name'])
             px = i * pr * 4 - (nb - 1) * 2 * pr
             port = paper.circle((px, py), pr, stroke='#000000', stroke_width=1)
             port.fill("url(#in_port)")
-            link.add(port)
+
+            idef = interfaces.get(pdef['interface'], None)
+            if idef is None:
+                port.attribs['id'] = "wkf_node_%d_input_%s" % (ind, pdef['name'])
+                g.add(port)
+            else:
+                link = g.add(paper.a(href=idef['url'], target='_top'))
+                link.attribs['id'] = "wkf_node_%d_input_%s" % (ind, pdef['name'])
+                link.add(port)
 
         nb = len(nf['outputs'])
         py = nh / 2
         for i, pdef in enumerate(nf['outputs']):
-            idef = interfaces.get(pdef['interface'], None)
-            if idef is None:
-                link = g
-            else:
-                link = g.add(paper.a(href=idef['url'], target='_top'))
-            link.attribs['id'] = "wkf_node_%d_output_%s" % (ind, pdef['name'])
             px = i * pr * 4 - (nb - 1) * 2 * pr
             port = paper.circle((px, py), pr, stroke='#000000', stroke_width=1)
             port.fill("url(#out_port)")
-            link.add(port)
+
+            idef = interfaces.get(pdef['interface'], None)
+            if idef is None:
+                port.attribs['id'] = "wkf_node_%d_output_%s" % (ind, pdef['name'])
+                g.add(port)
+            else:
+                link = g.add(paper.a(href=idef['url'], target='_top'))
+                link.attribs['id'] = "wkf_node_%d_output_%s" % (ind, pdef['name'])
+                link.add(port)
 
 
 def port_index(ports, port_name):

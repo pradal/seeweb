@@ -38,13 +38,10 @@ def view(request):
 
     data = {}
     if workflow.name == "Add integers":
-        from seeweb.project.source import source_pth
-        from os.path import join
-        pth = source_pth(project.id)
-        with open(join(pth, "src/sample_project/workflow_add.prov")) as f:
-            prov = json.load(f)
-
-        if prov['workflow'] == workflow.id:
+        query = session.query(ContentItem).filter(ContentItem.extra == workflow.id)
+        items = query.all()
+        if len(items) > 0:
+            prov = items[0].load_definition()
             fmt_data = {}
             for data_obj in prov['data']:
                 dtype = data_obj['type']

@@ -59,14 +59,15 @@ def draw_node(paper, workflow, nodes, interfaces, node, ind):
             px = i * pr * 4 - (nb - 1) * 2 * pr
             port = paper.circle((px, py), pr, stroke='#000000', stroke_width=1)
             port.fill("url(#in_port)")
+            pid = "wkf_node_%d_input_%s" % (ind, pdef['name'])
 
             idef = interfaces.get(pdef['interface'], None)
             if idef is None:
-                port.attribs['id'] = "wkf_node_%d_input_%s" % (ind, pdef['name'])
+                port.attribs['id'] = pid
                 g.add(port)
             else:
                 link = g.add(paper.a(href=idef['url'], target='_top'))
-                link.attribs['id'] = "wkf_node_%d_input_%s" % (ind, pdef['name'])
+                link.attribs['id'] = pid
                 link.add(port)
 
         nb = len(nf['outputs'])
@@ -75,14 +76,15 @@ def draw_node(paper, workflow, nodes, interfaces, node, ind):
             px = i * pr * 4 - (nb - 1) * 2 * pr
             port = paper.circle((px, py), pr, stroke='#000000', stroke_width=1)
             port.fill("url(#out_port)")
+            pid = "wkf_node_%d_output_%s" % (ind, pdef['name'])
 
             idef = interfaces.get(pdef['interface'], None)
             if idef is None:
-                port.attribs['id'] = "wkf_node_%d_output_%s" % (ind, pdef['name'])
+                port.attribs['id'] = pid
                 g.add(port)
             else:
                 link = g.add(paper.a(href=idef['url'], target='_top'))
-                link.attribs['id'] = "wkf_node_%d_output_%s" % (ind, pdef['name'])
+                link.attribs['id'] = pid
                 link.add(port)
 
 

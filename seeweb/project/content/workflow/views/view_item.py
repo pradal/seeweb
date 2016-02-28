@@ -71,10 +71,6 @@ def view(request):
                     key = "wkf_node_%d_output_%s" % (nid, port['port'])
                     data[key] = fmt_data[port['data']]
 
-
-    # data["wkf_node_0_output_ret"] = ("int", "<p>1</p>")
-    # data["wkf_node_1_output_ret"] = ('img', '<img src="data:image/png;base64,%s" />' % img_data)
-
     svg, viewbox = draw_workflow(workflow_def, ndef, idef, (800, 600))
     view_params['svg_repr'] = svg
     view_params['svg_viewbox'] = json.dumps(viewbox)

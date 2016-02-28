@@ -24,28 +24,6 @@
     {{ cnt_item.definition }}
 </div>
 
-<!-- Modal -->
-<div id="data_view" class="modal fade" role="dialog" data-keyboard="true">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 id="data_view_title" class="modal-title">Data</h4>
-      </div>
-      <div class="modal-body">
-        <div id="data_schema"></div>
-        <div id="data_value"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_data">Back</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 {%- endblock %}
 
 {% block project_js -%}
@@ -65,16 +43,6 @@
                 return value;
             }
         };
-
-        {% for port_id, (iface, html_data) in wkf_data.items() %}
-            $("#workflow_canvas #{{ port_id }}").click(function (e) {
-                $('#data_view #data_view_title').text('{{ port_id }}');
-                $('#data_view #data_schema').html('Interface: {{ iface }}');
-                $('#data_view #data_value').html('{{ html_data|safe }}');
-                $('#data_view').modal('show');
-                e.preventDefault();
-            });
-        {% endfor %}
 
         $("#canvas_controls #down").click(function (e) {
             scaling_ind = Math.min(scaling_range.length - 1, scaling_ind + 1);

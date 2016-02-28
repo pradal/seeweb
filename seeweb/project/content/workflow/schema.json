@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "description": "The unique identifier this workflow",
+      "description": "A unique identifier for this workflow",
       "type": "string",
       "minLength": 32,
       "maxLength": 32

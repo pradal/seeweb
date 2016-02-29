@@ -14,7 +14,7 @@
 
 {% extends "templates/project/layout_content.jinja2" %}
 
-{% block project_css -%}
+{% block project_content_css -%}
 
 <link href="{{ request.static_url('seeweb:project/content/notebook/static/notebook.css') }}" rel="stylesheet">
 
@@ -68,13 +68,9 @@
     {% endfor %}
 </div>
 
-<div class="well debug">
-    {{ cnt_item.definition }}
-</div>
-
 {%- endblock %}
 
-{% block project_js -%}
+{% block project_content_js -%}
 
 <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 

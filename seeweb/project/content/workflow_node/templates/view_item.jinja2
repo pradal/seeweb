@@ -1,6 +1,6 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
-{% block project_css -%}
+{% block project_content_css -%}
 
 <link href="{{ request.static_url('seeweb:project/content/workflow_node/static/style.css') }}" rel="stylesheet">
 
@@ -22,10 +22,6 @@
     &nbsp;&nbsp;&nbsp;&nbsp;{{ line }}<br>
 {% endfor -%}
 </p>
-
-<div class="well debug">
-    {{ cnt_item.definition }}
-</div>
 
 {%- endblock %}
 

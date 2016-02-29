@@ -15,14 +15,10 @@
 <div id="scene3d_canvas">
 </div>
 
-<div class="well debug">
-    {{ cnt_item.definition }}
-</div>
-
 {%- endblock %}
 
 
-{% block project_js -%}
+{% block project_content_js -%}
     <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/scene3d/static/three.min.js') }}"></script>
     <script type="text/javascript" src="{{ request.static_url('seeweb:project/content/scene3d/static/TrackballControls.js') }}"></script>
 

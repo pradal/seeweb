@@ -1,6 +1,6 @@
 {% extends "templates/project/layout_content.jinja2" %}
 
-{% block project_css -%}
+{% block project_content_css -%}
 
 <link href="{{ request.static_url('seeweb:project/content/workflow/static/style.css') }}" rel="stylesheet">
 
@@ -20,13 +20,9 @@
     </div>
 </div>
 
-<div class="well debug">
-    {{ cnt_item.definition }}
-</div>
-
 {%- endblock %}
 
-{% block project_js -%}
+{% block project_content_js -%}
 
 <script>
     var viewbox;

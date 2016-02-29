@@ -5,6 +5,7 @@ from seeweb.models import DBSession
 from seeweb.models.content_item import ContentItem
 from seeweb.views.project.commons import content_init
 
+from seeweb.project.content.alias.commons import resolve_target
 from seeweb.project.content.workflow.workflow_draw import draw_workflow
 
 
@@ -20,6 +21,10 @@ def view(request):
         wnode = ContentItem.get(session, nid)
         if wnode is None:
             ndef[nid] = None
+        elif wnode.category == "alias":
+            wnode = resolve_target(session, wnode)
+            ndef[nid] = wnode.load_definition()
+            ndef[nid]['url'] = request.route_url('project_content_alias_view_item', pid=wnode.project, cid=nid)
         else:
             ndef[nid] = wnode.load_definition()
             ndef[nid]['url'] = request.route_url('project_content_workflow_node_view_item', pid=wnode.project, cid=nid)

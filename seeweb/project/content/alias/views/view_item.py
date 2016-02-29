@@ -4,7 +4,7 @@ from seeweb.models import DBSession
 from seeweb.views.project.commons import content_init
 
 
-@view_config(route_name='project_content_executable_view_item',
+@view_config(route_name='project_content_alias_view_item',
              renderer='../templates/view_item.jinja2')
 def view(request):
     session = DBSession()

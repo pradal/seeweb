@@ -12,7 +12,7 @@
     },
     "name": {
       "description": "Target content the alias is pointing to",
-      "type": "string"
+      "type": "string",
       "minLength": 32,
       "maxLength": 32
     },

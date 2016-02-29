@@ -24,11 +24,7 @@ def main(session):
                 schema={},
                 ancestors=[]
                 )
-    item = ContentItem.create(session, idef['id'], "interface", nodelib)
-    item.name = idef['name']
-    item.author = idef['author']
-    item.store_definition(idef)
-    item.store_description(idef['description'])
+    ContentItem.create_from_def(session, "interface", idef, nodelib)
 
     idef = dict(id='int',
                 name='int',
@@ -38,11 +34,7 @@ def main(session):
                 schema={"type": "integer"},
                 ancestors=[]
                 )
-    item = ContentItem.create(session, idef['id'], "interface", nodelib)
-    item.name = idef['name']
-    item.author = idef['author']
-    item.store_definition(idef)
-    item.store_description(idef['description'])
+    ContentItem.create_from_def(session, "interface", idef, nodelib)
 
     idef = dict(id='float',
                 name='float',
@@ -52,11 +44,7 @@ def main(session):
                 schema={"type": "number"},
                 ancestors=[]
                 )
-    item = ContentItem.create(session, idef['id'], "interface", nodelib)
-    item.name = idef['name']
-    item.author = idef['author']
-    item.store_definition(idef)
-    item.store_description(idef['description'])
+    ContentItem.create_from_def(session, "interface", idef, nodelib)
 
     idef = dict(id='str',
                 name='string',
@@ -66,11 +54,7 @@ def main(session):
                 schema={"type": "string"},
                 ancestors=[]
                 )
-    item = ContentItem.create(session, idef['id'], "interface", nodelib)
-    item.name = idef['name']
-    item.author = idef['author']
-    item.store_definition(idef)
-    item.store_description(idef['description'])
+    ContentItem.create_from_def(session, "interface", idef, nodelib)
 
     ndefs = []
     for i in range(3):
@@ -87,13 +71,12 @@ def main(session):
                         outputs=[dict(name="ret", interface="int",
                                       description="important result")])
 
-        item = ContentItem.create(session, node_def['id'],
-                                  "workflow_node", nodelib)
-        item.name = node_def['name']
-        item.author = node_def['author']
-        item.store_definition(node_def)
-        item.store_description(node_def['description'])
+        ContentItem.create_from_def(session, "workflow_node", node_def, nodelib)
         ndefs.append(node_def)
+
+    alias = ContentItem.create(session, uuid1().hex, "alias", nodelib)
+    alias.author = "revesansparole"
+    alias.name = ndefs[2]['id']
 
     workflow = Project.create(session, 'revesansparole', 'workflow')
     workflow.public = True
@@ -107,7 +90,7 @@ def main(session):
                                     x=-50, y=-80),
                                dict(id=ndefs[1]['id'], label=None,
                                     x=50, y=-80),
-                               dict(id=ndefs[2]['id'], label=None,
+                               dict(id=alias.id, label=None,
                                     x=0, y=0),
                                dict(id=uuid1().hex, label="fail",
                                     x=0, y=80)],
@@ -115,8 +98,4 @@ def main(session):
                                (1, "ret", 2, "in2"),
                                (2, "ret", 3, "in")])
 
-    item = ContentItem.create(session, workflow_def['id'],
-                              "workflow", workflow)
-    item.name = workflow_def['name']
-    item.author = workflow_def['author']
-    item.store_definition(workflow_def)
+    ContentItem.create_from_def(session, "workflow", workflow_def, workflow)

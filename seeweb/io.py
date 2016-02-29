@@ -1,5 +1,7 @@
 """Extended io to fix some issues with default python implementations
 """
+import json
+from jsonschema import validate, ValidationError
 from fnmatch import fnmatch
 import os
 import stat
@@ -12,7 +14,7 @@ def find_files(root_pth, patterns):
 
     Args:
         root_pth: (str) root dir to start exploring
-        patterns: (list of str) list of patterns to consider:
+        patterns: (list of str) list of file name patterns to consider:
                    e.g. ['*.png', '*.gif']
 
     Returns:
@@ -29,6 +31,43 @@ def find_files(root_pth, patterns):
             if any(fnmatch(fname, pat) for pat in patterns):
                 pth = os.path.join(root, fname)
                 yield pth, fname
+
+
+def find_definitions(root_pth, schema, patterns):
+    """Explore recursively pth to find files with the given patterns.
+
+    Notes: Do not process hidden directories (i.e. starting with '.')
+
+    Args:
+        root_pth: (str) root dir to start exploring
+        schema: (dict) json schema defining an object type
+        patterns: (list of str) list of file name patterns to consider:
+                   e.g. ['*.png', '*.gif']
+
+    Returns:
+        (str, str)
+    """
+    for pth, fname in find_files(root_pth, patterns):
+        with open(pth, 'r') as f:
+            idef = json.load(f)
+            try:
+                validate(idef, schema)
+                yield pth, fname, idef
+            except ValidationError:
+                print "%s not a valid object" % pth
+
+
+def load_schema(here):
+    """Load a json schema definition
+
+    Args:
+        here: (str) path to python file
+
+    Returns:
+        dict
+    """
+    with open(os.path.join(os.path.dirname(here), "schema.json"), 'r') as f:
+        return json.load(f)
 
 
 def rmtree(top):

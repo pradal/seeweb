@@ -160,6 +160,9 @@ def edit_init(request, session, tab):
 
     if 'fetch_content' in request.params:
         explore_sources(session, project)
+        loc = request.route_url('project_view_content', pid=project.id)
+        transaction.commit()
+        raise HTTPFound(location=loc)
 
     if "confirm_delete" in request.params:
         if request.unauthenticated_userid != project.owner:

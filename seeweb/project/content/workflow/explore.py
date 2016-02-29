@@ -2,10 +2,10 @@
 """
 import json
 from jsonschema import validate, ValidationError
-from os import walk
-from os.path import dirname, splitext
+from os.path import dirname
 from os.path import join as pj
 
+from seeweb.io import find_files
 from seeweb.models.content_item import ContentItem
 
 
@@ -35,25 +35,16 @@ def explore_pth(session, root_pth, project):
     Returns:
         None
     """
-    for root, dirnames, filenames in walk(root_pth):
-        # avoid hidden directories
-        for i in range(len(dirnames) - 1, -1, -1):
-            if dirnames[i].startswith("."):
-                del dirnames[i]
+    for pth, fname in find_files(root_pth, ["*.wkf"]):
+        with open(pth, 'r') as f:
+            wkf_def = json.load(f)
 
-        # find recognized content items
-        for fname in filenames:
-            if splitext(fname)[1] == ".wkf":
-                pth = pj(root, fname)
-                with open(pth, 'r') as f:
-                    wkf_def = json.load(f)
-
-                if check_definition(wkf_def):
-                    node = ContentItem.create(session,
-                                              wkf_def['id'],
-                                              "workflow",
-                                              project)
-                    node.author = wkf_def['author']
-                    node.name = wkf_def['name']
-                    node.store_description(wkf_def['description'])
-                    node.store_definition(wkf_def)
+        if check_definition(wkf_def):
+            node = ContentItem.create(session,
+                                      wkf_def['id'],
+                                      "workflow",
+                                      project)
+            node.author = wkf_def['author']
+            node.name = wkf_def['name']
+            node.store_description(wkf_def['description'])
+            node.store_definition(wkf_def)

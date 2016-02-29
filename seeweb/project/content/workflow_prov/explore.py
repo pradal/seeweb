@@ -2,10 +2,10 @@
 """
 import json
 from jsonschema import validate, ValidationError
-from os import walk
-from os.path import dirname, splitext
+from os.path import dirname
 from os.path import join as pj
 
+from seeweb.io import find_files
 from seeweb.models.content_item import ContentItem
 
 
@@ -35,25 +35,16 @@ def explore_pth(session, root_pth, project):
     Returns:
         None
     """
-    for root, dirnames, filenames in walk(root_pth):
-        # avoid hidden directories
-        for i in range(len(dirnames) - 1, -1, -1):
-            if dirnames[i].startswith("."):
-                del dirnames[i]
+    for pth, fname in find_files(root_pth, ["*.prov"]):
+        with open(pth, 'r') as f:
+            pdef = json.load(f)
 
-        # find recognized content items
-        for fname in filenames:
-            if splitext(fname)[1] == ".prov":
-                pth = pj(root, fname)
-                with open(pth, 'r') as f:
-                    pdef = json.load(f)
-
-                if check_definition(pdef):
-                    prov = ContentItem.create(session,
-                                              pdef['id'],
-                                              "workflow_prov",
-                                              project)
-                    prov.author = pdef['author']
-                    prov.name = pdef['name']
-                    prov.store_description("Execution of workflow")
-                    prov.store_definition(pdef)
+        if check_definition(pdef):
+            prov = ContentItem.create(session,
+                                      pdef['id'],
+                                      "workflow_prov",
+                                      project)
+            prov.author = pdef['author']
+            prov.name = pdef['name']
+            prov.store_description("Execution of workflow")
+            prov.store_definition(pdef)

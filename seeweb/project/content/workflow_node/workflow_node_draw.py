@@ -52,7 +52,8 @@ def draw_node(node, interfaces, size):
     g.add(label)
 
     # ports
-    nstyle = 'font-size: 18px; font-family: verdana; text-anchor: middle'
+    onstyle = 'font-size: 18px; font-family: verdana; text-anchor: end'
+    instyle = 'font-size: 18px; font-family: verdana; text-anchor: start'
     istyle = 'font-size: 10px; font-family: verdana; text-anchor: middle'
     nb = len(node['inputs'])
     py = -nh / 2
@@ -71,11 +72,15 @@ def draw_node(node, interfaces, size):
         link.add(port)
         # port name
         frag = paper.tspan(pdef['name'], dy=[-2 * pr + 5])
-        label = paper.text("", style=nstyle, fill='#000000')
+        label = paper.text("", style=instyle, fill='#000000')
+        label.rotate(-45)
         label.add(frag)
         pg.add(label)
         # port interface
-        frag = paper.tspan(pdef['interface'], dy=[2 * pr + 3])
+        itxt = pdef['interface']
+        if len(itxt) > 10:
+            itxt = itxt[:7] + "..."
+        frag = paper.tspan(itxt, dy=[2 * pr + 3])
         label = paper.text("", style=istyle, fill='#000000')
         label.add(frag)
         link.add(label)
@@ -97,11 +102,15 @@ def draw_node(node, interfaces, size):
         link.add(port)
         # port name
         frag = paper.tspan(pdef['name'], dy=[2 * pr + 5])
-        label = paper.text("", style=nstyle, fill='#000000')
+        label = paper.text("", style=onstyle, fill='#000000')
+        label.rotate(-45)
         label.add(frag)
         pg.add(label)
         # port interface
-        frag = paper.tspan(pdef['interface'], dy=[-2 * pr + 3])
+        itxt = pdef['interface']
+        if len(itxt) > 10:
+            itxt = itxt[:7] + "..."
+        frag = paper.tspan(itxt, dy=[-2 * pr + 3])
         label = paper.text("", style=istyle, fill='#000000')
         label.add(frag)
         link.add(label)

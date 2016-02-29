@@ -21,6 +21,10 @@ def draw_node(paper, workflow, nodes, interfaces, node, ind):
 
     nf = nodes.get(node['id'], None)
 
+    if nf is not None:
+        nb = max(len(nf['inputs']), len(nf['outputs']))
+        nw = max(nw, pr * (nb * 4 + 4))
+
     g = paper.add(paper.g())
     g.translate(node['x'], node['y'])
     if nf is None:

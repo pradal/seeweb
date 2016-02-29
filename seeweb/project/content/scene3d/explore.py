@@ -1,9 +1,10 @@
 """Explore the content of a project to find its workflow nodes.
 """
-import json
-
-from seeweb.io import find_files
+from seeweb.io import find_definitions, load_schema
 from seeweb.models.content_item import ContentItem
+
+
+schema = load_schema(__file__)
 
 
 def explore_pth(session, root_pth, project):
@@ -20,17 +21,13 @@ def explore_pth(session, root_pth, project):
     Returns:
         None
     """
-    for pth, fname in find_files(root_pth, ["*.json"]):
-        with open(pth, 'r') as f:
-            sc_def = json.load(f)
-
-        if sc_def.get("metadata", {}).get("type", "") == "Object":
-            obj = sc_def['object']
-            node = ContentItem.create(session,
-                                      obj['uuid'],
-                                      "scene3d",
-                                      project)
-            node.author = project.owner
-            node.name = obj['name']
-            node.store_description("three.js")
-            node.store_definition(sc_def)
+    for pth, fname, idef in find_definitions(root_pth, schema, ["*.json"]):
+        obj = idef['object']
+        node = ContentItem.create(session,
+                                  obj['uuid'],
+                                  "scene3d",
+                                  project)
+        node.author = project.owner
+        node.name = obj['name']
+        node.store_description("three.js")
+        node.store_definition(idef)

@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Project content alias",
+  "description": "Symbolic link to another content",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Unique id for a given object",
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 32
+    },
+    "name": {
+      "description": "Target content the alias is pointing to",
+      "type": "string"
+      "minLength": 32,
+      "maxLength": 32
+    },
+    "author": {
+      "description": "Author who created this alias",
+      "type": "string"
+    },
+    "description": {
+      "description": "Short description of this alias",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "author",
+    "version",
+    "description"
+  ]
+}

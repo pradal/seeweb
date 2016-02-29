@@ -22,11 +22,4 @@ def explore_pth(session, root_pth, project):
         None
     """
     for pth, fname, idef in find_definitions(root_pth, schema, ["*.wkf"]):
-        node = ContentItem.create(session,
-                                  idef['id'],
-                                  "workflow_node",
-                                  project)
-        node.author = idef['author']
-        node.name = idef['name']
-        node.store_description(idef['description'])
-        node.store_definition(idef)
+        ContentItem.create_from_def(session, "workflow_node", idef, project)

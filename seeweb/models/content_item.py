@@ -55,6 +55,27 @@ class ContentItem(Base, Described):
         return item
 
     @staticmethod
+    def create_from_def(session, category, idef, project):
+        """Create a new content item for this project.
+
+        Args:
+            session: (DBSession)
+            category: (str)
+            idef: (dict) definition of item
+            project: (Project) project that will own the content
+
+        Returns:
+            (ContentItem)
+        """
+        item = ContentItem.create(session, idef['id'], category, project)
+        item.author = idef['author']
+        item.name = idef['name']
+        item.store_description(idef['description'])
+        item.store_definition(idef)
+
+        return item
+
+    @staticmethod
     def remove(session, item):
         """Remove a given item from the database.
 

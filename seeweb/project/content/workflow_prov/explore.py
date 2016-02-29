@@ -22,11 +22,5 @@ def explore_pth(session, root_pth, project):
         None
     """
     for pth, fname, idef in find_definitions(root_pth, schema, ["*.prov"]):
-        prov = ContentItem.create(session,
-                                  idef['id'],
-                                  "workflow_prov",
-                                  project)
-        prov.author = idef['author']
-        prov.name = idef['name']
-        prov.store_description("Execution of workflow")
-        prov.store_definition(idef)
+        idef['description'] = "Execution of workflow"
+        ContentItem.create_from_def(session, "workflow_prov", idef, project)

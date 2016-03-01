@@ -34,9 +34,9 @@
               {},
               function(data) {
               $('#execute #result').empty();
-                $('#execute #result').append("<div class='well'>" + data + "</div>");
+                $('#execute #result').append("<div class='well'><pre>" + data['stdout'] + "</pre></div>");
               },
-              "html"
+              "json"
         );
         e.preventDefault();
     });

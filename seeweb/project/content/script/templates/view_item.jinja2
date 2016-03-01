@@ -33,8 +33,14 @@
         $.get("{{ request.route_url('project_content_script_execute', pid=project.id, cid=cnt_item.id) }}",
               {},
               function(data) {
-              $('#execute #result').empty();
-                $('#execute #result').append("<div class='well'><pre>" + data['stdout'] + "</pre></div>");
+                $('#execute #result').empty();
+                var msg;
+                if (data['stderr'].length > 0){
+                    $('#execute #result').append("<div class='well error'><pre>" + data['stderr'] + "</pre></div>");
+                } else {
+                    $('#execute #result').append("<div class='well'><pre>" + data['stdout'] + "</pre></div>");
+                }
+
               },
               "json"
         );

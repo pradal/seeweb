@@ -1,3 +1,7 @@
 #source {
     padding: 1em;
 }
+
+#result .error {
+    background: #ffaaaa;
+}

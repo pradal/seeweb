@@ -2,6 +2,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from StringIO import StringIO
 import sys
+import traceback
 
 from seeweb.models import DBSession
 from seeweb.models.user import User
@@ -28,9 +29,15 @@ def view(request):
     mem = sys.stdout
     sys.stdout = stream
     code = compile(script_def['source'], script.name, 'exec')
-    eval(code)
+    res = dict(stdout="", stderr="")
+    try:
+        eval(code)
+    except Exception as e:
+        traceback.print_exc(file=stream)
+        res['stderr'] = stream.getvalue()
+
     sys.stdout = mem
 
-    res = {'stdout': stream.getvalue()}
+    res['stdout'] = stream.getvalue()
 
     return res

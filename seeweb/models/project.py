@@ -282,6 +282,7 @@ class Project(Base, Rated, Described, Authorized):
         """
         query = session.query(ContentItem)
         query = query.filter(ContentItem.project == self.id)
+        query = query.order_by(ContentItem.name)
 
         cnt = {}
         for item in query.all():

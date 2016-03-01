@@ -79,6 +79,7 @@
 
 {% block project_js -%}
 
+{% if cnt_item.definition != "" %}
 <script src="{{ request.static_url('seeweb:static/js/underscore-min.js') }}">
 </script>
 
@@ -97,6 +98,7 @@
       data:obj
     });
 </script>
+{% endif %}
 
 {% block project_content_js %}
 {% endblock %}

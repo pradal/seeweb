@@ -22,8 +22,9 @@ def view(request):
 
         user.install_project(session, project)
 
-        loc = request.route_url('user_view_projects',
-                                uid=request.unauthenticated_userid)
+        # loc = request.route_url('user_view_projects',
+        #                         uid=request.unauthenticated_userid)
+        loc = request.route_url('project_view_home', pid=project.id)
         return HTTPFound(location=loc)
 
     return view_params

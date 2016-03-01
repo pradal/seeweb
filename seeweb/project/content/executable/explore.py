@@ -33,12 +33,12 @@ def explore_pth(session, root_pth, project):
     cf = ConfigParser()
     cf.read(pj(egg_pth, "entry_points.txt"))
     if cf.has_section('console_scripts'):
-        for ep in cf.items('console_scripts'):
+        for ep_name, ep_loc in cf.items('console_scripts'):
             exe = ContentItem.create(session,
                                      uuid1().hex,
                                      "executable",
                                      project)
             exe.author = project.owner
-            exe.name = ep.split("=")[0].strip()
-            exe.store_description(ep)
-            exe.store_definition(ep)
+            exe.name = ep_name
+            exe.store_description(ep_loc)
+            # exe.store_definition(ep)

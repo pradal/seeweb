@@ -2,4 +2,12 @@
 
 {% block project_content_body -%}
 
+<p>Target: {{ cnt_item.description }}</p>
+
+{% if installed %}
+    <div>
+        <button class="btn btn-warning">execute</button>
+    </div>
+{% endif %}
+
 {%- endblock %}

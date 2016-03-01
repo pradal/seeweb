@@ -19,6 +19,7 @@ from seeweb.models.user import User
 
 import pjt_notebook
 import pjt_scene3d
+import pjt_script
 import pjt_workflow
 
 
@@ -218,5 +219,6 @@ This project is part of OpenAlea_.
         revesansparole.install_project(session, svgdraw)
 
         pjt_notebook.main(session)
-        pjt_workflow.main(session)
         pjt_scene3d.main(session)
+        pjt_script.main(session)
+        pjt_workflow.main(session)

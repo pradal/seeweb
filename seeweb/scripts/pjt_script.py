@@ -68,3 +68,25 @@ print [v * 2 for v in sample]
                 )
     ContentItem.create_from_def(session, "script", idef, pjt)
 
+    idef = dict(id=uuid1().hex,
+                name='Rscript',
+                author="revesansparole",
+                description="More statistic oriented analysis",
+                version=0,
+                language="R",
+                source="""
+# Define a variable.
+x <- rnorm(10)
+
+# calculate the mean of x and print out the results.
+mux = mean(x)
+cat("The mean of x is ",mean(x),"\\n")
+
+# print out a summary of the results
+summary(x)
+cat("The summary of x is \\n",summary(x),"\\n")
+print(summary(x))
+                """
+                )
+    ContentItem.create_from_def(session, "script", idef, pjt)
+

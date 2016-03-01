@@ -25,19 +25,22 @@ def view(request):
         loc = request.route_url('user_view_home', uid=user.id)
         raise HTTPFound(location=loc)
 
-    stream = StringIO()
-    mem = sys.stdout
-    sys.stdout = stream
-    code = compile(script_def['source'], script.name, 'exec')
     res = dict(stdout="", stderr="")
-    try:
-        eval(code)
-    except Exception as e:
-        traceback.print_exc(file=stream)
-        res['stderr'] = stream.getvalue()
+    if script_def['language'] == 'python':
+        stream = StringIO()
+        mem = sys.stdout
+        sys.stdout = stream
+        code = compile(script_def['source'], script.name, 'exec')
+        try:
+            eval(code)
+        except Exception as e:
+            traceback.print_exc(file=stream)
+            res['stderr'] = stream.getvalue()
 
-    sys.stdout = mem
+        sys.stdout = mem
 
-    res['stdout'] = stream.getvalue()
+        res['stdout'] = stream.getvalue()
+    else:
+        res['stderr'] = "unrecognized language: %s" % script_def['language']
 
     return res

@@ -6,8 +6,37 @@
 
 {% if installed %}
     <div>
-        <button class="btn btn-warning">execute</button>
+        <button id="execute_launch" class="btn btn-warning">execute</button>
     </div>
+    <div id="execute_return">
+        <p>Result</p>
+    </div>
+{% endif %}
+
+{%- endblock %}
+
+{% block project_content_js -%}
+
+{% if installed %}
+<script>
+    window.onload = function() {
+        $('#execute_return').html('loaded');
+    }
+
+    $('#execute_launch').click(function (e) {
+        $('#execute_return').html('awaiting...');
+        $.get("{{ request.route_url('project_content_executable_execute', pid=project.id, cid=cnt_item.id) }}",
+              {},
+              function(data) {
+                $('#execute_return').html('page content: ' + data);
+                //$('#execute_return').html('finished');
+              },
+              "html"
+        );
+        e.preventDefault();
+    });
+
+</script>
 {% endif %}
 
 {%- endblock %}

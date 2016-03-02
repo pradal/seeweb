@@ -1,4 +1,4 @@
-from markdown import markdown
+from nbconvert import HTMLExporter
 import nbformat
 from pyramid.view import view_config
 
@@ -13,15 +13,12 @@ def view(request):
     project, notebook, nbdef, view_params = content_init(request, session)
 
     if nbdef is None:
-        notebook_cells = []
+        view_params["notebook_body"] = "<p>No associated notebook</p>"
     else:
-        nbdef = nbformat.convert(nbformat.from_dict(nbdef), 4)
-        notebook_cells = nbdef.cells
-        for cell in notebook_cells:
-            if cell.cell_type == "markdown":
-                html = markdown("".join(cell.source))
-                cell.source = html
-
-    view_params["notebook_cells"] = notebook_cells
+        nbdef = nbformat.reads(notebook.definition, 4)
+        html_exporter = HTMLExporter()
+        html_exporter.template_file = 'basic'
+        (body, resources) = html_exporter.from_notebook_node(nbdef)
+        view_params["notebook_body"] = body
 
     return view_params

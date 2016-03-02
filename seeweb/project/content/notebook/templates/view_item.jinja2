@@ -16,6 +16,7 @@
 
 {% block project_content_css -%}
 
+<link href="{{ request.static_url('seeweb:project/content/notebook/static/notebook_bs.css') }}" rel="stylesheet">
 <link href="{{ request.static_url('seeweb:project/content/notebook/static/notebook.css') }}" rel="stylesheet">
 
 {%- endblock %}
@@ -23,49 +24,7 @@
 {% block project_content_body -%}
 
 <div id="notebook">
-    {% for cell in notebook_cells %}
-        <div class="cell {{ cell.cell_type }}">
-            {% if cell.cell_type == "markdown" %}
-                <div class="source">
-                    {{ cell.source|safe }}
-                </div>
-            {% elif cell.cell_type == "code" %}
-                <pre class="prettyprint source">
-{%- for line in cell.source -%}
-{{ line }}
-{%- endfor -%}
-                </pre>
-                <div class="outputs">
-                    {% for output in cell.outputs %}
-                        <div class="{{ output.output_type }}">
-                            {% if output.output_type == "stream" %}
-                                {% for line in output.text %}
-                                    <p>{{ line }}</p>
-                                {% endfor %}
-                            {% elif output.output_type == "error" %}
-                                {% for line in output.traceback %}
-                                    <p>{{ line|safe }}</p>
-                                {% endfor %}
-                                <p>
-                                    <span class="ename">{{ output.ename }}</span>
-                                    :
-                                    <span class="evalue">{{ output.evalue }}</span>
-                                </p>
-                            {% elif output.output_type == "display_data" %}
-                                {% for mime_type, item in output.data.items() %}
-                                    {{ render_data(mime_type, item) }}
-                                {% endfor %}
-                            {% elif output.output_type == "execute_result" %}
-                                {% for mime_type, item in output.data.items() %}
-                                    {{ render_data(mime_type, item) }}
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-    {% endfor %}
+    {{ notebook_body|safe }}
 </div>
 
 {%- endblock %}

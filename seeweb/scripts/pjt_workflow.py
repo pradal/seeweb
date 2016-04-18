@@ -94,8 +94,52 @@ def main(session):
                                     x=0, y=0),
                                dict(id=uuid1().hex, label="fail",
                                     x=0, y=80)],
-                        links=[(0, "ret", 2, "in1"),
-                               (1, "ret", 2, "in2"),
-                               (2, "ret", 3, "in")])
+                        links=[dict(source=0, source_port="ret",
+                                    target=2, target_port="in1"),
+                               dict(source=1, source_port="ret",
+                                    target=2, target_port="in2"),
+                               dict(source=2, source_port="ret",
+                                    target=3, target_port="in")])
 
     ContentItem.create_from_def(session, "workflow", workflow_def, workflow)
+
+    prov = Project.create(session, 'revesansparole', 'provenance')
+    prov.public = True
+
+    data = [dict(id=uuid1().hex, type="int", value=1),
+            dict(id=uuid1().hex, type="int", value=10),
+            dict(id=uuid1().hex, type="str", value="Killroy was here")
+            ]
+
+    prov_def = dict(id=uuid1().hex,
+                    name="sample_provenance",
+                    description="trying some stuff",
+                    author="revesansparole",
+                    version=0,
+                    workflow=workflow_def['id'],
+                    time_init=10,
+                    time_end=11,
+                    data=data,
+                    parameters=[dict(node=0, port="in1", data=data[0]['id']),
+                                dict(node=0, port="in2", data=data[2]['id'])
+                                ],
+                    executions=[
+                        dict(node=0, time_init=10, time_end=11,
+                             inputs=[
+                                 {"port": "in1", "data": data[0]['id']},
+                                 {"port": "in2", "data": data[2]['id']}
+                             ],
+                             outputs=[
+                                 {"port": "ret", "data": data[1]['id']}
+                             ]),
+                        dict(node=1, time_init=10, time_end=11,
+                             inputs=[
+                                 {"port": "in1", "data": data[0]['id']}
+                             ],
+                             outputs=[
+                                 {"port": "ret", "data": data[1]['id']}
+                             ])
+                    ]
+                    )
+
+    ContentItem.create_from_def(session, "workflow_prov", prov_def, prov)

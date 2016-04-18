@@ -1,10 +1,10 @@
 """Explore the content of a project to find its workflow nodes.
 """
-from seeweb.io import find_definitions, load_schema
+import json
+from openalea.wlformat.prov_exe import validate
+
+from seeweb.io import find_files
 from seeweb.models.content_item import ContentItem
-
-
-schema = load_schema(__file__)
 
 
 def explore_pth(session, root_pth, project):
@@ -21,6 +21,9 @@ def explore_pth(session, root_pth, project):
     Returns:
         None
     """
-    for pth, fname, idef in find_definitions(root_pth, schema, ["*.prov"]):
-        idef['description'] = "Execution of workflow"
-        ContentItem.create_from_def(session, "workflow_prov", idef, project)
+    for pth, fname in find_files(root_pth, ["*.wkf"]):
+        with open(pth, 'r') as f:
+            pdef = json.load(f)
+            if validate(pdef):
+                pdef['description'] = "Execution of workflow"
+                ContentItem.create_from_def(session, "workflow_prov", pdef, project)

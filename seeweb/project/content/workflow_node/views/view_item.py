@@ -1,11 +1,10 @@
 import json
+from openalea.wlformat.convert import svg
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.content_item import ContentItem
 from seeweb.views.project.commons import content_init
-
-from seeweb.project.content.workflow_node.workflow_node_draw import draw_node
 
 
 @view_config(route_name='project_content_workflow_node_view_item',
@@ -14,18 +13,18 @@ def view(request):
     session = DBSession()
     project, node, node_def, view_params = content_init(request, session)
 
-    idef = {}
+    store = {}
     for port in node_def['inputs'] + node_def['outputs']:
         iid = port['interface']
         iface = ContentItem.get(session, iid)
         if iface is None:
-            idef[iid] = None
+            pass
         else:
-            idef[iid] = iface.load_definition()
-            idef[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
+            store[iid] = iface.load_definition()
+            store[iid]['url'] = request.route_url('project_content_interface_view_item', pid=iface.project, cid=iid)
 
-    svg, viewbox = draw_node(node_def, idef, (800, 300))
-    view_params['svg_repr'] = svg
+    txt, viewbox = svg.export_node(node_def, store, (800, 300))
+    view_params['svg_repr'] = txt
     view_params['svg_viewbox'] = json.dumps(viewbox)
 
     return view_params

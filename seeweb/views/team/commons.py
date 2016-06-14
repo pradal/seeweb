@@ -6,7 +6,6 @@ import transaction
 
 
 tabs = [('Home', 'home'),
-        ('Projects', 'projects'),
         ('Members', 'members')]
 
 

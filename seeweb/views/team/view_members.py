@@ -13,12 +13,12 @@ def view(request):
     team, view_params = view_init(request, session, 'members')
 
     members = []
-    for actor in team.auth:
-        if actor.is_team:
+    for pol in team.auth:
+        if pol.is_team:
             typ = 'team'
         else:
             typ = 'user'
-        members.append((typ, Role.to_str(actor.role), actor.user))
+        members.append((typ, Role.to_str(pol.role), pol.actor))
 
     view_params["members"] = members
 

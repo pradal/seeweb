@@ -6,21 +6,15 @@ from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 import transaction
+from textwrap import dedent
 
 from seeweb.avatar import upload_team_avatar, upload_user_avatar
 from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
-from seeweb.models.comment import Comment
-from seeweb.models.gallery_item import GalleryItem
+from seeweb.models.research_object import ResearchObject
 from seeweb.models.team import Team
-from seeweb.models.project import Project
 from seeweb.models.user import User
-
-import pjt_notebook
-import pjt_scene3d
-import pjt_script
-import pjt_workflow
 
 
 def usage(argv):
@@ -45,7 +39,7 @@ def main(argv=sys.argv):
         os.remove(sqlite_pth)
 
     # clean data
-    for obj_type in ("project", "team", "user"):
+    for obj_type in ("team", "user"):
         for name in glob("seeweb/data/avatar/%s/*.png" % obj_type):
             try:
                 os.remove(name)
@@ -90,16 +84,6 @@ def main(argv=sys.argv):
                               name="Dummy Doofus",
                               email="dummy.doofus@email.com")
 
-        doofus2 = User.create(session,
-                              uid='doofus%d' % 2,
-                              name="Dummy Doofus",
-                              email="dummy.doofus@email.com")
-
-        doofus3 = User.create(session,
-                              uid='doofus%d' % 3,
-                              name="Dummy Doofus",
-                              email="dummy.doofus@email.com")
-
         revesansparole = User.create(session,
                                      uid='revesansparole',
                                      name="Jerome Chopard",
@@ -128,97 +112,46 @@ def main(argv=sys.argv):
         img = Image.open("seeweb/scripts/avatar/fboudon.png")
         upload_user_avatar(img, fboudon)
 
-        for i in range(30):
-            User.create(session,
-                        uid="zzzz%d" % i,
-                        name="John Doe%d" % i,
-                        email="john%d@emil.com" % i)
-
         # teams
         subsub_team = Team.create(session, tid="subsubteam")
         subsub_team.description = """Test team only"""
-        subsub_team.add_auth(session, doofus0, Role.edit)
+        subsub_team.add_policy(session, doofus0, Role.edit)
 
         sub_team = Team.create(session, tid="subteam")
         sub_team.description = """Test team only"""
-        sub_team.add_auth(session, doofus1, Role.edit)
-        sub_team.add_auth(session, subsub_team, Role.edit)
+        sub_team.add_policy(session, doofus1, Role.edit)
+        sub_team.add_policy(session, subsub_team, Role.edit)
 
         vplants = Team.create(session, tid="vplants")
         img = Image.open("seeweb/scripts/avatar/vplants.png")
         upload_team_avatar(img, vplants)
-        vplants.description = """
-Team
-----
-INRIA team based in Montpellier
+        descr = dedent("""
+                Team
+                ----
+                INRIA team based in Montpellier
 
-        """
-
-        vplants.add_auth(session, pradal, Role.edit)
-        vplants.add_auth(session, fboudon, Role.view)
+                """)
+        vplants.store_description(descr)
+        vplants.add_policy(session, pradal, Role.edit)
+        vplants.add_policy(session, fboudon, Role.view)
 
         oa = Team.create(session, tid="openalea")
         img = Image.open("seeweb/scripts/avatar/openalea.png")
         upload_team_avatar(img, oa)
-        oa.description = """
-Community
----------
+        descr = dedent("""
+                Community
+                ---------
 
-OpenAlea is an open source project primarily aimed at the plant research community.
-It is a distributed collaborative effort to develop Python libraries and tools that address the needs of
-current and future works in Plant Architecture modeling.
-OpenAlea includes modules to analyse, visualize and model the functioning and growth of plant architecture.
+                OpenAlea is an open source project primarily aimed at the plant research community.
+                It is a distributed collaborative effort to develop Python libraries and tools that address the needs of
+                current and future works in Plant Architecture modeling.
+                OpenAlea includes modules to analyse, visualize and model the functioning and growth of plant architecture.
 
-        """
+                """)
+        oa.store_description(descr)
+        oa.add_policy(session, revesansparole, Role.edit)
+        oa.add_policy(session, pradal, Role.view)
+        oa.add_policy(session, sartzet, Role.view)
+        oa.add_policy(session, vplants, Role.edit)
+        oa.add_policy(session, sub_team, Role.edit)
 
-        oa.add_auth(session, revesansparole, Role.edit)
-        oa.add_auth(session, pradal, Role.view)
-        oa.add_auth(session, sartzet, Role.view)
-        oa.add_auth(session, vplants, Role.edit)
-        oa.add_auth(session, sub_team, Role.edit)
-
-        # projects
-        for i in range(5):
-            Project.create(session, 'doofus%d' % i, "stoopid%d" % i)
-
-        pkglts = Project.create(session, 'revesansparole', 'pkglts')
-        pkglts.public = True
-        pkglts.doc_url = "http://pkglts.readthedocs.org/en/latest/"
-        pkglts.src_url = " C:/Users/jerome/Desktop/pkglts/.git"
-        pkglts.store_description("""
-This project is part of OpenAlea_.
-
-.. image:: http://localhost:6543/avatar/team/openalea_small.png
-    :alt: Openalea team
-    :target: http://localhost:6543/team/openalea
-
-.. _OpenAlea: http://localhost:6543/team/openalea
-
-        """)
-        pkglts.add_auth(session, sartzet, Role.edit)
-        for img_name in ["Chrysanthemum.png",
-                         "Desert.png",
-                         "Jellyfish.png",
-                         "Koala.png",
-                         "Penguins.png"]:
-            img = Image.open("seeweb/scripts/gallery/%s" % img_name)
-            GalleryItem.create_gallery_image(session, pkglts, img, img_name)
-
-        # comments
-        for i in range(4):
-            Comment.create(session,
-                           'pkglts',
-                           "doofus%d" % i,
-                           "very nasty comment (%d)" % i)
-
-        svgdraw = Project.create(session, 'revesansparole', 'svgdraw')
-        svgdraw.public = True
-        svgdraw.src_url = "https://github.com/revesansparole/svgdraw.git"
-        svgdraw.add_auth(session, sartzet, Role.view)
-
-        revesansparole.install_project(session, svgdraw)
-
-        pjt_notebook.main(session)
-        pjt_scene3d.main(session)
-        pjt_script.main(session)
-        pjt_workflow.main(session)

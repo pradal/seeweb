@@ -1,38 +1,25 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from models import Base
+from sqlalchemy import Column, String
+
+from .described import Described
+from .models import Base
 
 
-class PActor(Base):
-    """Project actor class.
-
-    Store the type of action a given user|team can do on a project
+class Actor(Base, Described):
+    """Base class for all actors (either users or teams)
     """
-    __tablename__ = 'p_actors'
 
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    project = Column(String(255), ForeignKey("projects.id"))
-    user = Column(String(255), ForeignKey("users.id"))
-    is_team = Column(Boolean, default=False)
-    role = Column(Integer)
+    __tablename__ = 'actors'
+
+    id = Column(String(255), unique=True, primary_key=True)
+    type = Column(String(50))
+
+    name = Column(String(255), nullable=False)  # display name
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'actor',
+        'polymorphic_on': type
+    }
 
     def __repr__(self):
-        tpl = "<PActor(id='%s', project='%s', user='%s', role='%s')>"
-        return tpl % (self.id, self.project, self.user,  self.role)
-
-
-class TActor(Base):
-    """Team actor class.
-
-    Store the type of action a given user|team can do on a project
-    """
-    __tablename__ = 't_actors'
-
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    team = Column(String(255), ForeignKey("teams.id"))
-    user = Column(String(255), ForeignKey("users.id"))
-    is_team = Column(Boolean, default=False)
-    role = Column(Integer)
-
-    def __repr__(self):
-        tpl = "<TActor(id='%s', team='%s', user='%s', role='%s')>"
-        return tpl % (self.id, self.team, self.user, self.role)
+        return "<Actor(id='%s', name='%s'>" % (self.id,
+                                               self.name)

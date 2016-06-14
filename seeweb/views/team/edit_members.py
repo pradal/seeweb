@@ -30,11 +30,12 @@ def register_new_user(request, session, team, new_uid):
 
     member = User.get(session, new_uid)
     if member is not None:
-        if team.get_actor(new_uid) is not None:
-            request.session.flash("%s already a member" % member.id, 'warning')
+        if new_uid in (pol.actor for pol in team.auth):
+            msg = "%s already a direct member" % member.id
+            request.session.flash(msg, 'warning')
             return False
 
-        team.add_auth(session, member, role)
+        team.add_policy(session, member, role)
         request.session.flash("New member %s added" % member.id, 'success')
         return True
 
@@ -50,7 +51,7 @@ def register_new_user(request, session, team, new_uid):
             request.session.flash(msg, 'warning')
             return False
 
-        team.add_auth(session, member, role)
+        team.add_policy(session, member, role)
         request.session.flash("New member %s added" % member.id, 'success')
         return True
 
@@ -66,8 +67,8 @@ def view(request):
 
     need_update = 'update' in request.params
     if not need_update:
-        for actor in team.auth:
-            rm_button_id = "rm_%s" % actor.user
+        for pol in team.auth:
+            rm_button_id = "rm_%s" % pol.actor
             if rm_button_id in request.params:
                 need_update = True
 
@@ -80,22 +81,22 @@ def view(request):
             need_reload = register_new_user(request, session, team, new_uid)
 
         # update user roles
-        for actor in team.auth:
+        for pol in team.auth:
             # check need to remove
-            if "rm_%s" % actor.user in request.params:
-                team.remove_auth(session, actor.user)
-                request.session.flash("User %s removed" % actor.user, 'success')
+            if "rm_%s" % pol.actor in request.params:
+                team.remove_policy(session, pol.actor)
+                request.session.flash("User %s removed" % pol.actor, 'success')
                 need_reload = True
             else:  # update roles
-                if actor.user == new_uid and need_reload:
+                if pol.actor == new_uid and need_reload:
                     new_role_str = request.params.get("role_new", "denied")
                 else:
-                    new_role_str = request.params.get("role_%s" % actor.user,
+                    new_role_str = request.params.get("role_%s" % pol.actor,
                                                       "denied")
                 new_role = Role.from_str(new_role_str)
 
-                if new_role != actor.role:
-                    team.update_auth(session, actor.user, new_role)
+                if new_role != pol.role:
+                    team.update_policy(session, pol.actor, new_role)
                     need_reload = True
 
         if need_reload:
@@ -106,12 +107,12 @@ def view(request):
 
     members = []
 
-    for actor in team.auth:
-        if actor.is_team:
+    for pol in team.auth:
+        if pol.is_team:
             typ = 'team'
         else:
             typ = 'user'
-        members.append((typ, actor.role, actor.user))
+        members.append((typ, pol.role, pol.actor))
 
     view_params["members"] = members
 

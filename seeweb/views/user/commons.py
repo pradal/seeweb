@@ -4,7 +4,6 @@ from seeweb.models.user import User
 
 
 tabs = [('Home', 'home'),
-        ('Projects', 'projects'),
         ('Teams', 'teams')]
 
 

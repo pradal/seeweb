@@ -1,23 +1,22 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from seeweb.avatar import (generate_default_team_avatar,
                            remove_team_avatar)
 
-from .actor import TActor
-from .auth import Authorized, Role
-from .described import Described
-from .models import Base, get_by_id
+from .actor import Actor
+from .auth import Authorized, Role, TPolicy
+from .models import get_by_id
 
 
-class Team(Base, Described, Authorized):
+class Team(Actor, Authorized):
     """Group of users used to manage auth at a coarser level
     """
     __tablename__ = 'teams'
 
-    id = Column(String(255), unique=True, primary_key=True)
+    id = Column(String(255), ForeignKey('actors.id'), primary_key=True)
 
-    auth = relationship("TActor")
+    auth = relationship("TPolicy")
 
     def __repr__(self):
         return "<Team(id='%s')>" % self.id
@@ -36,7 +35,7 @@ class Team(Base, Described, Authorized):
         return get_by_id(session, Team, tid)
 
     @staticmethod
-    def create(session, tid):
+    def create(session, tid, name=None):
         """Create a new team.
 
         Also create default avatar for the team.
@@ -44,11 +43,15 @@ class Team(Base, Described, Authorized):
         Args:
             session: (DBSession)
             tid: (str) team id
+            name: (str) display name, default None means name=tid
 
         Returns:
             (Team)
         """
-        team = Team(id=tid)
+        if name is None:
+            name = tid
+
+        team = Team(id=tid, name=name)
         session.add(team)
 
         # create avatar
@@ -81,35 +84,20 @@ class Team(Base, Described, Authorized):
 
         return True
 
-    def add_auth(self, session, user, role):
-        """Add a new authorization for this team
+    def add_policy(self, session, actor, role):
+        """Add a new authorization policy for this team
 
         Args:
-            session: (DBsession)
-            user: (User|Team)
+            session: (DBSession)
+            actor: (Actor)
             role: (Role) role to grant to user
 
         Returns:
             None
         """
-        actor = TActor(team=self.id, user=user.id, role=role)
-        session.add(actor)
-        actor.is_team = isinstance(user, Team)
-
-    def get_actor(self, uid):
-        """Retrieve actor associated with this uid.
-
-        Args:
-            uid: (str) id of user
-
-        Returns:
-            (TActor) or None if no user in auth list
-        """
-        for actor in self.auth:
-            if actor.user == uid:
-                return actor
-
-        return None
+        pol = TPolicy(team=self.id, actor=actor.id, role=role)
+        pol.is_team = isinstance(actor, Team)
+        session.add(pol)
 
     def has_member(self, session, uid):
         """Check whether the team has a given member.
@@ -121,44 +109,44 @@ class Team(Base, Described, Authorized):
             uid: (str) user id
 
         Returns:
-            (Bool) True if user is appears in the team or one
+            (Bool) True if user appears in the team or one
             of the sub teams recursively and its role is not
             'denied'.
         """
-        actors = list(self.auth)
-        while len(actors) > 0:
-            actor = actors.pop(0)
-            if actor.user == uid:
-                return actor.role != Role.denied
+        policies = list(self.auth)
+        while len(policies) > 0:
+            pol = policies.pop(0)
+            if pol.actor == uid:
+                return pol.role != Role.denied
 
-            if actor.is_team:
-                actors.extend(Team.get(session, actor.user).auth)
+            if isinstance(pol.actor, Team):
+                policies.extend(Team.get(session, pol.actor).auth)
 
         return False
 
     def access_role(self, session, uid):
-        """Check the type of access granted to a user.
+        """Check the type of access granted to an actor.
 
         Args:
             session: (DBSession)
-            uid: id of user to test
+            uid: id of actor to test
 
         Returns:
-            (Role) type of role given to this user
+            (Role) type of role given to this actor
         """
-        # check team auth for this user, supersede sub_team auth
-        actor = self.get_actor(uid)
-        if actor is not None:
-            return actor.role
+        # check team auth for this actor, supersede sub_team auth
+        pol = self.get_policy(uid)
+        if pol is not None:
+            return pol.role
 
         # check team auth in subteams
         role = Role.view  # teams are public by default
 
-        for actor in self.auth:
-            if actor.is_team:
-                team = Team.get(session, actor.user)
+        for pol in self.auth:
+            if isinstance(pol.actor, Team):
+                team = Team.get(session, pol.user)
                 if team.has_member(session, uid):
-                    role = max(role, actor.role)
-                    # useful in case user is member of multiple teams
+                    role = max(role, pol.role)
+                    # useful in case actor is member of multiple teams
 
         return role

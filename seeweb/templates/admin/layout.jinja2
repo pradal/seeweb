@@ -10,10 +10,6 @@
 <form action="{{ request.route_url('admin_users') }}" method='POST'>
 {% elif teams is defined %}
 <form action="{{ request.route_url('admin_teams') }}" method='POST'>
-{% elif projects is defined %}
-<form action="{{ request.route_url('admin_projects') }}" method='POST'>
-{% elif comments is defined %}
-<form action="{{ request.route_url('admin_comments') }}" method='POST'>
 {% endif %}
 
 <div class="col-md-2 sidebar">
@@ -23,12 +19,6 @@
         </li>
         <li role="presentation" {% if teams is defined %}class="active" {% endif %}>
             <a href="{{ request.route_url('admin_teams') }}">Teams</a>
-        </li>
-        <li role="presentation" {% if projects is defined %}class="active" {% endif%}>
-            <a href="{{ request.route_url('admin_projects') }}">Projects</a>
-        </li>
-        <li role="presentation" {% if comments is defined %}class="active" {% endif%}>
-            <a href="{{ request.route_url('admin_comments') }}">Comments</a>
         </li>
         {% block side %}
         {% endblock %}

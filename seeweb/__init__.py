@@ -1,5 +1,3 @@
-from glob import glob
-from os.path import basename, dirname, exists, splitext
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
@@ -7,7 +5,6 @@ from pyramid.httpexceptions import HTTPFound
 from sqlalchemy import engine_from_config
 
 from models import DBSession, Base
-from views.project.commons import tabs as project_tabs
 from views.team.commons import tabs as team_tabs
 from views.user.commons import tabs as user_tabs
 #
@@ -69,52 +66,17 @@ def main(global_config, **settings):
     # public
     config.add_route('home', '/')
     config.add_route('documentation', 'documentation')
-    config.add_route('project_list', 'projects')
     config.add_route('user_list', 'users')
     config.add_route('team_list', 'teams')
 
     # admin
     config.add_route('admin_users', "admin/users")
     config.add_route('admin_teams', "admin/teams")
-    config.add_route('admin_projects', "admin/projects")
-    config.add_route('admin_comments', "admin/comments")
 
     # # user auth
     config.add_route('user_login', 'user_login')
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
-
-    # comment
-    config.add_route('comment_edit_new', 'comment/new')
-    config.add_route('comment_edit_score', 'comment/{cid}/score')
-
-    # project content
-    config.add_route('project_content', 'project_content/{cid}')
-    for dname in glob("seeweb/project/content/*/"):
-        dname = dname.replace("\\", "/")
-        category = basename(dirname(dname))
-        static_pth = dname + "static"
-        if exists(static_pth):
-            config.add_static_view(name='static_%s' % category,
-                                   path='seeweb:%s' % static_pth[7:],
-                                   cache_max_age=3600)
-
-        for view_pth in glob(dname + "views/*.py"):
-            view_name = splitext(basename(view_pth))[0]
-            if view_name != "__init__":
-                route_name = 'project_content_%s_%s' % (category, view_name)
-                route_url = 'project/{pid}/content/%s/{cid}/%s' % (category,
-                                                                   view_name)
-                config.add_route(route_name, route_url)
-
-    # project
-    for tab_title, tab_id in project_tabs:
-        config.add_route('project_edit_%s' % tab_id, 'project/{pid}/edit/%s' % tab_id)
-        config.add_route('project_view_%s' % tab_id, 'project/{pid}/%s' % tab_id)
-
-    config.add_route('project_install', 'project/{pid}/install')
-    config.add_route('project_uninstall', 'project/{pid}/uninstall')
-    config.add_route('project_view_home_default', 'project/{pid}')
 
     # team
     for tab_title, tab_id in team_tabs:

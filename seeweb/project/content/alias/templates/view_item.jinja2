@@ -1,7 +1,0 @@
-{% extends "templates/project/layout_content.jinja2" %}
-
-{% block project_content_body -%}
-
-<p>Target: <a href="{{ request.route_url('project_content', cid=cnt_item.name) }}">{{ cnt_item.name }}</a></p>
-
-{%- endblock %}

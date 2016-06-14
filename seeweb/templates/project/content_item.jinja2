@@ -1,7 +1,0 @@
-{% macro content_item_condensed(item) -%}
-
-<div class="{{ item.category }} condensed">
-    <a href="{{ request.route_url('project_content_%s_view_item' % item.category, pid=item.project, cid=item.id) }}">{{ item.name }}</a>
-</div>
-
-{%- endmacro %}

@@ -41,7 +41,7 @@ def register_new_team(request, session, user):
 
     # create new team
     team = Team.create(session, tid)
-    team.add_auth(session, user, Role.edit)
+    team.add_policy(session, user, Role.edit)
     request.session.flash("New team %s created" % tid, 'success')
     return tid
 

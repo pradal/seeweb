@@ -127,9 +127,15 @@ class ResearchObject(Base, Described, Authorized):
         Returns:
             (Role) type of role given to this actor
         """
-        # check team auth for this actor, supersede sub_team auth
+        if uid == self.creator:
+            return Role.edit
+
+        # check local auth for this actor, supersede any parent auth
         pol = self.get_policy(uid)
         if pol is not None:
             return pol.role
 
-        return Role.edit
+        # check containers of this object
+        # pass
+
+        return Role.view

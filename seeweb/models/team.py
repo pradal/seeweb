@@ -76,8 +76,8 @@ class Team(Actor, Authorized):
         remove_team_avatar(team)
 
         # remove authorizations
-        for actor in team.auth:
-            session.delete(actor)
+        for pol in team.auth:
+            session.delete(pol)
 
         # remove team
         session.delete(team)

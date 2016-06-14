@@ -43,6 +43,21 @@ def project_avatar_pth(project, small=False):
     return _avatar_pth(project, "project", small)
 
 
+def ro_avatar_pth(ro, small=False):
+    """Return the path to a RO avatar.
+
+    Warnings: does not test if path exists
+
+    Args:
+        ro: (ResearchObject)
+        small: (Bool) default False, avatar have two sizes
+
+    Returns:
+        (str): pth to avatar file
+    """
+    return _avatar_pth(ro, "ro", small)
+
+
 def team_avatar_pth(team, small=False):
     """Return the path to a team avatar.
 
@@ -136,6 +151,19 @@ def upload_project_avatar(img, project):
     _upload_avatar(img, project, 'project')
 
 
+def upload_ro_avatar(img, ro):
+    """Upload an image to use as ro avatar.
+
+    Args:
+        img: (Image)
+        ro: (ResearchObject)
+
+    Returns:
+        None
+    """
+    _upload_avatar(img, ro, 'ro')
+
+
 def upload_team_avatar(img, team):
     """Upload an image to use as team avatar.
 
@@ -193,6 +221,18 @@ def generate_default_team_avatar(team):
     _generate_default_avatar(team, 'team')
 
 
+def generate_default_ro_avatar(ro):
+    """Upload a default avatar for a RO.
+
+    Args:
+        ro: (ResearchObject)
+
+    Returns:
+        None
+    """
+    _generate_default_avatar(ro, 'ro')
+
+
 def generate_default_user_avatar(user):
     """Upload a default avatar for a user.
 
@@ -222,6 +262,18 @@ def remove_project_avatar(project):
         (None)
     """
     _remove_avatar(project, 'project')
+
+
+def remove_ro_avatar(ro):
+    """Remove avatar files associated to a RO.
+
+    Args:
+        ro: (ResearchObject)
+
+    Returns:
+        (None)
+    """
+    _remove_avatar(ro, 'ro')
 
 
 def remove_team_avatar(team):

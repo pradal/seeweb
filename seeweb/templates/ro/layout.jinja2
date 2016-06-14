@@ -1,0 +1,16 @@
+{% extends "templates/layout.jinja2" %}
+
+{% block css -%}
+
+<link href="{{request.static_url('seeweb:static/css/ro_theme.css')}}" rel="stylesheet">
+{% block ro_css %}
+{% endblock %}
+
+{%- endblock css %}
+
+{% block body -%}
+
+    {% block ro_body %}
+    {% endblock %}
+
+{%- endblock %}

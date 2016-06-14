@@ -2,7 +2,10 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
-from .auth import Authorized, ROPolicy
+from seeweb.avatar import (generate_default_ro_avatar,
+                           remove_ro_avatar)
+
+from .auth import Authorized, Role, ROPolicy
 from .described import Described
 from .models import Base, get_by_id
 
@@ -72,6 +75,9 @@ class ResearchObject(Base, Described, Authorized):
                             title=title)
         session.add(ro)
 
+        # create avatar
+        generate_default_ro_avatar(ro)
+
         return ro
 
     @staticmethod
@@ -85,8 +91,15 @@ class ResearchObject(Base, Described, Authorized):
         Returns:
             (True)
         """
-        del session
-        del ro
+        # remove avatar
+        remove_ro_avatar(ro)
+
+        # remove authorizations
+        for pol in ro.auth:
+            session.delete(pol)
+
+        # remove team
+        session.delete(ro)
 
         return True
 
@@ -104,3 +117,19 @@ class ResearchObject(Base, Described, Authorized):
         actor = ROPolicy(ro=self.id, actor=actor.id, role=role)
         session.add(actor)
 
+    def access_role(self, session, uid):
+        """Check the type of access granted to an actor.
+
+        Args:
+            session: (DBSession)
+            uid: id of actor to test
+
+        Returns:
+            (Role) type of role given to this actor
+        """
+        # check team auth for this actor, supersede sub_team auth
+        pol = self.get_policy(uid)
+        if pol is not None:
+            return pol.role
+
+        return Role.edit

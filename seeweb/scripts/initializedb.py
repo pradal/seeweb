@@ -40,7 +40,7 @@ def main(argv=sys.argv):
         os.remove(sqlite_pth)
 
     # clean data
-    for obj_type in ("team", "user"):
+    for obj_type in ("ro", "team", "user"):
         for name in glob("seeweb/data/avatar/%s/*.png" % obj_type):
             try:
                 os.remove(name)

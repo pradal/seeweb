@@ -30,7 +30,7 @@
             {% for ro in ros %}
             <tr>
               <td><input type="checkbox" /></td>
-              <td>{{ ro.id }}</td>
+              <td><a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">{{ ro.id }}</a></td>
               <td>{{ ro.type }}</td>
               <td>{{ ro.creator }}</td>
               <td>{{ ro.created.isoformat() }}</td>

@@ -5,6 +5,7 @@ from pyramid.httpexceptions import HTTPFound
 from sqlalchemy import engine_from_config
 
 from models import DBSession, Base
+from views.ro.commons import tabs as ro_tabs
 from views.team.commons import tabs as team_tabs
 from views.user.commons import tabs as user_tabs
 #
@@ -94,6 +95,13 @@ def main(global_config, **settings):
         config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
 
     config.add_route('user_view_home_default', 'user/{uid}')
+
+    # research objecs
+    for tab_title, tab_id in ro_tabs:
+        config.add_route('ro_edit_%s' % tab_id, 'ro/{uid}/edit/%s' % tab_id)
+        config.add_route('ro_view_%s' % tab_id, 'ro/{uid}/%s' % tab_id)
+
+    config.add_route('ro_view_home_default', 'ro/{tid}')
 
     config.scan()
 

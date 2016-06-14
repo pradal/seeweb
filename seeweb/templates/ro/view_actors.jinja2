@@ -1,0 +1,48 @@
+{% from 'templates/team/macro.jinja2' import team_condensed with context %}
+
+{% extends "layout_view.jinja2" %}
+
+{% block ro_view_body -%}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Actors</h3>
+    </div>
+    <div class="panel-body">
+        {% if actors|length == 0 %}
+            <div class="row">
+                <p>This research objects has no actors.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>actor</th>
+                      <th>role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for type, role, actor in actors %}
+                    <tr>
+                      <td>
+                        {% if type == 'user' %}
+                            <a href="{{ request.route_url('user_view_home', uid=actor) }}">{{ actor }}</a>
+                        {% elif type == 'team' %}
+                            <a href="{{ request.route_url('team_view_members', tid=actor) }}">{{ actor }}</a>
+                        {% else %}
+                            unknown
+                        {% endif %}
+                      </td>
+                      <td>{{ role }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+{%- endblock %}

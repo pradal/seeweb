@@ -72,6 +72,7 @@ def main(global_config, **settings):
     # admin
     config.add_route('admin_users', "admin/users")
     config.add_route('admin_teams', "admin/teams")
+    config.add_route('admin_ros', "admin/ros")
 
     # # user auth
     config.add_route('user_login', 'user_login')

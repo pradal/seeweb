@@ -5,8 +5,9 @@ from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
 from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
-import transaction
 from textwrap import dedent
+import transaction
+from uuid import uuid1
 
 from seeweb.avatar import upload_team_avatar, upload_user_avatar
 from seeweb.io import rmtree
@@ -155,3 +156,10 @@ def main(argv=sys.argv):
         oa.add_policy(session, vplants, Role.edit)
         oa.add_policy(session, sub_team, Role.edit)
 
+        # ROs
+        ro1 = ResearchObject.create(session,
+                                    uuid1().hex,
+                                    revesansparole.id,
+                                    "RO one")
+        ro1.add_policy(session, sartzet, Role.view)
+        ro1.add_policy(session, vplants, Role.edit)

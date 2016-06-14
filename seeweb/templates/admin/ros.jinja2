@@ -1,0 +1,51 @@
+{% extends "layout.jinja2" %}
+
+{% block admin_body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if search_pattern == "" %}
+            <h1>All Research Objects</h1>
+            {% else %}
+            <h1>Research Objects starting with: '{{ search_pattern }}' <span class='small'><a class="btn btn-default" href="{{ request.route_url('admin_ros') }}">All</a></span></h1>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if ros|length == 0 %}
+    <h2>No Research Object found</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>ro</th>
+              <th>type</th>
+              <th>creator</th>
+              <th>creation date</th>
+              <th>actors</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ro in ros %}
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>{{ ro.id }}</td>
+              <td>{{ ro.type }}</td>
+              <td>{{ ro.creator }}</td>
+              <td>{{ ro.created.isoformat() }}</td>
+              <td>
+                <select>
+                    {% for pol in ro.auth %}
+                    <option>{{ pol.actor }}</option>
+                    {% endfor %}
+                </select>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+

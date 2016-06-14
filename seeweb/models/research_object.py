@@ -49,7 +49,7 @@ class ResearchObject(Base, Described, Authorized):
         return get_by_id(session, ResearchObject, uid)
 
     @staticmethod
-    def create(session, uid, creator, title, version=0):
+    def create(session, uid, creator_id, title):
         """Create a new RO.
 
         Also create default avatar for this user.
@@ -57,16 +57,17 @@ class ResearchObject(Base, Described, Authorized):
         Args:
             session: (DBSession)
             uid: (str) unique id for RO
-            creator: (str) user id
+            creator_id: (str) id of actor creating the object
             title: (str) name of this RO
-            version: (int) current version of RO, default 0
 
         Returns:
             (ResearchObject)
         """
         created = datetime.now()
+        version = 0
+
         ro = ResearchObject(id=uid,
-                            creator=creator, created=created,
+                            creator=creator_id, created=created,
                             version=version,
                             title=title)
         session.add(ro)
@@ -100,6 +101,6 @@ class ResearchObject(Base, Described, Authorized):
         Returns:
             None
         """
-        actor = ROPolicy(team=self.id, actor=actor.id, role=role)
+        actor = ROPolicy(ro=self.id, actor=actor.id, role=role)
         session.add(actor)
 

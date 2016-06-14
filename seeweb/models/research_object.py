@@ -28,6 +28,9 @@ class ResearchObject(Base, Described, Authorized):
 
     remote = Column(Text, default="")
 
+    out_links = relationship("ROLink", foreign_keys="ROLink.source")
+    in_links = relationship("ROLink", foreign_keys="ROLink.target")
+
     __mapper_args__ = {
         'polymorphic_identity': 'ro',
         'polymorphic_on': type
@@ -98,7 +101,13 @@ class ResearchObject(Base, Described, Authorized):
         for pol in ro.auth:
             session.delete(pol)
 
-        # remove team
+        # remove all links
+        for link in ro.out_link:
+            session.delete(link)
+        for link in ro.in_link:
+            session.delete(link)
+
+        # remove RO
         session.delete(ro)
 
         return True

@@ -6,7 +6,8 @@ from seeweb.models.research_object import ResearchObject
 
 
 tabs = [('Home', 'home'),
-        ('Actors', 'actors')]
+        ('Actors', 'actors'),
+        ('Links', 'links')]
 
 
 def view_init(request, session, tab):

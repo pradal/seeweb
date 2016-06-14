@@ -1,0 +1,42 @@
+{% extends "layout_view.jinja2" %}
+
+{% block ro_view_body -%}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Links</h3>
+    </div>
+    <div class="panel-body">
+        {% if links|length == 0 %}
+            <div class="row">
+                <p>This research objects has no links.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>other</th>
+                      <th>direction</th>
+                      <th>type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for other, direction, type in links %}
+                    <tr>
+                      <td>
+                       <a href="{{ request.route_url('ro_view_home', uid=other) }}">{{ other }}</a>
+                      </td>
+                      <td>{{ direction }}</td>
+                      <td>{{ type }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+{%- endblock %}

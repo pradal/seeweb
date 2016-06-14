@@ -14,6 +14,7 @@ from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_link import ROLink
 from seeweb.models.team import Team
 from seeweb.models.user import User
 
@@ -163,3 +164,10 @@ def main(argv=sys.argv):
                                     "RO one")
         ro1.add_policy(session, sartzet, Role.view)
         ro1.add_policy(session, vplants, Role.edit)
+
+        ro2 = ResearchObject.create(session,
+                                    uuid1().hex,
+                                    revesansparole.id,
+                                    "RO one")
+
+        ROLink.connect(session, ro2.id, ro1.id, "use")

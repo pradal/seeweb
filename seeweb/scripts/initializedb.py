@@ -168,6 +168,11 @@ def main(argv=sys.argv):
         ro2 = ResearchObject.create(session,
                                     uuid1().hex,
                                     revesansparole.id,
-                                    "RO one")
+                                    "RO two")
 
         ROLink.connect(session, ro1.id, ro2.id, "contains")
+
+        ro3 = ResearchObject.create(session,
+                                    uuid1().hex,
+                                    revesansparole.id,
+                                    "RO three")

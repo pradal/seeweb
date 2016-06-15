@@ -69,6 +69,7 @@ def main(global_config, **settings):
     config.add_route('documentation', 'documentation')
     config.add_route('user_list', 'users')
     config.add_route('team_list', 'teams')
+    config.add_route('ro_list', 'ros')
 
     # admin
     config.add_route('admin_users', "admin/users")

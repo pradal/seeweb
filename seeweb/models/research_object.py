@@ -145,6 +145,11 @@ class ResearchObject(Base, Described, Authorized):
             return pol.role
 
         # check containers of this object
-        # pass
+        for link in self.in_links:
+            if link.type == "contains":
+                container = ResearchObject.get(session, link.source)
+                container_role = container.access_role(session, uid)
+                if container_role is not None:
+                    return container_role
 
-        return Role.view
+        return None

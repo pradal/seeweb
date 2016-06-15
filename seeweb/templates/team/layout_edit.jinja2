@@ -2,13 +2,13 @@
 
 {% block team_body -%}
 
-<form action="{{ request.route_url('team_edit_%s' % tab, tid=team.id) }}" method='POST'
+<form action="{{ request.route_url('team_edit_%s' % tab, uid=team.id) }}" method='POST'
       enctype="multipart/form-data">
 
 <div id="header" class="row">
     <div class="partner-table">
         <div class="col-md-3 partner avatar">
-            <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
+            <a href="{{ request.route_url('team_view_home', uid=team.id) }}">
                 <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/team/%s.png' % team.id) }}" />
             </a>
         </div>
@@ -17,7 +17,7 @@
             <div class="spacer"></div>
             <ul class="nav nav-tabs">
                 {% for tab_title, tab_id in tabs %}
-                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_%s' % tab_id, tid=team.id) }}">{{ tab_title }}</a></li>
+                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('team_edit_%s' % tab_id, uid=team.id) }}">{{ tab_title }}</a></li>
                 {% endfor %}
             </ul>
         </div>

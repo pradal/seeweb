@@ -2,12 +2,12 @@
 
 <div class="team condensed">
     <div class="avatar">
-        <a href="{{ request.route_url('team_view_home', tid=team.id) }}">
+        <a href="{{ request.route_url('team_view_home', uid=team.id) }}">
             <img class="img-circle" src="{{ request.static_url('seeweb:data/avatar/team/%s_small.png' % team.id) }}" />
         </a>
     </div>
     <div class="description">
-        <a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a>
+        <a href="{{ request.route_url('team_view_home', uid=team.id) }}">{{ team.id }}</a>
     </div>
 </div>
 

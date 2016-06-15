@@ -81,12 +81,16 @@ def main(global_config, **settings):
     config.add_route('user_logout', 'user_logout')
     config.add_route('user_register', 'user_register')
 
+    # actor
+    config.add_route('actor_view_home_default', 'actor/{uid}')
+    config.add_route('actor_view_home', 'actor/{uid}/home')
+
     # team
     for tab_title, tab_id in team_tabs:
-        config.add_route('team_edit_%s' % tab_id, 'team/{tid}/edit/%s' % tab_id)
-        config.add_route('team_view_%s' % tab_id, 'team/{tid}/%s' % tab_id)
+        config.add_route('team_edit_%s' % tab_id, 'team/{uid}/edit/%s' % tab_id)
+        config.add_route('team_view_%s' % tab_id, 'team/{uid}/%s' % tab_id)
 
-    config.add_route('team_view_home_default', 'team/{tid}')
+    config.add_route('team_view_home_default', 'team/{uid}')
 
     # user
     config.add_route('site_suck', 'user/site_suck')

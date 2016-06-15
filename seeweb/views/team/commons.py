@@ -20,7 +20,7 @@ def view_init(request, session, tab):
     Returns:
         (Team, dict of (str: any)): team, view_params
     """
-    tid = request.matchdict['tid']
+    tid = request.matchdict['uid']
     team = Team.get(session, tid)
     if team is None:
         request.session.flash("Team %s does not exists" % tid, 'warning')
@@ -61,7 +61,7 @@ def edit_init(request, session, tab):
 
     if 'back' in request.params:
         # request.session.flash("Edition stopped", 'success')
-        loc = request.route_url('team_view_%s' % tab, tid=team.id)
+        loc = request.route_url('team_view_%s' % tab, uid=team.id)
         raise HTTPFound(location=loc)
 
     if "confirm_delete" in request.params:

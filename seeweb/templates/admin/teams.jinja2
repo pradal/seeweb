@@ -27,7 +27,7 @@
             {% for team in teams %}
             <tr>
               <td><input type="checkbox" /></td>
-              <td><a href="{{ request.route_url('team_view_home', tid=team.id) }}">{{ team.id }}</a></td>
+              <td><a href="{{ request.route_url('team_view_home', uid=team.id) }}">{{ team.id }}</a></td>
               <td>
                 <select>
                     {% for pol in team.auth %}

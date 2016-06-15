@@ -18,6 +18,10 @@ class Team(Actor, Authorized):
 
     auth = relationship("TPolicy")
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'team',
+    }
+
     def __repr__(self):
         return "<Team(id='%s')>" % self.id
 

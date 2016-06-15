@@ -33,7 +33,7 @@ def register_new_team(request, session, user):
 
     team = Team.get(session, tid)
     if team is not None:
-        team_url = request.route_url('team_view_home', tid=tid)
+        team_url = request.route_url('team_view_home', uid=tid)
         msg = "Team <a href='%s'>'%s'</a> already exists" % (team_url,
                                                              tid)
         request.session.flash(Markup(msg), 'warning')
@@ -55,7 +55,7 @@ def view(request):
     if 'new_team' in request.params and user.id == request.unauthenticated_userid:
         tid = register_new_team(request, session, user)
         if tid is not None:
-            loc = request.route_url("team_view_home", tid=tid)
+            loc = request.route_url("team_view_home", uid=tid)
             return HTTPFound(location=loc)
 
     teams = []

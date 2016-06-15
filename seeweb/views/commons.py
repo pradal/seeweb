@@ -23,7 +23,7 @@ def view_init(request, session):
 
         team = Team.get(session, search_pattern)
         if team is not None:
-            loc = request.route_url('team_view_home', tid=team.id)
+            loc = request.route_url('team_view_home', uid=team.id)
             return HTTPFound(location=loc)
 
         loc = request.route_url('project_list',

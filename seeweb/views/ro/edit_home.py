@@ -25,7 +25,7 @@ def view(request):
                 img = load_image(field_storage)
                 upload_ro_avatar(img, ro)
                 request.session.flash("Avatar submitted", 'success')
-                loc = request.route_url('ro_view_home', tid=ro.id)
+                loc = request.route_url('ro_view_home', uid=ro.id)
                 return HTTPFound(location=loc)
             except IOError:
                 request.session.flash("Unable to read image", 'warning')

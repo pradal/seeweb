@@ -37,7 +37,7 @@
                 {% if type == 'user' %}
                     <a href="{{ request.route_url('user_view_home', uid=uid) }}">{{ uid }}</a>
                 {% elif type == 'team' %}
-                    <a href="{{ request.route_url('team_view_members', tid=uid) }}">{{ uid }}</a>
+                    <a href="{{ request.route_url('team_view_members', uid=uid) }}">{{ uid }}</a>
                 {% else %}
                     unknown
                 {% endif %}

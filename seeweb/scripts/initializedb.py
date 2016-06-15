@@ -116,16 +116,16 @@ def main(argv=sys.argv):
         upload_user_avatar(img, fboudon)
 
         # teams
-        subsub_team = Team.create(session, tid="subsubteam")
+        subsub_team = Team.create(session, uid="subsubteam")
         subsub_team.description = """Test team only"""
         subsub_team.add_policy(session, doofus0, Role.edit)
 
-        sub_team = Team.create(session, tid="subteam")
+        sub_team = Team.create(session, uid="subteam")
         sub_team.description = """Test team only"""
         sub_team.add_policy(session, doofus1, Role.edit)
         sub_team.add_policy(session, subsub_team, Role.edit)
 
-        vplants = Team.create(session, tid="vplants")
+        vplants = Team.create(session, uid="vplants")
         img = Image.open("seeweb/scripts/avatar/vplants.png")
         upload_team_avatar(img, vplants)
         descr = dedent("""
@@ -138,7 +138,7 @@ def main(argv=sys.argv):
         vplants.add_policy(session, pradal, Role.edit)
         vplants.add_policy(session, fboudon, Role.view)
 
-        oa = Team.create(session, tid="openalea")
+        oa = Team.create(session, uid="openalea")
         img = Image.open("seeweb/scripts/avatar/openalea.png")
         upload_team_avatar(img, oa)
         descr = dedent("""

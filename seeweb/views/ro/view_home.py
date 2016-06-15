@@ -20,6 +20,11 @@ def view(request):
                                 uid=request.matchdict['uid'])
         return HTTPFound(location=loc)
 
+    if ro.type == 'article':
+        loc = request.route_url('ro_article_view',
+                                uid=request.matchdict['uid'])
+        return HTTPFound(location=loc)
+
     ro, view_params = view_init(request, session, 'home')
     view_params['description'] = Markup(ro.html_description())
 

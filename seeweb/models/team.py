@@ -39,23 +39,23 @@ class Team(Actor, Authorized):
         return get_by_id(session, Team, tid)
 
     @staticmethod
-    def create(session, tid, name=None):
+    def create(session, uid, name=None):
         """Create a new team.
 
         Also create default avatar for the team.
 
         Args:
             session: (DBSession)
-            tid: (str) team id
+            uid: (str) team id
             name: (str) display name, default None means name=tid
 
         Returns:
             (Team)
         """
         if name is None:
-            name = tid
+            name = uid
 
-        team = Team(id=tid, name=name)
+        team = Team(id=uid, name=name)
         session.add(team)
 
         # create avatar

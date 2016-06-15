@@ -14,6 +14,7 @@ from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_article import ROArticle
 from seeweb.models.ro_container import ROContainer
 from seeweb.models.ro_link import ROLink
 from seeweb.models.team import Team
@@ -188,3 +189,11 @@ def main(argv=sys.argv):
                                        revesansparole.id,
                                        "RO%d" % i)
             ROLink.connect(session, roc.id, ro.id, "contains")
+
+        roa = ROArticle.create(session,
+                                 uuid1().hex,
+                                 revesansparole.id,
+                                 "test article")
+        roa.doi = "10.1016/S0304-3800(98)00100-8"
+        ROLink.connect(session, roc.id, roa.id, "contains")
+        ROLink.connect(session, ro3.id, roa.id, "use")

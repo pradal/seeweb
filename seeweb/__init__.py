@@ -106,6 +106,7 @@ def main(global_config, **settings):
 
     config.add_route('ro_view_home_default', 'ro/{uid}')
 
+    config.add_route('ro_article_view', 'ro_article/{uid}')
     config.add_route('ro_container_view', 'ro_container/{uid}')
 
     config.scan()

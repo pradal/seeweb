@@ -10,6 +10,25 @@ tabs = [('Home', 'home'),
         ('Links', 'links')]
 
 
+def fetch_ro(request, session):
+    """Retrieve RO whose id is in URL.
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+
+    Returns:
+        (str, ResearchObject): uid, ro
+    """
+    uid = request.matchdict['uid']
+    ro = ResearchObject.get(session, uid)
+    if ro is None:
+        request.session.flash("RO %s does not exists" % uid, 'warning')
+        raise HTTPFound(location=request.route_url('home'))
+
+    return uid, ro
+
+
 def view_init_min(request, session):
     """Common init for all 'view' parts.
 
@@ -20,11 +39,7 @@ def view_init_min(request, session):
     Returns:
         (ResearchObject, dict of (str: any)): ro, view_params
     """
-    uid = request.matchdict['uid']
-    ro = ResearchObject.get(session, uid)
-    if ro is None:
-        request.session.flash("RO %s does not exists" % uid, 'warning')
-        raise HTTPFound(location=request.route_url('home'))
+    uid, ro = fetch_ro(request, session)
 
     current_uid = request.unauthenticated_userid
 

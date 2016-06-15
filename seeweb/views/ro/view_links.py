@@ -13,9 +13,9 @@ def view(request):
 
     links = []
     for link in ro.out_links:
-        links.append((link.target, "out", link.type))
+        links.append(("self", link.type, link.target))
     for link in ro.in_links:
-        links.append((link.source, "in", link.type))
+        links.append((link.source, link.type, "self"))
 
     view_params["links"] = links
 

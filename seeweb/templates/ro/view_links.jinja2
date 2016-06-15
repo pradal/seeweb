@@ -16,19 +16,29 @@
                 <table class="table table-striped">
                   <thead>
                     <tr>
-                      <th>other</th>
-                      <th>direction</th>
+                      <th>source</th>
                       <th>type</th>
+                      <th>target</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for other, direction, type in links %}
+                    {% for source, type, target in links %}
                     <tr>
                       <td>
-                       <a href="{{ request.route_url('ro_view_home', uid=other) }}">{{ other }}</a>
+                        {% if source == "self" %}
+                            {{ source }}
+                        {% else %}
+                            <a href="{{ request.route_url('ro_view_home', uid=source) }}">{{ source }}</a>
+                        {% endif %}
                       </td>
-                      <td>{{ direction }}</td>
                       <td>{{ type }}</td>
+                      <td>
+                        {% if target == "self" %}
+                            {{ target }}
+                        {% else %}
+                            <a href="{{ request.route_url('ro_view_home', uid=target) }}">{{ target }}</a>
+                        {% endif %}
+                      </td>
                     </tr>
                     {% endfor %}
                   </tbody>

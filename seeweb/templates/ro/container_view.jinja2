@@ -1,0 +1,41 @@
+{% extends "templates/ro/layout_view_min.jinja2" %}
+
+{% block ro_view_body -%}
+
+{% if description == "" %}
+    <p>No description available</p>
+{% else %}
+    {{ description }}
+{% endif %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Content</h3>
+    </div>
+    <div class="panel-body">
+        {% if content|length == 0 %}
+            <div class="row">
+                <p>This container is empty.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>id</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item_id in content %}
+                    <tr>
+                      <td><a href="{{ request.route_url('ro_view_home', uid=item_id) }}">{{ item_id }}</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{%- endblock %}

@@ -1,4 +1,5 @@
 from jinja2 import Markup
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -13,6 +14,11 @@ from .commons import view_init
 def view(request):
     session = DBSession()
     ro, view_params = view_init(request, session, 'home')
+
+    if ro.type == 'container':
+        loc = request.route_url('ro_container_view',
+                                uid=request.matchdict['uid'])
+        return HTTPFound(location=loc)
 
     view_params['description'] = Markup(ro.html_description())
 

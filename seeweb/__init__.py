@@ -106,6 +106,8 @@ def main(global_config, **settings):
 
     config.add_route('ro_view_home_default', 'ro/{uid}')
 
+    config.add_route('ro_container_view', 'ro_container/{uid}')
+
     config.scan()
 
     return config.make_wsgi_app()

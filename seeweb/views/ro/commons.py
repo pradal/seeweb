@@ -10,13 +10,12 @@ tabs = [('Home', 'home'),
         ('Links', 'links')]
 
 
-def view_init(request, session, tab):
+def view_init_min(request, session):
     """Common init for all 'view' parts.
 
     Args:
         request: (Request)
         session: (DBSession)
-        tab: (str) current tab in view
 
     Returns:
         (ResearchObject, dict of (str: any)): ro, view_params
@@ -34,11 +33,27 @@ def view_init(request, session, tab):
                   ro.access_role(session, current_uid) == Role.edit)
 
     view_params = {"ro": ro,
-                   "ro_type": str(type(ro)),
-                   "tabs": tabs,
-                   "tab": tab,
-                   "allow_edit": allow_edit,
-                   "sections": []}
+                   "allow_edit": allow_edit}
+
+    return ro, view_params
+
+
+def view_init(request, session, tab):
+    """Extended init adding tabs.
+
+    Args:
+        request: (Request)
+        session: (DBSession)
+        tab: (str) current tab in view
+
+    Returns:
+        (ResearchObject, dict of (str: any)): ro, view_params
+    """
+    ro, view_params = view_init_min(request, session)
+
+    view_params["tabs"] = tabs
+    view_params["tab"] = tab
+    view_params["sections"] = []
 
     return ro, view_params
 

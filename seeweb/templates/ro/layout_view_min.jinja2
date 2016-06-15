@@ -1,0 +1,34 @@
+{% extends "layout.jinja2" %}
+
+{% block ro_body -%}
+
+<div id="header" class="row">
+    <div class="partner-table">
+        <div class="col-md-3 partner avatar">
+            <a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">
+                <img class="img-rounded center-block" src="{{ request.static_url('seeweb:data/avatar/ro/%s.png' % ro.id) }}" />
+            </a>
+        </div>
+        <div class="col-md-9 partner description">
+            <div class="h1">{{ ro.title }}</div>
+            <div class="h2">{{ ro.id }}</div>
+            <div class="spacer"></div>
+            {% if allow_edit %}
+                <a class="btn btn-default pull-right" href="{{ request.route_url('ro_edit_home', uid=ro.id) }}">
+                  <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+                  Edit
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<div id="content" class="row">
+    <div class="col-md-9 col-md-offset-3">
+        {% block ro_view_body %}
+        {% endblock %}
+    </div>
+</div>
+
+{%- endblock %}

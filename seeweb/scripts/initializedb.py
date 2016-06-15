@@ -14,6 +14,7 @@ from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_container import ROContainer
 from seeweb.models.ro_link import ROLink
 from seeweb.models.team import Team
 from seeweb.models.user import User
@@ -176,3 +177,14 @@ def main(argv=sys.argv):
                                     uuid1().hex,
                                     revesansparole.id,
                                     "RO three")
+
+        roc = ROContainer.create(session,
+                                 uuid1().hex,
+                                 revesansparole.id,
+                                 "myproject")
+        for i in range(5):
+            ro = ResearchObject.create(session,
+                                       uuid1().hex,
+                                       revesansparole.id,
+                                       "RO%d" % i)
+            ROLink.connect(session, roc.id, ro.id, "contains")

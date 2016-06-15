@@ -170,4 +170,4 @@ def main(argv=sys.argv):
                                     revesansparole.id,
                                     "RO one")
 
-        ROLink.connect(session, ro2.id, ro1.id, "use")
+        ROLink.connect(session, ro1.id, ro2.id, "contains")

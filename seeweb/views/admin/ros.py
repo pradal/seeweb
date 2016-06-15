@@ -2,6 +2,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_link import ROLink
 
 
 @view_config(route_name='admin_ros',
@@ -16,4 +17,5 @@ def view(request):
         query = query.filter(ResearchObject.title.like("%s%%" % search_pattern))
 
     return {'ros': query.all(),
-            'search_pattern': search_pattern}
+            'search_pattern': search_pattern,
+            'links': session.query(ROLink).all()}

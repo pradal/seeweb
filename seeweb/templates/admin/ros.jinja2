@@ -47,5 +47,35 @@
         </table>
     </div>
     {% endif %}
+
+    {% if links|length == 0 %}
+    <h2>No Research Object links found</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>link</th>
+              <th>source</th>
+              <th>type</th>
+              <th>target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for link in links %}
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>{{ link.id }}</td>
+              <td><a href="{{ request.route_url('ro_view_home', uid=link.source) }}">{{ link.source }}</a></td>
+              <td>{{ link.type }}</td>
+              <td><a href="{{ request.route_url('ro_view_home', uid=link.target) }}">{{ link.target }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+
 {% endblock %}
 

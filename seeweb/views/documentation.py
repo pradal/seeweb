@@ -2,7 +2,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 
-from.commons import view_init
+from .commons import view_init
 
 
 @view_config(route_name='documentation',

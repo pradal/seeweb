@@ -82,8 +82,8 @@ def main(global_config, **settings):
     config.add_route('user_register', 'user_register')
 
     # actor
-    config.add_route('actor_view_home_default', 'actor/{uid}')
     config.add_route('actor_view_home', 'actor/{uid}/home')
+    config.add_route('actor_view_home_default', 'actor/{uid}')
 
     # team
     for tab_title, tab_id in team_tabs:
@@ -93,20 +93,18 @@ def main(global_config, **settings):
     config.add_route('team_view_home_default', 'team/{uid}')
 
     # user
-    config.add_route('site_suck', 'user/site_suck')
-    config.add_route('file_suck', 'user/file_suck')
     for tab_title, tab_id in user_tabs:
         config.add_route('user_edit_%s' % tab_id, 'user/{uid}/edit/%s' % tab_id)
         config.add_route('user_view_%s' % tab_id, 'user/{uid}/%s' % tab_id)
 
     config.add_route('user_view_home_default', 'user/{uid}')
 
-    # research objecs
+    # research objects
     for tab_title, tab_id in ro_tabs:
         config.add_route('ro_edit_%s' % tab_id, 'ro/{uid}/edit/%s' % tab_id)
         config.add_route('ro_view_%s' % tab_id, 'ro/{uid}/%s' % tab_id)
 
-    config.add_route('ro_view_home_default', 'ro/{tid}')
+    config.add_route('ro_view_home_default', 'ro/{uid}')
 
     config.scan()
 

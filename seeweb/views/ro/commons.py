@@ -34,6 +34,7 @@ def view_init(request, session, tab):
                   ro.access_role(session, current_uid) == Role.edit)
 
     view_params = {"ro": ro,
+                   "ro_type": str(type(ro)),
                    "tabs": tabs,
                    "tab": tab,
                    "allow_edit": allow_edit,

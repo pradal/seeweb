@@ -32,8 +32,8 @@ class ResearchObject(Base, Described, Authorized):
     in_links = relationship("ROLink", foreign_keys="ROLink.target")
 
     __mapper_args__ = {
-        'polymorphic_identity': 'ro',
-        'polymorphic_on': type
+        'polymorphic_on': type,
+        'polymorphic_identity': 'ro'
     }
 
     def __repr__(self):

@@ -1,6 +1,6 @@
 {% extends "layout_edit.jinja2" %}
 
-{% block user_edit_body -%}
+{% block ro_edit_body -%}
 
 <div id="edit_avatar" class="form-group">
     <label for="avatar">Load avatar</label>
@@ -10,7 +10,7 @@
 
 <div class="form-group">
   <label for="descr">Description:</label>
-  <textarea class="form-control" rows="20" id="descr" name='description' {% if user.description == "" %}placeholder='write some description in restructured text here'{% endif %}>{{ user.description }}</textarea>
+  <textarea class="form-control" rows="20" id="descr" name='description' {% if ro.description == "" %}placeholder='write some description in restructured text here'{% endif %}>{{ ro.description }}</textarea>
 </div>
 
 {%- endblock %}

@@ -43,9 +43,14 @@ def view_init_min(request, session):
 
     current_uid = request.unauthenticated_userid
 
+    role = ro.access_role(session, current_uid)
+    if role == Role.denied:
+        request.session.flash("Access to %s not granted for you" % uid,
+                              'warning')
+        raise HTTPFound(location=request.route_url('home'))
+
     # allow edition
-    allow_edit = (current_uid is not None and
-                  ro.access_role(session, current_uid) == Role.edit)
+    allow_edit = (current_uid is not None and role == Role.edit)
 
     view_params = {"ro": ro,
                    "allow_edit": allow_edit}

@@ -35,6 +35,14 @@
                 </table>
             </div>
         {% endif %}
+        {% if allow_edit %}
+            <form action="{{ request.current_route_url() }}" method='POST'>
+                <div class="form-group">
+                    <button class="btn btn-primary pull-right" type="submit" name="new_content">Append</button>
+                    <input type='text' name='ro_id' placeholder='RO id' />
+                </div>
+            </form>
+        {% endif %}
     </div>
 </div>
 

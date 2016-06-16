@@ -152,4 +152,4 @@ class ResearchObject(Base, Described, Authorized):
                 if container_role is not None:
                     return container_role
 
-        return None
+        return Role.denied

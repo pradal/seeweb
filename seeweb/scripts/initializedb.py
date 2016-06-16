@@ -190,10 +190,28 @@ def main(argv=sys.argv):
                                        "RO%d" % i)
             ROLink.connect(session, roc.id, ro.id, "contains")
 
+        roc2 = ROContainer.create(session,
+                                  uuid1().hex,
+                                  pradal.id,
+                                  "CPproject")
+        for i in range(5):
+            ro = ResearchObject.create(session,
+                                       uuid1().hex,
+                                       sartzet.id,
+                                       "ROcp%d" % i)
+            ROLink.connect(session, roc2.id, ro.id, "contains")
+
+        ro = ROArticle.create(session,
+                              uuid1().hex,
+                              pradal.id,
+                              "cp article")
+        ro.add_policy(session, revesansparole, Role.view)
+        ROLink.connect(session, roc2.id, ro.id, "contains")
+
         roa = ROArticle.create(session,
-                                 uuid1().hex,
-                                 revesansparole.id,
-                                 "test article")
+                               uuid1().hex,
+                               revesansparole.id,
+                               "test article")
         roa.doi = "10.1016/S0304-3800(98)00100-8"
         ROLink.connect(session, roc.id, roa.id, "contains")
         ROLink.connect(session, ro3.id, roa.id, "use")

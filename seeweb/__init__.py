@@ -104,6 +104,7 @@ def main(global_config, **settings):
         config.add_route('ro_edit_%s' % tab_id, 'ro/{uid}/edit/%s' % tab_id)
         config.add_route('ro_view_%s' % tab_id, 'ro/{uid}/%s' % tab_id)
 
+    config.add_route('ro_create', 'ro/create')
     config.add_route('ro_view_home_default', 'ro/{uid}')
 
     config.add_route('ro_article_view', 'ro_article/{uid}')

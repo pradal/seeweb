@@ -1,0 +1,77 @@
+{% extends "layout.jinja2" %}
+
+{% block ro_body %}
+
+<form action="{{ request.current_route_url() }}" method='POST' enctype="multipart/form-data">
+
+<h1>Create new Research Object</h1>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Clone</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <button class="btn btn-warning pull-right" type="submit" name="clone_url">Clone</button>
+            <label for="url">Url</label>
+            <input type='text' id='url' name='url' placeholder='GitHub repo URL' />
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Upload</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <button class="btn btn-warning pull-right" type="submit" name="submit_upload">Upload</button>
+            <input id="upload_file" class="btn btn-default btn-file" name="upload_file" type="file" />
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Manual</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="ro_id">RO id</label>
+            <input type='text' id='ro_id' name='ro_id' value={{ uid }} />
+        </div>
+        <div class="form-group">
+            <label for="creator">Creator</label>
+            <input type='text' id='creator' name='creator' value={{ creator }} />
+        </div>
+        <div class="form-group">
+            <label for="creator">Creation date</label>
+            <input type='text' id='created' name='created' value={{ created.isoformat() }} />
+        </div>
+        <div class="form-group">
+            <label for="version">Version</label>
+            <input type='text' id='version' name='version' value={{ version }} />
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type='text' id='title' name='title' placeholder='Title' />
+        </div>
+        <div class="form-group">
+            <label for="ro_type">RO type</label>
+            <select id="ro_type" name="ro_type">
+                {% for type in ro_types %}
+                <option>{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit" name="new_ro">Create</button>
+        </div>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}
+

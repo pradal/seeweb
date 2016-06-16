@@ -27,6 +27,10 @@ def append_ro(request, session, container):
         return None
 
     # check whether the RO is already a member of the container
+    if uid == container.id:
+        request.session.flash("Can not contain oneself", 'warning')
+        return None
+
     content = [link.target for link in container.out_links if link.type == 'contains']
     if uid in content:
         request.session.flash("%s is already in this container" % uid, 'warning')
@@ -55,7 +59,7 @@ def view(request):
     session = DBSession()
     ro, view_params = view_init_min(request, session)
 
-    if 'new_content' in request.params and view_params["allow_edit"]:
+    if view_params["allow_edit"] and ('new_content' in request.params or request.params.get("ro_id", "") != "") :
         if append_ro(request, session, ro) is not None:
             loc = request.current_route_url()
             return HTTPFound(location=loc)

@@ -2,7 +2,63 @@
 
 {% block ro_edit_body -%}
 
-<h3>Nothing yet</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">New link</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <button class="btn btn-primary pull-right" type="submit" name="new_link">Link</button>
+            <input type='text' name='ro_id' placeholder='RO id' />
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Links</h3>
+    </div>
+    <div class="panel-body">
+        {% if links|length == 0 %}
+            <div class="row">
+                <p>This research objects has no links.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>source</th>
+                      <th>type</th>
+                      <th>target</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for source, type, target in links %}
+                    <tr>
+                      <td>
+                        {% if source == "self" %}
+                            {{ source }}
+                        {% else %}
+                            <a href="{{ request.route_url('ro_view_home', uid=source) }}">{{ source }}</a>
+                        {% endif %}
+                      </td>
+                      <td>{{ type }}</td>
+                      <td>
+                        {% if target == "self" %}
+                            {{ target }}
+                        {% else %}
+                            <a href="{{ request.route_url('ro_view_home', uid=target) }}">{{ target }}</a>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
 
 {%- endblock %}
 

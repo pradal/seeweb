@@ -34,6 +34,7 @@
         <button class="btn btn-primary" type="submit" name="update">Update</button>
         <button class="btn" type="submit" name="default">Default</button>
         <button class="btn pull-right" type="submit" name="back">Back</button>
+        <button class="btn btn-danger"  data-toggle="modal" data-target="#confirm_delete">Delete</button>
     </div>
 
     <div class="col-md-9">
@@ -41,5 +42,32 @@
         {% endblock %}
     </div>
 </div>
+
+<!-- Modal -->
+<div id="confirm_delete" class="modal fade" role="dialog" data-keyboard="true">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">About to remove {{ ro.title }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        {% if ro.type == 'container' %}
+            <button type="submit" class="btn btn-danger" name="confirm_delete_recursive">Delete recursively</a>
+        {% endif %}
+        <button type="submit" class="btn btn-primary" name="confirm_delete">Delete</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_delete">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</form>
 
 {%- endblock %}

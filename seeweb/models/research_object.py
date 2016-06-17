@@ -84,12 +84,13 @@ class ResearchObject(Base, Described, Authorized):
         return ro
 
     @staticmethod
-    def remove(session, ro):
+    def remove(session, ro, recursive):
         """Remove a RO from database.
 
         Args:
             session: (DBSession)
             ro: (ResearchObject)
+            recursive: (bool) whether to also remove ROs contained in this RO
 
         Returns:
             (True)
@@ -102,13 +103,23 @@ class ResearchObject(Base, Described, Authorized):
             session.delete(pol)
 
         # remove all links
-        for link in ro.out_link:
+        ros = []
+        for link in ro.out_links:
+            if link.type == "contains":
+                ros.append(link.target)
             session.delete(link)
-        for link in ro.in_link:
+        for link in ro.in_links:
             session.delete(link)
 
         # remove RO
         session.delete(ro)
+
+        # recursivity
+        if recursive:
+            for uid in ros:
+                ro = ResearchObject.get(session, uid)
+                if ro.is_lonely():
+                    ResearchObject.remove(session, ro, recursive)
 
         return True
 
@@ -153,3 +164,13 @@ class ResearchObject(Base, Described, Authorized):
                     return container_role
 
         return Role.denied
+
+    def is_lonely(self):
+        """Check whether this RO is inside another one
+
+        Returns:
+            (bool): True if no other RO is linked to this one through a
+                    'contains' link
+        """
+        conts = [1 for link in self.in_links if link.type == "contains"]
+        return len(conts) == 0

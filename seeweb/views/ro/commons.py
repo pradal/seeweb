@@ -102,8 +102,9 @@ def edit_init(request, session, tab):
         loc = request.route_url('ro_view_%s' % tab, uid=ro.id)
         raise HTTPFound(location=loc)
 
-    if "confirm_delete" in request.params:
-        if ResearchObject.remove(session, ro):
+    delete_recursive = "confirm_delete_recursive" in request.params
+    if "confirm_delete" in request.params or delete_recursive:
+        if ResearchObject.remove(session, ro, delete_recursive):
             transaction.commit()
             request.session.flash("RO '%s' deleted" % ro.id, 'success')
         else:

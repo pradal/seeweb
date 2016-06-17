@@ -10,6 +10,8 @@ from seeweb.models.research_object import ResearchObject
 def view(request):
     session = DBSession()
     query = session.query(ResearchObject)
+    if "type" in request.params:
+        query = query.filter(ResearchObject.type == request.params["type"])
 
     query = query.order_by(ResearchObject.id)
 

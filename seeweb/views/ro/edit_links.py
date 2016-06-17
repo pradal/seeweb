@@ -56,11 +56,20 @@ def view(request):
             loc = request.current_route_url()
             return HTTPFound(location=loc)
 
+    # check for link removal
+    for link in ro.out_links + ro.in_links:
+        if "rm_%s" % link.id in request.params:
+            ROLink.remove(session, link)
+            request.session.flash("Link removed", 'success')
+
+            loc = request.current_route_url()
+            return HTTPFound(location=loc)
+
     links = []
     for link in ro.out_links:
-        links.append(("self", link.type, link.target))
+        links.append((link.id, "self", link.type, link.target))
     for link in ro.in_links:
-        links.append((link.source, link.type, "self"))
+        links.append((link.id, link.source, link.type, "self"))
 
     view_params["links"] = links
 

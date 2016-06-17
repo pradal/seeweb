@@ -31,10 +31,11 @@
                       <th>source</th>
                       <th>type</th>
                       <th>target</th>
+                      <th>#</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for source, type, target in links %}
+                    {% for lid, source, type, target in links %}
                     <tr>
                       <td>
                         {% if source == "self" %}
@@ -50,6 +51,11 @@
                         {% else %}
                             <a href="{{ request.route_url('ro_view_home', uid=target) }}">{{ target }}</a>
                         {% endif %}
+                      </td>
+                      <td>
+                        <div class="input-group">
+                            <button class="btn glyphicon glyphicon-trash" type="submit" name="rm_{{ lid }}"></button>
+                        </div>
                       </td>
                     </tr>
                     {% endfor %}

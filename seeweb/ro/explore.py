@@ -31,7 +31,7 @@ def validate(pth):
             for kwd in ('creation', 'creator', 'title', 'description'):
                 if kwd not in ro_def:
                     return None
-            
+
             ro_type = ro_def.get("type", 'ro')
             return ro_type
     except ValueError:

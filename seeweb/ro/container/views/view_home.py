@@ -66,7 +66,11 @@ def view(request):
 
     view_params['description'] = Markup(ro.html_description())
 
-    content = [link.target for link in ro.out_links if link.type == "contains"]
+    content = []
+    for link in ro.out_links:
+        if link.type == "contains":
+            content.append(ResearchObject.get(session, link.target))
+
     view_params['content'] = content
 
     return view_params

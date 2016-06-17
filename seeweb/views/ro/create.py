@@ -37,7 +37,7 @@ def view(request):
             pth = upload_file(field_storage)
             session = DBSession()
             ro = create_from_file(session, pth, request.unauthenticated_userid)
-            rmtree(dirname(pth))
+            # rmtree(dirname(pth))
 
             if ro is None:
                 msg = "Unable to find a valid RO in this file"

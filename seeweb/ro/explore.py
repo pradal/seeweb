@@ -2,15 +2,18 @@ from dateutil.parser import parse
 import json
 from os import remove
 from os.path import join as pj
-from os.path import basename, dirname, splitext
+from os.path import basename, dirname, exists, splitext
+from PIL import Image
 from uuid import uuid1
 from zipfile import BadZipfile, ZipFile
 
-from seeweb.io import find_files, rmtree
+from seeweb.avatar import upload_ro_avatar
+from seeweb.io import find_files
 from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
+from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
 
 
 def validate(pth):
@@ -81,10 +84,10 @@ def create_from_file(session, pth, user):
         remove(pth)
         # explore directory
         ros = []
-        for pth, fname in find_files(pj(dirname(pth), "archive"), ["*.wkf"]):
-            ro_type = validate(pth)
+        for fpth, fname in find_files(pj(dirname(pth), "archive"), ["*.wkf"]):
+            ro_type = validate(fpth)
             if ro_type is not None:
-                ros.append(create(session, pth, ro_type))
+                ros.append(create(session, fpth, ro_type))
 
         if len(ros) == 0:
             return None
@@ -94,6 +97,15 @@ def create_from_file(session, pth, user):
             cont = ROContainer.create(session, cid, user, name)
             for ro in ros:
                 ROLink.connect(session, cont.id, ro.id, "contains")
+
+            # search for project avatar
+            avatar = fetch_avatar(pj(dirname(pth), "archive"))
+            if avatar is not None:
+                upload_ro_avatar(avatar, cont)
+
+            # search project description in README
+            descr = fetch_readme(pj(dirname(pth), "archive"))
+            cont.store_description(descr)
 
             return cont
     except BadZipfile:

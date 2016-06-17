@@ -1,3 +1,5 @@
+from glob import glob
+from os.path import basename, dirname, exists, splitext
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
@@ -107,8 +109,21 @@ def main(global_config, **settings):
     config.add_route('ro_create', 'ro/create')
     config.add_route('ro_view_home_default', 'ro/{uid}')
 
-    config.add_route('ro_article_view', 'ro_article/{uid}')
-    config.add_route('ro_container_view', 'ro_container/{uid}')
+    for dname in glob("seeweb/ro/*/"):
+        dname = dname.replace("\\", "/")
+        ro_type = basename(dirname(dname))
+        static_pth = dname + "static"
+        if exists(static_pth):
+            config.add_static_view(name='static_%s' % ro_type,
+                                   path='seeweb:%s' % static_pth[7:],
+                                   cache_max_age=3600)
+
+        for view_pth in glob(dname + "views/*.py"):
+            view_name = splitext(basename(view_pth))[0]
+            if view_name != "__init__":
+                route_name = 'ro_%s_%s' % (ro_type, view_name)
+                route_url = 'ro_%s/{uid}/%s' % (ro_type, view_name)
+                config.add_route(route_name, route_url)
 
     config.scan()
 

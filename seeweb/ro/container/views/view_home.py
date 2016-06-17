@@ -53,8 +53,8 @@ def append_ro(request, session, container):
     return link
 
 
-@view_config(route_name='ro_container_view',
-             renderer='templates/ro/container_view.jinja2')
+@view_config(route_name='ro_container_view_home',
+             renderer='../templates/view_home.jinja2')
 def view(request):
     session = DBSession()
     ro, view_params = view_init_min(request, session)

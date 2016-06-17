@@ -15,17 +15,11 @@ def view(request):
     session = DBSession()
     uid, ro = fetch_ro(request, session)
 
-    if ro.type == 'container':
-        loc = request.route_url('ro_container_view',
-                                uid=request.matchdict['uid'])
+    try:
+        loc = request.route_url('ro_%s_view_home' % ro.type, uid=uid)
         return HTTPFound(location=loc)
+    except KeyError:
+        ro, view_params = view_init(request, session, 'home')
+        view_params['description'] = Markup(ro.html_description())
 
-    if ro.type == 'article':
-        loc = request.route_url('ro_article_view',
-                                uid=request.matchdict['uid'])
-        return HTTPFound(location=loc)
-
-    ro, view_params = view_init(request, session, 'home')
-    view_params['description'] = Markup(ro.html_description())
-
-    return view_params
+        return view_params

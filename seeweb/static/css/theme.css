@@ -63,11 +63,15 @@ textarea {
 #banner {
     background: #bc2131;
     color: #ffeeee;
-    padding-top: 0.4em;
+    padding: 0.4em;
 }
 
 #banner .spacer {
     padding-top: 1em;
+}
+
+#banner .navbar {
+    margin: 0;
 }
 
 #flash-msg {

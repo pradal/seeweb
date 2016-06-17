@@ -3,24 +3,24 @@ from sqlalchemy import Column, ForeignKey, String
 
 from seeweb.avatar import generate_default_ro_avatar
 
-from .research_object import ResearchObject
+from seeweb.models.research_object import ResearchObject
 
 
-class ROArticle(ResearchObject):
-    """Research Object that contains reference to an article
+class ROContainer(ResearchObject):
+    """Research Object that contains other ROs
     """
-    __tablename__ = 'ro_articles'
+    __tablename__ = 'ro_containers'
 
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
-    doi = Column(String(255), default="")
+    ctype = Column(String(50), default="project")
 
     __mapper_args__ = {
-        'polymorphic_identity': 'article',
+        'polymorphic_identity': 'container',
     }
 
     def __repr__(self):
-        return "<ROArticle(id='%s', doi='%s')>" % (self.id,
-                                                   self.doi)
+        return "<ROContainer(id='%s', type='%s')>" % (self.id,
+                                                      self.ctype)
 
     @staticmethod
     def create(session, uid, creator_id, title):
@@ -40,10 +40,10 @@ class ROArticle(ResearchObject):
         created = datetime.now()
         version = 0
 
-        ro = ROArticle(id=uid,
-                       creator=creator_id, created=created,
-                       version=version,
-                       title=title)
+        ro = ROContainer(id=uid,
+                         creator=creator_id, created=created,
+                         version=version,
+                         title=title)
         session.add(ro)
 
         # create avatar

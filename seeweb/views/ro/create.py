@@ -8,7 +8,7 @@ from uuid import uuid1
 
 from seeweb.models import DBSession
 from seeweb.models.research_object import ResearchObject
-from seeweb.models.ro_article import ROArticle
+from seeweb.ro.article.models.ro_article import ROArticle
 
 
 @view_config(route_name='ro_create',

@@ -1,5 +1,7 @@
 from glob import glob
+from importlib import import_module
 import os
+from os.path import basename, dirname, exists, splitext
 import sys
 from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
@@ -14,11 +16,20 @@ from seeweb.io import rmtree
 from seeweb.models import Base, DBSession
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
-from seeweb.models.ro_article import ROArticle
-from seeweb.models.ro_container import ROContainer
 from seeweb.models.ro_link import ROLink
 from seeweb.models.team import Team
 from seeweb.models.user import User
+
+from seeweb.ro.article.models.ro_article import ROArticle
+from seeweb.ro.container.models.ro_container import ROContainer
+
+for dname in glob("seeweb/ro/*/"):
+    dname = dname.replace("\\", "/")
+    ro_type = basename(dirname(dname))
+    for module_pth in glob(dname + "models/*.py"):
+        module_name = splitext(basename(module_pth))[0]
+        if module_name != "__init__":
+            import_module('seeweb.ro.%s.models.%s' % (ro_type, module_name))
 
 
 def usage(argv):

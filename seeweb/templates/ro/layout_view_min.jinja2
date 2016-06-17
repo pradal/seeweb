@@ -1,5 +1,11 @@
 {% extends "layout.jinja2" %}
 
+{% block ro_css -%}
+
+<link href="{{request.static_url('seeweb:static/css/pretty-json.css')}}" rel="stylesheet">
+
+{%- endblock %}
+
 {% block ro_body -%}
 
 <div id="content" class="row">
@@ -32,7 +38,37 @@
     <div class="col-md-10">
         {% block ro_view_body %}
         {% endblock %}
+        <div id="cnt_debug" class="well debug">
+        </div>
     </div>
 </div>
+
+{%- endblock %}
+
+{% block ro_js -%}
+
+{% if scene != "" %}
+    <script src="{{ request.static_url('seeweb:static/js/underscore-min.js') }}">
+    </script>
+
+    <script src="{{ request.static_url('seeweb:static/js/backbone-min.js') }}">
+    </script>
+
+    <script src="{{ request.static_url('seeweb:static/js/pretty-json-min.js') }}">
+    </script>
+
+    <script>
+        //obj to render.
+        var obj = {{ scene|safe }};
+
+        var node = new PrettyJSON.view.Node({
+          el:$('#cnt_debug'),
+          data:obj
+        });
+    </script>
+{% endif %}
+
+{% block ro_content_js %}
+{% endblock %}
 
 {%- endblock %}

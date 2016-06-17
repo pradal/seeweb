@@ -22,6 +22,8 @@ from seeweb.models.user import User
 
 from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
+from seeweb.ro.scene3d.models.ro_scene3d import ROScene3d
+
 
 for dname in glob("seeweb/ro/*/"):
     dname = dname.replace("\\", "/")
@@ -251,3 +253,10 @@ def main(argv=sys.argv):
         roa.store_description(descr)
         ROLink.connect(session, roc.id, roa.id, "contains")
         ROLink.connect(session, ro3.id, roa.id, "use")
+
+        rosc = ROScene3d.create(session,
+                                uuid1().hex,
+                                revesansparole.id,
+                                "test scene")
+        with open("seeweb/scripts/scene.json", 'r') as f:
+            rosc.scene = f.read()

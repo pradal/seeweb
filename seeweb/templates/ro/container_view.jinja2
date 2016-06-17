@@ -1,12 +1,21 @@
 {% extends "templates/ro/layout_view_min.jinja2" %}
 
 {% block ro_view_body -%}
-<h2>{{ ro.ctype }}</h2>
-{% if description == "" %}
-    <p>No description available</p>
-{% else %}
-    {{ description }}
-{% endif %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ ro.ctype }}</h3>
+    </div>
+    <div class="panel-body">
+        {% if description == "" %}
+            <div class="row">
+                <p>No description available</p>
+            </div>
+        {% else %}
+            {{ description }}
+        {% endif %}
+    </div>
+</div>
 
 <div class="panel panel-default">
     <div class="panel-heading">

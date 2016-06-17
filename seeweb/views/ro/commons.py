@@ -53,7 +53,8 @@ def view_init_min(request, session):
     allow_edit = (current_uid is not None and role == Role.edit)
 
     view_params = {"ro": ro,
-                   "allow_edit": allow_edit}
+                   "allow_edit": allow_edit,
+                   "minimized": True}
 
     return ro, view_params
 

@@ -2,42 +2,48 @@
 
 {% block ro_body %}
 
-{% if ros|length == 0 %}
-<h2>No Research Object to be seen</h2>
-{% else %}
-<div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>ro</th>
-          <th>type</th>
-          <th>creator</th>
-          <th>creation date</th>
-          <th>actors</th>
-          <th>role</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for role, ro in ros %}
-        <tr>
-          <td><a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">{{ ro.id }}</a></td>
-          <td>{{ ro.type }}</td>
-          <td>{{ ro.creator }}</td>
-          <td>{{ ro.created.isoformat() }}</td>
-          <td>
-            <select>
-                {% for pol in ro.auth %}
-                <option>{{ pol.actor }}</option>
-                {% endfor %}
-            </select>
-          </td>
-           <td>{{ role }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="row">
+    <a class="btn btn-warning" href="{{ request.route_url('ro_create') }}">Create</a>
 </div>
-{% endif %}
+
+<div class="row">
+    {% if ros|length == 0 %}
+    <h2>No Research Object to be seen</h2>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ro</th>
+              <th>type</th>
+              <th>creator</th>
+              <th>creation date</th>
+              <th>actors</th>
+              <th>role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for role, ro in ros %}
+            <tr>
+              <td><a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">{{ ro.id }}</a></td>
+              <td>{{ ro.type }}</td>
+              <td>{{ ro.creator }}</td>
+              <td>{{ ro.created.isoformat() }}</td>
+              <td>
+                <select>
+                    {% for pol in ro.auth %}
+                    <option>{{ pol.actor }}</option>
+                    {% endfor %}
+                </select>
+              </td>
+               <td>{{ role }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
 
 {% endblock %}
 

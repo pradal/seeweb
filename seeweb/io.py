@@ -4,7 +4,29 @@ import json
 from jsonschema import validate, ValidationError
 from fnmatch import fnmatch
 import os
+from os.path import abspath, dirname, exists
+from os.path import join as pj
+from random import sample
 import stat
+
+
+def temp_pth():
+    """Return a path to the temporary directory.
+
+    Returns:
+        (str): path
+    """
+    root = dirname(dirname(dirname(abspath(__file__))))
+    return pj(root, "see_repo")
+
+
+def random_name():
+    """Generates a random 6 letters long name.
+
+    Returns:
+        (str)
+    """
+    return "".join(sample("abcdefghijklmnopqrstuvwxyz", 6))
 
 
 def find_files(root_pth, patterns):
@@ -87,3 +109,27 @@ def rmtree(top):
         for name in dirs:
             os.rmdir(os.path.join(root, name))
     os.rmdir(top)
+
+
+def upload_file(field_storage):
+    """Write the content of field_storage in a temporary space.
+
+    Args:
+        field_storage: (FieldStorage) html structure
+
+    Returns:
+        (str, str) path of file written (dirname, filename)
+    """
+    pth = pj(temp_pth(), random_name())
+    if exists(pth):
+        pth = pj(temp_pth(), random_name())
+
+    os.mkdir(pth)
+
+    file_pth = pj(pth, str(field_storage.filename))
+    input_file = field_storage.file
+    input_file.seek(0)
+    with open(file_pth, 'wb') as f:
+        f.write(input_file.read())
+
+    return file_pth

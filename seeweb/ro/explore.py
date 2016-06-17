@@ -1,9 +1,16 @@
 from dateutil.parser import parse
 import json
+from os import remove
+from os.path import join as pj
+from os.path import basename, dirname, splitext
 from uuid import uuid1
+from zipfile import BadZipfile, ZipFile
 
+from seeweb.io import find_files, rmtree
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_link import ROLink
 from seeweb.ro.article.models.ro_article import ROArticle
+from seeweb.ro.container.models.ro_container import ROContainer
 
 
 def validate(pth):
@@ -49,3 +56,51 @@ def create(session, pth, ro_type):
     ro.store_description(data['description'])
 
     return ro
+
+
+def create_from_file(session, pth, user):
+    """Create a RO from a a file.
+
+    Notes: if pth is a zipfile, it will be extracted and
+           a ROContainer will be created with he content
+
+    Args:
+        session (DBSession):
+        pth (str): path to file to read
+        user (str): id of user
+
+    Returns:
+        (ResearchObject): or None if nothing has been recognized in
+                          the file
+    """
+    # try to unpack zip files
+    try:
+        with ZipFile(pth, 'r') as myzip:
+            myzip.extractall(pj(dirname(pth), "archive"))
+
+        remove(pth)
+        # explore directory
+        ros = []
+        for pth, fname in find_files(pj(dirname(pth), "archive"), ["*.wkf"]):
+            ro_type = validate(pth)
+            if ro_type is not None:
+                ros.append(create(session, pth, ro_type))
+
+        if len(ros) == 0:
+            return None
+        else:
+            cid = uuid1().hex
+            name = splitext(basename(pth))[0]
+            cont = ROContainer.create(session, cid, user, name)
+            for ro in ros:
+                ROLink.connect(session, cont.id, ro.id, "contains")
+
+            return cont
+    except BadZipfile:
+        # not a zip file, try to import single file
+        ro_type = validate(pth)
+        if ro_type is None:
+            return None
+        else:
+            ro = create(session, pth, ro_type)
+            return ro

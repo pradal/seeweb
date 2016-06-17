@@ -1,0 +1,35 @@
+{% extends "layout.jinja2" %}
+
+{% block user_body -%}
+
+<div id="content" class="row">
+    <div class="col-md-2">
+        <div class="row">
+            {% if allow_edit %}
+                <a class="btn btn-default pull-right" href="{{ request.route_url('user_edit_%s' % tab, uid=user.id) }}">
+                  <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+                  Edit profile
+                </a>
+            {% endif %}
+            <a href="{{ request.route_url('user_view_home', uid=user.id) }}">
+                <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/user/%s_small.png' % user.id) }}" />
+            </a>
+            <span>{{ user.id }}</span>
+        </div>
+        <div class="row">
+            {% if tabs|length > 0 %}
+                <ul class="nav nav-pills nav-stacked nav-sidebar">
+                    {% for tab_title, tab_id in tabs %}
+                        <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_view_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-10">
+        {% block user_view_body %}
+        {% endblock %}
+    </div>
+</div>
+
+{%- endblock %}

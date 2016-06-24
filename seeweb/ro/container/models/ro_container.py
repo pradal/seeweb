@@ -24,6 +24,19 @@ class ROContainer(ResearchObject):
                                                       self.ctype)
 
     @staticmethod
+    def get(session, uid):
+        """Fetch a given RO in the database.
+
+        Args:
+            session: (DBSession)
+            uid: (str) RO id
+
+        Returns:
+            (ResearchObject) or None if no RO with this id is found
+        """
+        return get_by_id(session, ROContainer, uid)
+
+    @staticmethod
     def create(session, uid, creator_id, title):
         """Create a new RO.
 
@@ -51,16 +64,3 @@ class ROContainer(ResearchObject):
         generate_default_ro_avatar(ro)
 
         return ro
-
-    @staticmethod
-    def get(session, uid):
-        """Fetch a given RO in the database.
-
-        Args:
-            session: (DBSession)
-            uid: (str) RO id
-
-        Returns:
-            (ResearchObject) or None if no RO with this id is found
-        """
-        return get_by_id(session, ROContainer, uid)

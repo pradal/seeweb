@@ -3,6 +3,7 @@ from sqlalchemy import Column, ForeignKey, String, Text
 
 from seeweb.avatar import generate_default_ro_avatar
 
+from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
 
 
@@ -20,6 +21,19 @@ class ROScene3d(ResearchObject):
 
     def __repr__(self):
         return "<ROScene3d(id='%s')>" % (self.id,)
+
+    @staticmethod
+    def get(session, uid):
+        """Fetch a given RO in the database.
+
+        Args:
+            session: (DBSession)
+            uid: (str) RO id
+
+        Returns:
+            (ResearchObject) or None if no RO with this id is found
+        """
+        return get_by_id(session, ROScene3d, uid)
 
     @staticmethod
     def create(session, uid, creator_id, title):

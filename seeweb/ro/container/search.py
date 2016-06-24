@@ -20,8 +20,6 @@ def search(session, params):
         return [uid for uid, in query.all()]
     elif 'contains' in params or 'use' in params:
         res = ro_search(session, params)
-        for uid in res:
-            print "ROC", uid, ROContainer.get(session, uid), "\n" * 10
         ros = [ROContainer.get(session, uid) for uid in res]
         return [ro.id for ro in ros if ro is not None]
     else:

@@ -4,7 +4,11 @@ from seeweb.models import DBSession
 from seeweb.views.ro.commons import view_init_min
 
 
-@view_config(route_name='ro_scene3d_view_home',
+route_name = 'ro_scene3d_view_home'
+route_url = 'ro_scene3d/{uid}/home'
+
+
+@view_config(route_name=route_name,
              renderer='../templates/view_home.jinja2')
 def view(request):
     session = DBSession()

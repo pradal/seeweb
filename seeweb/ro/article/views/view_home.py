@@ -5,8 +5,11 @@ from seeweb.models import DBSession
 
 from seeweb.views.ro.commons import view_init_min
 
+route_name = 'ro_article_view_home'
+route_url = 'ro_article/{uid}/home'
 
-@view_config(route_name='ro_article_view_home',
+
+@view_config(route_name=route_name,
              renderer='../templates/view_home.jinja2')
 def view(request):
     session = DBSession()

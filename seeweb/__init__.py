@@ -1,4 +1,5 @@
 from glob import glob
+from importlib import import_module
 from os.path import basename, dirname, exists, splitext
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
@@ -119,11 +120,12 @@ def main(global_config, **settings):
                                    cache_max_age=3600)
 
         for view_pth in glob(dname + "views/*.py"):
+            print "view_pth", view_pth
             view_name = splitext(basename(view_pth))[0]
             if view_name != "__init__":
-                route_name = 'ro_%s_%s' % (ro_type, view_name)
-                route_url = 'ro_%s/{uid}/%s' % (ro_type, view_name)
-                config.add_route(route_name, route_url)
+                modname = splitext(view_pth)[0].replace("/",".")
+                mod = import_module(modname)
+                config.add_route(mod.route_name, mod.route_url)
 
     config.add_route('ro_rest_search', 'rest/ro/search')
 

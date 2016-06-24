@@ -10,6 +10,10 @@ from seeweb.models.ro_link import ROLink
 from seeweb.views.ro.commons import view_init_min
 
 
+route_name = 'ro_container_view_home'
+route_url = 'ro_container/{uid}/home'
+
+
 def append_ro(request, session, container):
     """Add a new RO in this container.
 
@@ -53,7 +57,7 @@ def append_ro(request, session, container):
     return link
 
 
-@view_config(route_name='ro_container_view_home',
+@view_config(route_name=route_name,
              renderer='../templates/view_home.jinja2')
 def view(request):
     session = DBSession()

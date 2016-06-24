@@ -1,37 +1,22 @@
-from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
+from seeweb.ro.container.models.ro_container import ROContainer
 
 
-@view_config(route_name='ro_rest_search', renderer='json')
+route_name = 'ro_container_rest_search'
+route_url = 'rest/ro_container/search'
+
+
+@view_config(route_name=route_name, renderer='json')
 def view(request):
-    # dispatch by type
-    if 'type' in request.GET:
-        ro_type = request.GET['type']
-        print "ro_type", ro_type, repr(ro_type), "\n" * 10
-        loc = request.route_url('ro_%s_rest_search' % ro_type, _query=dict(request.GET))
-        return HTTPFound(location=loc)
-
     session = DBSession()
 
-    if 'uid' in request.GET:
-        # search a RO with a specific id
-        uid = request.GET['uid']
-        ro = ResearchObject.get(session, uid)
-        if ro is None:
-            return {}
-        else:
-            # check credentials
-            pass
-
-            return ro.repr_json()
-    elif 'title' in request.GET:
+    if 'title' in request.GET:
         # search all RO whose title starts with something similar
         title = request.GET['title']
-        query = session.query(ResearchObject).filter(ResearchObject.title.like("%s%%" % title))
+        query = session.query(ROContainer).filter(ROContainer.title.like("%s%%" % title))
         res = list(query.all())
         # check credentials
 

@@ -32,6 +32,7 @@
                   <thead>
                     <tr>
                       <th>id</th>
+                      <th>#</th>
                       <th>type</th>
                       <th>title</th>
                     </tr>
@@ -40,6 +41,9 @@
                     {% for item in content %}
                     <tr>
                         <td><a href="{{ request.route_url('ro_view_home', uid=item.id) }}">{{ item.id }}</a></td>
+                        <td>
+                          <img class="tiny" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % item.id) }}" />
+                        </td>
                         <td>{{ item.type }}</td>
                         <td>{{ item.title }}</td>
                     </tr>

@@ -230,7 +230,12 @@ def generate_default_ro_avatar(ro):
     Returns:
         None
     """
-    _generate_default_avatar(ro, 'ro')
+    root = dirname(__file__)
+    pth = join(root, 'ro', ro.type, 'static', 'default_avatar.png')
+    if not exists(pth):
+        pth = join(root, "static", "ro_avatar.png")
+    img = Image.open(pth)
+    _upload_avatar(img, ro, 'ro')
 
 
 def generate_default_user_avatar(user):

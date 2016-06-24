@@ -120,10 +120,9 @@ def main(global_config, **settings):
                                    cache_max_age=3600)
 
         for view_pth in glob(dname + "views/*.py"):
-            print "view_pth", view_pth
             view_name = splitext(basename(view_pth))[0]
             if view_name != "__init__":
-                modname = splitext(view_pth)[0].replace("/",".")
+                modname = splitext(view_pth)[0].replace("/", ".")
                 mod = import_module(modname)
                 config.add_route(mod.route_name, mod.route_url)
 

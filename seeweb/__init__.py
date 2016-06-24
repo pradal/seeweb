@@ -125,6 +125,8 @@ def main(global_config, **settings):
                 route_url = 'ro_%s/{uid}/%s' % (ro_type, view_name)
                 config.add_route(route_name, route_url)
 
+    config.add_route('ro_rest_search', 'rest/ro/search')
+
     config.scan()
 
     return config.make_wsgi_app()

@@ -174,3 +174,19 @@ class ResearchObject(Base, Described, Authorized):
         """
         conts = [1 for link in self.in_links if link.type == "contains"]
         return len(conts) == 0
+
+    def repr_json(self):
+        """Create a json representation of this object
+
+        Returns:
+            dict
+        """
+        d = dict(id=self.id,
+                 type=self.type,
+                 creator=self.creator,
+                 created=self.created.isoformat(),
+                 version=self.version,
+                 title=self.title,
+                 remote=self.remote)
+
+        return d

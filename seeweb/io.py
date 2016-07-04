@@ -121,7 +121,7 @@ def upload_file(field_storage):
         (str, str) path of file written (dirname, filename)
     """
     pth = pj(temp_pth(), random_name())
-    if exists(pth):
+    while exists(pth):
         pth = pj(temp_pth(), random_name())
 
     os.mkdir(pth)

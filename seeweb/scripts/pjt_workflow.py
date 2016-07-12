@@ -1,5 +1,3 @@
-from uuid import uuid1
-
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.interface.models.ro_interface import ROInterface

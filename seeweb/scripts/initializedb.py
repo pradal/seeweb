@@ -1,7 +1,7 @@
 from glob import glob
 from importlib import import_module
 import os
-from os.path import basename, dirname, exists, splitext
+from os.path import basename, dirname, splitext
 import sys
 from PIL import Image
 from pyramid.paster import get_appsettings, setup_logging
@@ -9,7 +9,6 @@ from pyramid.scripts.common import parse_vars
 from sqlalchemy import engine_from_config
 from textwrap import dedent
 import transaction
-from uuid import uuid1
 
 from seeweb.avatar import upload_team_avatar, upload_user_avatar
 from seeweb.io import rmtree

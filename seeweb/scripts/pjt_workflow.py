@@ -19,9 +19,11 @@ def main(session, user):
                              uuid1().hex,
                              user.id,
                              "nodelib")
-    roi = ROInterface.create(session,
-                             uuid1().hex,
-                             user.id,
-                             "any")
 
-    ROLink.connect(session, roc.id, roi.id, "contains")
+    for iname in ("any", "IStr", "IInt", "IFileStr"):
+        roi = ROInterface.create(session,
+                                 uuid1().hex,
+                                 user.id,
+                                 iname)
+
+        ROLink.connect(session, roc.id, roi.id, "contains")

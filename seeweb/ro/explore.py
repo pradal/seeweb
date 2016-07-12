@@ -14,6 +14,13 @@ from seeweb.models.ro_link import ROLink
 from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
+from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
+
+
+ro_factory = dict(ro=ResearchObject,
+                  article=ROArticle,
+                  container=ROContainer,
+                  workflow_node=ROWorkflowNode)
 
 
 def validate(pth):
@@ -55,13 +62,15 @@ def create(session, pth, ro_type):
         data = json.load(f)
 
     data["created"] = parse(data["created"])
-    uid = uuid1().hex#data["id"]
+    uid = data["id"]
 
-    if ro_type == 'article':
-        ro = ROArticle.create(session, uid, data["creator"], data["title"])
-    else:
-        ro = ResearchObject.create(session, uid, data["creator"], data["title"])
+    if ro_type not in ro_factory:
+        raise UserWarning("unrecognized RO type '%s'" % ro_type)
 
+    ro = ro_factory[ro_type].create(session,
+                                    uid,
+                                    data["creator"],
+                                    data["title"])
     ro.store_description(data['description'])
 
     return ro
@@ -91,9 +100,7 @@ def create_from_file(session, pth, user):
         # explore directory
         ros = []
         for fpth, fname in find_files(pj(dirname(pth), "archive"), ["*.wkf"]):
-            print "extracted", fname, "\n" * 10
             ro_type = validate(fpth)
-            print "aft val", ro_type
             if ro_type is not None:
                 ros.append(create(session, fpth, ro_type))
 

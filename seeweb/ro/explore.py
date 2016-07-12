@@ -28,8 +28,10 @@ def validate(pth):
     try:
         with open(pth, 'r') as f:
             ro_def = json.load(f)
-            for kwd in ('creation', 'creator', 'title', 'description'):
+            print "ro_def", ro_def
+            for kwd in ('created', 'creator', 'title', 'description'):
                 if kwd not in ro_def:
+                    print "missing", kwd
                     return None
 
             ro_type = ro_def.get("type", 'ro')
@@ -52,7 +54,7 @@ def create(session, pth, ro_type):
     with open(pth, 'r') as f:
         data = json.load(f)
 
-    data["creation"] = parse(data["creation"])
+    data["created"] = parse(data["created"])
     uid = uuid1().hex#data["id"]
 
     if ro_type == 'article':
@@ -89,7 +91,9 @@ def create_from_file(session, pth, user):
         # explore directory
         ros = []
         for fpth, fname in find_files(pj(dirname(pth), "archive"), ["*.wkf"]):
+            print "extracted", fname, "\n" * 10
             ro_type = validate(fpth)
+            print "aft val", ro_type
             if ro_type is not None:
                 ros.append(create(session, fpth, ro_type))
 

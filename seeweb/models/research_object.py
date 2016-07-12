@@ -9,6 +9,7 @@ from seeweb.avatar import (generate_default_ro_avatar,
 from .auth import Authorized, Role, ROPolicy
 from .described import Described
 from .models import Base, get_by_id
+from .ro_link import ROLink
 
 
 class ResearchObject(Base, Described, Authorized):

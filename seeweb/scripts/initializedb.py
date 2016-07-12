@@ -189,28 +189,32 @@ def main(argv=sys.argv):
         ro3 = ResearchObject()
         ro3.init(session, dict(creator=revesansparole.id, title="RO three"))
 
-        roc = ROContainer()
-        roc.init(session, dict(creator=revesansparole.id, title="myproject"))
-
+        ros = []
         for i in range(5):
             ro = ResearchObject()
             ro.init(session, dict(creator=revesansparole.id, title="RO%d" % i))
+            ros.append(ro)
 
-            ROLink.connect(session, roc.id, ro.id, "contains")
+        roc = ROContainer()
+        roc.init(session, dict(creator=revesansparole.id,
+                               title="myproject",
+                               contents=ros))
 
-        roc2 = ROContainer()
-        roc2.init(session, dict(creator=pradal.id, title="CPproject"))
-
+        ros = []
         for i in range(5):
             ro = ResearchObject()
             ro.init(session, dict(creator=sartzet.id, title="ROcp%d" % i))
-            ROLink.connect(session, roc2.id, ro.id, "contains")
+            ros.append(ro)
 
         ro = ROArticle()
         ro.init(session, dict(creator=pradal.id, title="cp article"))
-
         ro.add_policy(session, revesansparole, Role.view)
-        ROLink.connect(session, roc2.id, ro.id, "contains")
+        ros.append(ro)
+
+        roc2 = ROContainer()
+        roc2.init(session, dict(creator=pradal.id,
+                                title="CPproject",
+                                contents=ros))
 
         roa = ROArticle()
         roa.init(session, dict(creator=revesansparole.id, title="test article"))

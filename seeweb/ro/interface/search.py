@@ -2,7 +2,7 @@ from seeweb.ro.interface.models.ro_interface import ROInterface
 
 
 def search(session, params):
-    """Perform a query for ROContainer objects
+    """Perform a query for ROInterface objects
 
     Args:
         session (DBSession):

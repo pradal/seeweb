@@ -10,7 +10,7 @@ from seeweb.models.research_object import ResearchObject
 class ROInterface(ResearchObject):
     """Research Object that contains interface definition for data types ROs
     """
-    __tablename__ = 'ro_interfacess'
+    __tablename__ = 'ro_interfaces'
 
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
 

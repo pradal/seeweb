@@ -31,3 +31,12 @@ class ROInterface(ResearchObject):
             (ResearchObject) or None if no RO with this id is found
         """
         return get_by_id(session, ROInterface, uid)
+
+    def repr_json(self):
+        """Create a json representation of this object
+
+        Returns:
+            dict
+        """
+        d = ResearchObject.repr_json(self)
+        return d

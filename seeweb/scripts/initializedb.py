@@ -24,6 +24,8 @@ from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.scene3d.models.ro_scene3d import ROScene3d
 
+import pjt_workflow
+
 
 for dname in glob("seeweb/ro/*/"):
     dname = dname.replace("\\", "/")
@@ -260,3 +262,5 @@ def main(argv=sys.argv):
                                 "test scene")
         with open("seeweb/scripts/scene.json", 'r') as f:
             rosc.scene = f.read()
+
+        pjt_workflow.main(session, revesansparole)

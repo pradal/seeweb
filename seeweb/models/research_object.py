@@ -67,6 +67,9 @@ class ResearchObject(Base, Described, Authorized):
 
         self.title = ro_def.get('title', "no title")
 
+        if 'description' in ro_def:
+            self.store_description(ro_def['description'])
+
         # add RO to database
         session.add(self)
 

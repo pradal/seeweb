@@ -60,17 +60,15 @@ def create(session, pth, ro_type):
     Returns:
         (ResearchObject): or one of its subclass
     """
-    with open(pth, 'r') as f:
-        data = json.load(f)
-
-    data["created"] = parse(data["created"])
-
     if ro_type not in ro_factory:
         raise UserWarning("unrecognized RO type '%s'" % ro_type)
 
+    with open(pth, 'r') as f:
+        data = json.load(f)
+        data["created"] = parse(data["created"])
+
     ro = ro_factory[ro_type]()
     ro.init(session, data)
-    ro.store_description(data['description'])
 
     return ro
 

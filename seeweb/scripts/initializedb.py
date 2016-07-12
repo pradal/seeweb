@@ -175,58 +175,45 @@ def main(argv=sys.argv):
         oa.add_policy(session, sub_team, Role.edit)
 
         # ROs
-        ro1 = ResearchObject.create(session,
-                                    uuid1().hex,
-                                    revesansparole.id,
-                                    "RO one")
+        ro1 = ResearchObject()
+        ro1.init(session, dict(creator=revesansparole.id, title="RO one"))
+
         ro1.add_policy(session, sartzet, Role.view)
         ro1.add_policy(session, vplants, Role.edit)
 
-        ro2 = ResearchObject.create(session,
-                                    uuid1().hex,
-                                    revesansparole.id,
-                                    "RO two")
+        ro2 = ResearchObject()
+        ro2.init(session, dict(creator=revesansparole.id, title="RO two"))
 
         ROLink.connect(session, ro1.id, ro2.id, "contains")
 
-        ro3 = ResearchObject.create(session,
-                                    uuid1().hex,
-                                    revesansparole.id,
-                                    "RO three")
+        ro3 = ResearchObject()
+        ro3.init(session, dict(creator=revesansparole.id, title="RO three"))
 
-        roc = ROContainer.create(session,
-                                 uuid1().hex,
-                                 revesansparole.id,
-                                 "myproject")
+        roc = ROContainer()
+        roc.init(session, dict(creator=revesansparole.id, title="myproject"))
+
         for i in range(5):
-            ro = ResearchObject.create(session,
-                                       uuid1().hex,
-                                       revesansparole.id,
-                                       "RO%d" % i)
+            ro = ResearchObject()
+            ro.init(session, dict(creator=revesansparole.id, title="RO%d" % i))
+
             ROLink.connect(session, roc.id, ro.id, "contains")
 
-        roc2 = ROContainer.create(session,
-                                  uuid1().hex,
-                                  pradal.id,
-                                  "CPproject")
+        roc2 = ROContainer()
+        roc2.init(session, dict(creator=pradal.id, title="CPproject"))
+
         for i in range(5):
-            ro = ResearchObject.create(session,
-                                       uuid1().hex,
-                                       sartzet.id,
-                                       "ROcp%d" % i)
+            ro = ResearchObject()
+            ro.init(session, dict(creator=sartzet.id, title="ROcp%d" % i))
             ROLink.connect(session, roc2.id, ro.id, "contains")
 
-        ro = ROArticle.create(session,
-                              uuid1().hex,
-                              pradal.id,
-                              "cp article")
+        ro = ROArticle()
+        ro.init(session, dict(creator=pradal.id, title="cp article"))
+
         ro.add_policy(session, revesansparole, Role.view)
         ROLink.connect(session, roc2.id, ro.id, "contains")
 
-        roa = ROArticle.create(session,
-                               uuid1().hex,
-                               revesansparole.id,
-                               "test article")
+        roa = ROArticle()
+        roa.init(session, dict(creator=revesansparole.id, title="test article"))
         roa.doi = "10.1016/S0304-3800(98)00100-8"
         descr = dedent("""
             We present a new approach to simulate the distribution of natural
@@ -256,10 +243,8 @@ def main(argv=sys.argv):
         ROLink.connect(session, roc.id, roa.id, "contains")
         ROLink.connect(session, ro3.id, roa.id, "use")
 
-        rosc = ROScene3d.create(session,
-                                uuid1().hex,
-                                revesansparole.id,
-                                "test scene")
+        rosc = ROScene3d()
+        rosc.init(session, dict(creator=revesansparole.id, title="test scene"))
         with open("seeweb/scripts/scene.json", 'r') as f:
             rosc.scene = f.read()
 

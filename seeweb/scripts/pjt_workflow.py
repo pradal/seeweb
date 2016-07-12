@@ -16,21 +16,15 @@ def main(session, user):
     Returns:
         None
     """
-    roc = ROContainer.create(session,
-                             uuid1().hex,
-                             user.id,
-                             "nodelib")
+    roc = ROContainer()
+    roc.init(session, dict(creator=user.id, title="nodelib"))
 
     for iname in ("any", "IStr", "IInt", "IFileStr"):
-        roi = ROInterface.create(session,
-                                 uuid1().hex,
-                                 user.id,
-                                 iname)
+        roi = ROInterface()
+        roi.init(session, dict(creator=user.id, title=iname))
 
         ROLink.connect(session, roc.id, roi.id, "contains")
 
-    rown = ROWorkflowNode.create(session,
-                                 uuid1().hex,
-                                 user.id,
-                                 "node")
+    rown = ROWorkflowNode()
+    rown.init(session, dict(creator=user.id, title="node"))
     ROLink.connect(session, roc.id, rown.id, "contains")

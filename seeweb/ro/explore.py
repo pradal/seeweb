@@ -2,8 +2,7 @@ from dateutil.parser import parse
 import json
 from os import remove
 from os.path import join as pj
-from os.path import basename, dirname, exists, splitext
-from PIL import Image
+from os.path import basename, dirname, splitext
 from uuid import uuid1
 from zipfile import BadZipfile, ZipFile
 
@@ -14,12 +13,16 @@ from seeweb.models.ro_link import ROLink
 from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
+from seeweb.ro.interface.models.ro_interface import ROInterface
+from seeweb.ro.scene3d.models.ro_scene3d import ROScene3d
 from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 
 
 ro_factory = dict(ro=ResearchObject,
                   article=ROArticle,
                   container=ROContainer,
+                  interface=ROInterface,
+                  scene3d=ROScene3d,
                   workflow_node=ROWorkflowNode)
 
 
@@ -35,8 +38,7 @@ def validate(pth):
     try:
         with open(pth, 'r') as f:
             ro_def = json.load(f)
-            print "ro_def", ro_def
-            for kwd in ('created', 'creator', 'title', 'description'):
+            for kwd in ('id', 'created', 'creator', 'title', 'description'):
                 if kwd not in ro_def:
                     print "missing", kwd
                     return None
@@ -62,15 +64,12 @@ def create(session, pth, ro_type):
         data = json.load(f)
 
     data["created"] = parse(data["created"])
-    uid = data["id"]
 
     if ro_type not in ro_factory:
         raise UserWarning("unrecognized RO type '%s'" % ro_type)
 
-    ro = ro_factory[ro_type].create(session,
-                                    uid,
-                                    data["creator"],
-                                    data["title"])
+    ro = ro_factory[ro_type]()
+    ro.init(session, data)
     ro.store_description(data['description'])
 
     return ro
@@ -109,7 +108,8 @@ def create_from_file(session, pth, user):
         else:
             cid = uuid1().hex
             name = splitext(basename(pth))[0]
-            cont = ROContainer.create(session, cid, user, name)
+            cont = ROContainer()
+            cont.init(session, dict(uid=cid, creator=user, title=name))
             for ro in ros:
                 ROLink.connect(session, cont.id, ro.id, "contains")
 

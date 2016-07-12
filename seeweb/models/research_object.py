@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+from uuid import uuid1
 
 from seeweb.avatar import (generate_default_ro_avatar,
                            remove_ro_avatar)
@@ -41,6 +42,37 @@ class ResearchObject(Base, Described, Authorized):
                                                             self.title,
                                                             self.version)
 
+    def init(self, session, ro_def):
+        """Initialize this RO with a set of attributes
+
+        Args:
+            session (DBSession):
+            ro_def (dict): set of properties to initialize this RO
+
+        Returns:
+            None
+        """
+        if "id" in ro_def:
+            self.id = ro_def['id']
+        else:
+            self.id = uuid1().hex
+
+        self.creator = ro_def.get("creator", "unknown")
+        if "created" in ro_def:
+            self.created = ro_def['created']
+        else:
+            self.created = datetime.now()
+
+        self.version = 0
+
+        self.title = ro_def.get('title', "no title")
+
+        # add RO to database
+        session.add(self)
+
+        # create avatar
+        generate_default_ro_avatar(self)
+
     @staticmethod
     def get(session, uid):
         """Fetch a given RO in the database.
@@ -53,35 +85,6 @@ class ResearchObject(Base, Described, Authorized):
             (ResearchObject) or None if no RO with this id is found
         """
         return get_by_id(session, ResearchObject, uid)
-
-    @staticmethod
-    def create(session, uid, creator_id, title):
-        """Create a new RO.
-
-        Also create default avatar for this user.
-
-        Args:
-            session: (DBSession)
-            uid: (str) unique id for RO
-            creator_id: (str) id of actor creating the object
-            title: (str) name of this RO
-
-        Returns:
-            (ResearchObject)
-        """
-        created = datetime.now()
-        version = 0
-
-        ro = ResearchObject(id=uid,
-                            creator=creator_id, created=created,
-                            version=version,
-                            title=title)
-        session.add(ro)
-
-        # create avatar
-        generate_default_ro_avatar(ro)
-
-        return ro
 
     @staticmethod
     def remove(session, ro, recursive):

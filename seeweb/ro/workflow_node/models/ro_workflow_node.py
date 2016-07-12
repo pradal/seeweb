@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, String
 
 from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_link import ROLink
 
 
 class ROWorkflowNode(ResearchObject):
@@ -31,3 +32,23 @@ class ROWorkflowNode(ResearchObject):
             (ResearchObject) or None if no RO with this id is found
         """
         return get_by_id(session, ROWorkflowNode, uid)
+
+    def init(self, session, ro_def):
+        """Initialize this RO with a set of attributes
+
+        Args:
+            session (DBSession):
+            ro_def (dict): set of properties to initialize this RO
+
+        Returns:
+            None
+        """
+        ResearchObject.init(self, session, ro_def)
+
+        # try to link to interfaces used by this node
+        for port_def in ro_def.get("inputs", ()):
+            ROLink.connect(session, self.id, port_def['interface'], 'use')
+
+        for port_def in ro_def.get("outputs", ()):
+            ROLink.connect(session, self.id, port_def['interface'], 'use')
+

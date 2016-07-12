@@ -46,7 +46,6 @@ class ROWorkflow(ResearchObject):
         ResearchObject.init(self, session, ro_def)
 
         # link to nodes used by this workflow
-        # ports = ro_def.get("inputs", []) + ro_def.get("outputs", [])
-        # uids = set(port_def['interface'] for port_def in ports)
-        # for uid in uids:
-        #     ROLink.connect(session, self.id, uid, 'use')
+        uids = set(ndef['id'] for ndef in ro_def.get('nodes', []))
+        for uid in uids:
+            ROLink.connect(session, self.id, uid, 'use')

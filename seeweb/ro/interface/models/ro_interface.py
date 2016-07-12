@@ -1,4 +1,5 @@
-from sqlalchemy import Column, ForeignKey, String
+import json
+from sqlalchemy import Column, ForeignKey, String, Text
 
 from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
@@ -10,6 +11,9 @@ class ROInterface(ResearchObject):
     __tablename__ = 'ro_interfaces'
 
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
+
+    schema = Column(Text, default="{}")
+    ancestors = Column(Text, default="[]")
 
     __mapper_args__ = {
         'polymorphic_identity': 'interface',
@@ -39,4 +43,7 @@ class ROInterface(ResearchObject):
             dict
         """
         d = ResearchObject.repr_json(self)
+        d['schema'] = json.loads(self.schema)
+        d['ancestors'] = json.loads(self.ancestors)
+
         return d

@@ -29,7 +29,7 @@ def view(request):
         if iface is None:
             pass
         else:
-            store[iid] = iface.load_definition()
+            store[iid] = iface.repr_json(full=True)
             store[iid]['url'] = request.route_url('ro_view_home', uid=iid)
 
     txt, viewbox = svg.export_node(node_def, store, (800, 300))

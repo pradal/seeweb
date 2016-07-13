@@ -16,7 +16,7 @@
             <div class="h1">{{ ro.id }}</div>
             <div class="input-group">
                 <span class="input-group-addon">Name</span>
-                <input type="text" class="form-control" name="name" value="{{ ro.title }}" />
+                <input type="text" class="form-control" name="name" value="{{ ro.name }}" />
             </div>
             <div class="spacer"></div>
             <ul class="nav nav-tabs">
@@ -51,7 +51,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">About to remove {{ ro.title }}</h4>
+        <h4 class="modal-title">About to remove {{ ro.name }}</h4>
       </div>
       <div class="modal-body">
         <p>Are you sure?</p>

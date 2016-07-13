@@ -18,7 +18,7 @@ class ROWorkflowNode(ResearchObject):
 
     def __repr__(self):
         return "<ROWorkflowNode(id='%s', name='%s')>" % (self.id,
-                                                         self.title)
+                                                         self.name)
 
     @staticmethod
     def get(session, uid):

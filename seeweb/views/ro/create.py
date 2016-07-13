@@ -19,14 +19,14 @@ def view(request):
         creator = request.params["creator"]
         created = request.params["created"]
         version = request.params["version"]
-        title = request.params["title"]
+        name = request.params["name"]
         ro_type = request.params["ro_type"]
 
         # do some checking
-        print uid, creator, title, ro_type
+        print uid, creator, name, ro_type
 
         # create RO
-        if ResearchObject.create(session, uid, creator, title):
+        if ResearchObject.create(session, uid, creator, name):
             return HTTPFound(location=request.route_url("ro_view_home", uid=uid))
     elif "submit_upload" in request.params:
         field_storage = request.params["upload_file"]

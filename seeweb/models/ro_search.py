@@ -12,11 +12,11 @@ def search(session, params):
     Returns:
         (list of str): list of ids of ROContainers matching query
     """
-    if 'title' in params:
+    if 'name' in params:
         # search all RO whose title starts with something similar
-        title = params['title']
+        name = params['name']
         query = session.query(ResearchObject.id)
-        query = query.filter(ResearchObject.title.like("%s%%" % title))
+        query = query.filter(ResearchObject.name.like("%s%%" % name))
         return [uid for uid, in query.all()]
     elif 'contains' in params:
         # search all RO that contains a specific id

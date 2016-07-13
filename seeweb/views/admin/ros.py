@@ -14,7 +14,7 @@ def view(request):
 
     search_pattern = request.params.get("main_search", "")
     if search_pattern != "":
-        query = query.filter(ResearchObject.title.like("%s%%" % search_pattern))
+        query = query.filter(ResearchObject.name.like("%s%%" % search_pattern))
 
     return {'ros': query.all(),
             'search_pattern': search_pattern,

@@ -20,7 +20,7 @@
             <a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">
                 <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % ro.id) }}" />
             </a>
-            {{ ro.title }}
+            {{ ro.name }}
         </div>
         <div class="row">
             <p class="small">{{ ro.id }}</p>

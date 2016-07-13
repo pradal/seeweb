@@ -21,7 +21,7 @@ class ROInterface(ResearchObject):
 
     def __repr__(self):
         return "<ROInterface(id='%s', name='%s')>" % (self.id,
-                                                      self.title)
+                                                      self.name)
 
     @staticmethod
     def get(session, uid):
@@ -36,13 +36,17 @@ class ROInterface(ResearchObject):
         """
         return get_by_id(session, ROInterface, uid)
 
-    def repr_json(self):
+    def repr_json(self, full=False):
         """Create a json representation of this object
+
+        Args:
+            full (bool): if True, also add all properties stored in definition
+                         default False
 
         Returns:
             dict
         """
-        d = ResearchObject.repr_json(self)
+        d = ResearchObject.repr_json(self, full=full)
         d['schema'] = json.loads(self.schema)
         d['ancestors'] = json.loads(self.ancestors)
 

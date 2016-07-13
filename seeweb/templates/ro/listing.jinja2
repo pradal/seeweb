@@ -21,7 +21,7 @@
           <thead>
             <tr>
               <th>ro</th>
-              <th>title</th>
+              <th>name</th>
               <th>#</th>
               <th>type</th>
               <th>creator</th>
@@ -34,7 +34,7 @@
             {% for role, ro in ros %}
             <tr>
               <td>{{ roid(ro.id) }}</td>
-              <td>{{ ro.title|truncate(15) }}</td>
+              <td>{{ ro.name|truncate(15) }}</td>
               <td>{{ roicon(ro.id) }}</td>
               <td>{{ ro.type }}</td>
               <td>{{ ro.creator }}</td>

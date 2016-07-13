@@ -24,7 +24,7 @@ class ResearchObject(Base, Described, Authorized):
     created = Column(DateTime, nullable=False)
 
     version = Column(Integer, nullable=False)
-    title = Column(Text, default="")
+    name = Column(Text, default="")
 
     remote = Column(Text, default="")
     definition = Column(Text, default="{}")
@@ -40,9 +40,9 @@ class ResearchObject(Base, Described, Authorized):
     }
 
     def __repr__(self):
-        return "<RO(id='%s', title='%s', version='%d')>" % (self.id,
-                                                            self.title,
-                                                            self.version)
+        return "<RO(id='%s', name='%s', version='%d')>" % (self.id,
+                                                           self.name,
+                                                           self.version)
 
     def init(self, session, ro_def):
         """Initialize this RO with a set of attributes
@@ -67,7 +67,7 @@ class ResearchObject(Base, Described, Authorized):
 
         self.version = 0
 
-        self.title = ro_def.get('title', "no title")
+        self.name = ro_def.get('name', "no name")
 
         if 'description' in ro_def:
             self.store_description(ro_def['description'])
@@ -201,7 +201,7 @@ class ResearchObject(Base, Described, Authorized):
         loc_def = dict(ro_def)
         for key in ('id', 'type',
                     'creator', 'created',
-                    'version', 'title',
+                    'version', 'name',
                     'remote'):
             loc_def.pop(key, None)
 
@@ -233,7 +233,7 @@ class ResearchObject(Base, Described, Authorized):
                  creator=self.creator,
                  created=self.created.isoformat(),
                  version=self.version,
-                 title=self.title,
+                 name=self.name,
                  remote=self.remote)
 
         if full:

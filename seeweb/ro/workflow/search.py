@@ -11,11 +11,11 @@ def search(session, params):
     Returns:
         (list of str): list of ids of ROContainers matching query
     """
-    if 'title' in params:
+    if 'name' in params:
         # search all RO whose title starts with something similar
-        title = params['title']
+        name = params['name']
         query = session.query(ROWorkflow.id)
-        query = query.filter(ROWorkflow.title.like("%s%%" % title))
+        query = query.filter(ROWorkflow.name.like("%s%%" % name))
         return [uid for uid, in query.all()]
     else:
         return []

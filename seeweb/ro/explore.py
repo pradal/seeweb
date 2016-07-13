@@ -40,7 +40,7 @@ def validate(pth):
     try:
         with open(pth, 'r') as f:
             ro_def = json.load(f)
-            for kwd in ('id', 'created', 'creator', 'title', 'description'):
+            for kwd in ('id', 'created', 'creator', 'name', 'description'):
                 if kwd not in ro_def:
                     print "missing", kwd
                     return None
@@ -110,7 +110,7 @@ def create_from_file(session, pth, user):
             cont = ROContainer()
             cont.init(session, dict(id=uuid1().hex,
                                     creator=user,
-                                    title=name))
+                                    name=name))
             for ro in ros:
                 ROLink.connect(session, cont.id, ro.id, "contains")
 

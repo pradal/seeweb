@@ -16,7 +16,7 @@ def main(session, user):
         None
     """
     roc = ROContainer()
-    roc.init(session, dict(creator=user.id, title="nodelib"))
+    roc.init(session, dict(creator=user.id, name="nodelib"))
 
     for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",
@@ -25,14 +25,14 @@ def main(session, user):
                   "ISequence", "ISlice", "IStr", "ITextStr",
                   "ITuple", "ITuple3"):
         roi = ROInterface()
-        roi.init(session, dict(creator=user.id, title=iname))
+        roi.init(session, dict(creator=user.id, name=iname))
 
         ROLink.connect(session, roc.id, roi.id, "contains")
 
     rown = ROWorkflowNode()
-    rown.init(session, dict(creator=user.id, title="node"))
+    rown.init(session, dict(creator=user.id, name="node"))
     ROLink.connect(session, roc.id, rown.id, "contains")
 
     row = ROWorkflow()
-    row.init(session, dict(creator=user.id, title="workflow"))
+    row.init(session, dict(creator=user.id, name="workflow"))
     ROLink.connect(session, roc.id, row.id, "contains")

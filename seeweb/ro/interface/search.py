@@ -11,11 +11,11 @@ def search(session, params):
     Returns:
         (list of str): list of ids of ROContainers matching query
     """
-    if 'title' in params:
+    if 'name' in params:
         # search all ROInterfaces with given title
-        title = params['title']
+        name = params['name']
         query = session.query(ROInterface.id)
-        query = query.filter(ROInterface.title == title)
+        query = query.filter(ROInterface.name == name)
         return [uid for uid, in query.all()]
     else:
         return []

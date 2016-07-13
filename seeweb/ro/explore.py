@@ -106,10 +106,11 @@ def create_from_file(session, pth, user):
         if len(ros) == 0:
             return None
         else:
-            cid = uuid1().hex
             name = splitext(basename(pth))[0]
             cont = ROContainer()
-            cont.init(session, dict(uid=cid, creator=user, title=name))
+            cont.init(session, dict(id=uuid1().hex,
+                                    creator=user,
+                                    title=name))
             for ro in ros:
                 ROLink.connect(session, cont.id, ro.id, "contains")
 

@@ -1,3 +1,6 @@
+{% from 'templates/ro/macro.jinja2' import roid with context %}
+{% from 'templates/ro/macro.jinja2' import roicon with context %}
+
 {% extends "templates/ro/layout_view_min.jinja2" %}
 
 {% block ro_view_body -%}
@@ -40,10 +43,8 @@
                   <tbody>
                     {% for item in content %}
                     <tr>
-                        <td><a href="{{ request.route_url('ro_view_home', uid=item.id) }}">{{ item.id }}</a></td>
-                        <td>
-                          <img class="tiny" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % item.id) }}" />
-                        </td>
+                        <td>{{ roid(item.id) }}</a></td>
+                        <td>{{ roicon(item.id) }}</td>
                         <td>{{ item.type }}</td>
                         <td>{{ item.title }}</td>
                     </tr>

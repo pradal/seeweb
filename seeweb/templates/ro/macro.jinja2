@@ -1,0 +1,8 @@
+{% macro roid(uid) -%}
+<a href="{{ request.route_url('ro_view_home', uid=uid) }}">&lt{{ uid[:8] }}&gt</a>
+{%- endmacro %}
+
+
+{% macro roicon(uid) -%}
+<img class="tiny" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % uid) }}" />
+{%- endmacro %}

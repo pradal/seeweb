@@ -1,3 +1,6 @@
+{% from 'macro.jinja2' import roid with context %}
+{% from 'macro.jinja2' import roicon with context %}
+
 {% extends "layout.jinja2" %}
 
 {% block ro_body %}
@@ -18,24 +21,25 @@
           <thead>
             <tr>
               <th>ro</th>
+              <th>title</th>
               <th>#</th>
               <th>type</th>
               <th>creator</th>
               <th>creation date</th>
+              <th>your role</th>
               <th>actors</th>
-              <th>role</th>
             </tr>
           </thead>
           <tbody>
             {% for role, ro in ros %}
             <tr>
-              <td><a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">{{ ro.id }}</a></td>
-              <td>
-                <img class="tiny" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % ro.id) }}" />
-              </td>
+              <td>{{ roid(ro.id) }}</td>
+              <td>{{ ro.title|truncate(15) }}</td>
+              <td>{{ roicon(ro.id) }}</td>
               <td>{{ ro.type }}</td>
               <td>{{ ro.creator }}</td>
               <td>{{ ro.created.isoformat() }}</td>
+              <td>{{ role }}</td>
               <td>
                 <select>
                     {% for pol in ro.auth %}
@@ -43,7 +47,6 @@
                     {% endfor %}
                 </select>
               </td>
-               <td>{{ role }}</td>
             </tr>
             {% endfor %}
           </tbody>

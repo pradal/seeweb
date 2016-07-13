@@ -1,3 +1,5 @@
+{% from 'macro.jinja2' import roid with context %}
+
 {% extends "layout_edit.jinja2" %}
 
 {% block ro_edit_body -%}
@@ -41,7 +43,7 @@
                         {% if source == "self" %}
                             {{ source }}
                         {% else %}
-                            <a href="{{ request.route_url('ro_view_home', uid=source) }}">{{ source }}</a>
+                            {{ roid(source) }}
                         {% endif %}
                       </td>
                       <td>{{ type }}</td>
@@ -49,7 +51,7 @@
                         {% if target == "self" %}
                             {{ target }}
                         {% else %}
-                            <a href="{{ request.route_url('ro_view_home', uid=target) }}">{{ target }}</a>
+                            {{ roid(target) }}
                         {% endif %}
                       </td>
                       <td>

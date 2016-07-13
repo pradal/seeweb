@@ -1,3 +1,4 @@
+from itertools import chain
 import json
 from jinja2 import Markup
 from openalea.wlformat.convert import svg
@@ -22,7 +23,7 @@ def view(request):
 
     store = {}
     node_def = ro.load_definition()
-    for port in node_def['inputs'] + node_def['outputs']:
+    for port in chain(node_def['inputs'], node_def['outputs']):
         iid = port['interface']
         iface = ROInterface.get(session, iid)
         if iface is None:

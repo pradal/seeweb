@@ -1,3 +1,4 @@
+from itertools import chain
 from sqlalchemy import Column, ForeignKey, String
 
 from seeweb.models.models import get_by_id
@@ -43,10 +44,17 @@ class ROWorkflowNode(ResearchObject):
         Returns:
             None
         """
-        ResearchObject.init(self, session, ro_def)
+        loc_def = dict(ro_def)
+        # check attributes
+        if 'inputs' not in loc_def:
+            loc_def['inputs'] = []
+        if 'outputs' not in loc_def:
+            loc_def['outputs'] = []
+
+        ResearchObject.init(self, session, loc_def)
 
         # link to interfaces used by this node
-        ports = ro_def.get("inputs", []) + ro_def.get("outputs", [])
+        ports = chain(loc_def['inputs'], loc_def['outputs'])
         uids = set(port_def['interface'] for port_def in ports)
         for uid in uids:
             ROLink.connect(session, self.id, uid, 'use')

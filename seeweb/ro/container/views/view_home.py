@@ -63,7 +63,7 @@ def view(request):
     session = DBSession()
     ro, view_params = view_init_min(request, session)
 
-    if view_params["allow_edit"] and ('new_content' in request.params or request.params.get("ro_id", "") != "") :
+    if view_params["allow_edit"] and ('new_content' in request.params or request.params.get("ro_id", "") != ""):
         if append_ro(request, session, ro) is not None:
             loc = request.current_route_url()
             return HTTPFound(location=loc)
@@ -73,8 +73,10 @@ def view(request):
     content = []
     for link in ro.out_links:
         if link.type == "contains":
-            content.append(ResearchObject.get(session, link.target))
+            ro = ResearchObject.get(session, link.target)
+            content.append((ro.title, ro))
 
-    view_params['content'] = content
+    content.sort()
+    view_params['content'] = [ro for title, ro in content]
 
     return view_params

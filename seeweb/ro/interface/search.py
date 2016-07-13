@@ -12,10 +12,10 @@ def search(session, params):
         (list of str): list of ids of ROContainers matching query
     """
     if 'title' in params:
-        # search all RO whose title starts with something similar
+        # search all ROInterfaces with given title
         title = params['title']
         query = session.query(ROInterface.id)
-        query = query.filter(ROInterface.title.like("%s%%" % title))
+        query = query.filter(ROInterface.title == title)
         return [uid for uid, in query.all()]
     else:
         return []

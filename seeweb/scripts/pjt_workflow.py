@@ -18,7 +18,12 @@ def main(session, user):
     roc = ROContainer()
     roc.init(session, dict(creator=user.id, title="nodelib"))
 
-    for iname in ("any", "IStr", "IInt", "IFileStr"):
+    for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
+                  "IDict", "IDirStr",
+                  "IEnumStr", "IFileStr", "IFloat",
+                  "IFunction", "IInt", "IRGBColor",
+                  "ISequence", "ISlice", "IStr", "ITextStr",
+                  "ITuple", "ITuple3"):
         roi = ROInterface()
         roi.init(session, dict(creator=user.id, title=iname))
 

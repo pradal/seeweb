@@ -12,7 +12,9 @@
                 <p>No description available</p>
             </div>
         {% else %}
-            {{ description }}
+{%- for line in description.splitlines() %}
+    &nbsp;&nbsp;&nbsp;&nbsp;{{ line }}<br>
+{% endfor -%}
         {% endif %}
     </div>
 </div>

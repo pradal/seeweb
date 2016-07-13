@@ -44,6 +44,7 @@ class ROWorkflowNode(ResearchObject):
             None
         """
         ResearchObject.init(self, session, ro_def)
+        self.store_definition(ro_def)
 
         # link to interfaces used by this node
         ports = ro_def.get("inputs", []) + ro_def.get("outputs", [])

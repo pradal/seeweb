@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from uuid import uuid1
@@ -9,7 +10,6 @@ from seeweb.avatar import (generate_default_ro_avatar,
 from .auth import Authorized, Role, ROPolicy
 from .described import Described
 from .models import Base, get_by_id
-from .ro_link import ROLink
 
 
 class ResearchObject(Base, Described, Authorized):
@@ -26,9 +26,10 @@ class ResearchObject(Base, Described, Authorized):
     version = Column(Integer, nullable=False)
     title = Column(Text, default="")
 
-    auth = relationship("ROPolicy")
-
     remote = Column(Text, default="")
+    definition = Column(Text, default="{}")
+
+    auth = relationship("ROPolicy")
 
     out_links = relationship("ROLink", foreign_keys="ROLink.source")
     in_links = relationship("ROLink", foreign_keys="ROLink.target")
@@ -182,8 +183,45 @@ class ResearchObject(Base, Described, Authorized):
         conts = [1 for link in self.in_links if link.type == "contains"]
         return len(conts) == 0
 
-    def repr_json(self):
+    def store_definition(self, ro_def):
+        """Serialize obj in json format to store it as def.
+
+        Notes: remove attributes in obj which are already stored as attributes
+               of RO
+
+        Args:
+            ro_def (dict): dict of RO properties, each property must be json
+                           serializable
+
+        Returns:
+            None
+        """
+        loc_def = dict(ro_def)
+        for key in ('id', 'type',
+                    'creator', 'created',
+                    'version', 'title',
+                    'remote'):
+            loc_def.pop(key, None)
+
+        self.definition = json.dumps(ro_def)
+
+    def load_definition(self):
+        """Load previously stored definition.
+
+        Notes: Attributes which are directly stored as attributes of RO are
+               not loaded back into the returned object.
+
+        Returns:
+            (dict): RO properties previously stored
+        """
+        return json.loads(self.definition)
+
+    def repr_json(self, full=False):
         """Create a json representation of this object
+
+        Args:
+            full (bool): if True, also add all properties stored in definition
+                         default False
 
         Returns:
             dict
@@ -195,5 +233,8 @@ class ResearchObject(Base, Described, Authorized):
                  version=self.version,
                  title=self.title,
                  remote=self.remote)
+
+        if full:
+            d.update(self.load_definition())
 
         return d

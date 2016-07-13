@@ -205,7 +205,7 @@ class ResearchObject(Base, Described, Authorized):
                     'remote'):
             loc_def.pop(key, None)
 
-        self.definition = json.dumps(loc_def)
+        self.definition = json.dumps(loc_def, sort_keys=True)
 
     def load_definition(self):
         """Load previously stored definition.

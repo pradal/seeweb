@@ -25,7 +25,7 @@
             <li><a href="{{ request.route_url('team_list') }}">Team</a></li>
           </ul>
         </li>
-        <li><a href="{{ request.route_url('ro_list') }}">Research Objects</a></li>
+        <li><a href="{{ request.route_url('ro_list', _query={'type': "container"}) }}">Research Objects</a></li>
         {% block navbar_top %}
         {% endblock %}
       </ul>
@@ -100,7 +100,7 @@
                 <li><a href="{{ request.route_url('team_list') }}">Team</a></li>
               </ul>
             </li>
-            <li><a href="{{ request.route_url('ro_list') }}">Research Objects</a></li>
+            <li><a href="{{ request.route_url('ro_list', _query={'type': "container"}) }}">Research Objects</a></li>
           </ul>
           <form class="navbar-form navbar-left" role="search">
             <div class="form-group">

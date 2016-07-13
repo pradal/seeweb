@@ -1,5 +1,11 @@
 {% extends "templates/ro/layout_view_min.jinja2" %}
 
+{% block ro_view_css -%}
+
+<link href="{{ request.static_url('seeweb:ro/workflow/static/style.css') }}" rel="stylesheet">
+
+{%- endblock %}
+
 {% block ro_view_body -%}
 
 <div class="panel panel-default">
@@ -23,7 +29,53 @@
     </div>
     <div class="panel-body">
 
+<div id="workflow_canvas">
+    {{ svg_repr|safe }}
+    <div id="canvas_controls">
+        <a id="up" href="#"></a>
+        <a id="down" href="#"></a>
     </div>
 </div>
+
+    </div>
+</div>
+
+{%- endblock %}
+
+{% block ro_view_js -%}
+
+<script>
+    var viewbox;
+    var scaling_range = [-3, -2, -1, 0, 1, 2, 3].map(function(i) {return Math.pow(Math.SQRT2, i);});
+    var scaling_ind = 3;
+    var scaling;
+
+    window.onload = function() {
+        viewbox = {{ svg_viewbox }};
+
+        $.attrHooks['viewbox'] = {
+            set: function(elem, value, name) {
+                elem.setAttributeNS(null, 'viewBox', value + '');
+                return value;
+            }
+        };
+
+        $("#canvas_controls #down").click(function (e) {
+            scaling_ind = Math.min(scaling_range.length - 1, scaling_ind + 1);
+            scaling = scaling_range[scaling_ind];
+            var newbox = viewbox.map(function(v) {return scaling * v;});
+            $("#workflow_canvas #repr").attr('viewbox', newbox.join(', '));
+            e.preventDefault();
+        });
+
+        $("#canvas_controls #up").click(function (e) {
+            scaling_ind = Math.max(0, scaling_ind - 1);
+            scaling = scaling_range[scaling_ind];
+            var newbox = viewbox.map(function(v) {return scaling * v;});
+            $("#workflow_canvas #repr").attr('viewbox', newbox.join(', '));
+            e.preventDefault();
+        });
+    }
+</script>
 
 {%- endblock %}

@@ -4,6 +4,9 @@
 
 <link href="{{request.static_url('seeweb:static/css/pretty-json.css')}}" rel="stylesheet">
 
+{% block ro_view_css %}
+{% endblock %}
+
 {%- endblock %}
 
 {% block ro_body -%}
@@ -66,7 +69,7 @@
     });
 </script>
 
-{% block ro_content_js %}
+{% block ro_view_js %}
 {% endblock %}
 
 {%- endblock %}

@@ -72,6 +72,8 @@ class ResearchObject(Base, Described, Authorized):
         if 'description' in ro_def:
             self.store_description(ro_def['description'])
 
+        self.store_definition(ro_def)
+
         # add RO to database
         session.add(self)
 
@@ -203,7 +205,7 @@ class ResearchObject(Base, Described, Authorized):
                     'remote'):
             loc_def.pop(key, None)
 
-        self.definition = json.dumps(ro_def)
+        self.definition = json.dumps(loc_def)
 
     def load_definition(self):
         """Load previously stored definition.

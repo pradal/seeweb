@@ -47,26 +47,24 @@
 
 {% block ro_js -%}
 
-{% if scene != "" %}
-    <script src="{{ request.static_url('seeweb:static/js/underscore-min.js') }}">
-    </script>
+<script src="{{ request.static_url('seeweb:static/js/underscore-min.js') }}">
+</script>
 
-    <script src="{{ request.static_url('seeweb:static/js/backbone-min.js') }}">
-    </script>
+<script src="{{ request.static_url('seeweb:static/js/backbone-min.js') }}">
+</script>
 
-    <script src="{{ request.static_url('seeweb:static/js/pretty-json-min.js') }}">
-    </script>
+<script src="{{ request.static_url('seeweb:static/js/pretty-json-min.js') }}">
+</script>
 
-    <script>
-        //obj to render.
-        var obj = {{ scene|safe }};
+<script>
+    //obj to render.
+    var obj = {{ ro.definition|safe }};
 
-        var node = new PrettyJSON.view.Node({
-          el:$('#cnt_debug'),
-          data:obj
-        });
-    </script>
-{% endif %}
+    var node = new PrettyJSON.view.Node({
+      el:$('#cnt_debug'),
+      data:obj
+    });
+</script>
 
 {% block ro_content_js %}
 {% endblock %}

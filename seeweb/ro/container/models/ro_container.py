@@ -44,8 +44,11 @@ class ROContainer(ResearchObject):
         Returns:
             None
         """
-        ResearchObject.init(self, session, ro_def)
+        # remove attributes locally stored
+        loc_def = dict(ro_def)
+        contents = loc_def.pop('contents', [])
 
-        if 'contents' in ro_def:
-            for ro in ro_def['contents']:
-                ROLink.connect(session, self.id, ro.id, "contains")
+        ResearchObject.init(self, session, loc_def)
+
+        for ro in contents:
+            ROLink.connect(session, self.id, ro.id, "contains")

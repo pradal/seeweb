@@ -15,7 +15,7 @@ def search(session, params):
         # search all RO whose title starts with something similar
         name = params['name']
         query = session.query(ROWorkflowNode.id)
-        query = query.filter(ROWorkflowNode.name.like("%s%%" % name))
+        query = query.filter(ROWorkflowNode.name == name)
         return [uid for uid, in query.all()]
     else:
         return []

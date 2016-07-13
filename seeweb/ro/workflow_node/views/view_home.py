@@ -22,7 +22,7 @@ def view(request):
     view_params['description'] = Markup(ro.html_description())
 
     store = {}
-    node_def = ro.load_definition()
+    node_def = ro.repr_json(full=True)
     for port in chain(node_def['inputs'], node_def['outputs']):
         iid = port['interface']
         iface = ROInterface.get(session, iid)

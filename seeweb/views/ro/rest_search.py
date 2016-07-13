@@ -4,7 +4,6 @@ from pyramid.view import view_config
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
-from seeweb.models.ro_link import ROLink
 from seeweb.models.ro_search import search
 
 
@@ -25,7 +24,7 @@ def view(request):
             if role == Role.denied:
                 return {}
             else:
-                return ro.repr_json()
+                return ro.repr_json(full=True)
     else:
         # try to dispatch by type
         if 'type' in request.GET:

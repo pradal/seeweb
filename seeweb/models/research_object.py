@@ -179,6 +179,19 @@ class ResearchObject(Base, Described, Authorized):
 
         return role
 
+    def change_owner(self, session, user):
+        """Change ownership of the RO
+
+        Args:
+            session: (DBSession)
+            user: (User) new owner for the project
+
+        Returns:
+            (None)
+        """
+        del session
+        self.creator = user.id
+
     def is_lonely(self):
         """Check whether this RO is inside another one
 

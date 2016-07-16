@@ -13,13 +13,22 @@
             </a>
         </div>
         <div class="col-md-9 partner description">
+            <div class="owner pull-right">
+                <p>Owner: <a href="{{ request.route_url('user_view_home', uid=ro.creator) }}">{{ ro.creator }}</a>
+                    {% if request.unauthenticated_userid == ro.creator %}
+                        <!-- protect form submission when hitting enter -->
+                        <button style="position: fixed; left: -1000px; top: -1000px;" type="submit" name="update" value="default action"/>
+                        <button  class="btn btn-default"  data-toggle="modal" data-target="#transfer_ownership">Transfer ownership</button>
+                    {% endif %}
+                </p>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="visibility" {% if ro.public %}checked{% endif %} />Public</label>
+                </div>
+            </div>
             <div class="h1">{{ ro.id }}</div>
             <div class="input-group">
                 <span class="input-group-addon">Name</span>
                 <input type="text" class="form-control" name="name" value="{{ ro.name }}" />
-            </div>
-            <div class="checkbox">
-                <label><input type="checkbox" name="visibility" {% if ro.public %}checked{% endif %} />Public</label>
             </div>
             <div class="spacer"></div>
             <ul class="nav nav-tabs">
@@ -46,7 +55,32 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal transfer ownership -->
+<div id="transfer_ownership" class="modal fade" role="dialog" data-keyboard="true">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Transfer RO's ownership</h4>
+      </div>
+      <div class="modal-body">
+        <p>to who?</p>
+        <div class="form-group">
+            <input type='text' name='new_owner' placeholder='new owner id' />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" name="confirm_transfer">Transfer</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_transfer">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Delete -->
 <div id="confirm_delete" class="modal fade" role="dialog" data-keyboard="true">
   <div class="modal-dialog">
 

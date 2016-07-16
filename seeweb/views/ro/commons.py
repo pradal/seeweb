@@ -3,6 +3,7 @@ import transaction
 
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.user import User
 
 
 tabs = [('Home', 'home'),
@@ -106,6 +107,22 @@ def edit_init(request, session, tab):
         # edit project visibility
         public = 'visibility' in request.params
         ro.public = public
+
+    if 'confirm_transfer' in request.params:
+        if request.unauthenticated_userid != ro.creator:
+            request.session.flash("Action non authorized for you", 'warning')
+            raise HTTPFound(location=request.route_url('home'))
+
+        user = User.get(session, request.params["new_owner"])
+        if user is None:
+            msg = "User '%s' is unknown" % request.params["new_owner"]
+            request.session.flash(msg, 'warning')
+            raise HTTPFound(location=request.current_route_url())
+
+        ro.change_owner(session, user)
+        loc = request.route_url("ro_view_home", uid=ro.id)
+        transaction.commit()
+        raise HTTPFound(location=loc)
 
     delete_recursive = "confirm_delete_recursive" in request.params
     if "confirm_delete" in request.params or delete_recursive:

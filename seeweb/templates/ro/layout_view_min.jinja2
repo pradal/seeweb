@@ -30,6 +30,7 @@
             {% if ro.public %}
             <p>public</p>
             {% endif %}
+            <p>remote:{% if ro.remote|length == 0 %}unknown{% else %}<a href="{{ ro.remote }}">&lt{{ ro.remote[:15] }}&gt</a>{% endif %}</p>
         </div>
         <div class="row">
             {% if tabs|length > 0 %}

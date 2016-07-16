@@ -71,6 +71,8 @@ class ResearchObject(Base, Described, Authorized):
 
         self.name = ro_def.get('name', "no name")
 
+        self.remote = ro_def.get('remote', "")
+
         if 'description' in ro_def:
             self.store_description(ro_def['description'])
 

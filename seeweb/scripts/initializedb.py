@@ -198,6 +198,7 @@ def main(argv=sys.argv):
         roc = ROContainer()
         roc.init(session, dict(owner=revesansparole.id,
                                name="myproject",
+                               remote="https://github.com/revesansparole/roc",
                                contents=ros))
 
         ros = []

@@ -166,14 +166,13 @@ class ResearchObject(Base, Described, Authorized):
             return pol.role
 
         # check containers of this object
+        role = Role.denied
         for link in self.in_links:
             if link.type == "contains":
                 container = ResearchObject.get(session, link.source)
-                container_role = container.access_role(session, uid)
-                if container_role is not None:
-                    return container_role
+                role = max(role, container.access_role(session, uid))
 
-        return Role.denied
+        return role
 
     def is_lonely(self):
         """Check whether this RO is inside another one

@@ -51,6 +51,12 @@ def main(session, user):
 
     roc = ROContainer()
     roc.init(session, dict(creator=other.id,
+                           name="other 'denied' project",
+                           contents=[roa]))
+    roc.add_policy(session, user, Role.denied)
+
+    roc = ROContainer()
+    roc.init(session, dict(creator=other.id,
                            name="other project",
                            contents=[roa]))
-    roc.add_policy(session, user, Role.view)
+    roc.add_policy(session, user, Role.edit)

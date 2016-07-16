@@ -27,6 +27,9 @@
         </div>
         <div class="row">
             <p class="small">{{ ro.id }}</p>
+            {% if ro.public %}
+            <p>public</p>
+            {% endif %}
         </div>
         <div class="row">
             {% if tabs|length > 0 %}

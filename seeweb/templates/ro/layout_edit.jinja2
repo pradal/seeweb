@@ -18,6 +18,9 @@
                 <span class="input-group-addon">Name</span>
                 <input type="text" class="form-control" name="name" value="{{ ro.name }}" />
             </div>
+            <div class="checkbox">
+                <label><input type="checkbox" name="visibility" {% if ro.public %}checked{% endif %} />Public</label>
+            </div>
             <div class="spacer"></div>
             <ul class="nav nav-tabs">
                 {% for tab_title, tab_id in tabs %}

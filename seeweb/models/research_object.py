@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
+                        String, Text)
 from sqlalchemy.orm import relationship
 from uuid import uuid1
 
@@ -29,6 +30,7 @@ class ResearchObject(Base, Described, Authorized):
     remote = Column(Text, default="")
     definition = Column(Text, default="{}")
 
+    public = Column(Boolean, default=False)
     auth = relationship("ROPolicy")
 
     out_links = relationship("ROLink", foreign_keys="ROLink.source")
@@ -166,7 +168,10 @@ class ResearchObject(Base, Described, Authorized):
             return pol.role
 
         # check containers of this object
-        role = Role.denied
+        if self.public:
+            role = Role.view
+        else:
+            role = Role.denied
         for link in self.in_links:
             if link.type == "contains":
                 container = ResearchObject.get(session, link.source)

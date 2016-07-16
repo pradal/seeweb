@@ -102,6 +102,11 @@ def edit_init(request, session, tab):
         loc = request.route_url('ro_view_%s' % tab, uid=ro.id)
         raise HTTPFound(location=loc)
 
+    if 'update' in request.params:
+        # edit project visibility
+        public = 'visibility' in request.params
+        ro.public = public
+
     delete_recursive = "confirm_delete_recursive" in request.params
     if "confirm_delete" in request.params or delete_recursive:
         if ResearchObject.remove(session, ro, delete_recursive):

@@ -60,3 +60,19 @@ def main(session, user):
                            name="other project",
                            contents=[roa]))
     roc.add_policy(session, user, Role.edit)
+
+    # public container
+    roa = ROArticle()
+    roa.init(session, dict(creator=other.id, name="other article"))
+    roa.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
+
+    road = ROArticle()
+    road.init(session, dict(creator=other.id, name="other denied article"))
+    road.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
+    road.add_policy(session, user, Role.denied)
+
+    roc = ROContainer()
+    roc.init(session, dict(creator=other.id,
+                           name="other 'public' project",
+                           contents=[roa, road]))
+    roc.public = True

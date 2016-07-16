@@ -17,7 +17,7 @@ def main(session, user):
     """
     # default interfaces for openalea
     roa = ROContainer()
-    roa.init(session, dict(creator=user.id, name="openalea.interfaces"))
+    roa.init(session, dict(owner=user.id, name="openalea.interfaces"))
 
     for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",
@@ -26,12 +26,12 @@ def main(session, user):
                   "ISequence", "ISlice", "IStr", "ITextStr",
                   "ITuple", "ITuple3"):
         roi = ROInterface()
-        roi.init(session, dict(creator=user.id, name=iname))
+        roi.init(session, dict(owner=user.id, name=iname))
 
         ROLink.connect(session, roa.id, roi.id, "contains")
 
     roc = ROContainer()
-    roc.init(session, dict(creator=user.id, name="nodelib"))
+    roc.init(session, dict(owner=user.id, name="nodelib"))
 
     ndefs = []
     for i in range(3):

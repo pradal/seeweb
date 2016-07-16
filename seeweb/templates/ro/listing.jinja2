@@ -24,7 +24,7 @@
               <th>name</th>
               <th>#</th>
               <th>type</th>
-              <th>creator</th>
+              <th>owner</th>
               <th>creation date</th>
               <th>your role</th>
               <th>actors</th>
@@ -37,7 +37,7 @@
               <td>{{ ro.name|truncate(25) }}</td>
               <td>{{ roicon(ro.id) }}</td>
               <td>{{ ro.type }}</td>
-              <td>{{ ro.creator }}</td>
+              <td>{{ ro.owner }}</td>
               <td>{{ ro.created.isoformat() }}</td>
               <td>{{ role }}</td>
               <td>

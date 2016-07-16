@@ -21,7 +21,7 @@ class ResearchObject(Base, Described, Authorized):
     id = Column(String(32), nullable=False, primary_key=True)
     type = Column(String(50))
 
-    creator = Column(String(255), ForeignKey("users.id"))
+    owner = Column(String(255), ForeignKey("users.id"))
     created = Column(DateTime, nullable=False)
 
     version = Column(Integer, nullable=False)
@@ -61,7 +61,7 @@ class ResearchObject(Base, Described, Authorized):
         else:
             self.id = uuid1().hex
 
-        self.creator = ro_def.get("creator", "unknown")
+        self.owner = ro_def.get("owner", "unknown")
         if "created" in ro_def:
             self.created = ro_def['created']
         else:
@@ -159,7 +159,7 @@ class ResearchObject(Base, Described, Authorized):
         Returns:
             (Role) type of role given to this actor
         """
-        if uid == self.creator:
+        if uid == self.owner:
             return Role.edit
 
         # check local auth for this actor, supersede any parent auth
@@ -190,7 +190,7 @@ class ResearchObject(Base, Described, Authorized):
             (None)
         """
         del session
-        self.creator = user.id
+        self.owner = user.id
 
     def is_lonely(self):
         """Check whether this RO is inside another one
@@ -217,7 +217,7 @@ class ResearchObject(Base, Described, Authorized):
         """
         loc_def = dict(ro_def)
         for key in ('id', 'type',
-                    'creator', 'created',
+                    'owner', 'created',
                     'version', 'name',
                     'remote'):
             loc_def.pop(key, None)
@@ -247,7 +247,7 @@ class ResearchObject(Base, Described, Authorized):
         """
         d = dict(id=self.id,
                  type=self.type,
-                 creator=self.creator,
+                 owner=self.owner,
                  created=self.created.isoformat(),
                  version=self.version,
                  name=self.name,

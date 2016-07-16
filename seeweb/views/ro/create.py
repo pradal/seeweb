@@ -16,17 +16,17 @@ def view(request):
     if "new_ro" in request.params:
         session = DBSession()
         uid = request.params["ro_id"]
-        creator = request.params["creator"]
+        owner = request.params["owner"]
         created = request.params["created"]
         version = request.params["version"]
         name = request.params["name"]
         ro_type = request.params["ro_type"]
 
         # do some checking
-        print uid, creator, name, ro_type
+        print uid, owner, name, ro_type
 
         # create RO
-        if ResearchObject.create(session, uid, creator, name):
+        if ResearchObject.create(session, uid, owner, name):
             return HTTPFound(location=request.route_url("ro_view_home", uid=uid))
     elif "submit_upload" in request.params:
         field_storage = request.params["upload_file"]
@@ -46,10 +46,10 @@ def view(request):
                 return HTTPFound(location=request.route_url("ro_view_home", uid=ro.id))
 
     uid = uuid1().hex
-    creator = request.unauthenticated_userid  # TODO test first
+    owner = request.unauthenticated_userid  # TODO test first
     created = datetime.now()
     version = 0
 
     ro_types = ["plain", "container", "article"]
 
-    return dict(uid=uid, creator=creator, created=created, version=version, ro_types=ro_types)
+    return dict(uid=uid, owner=owner, created=created, version=version, ro_types=ro_types)

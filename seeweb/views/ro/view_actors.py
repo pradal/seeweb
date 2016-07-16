@@ -12,7 +12,7 @@ def view(request):
     session = DBSession()
     ro, view_params = view_init(request, session, 'actors')
 
-    actors = [('user', Role.to_str(Role.edit), ro.creator)]
+    actors = [('user', Role.to_str(Role.edit), ro.owner)]
     for pol in ro.auth:
         actors.append(('user', Role.to_str(pol.role), pol.actor))
 

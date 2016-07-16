@@ -109,7 +109,7 @@ def edit_init(request, session, tab):
         ro.public = public
 
     if 'confirm_transfer' in request.params:
-        if request.unauthenticated_userid != ro.creator:
+        if request.unauthenticated_userid != ro.owner:
             request.session.flash("Action non authorized for you", 'warning')
             raise HTTPFound(location=request.route_url('home'))
 

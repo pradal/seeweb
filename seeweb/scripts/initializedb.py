@@ -176,48 +176,48 @@ def main(argv=sys.argv):
 
         # ROs
         ro1 = ResearchObject()
-        ro1.init(session, dict(creator=revesansparole.id, name="RO one"))
+        ro1.init(session, dict(owner=revesansparole.id, name="RO one"))
 
         ro1.add_policy(session, sartzet, Role.view)
         ro1.add_policy(session, vplants, Role.edit)
 
         ro2 = ResearchObject()
-        ro2.init(session, dict(creator=revesansparole.id, name="RO two"))
+        ro2.init(session, dict(owner=revesansparole.id, name="RO two"))
 
         ROLink.connect(session, ro1.id, ro2.id, "contains")
 
         ro3 = ResearchObject()
-        ro3.init(session, dict(creator=revesansparole.id, name="RO three"))
+        ro3.init(session, dict(owner=revesansparole.id, name="RO three"))
 
         ros = []
         for i in range(5):
             ro = ResearchObject()
-            ro.init(session, dict(creator=revesansparole.id, name="RO%d" % i))
+            ro.init(session, dict(owner=revesansparole.id, name="RO%d" % i))
             ros.append(ro)
 
         roc = ROContainer()
-        roc.init(session, dict(creator=revesansparole.id,
+        roc.init(session, dict(owner=revesansparole.id,
                                name="myproject",
                                contents=ros))
 
         ros = []
         for i in range(5):
             ro = ResearchObject()
-            ro.init(session, dict(creator=sartzet.id, name="ROcp%d" % i))
+            ro.init(session, dict(owner=sartzet.id, name="ROcp%d" % i))
             ros.append(ro)
 
         ro = ROArticle()
-        ro.init(session, dict(creator=pradal.id, name="cp article"))
+        ro.init(session, dict(owner=pradal.id, name="cp article"))
         ro.add_policy(session, revesansparole, Role.view)
         ros.append(ro)
 
         roc2 = ROContainer()
-        roc2.init(session, dict(creator=pradal.id,
+        roc2.init(session, dict(owner=pradal.id,
                                 name="CPproject",
                                 contents=ros))
 
         roa = ROArticle()
-        roa.init(session, dict(creator=revesansparole.id, name="test article"))
+        roa.init(session, dict(owner=revesansparole.id, name="test article"))
         roa.doi = "10.1016/S0304-3800(98)00100-8"
         descr = dedent("""
             We present a new approach to simulate the distribution of natural
@@ -248,7 +248,7 @@ def main(argv=sys.argv):
         ROLink.connect(session, ro3.id, roa.id, "use")
 
         rosc = ROScene3d()
-        rosc.init(session, dict(creator=revesansparole.id, name="test scene"))
+        rosc.init(session, dict(owner=revesansparole.id, name="test scene"))
         with open("seeweb/scripts/scene.json", 'r') as f:
             rosc.scene = f.read()
 

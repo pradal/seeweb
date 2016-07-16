@@ -21,7 +21,7 @@
               <th>#</th>
               <th>ro</th>
               <th>type</th>
-              <th>creator</th>
+              <th>owner</th>
               <th>creation date</th>
               <th>actors</th>
             </tr>
@@ -32,7 +32,7 @@
               <td><input type="checkbox" /></td>
               <td><a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">{{ ro.id }}</a></td>
               <td>{{ ro.type }}</td>
-              <td>{{ ro.creator }}</td>
+              <td>{{ ro.owner }}</td>
               <td>{{ ro.created.isoformat() }}</td>
               <td>
                 <select>

@@ -30,49 +30,49 @@ def main(session, user):
 
     # user can view RO in container owner by other
     roa = ROArticle()
-    roa.init(session, dict(creator=other.id, name="other article"))
+    roa.init(session, dict(owner=other.id, name="other article"))
     roa.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
     roa.add_policy(session, user, Role.view)
 
     road = ROArticle()
-    road.init(session, dict(creator=other.id, name="other editable article"))
+    road.init(session, dict(owner=other.id, name="other editable article"))
     road.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
     road.add_policy(session, user, Role.edit)
 
     roc = ROContainer()
-    roc.init(session, dict(creator=other.id,
+    roc.init(session, dict(owner=other.id,
                            name="other project",
                            contents=[roa, road]))
 
     # access granted to ROs through their container policy
     roa = ROArticle()
-    roa.init(session, dict(creator=other.id, name="other 'private' article"))
+    roa.init(session, dict(owner=other.id, name="other 'private' article"))
     roa.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
 
     roc = ROContainer()
-    roc.init(session, dict(creator=other.id,
+    roc.init(session, dict(owner=other.id,
                            name="other 'denied' project",
                            contents=[roa]))
     roc.add_policy(session, user, Role.denied)
 
     roc = ROContainer()
-    roc.init(session, dict(creator=other.id,
+    roc.init(session, dict(owner=other.id,
                            name="other project",
                            contents=[roa]))
     roc.add_policy(session, user, Role.edit)
 
     # public container
     roa = ROArticle()
-    roa.init(session, dict(creator=other.id, name="other article"))
+    roa.init(session, dict(owner=other.id, name="other article"))
     roa.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
 
     road = ROArticle()
-    road.init(session, dict(creator=other.id, name="other denied article"))
+    road.init(session, dict(owner=other.id, name="other denied article"))
     road.store_description("Title\n=====\n\nLorem Ipsum\nlorem ipsum")
     road.add_policy(session, user, Role.denied)
 
     roc = ROContainer()
-    roc.init(session, dict(creator=other.id,
+    roc.init(session, dict(owner=other.id,
                            name="other 'public' project",
                            contents=[roa, road]))
     roc.public = True

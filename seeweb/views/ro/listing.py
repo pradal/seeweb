@@ -13,7 +13,7 @@ def view(request):
     if "type" in request.params:
         query = query.filter(ResearchObject.type == request.params["type"])
 
-    query = query.order_by(ResearchObject.id)
+    query = query.order_by(ResearchObject.name)
 
     ros = []
     for ro in query.all():

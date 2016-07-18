@@ -14,6 +14,6 @@ def view(request):
     session = DBSession()
     ro, view_params = view_init_min(request, session)
 
-    view_params['scene'] = ro.scene
+    view_params['scene'] = ro.load_definition()['scene']
 
     return view_params

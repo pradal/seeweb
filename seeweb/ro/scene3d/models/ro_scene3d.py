@@ -10,7 +10,6 @@ class ROScene3d(ResearchObject):
     __tablename__ = 'ro_scene3d'
 
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
-    scene = Column(String(50), default="")
 
     __mapper_args__ = {
         'polymorphic_identity': 'scene3d',

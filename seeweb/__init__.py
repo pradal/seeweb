@@ -126,8 +126,10 @@ def main(global_config, **settings):
                 mod = import_module(modname)
                 config.add_route(mod.route_name, mod.route_url)
 
-    config.add_route('ro_rest_search', 'rest/ro/search')
+    config.add_route('ro_rest_link', 'rest/ro/link')
     config.add_route('ro_rest_register', 'rest/ro/register')
+    config.add_route('ro_rest_remove', 'rest/ro/remove')
+    config.add_route('ro_rest_search', 'rest/ro/search')
 
     config.scan()
 

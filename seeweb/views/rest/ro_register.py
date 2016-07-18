@@ -10,9 +10,10 @@ def view(request):
     session = DBSession()
 
     # gather data
-    ro_type = request.params["ro_type"]
-
     data = dict(request.params)
+    ro_type = data.pop("ro_type")
+    data["owner"] = request.unauthenticated_userid
+
     if "created" in data:
         data["created"] = parse(data["created"])
 

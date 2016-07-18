@@ -22,6 +22,7 @@ def main(session, user):
     roa = ROContainer()
     roa.init(session, dict(owner=user.id, name="openalea.interfaces"))
 
+    itrans = {}
     for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",
                   "IEnumStr", "IFileStr", "IFloat",
@@ -32,6 +33,7 @@ def main(session, user):
         roi.init(session, dict(owner=user.id, name=iname))
 
         ROLink.connect(session, roa.id, roi.id, "contains")
+        itrans[iname] = roi.id
 
     roc = ROContainer()
     roc.init(session, dict(owner=user.id, name="nodelib"))
@@ -42,11 +44,11 @@ def main(session, user):
                         description="toto was here",
                         author=user.id,
                         function="testio:read",
-                        inputs=[dict(name="in1", interface="IInt",
+                        inputs=[dict(name="in1", interface=itrans["IInt"],
                                      default="0", description="counter"),
-                                dict(name="in2", interface="IStr",
+                                dict(name="in2", interface=itrans["IStr"],
                                      default="a", description="unit")],
-                        outputs=[dict(name="ret", interface="IInt",
+                        outputs=[dict(name="ret", interface=itrans["IInt"],
                                       description="important result")])
 
         rown = ROWorkflowNode()

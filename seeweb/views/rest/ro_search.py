@@ -17,12 +17,12 @@ def view(request):
         uid = request.GET['uid']
         ro = ResearchObject.get(session, uid)
         if ro is None:
-            return {}
+            return None
         else:
             # check credentials
             role = ro.access_role(session, user)
             if role == Role.denied:
-                return {}
+                return None
             else:
                 return ro.repr_json(full=True)
     else:

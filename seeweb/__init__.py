@@ -127,6 +127,7 @@ def main(global_config, **settings):
                 config.add_route(mod.route_name, mod.route_url)
 
     config.add_route('ro_rest_search', 'rest/ro/search')
+    config.add_route('ro_rest_register', 'rest/ro/register')
 
     config.scan()
 

@@ -1,8 +1,11 @@
+from uuid import uuid1
+
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.interface.models.ro_interface import ROInterface
-from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.ro.workflow.models.ro_workflow import ROWorkflow
+from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
+from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
 
 
 def main(session, user):
@@ -79,43 +82,43 @@ def main(session, user):
     row.init(session, workflow_def)
     ROLink.connect(session, roc.id, row.id, "contains")
 
-    # prov = Project.create(session, 'revesansparole', 'provenance')
-    # prov.public = True
-    #
-    # data = [dict(id=uuid1().hex, type="int", value=1),
-    #         dict(id=uuid1().hex, type="int", value=10),
-    #         dict(id=uuid1().hex, type="str", value="Killroy was here")
-    #         ]
-    #
-    # prov_def = dict(id=uuid1().hex,
-    #                 name="sample_provenance",
-    #                 description="trying some stuff",
-    #                 author="revesansparole",
-    #                 version=0,
-    #                 workflow=workflow_def['id'],
-    #                 time_init=10,
-    #                 time_end=11,
-    #                 data=data,
-    #                 parameters=[dict(node=0, port="in1", data=data[0]['id']),
-    #                             dict(node=0, port="in2", data=data[2]['id'])
-    #                             ],
-    #                 executions=[
-    #                     dict(node=0, time_init=10, time_end=11,
-    #                          inputs=[
-    #                              {"port": "in1", "data": data[0]['id']},
-    #                              {"port": "in2", "data": data[2]['id']}
-    #                          ],
-    #                          outputs=[
-    #                              {"port": "ret", "data": data[1]['id']}
-    #                          ]),
-    #                     dict(node=1, time_init=10, time_end=11,
-    #                          inputs=[
-    #                              {"port": "in1", "data": data[0]['id']}
-    #                          ],
-    #                          outputs=[
-    #                              {"port": "ret", "data": data[1]['id']}
-    #                          ])
-    #                 ]
-    #                 )
-    #
-    # ContentItem.create_from_def(session, "workflow_prov", prov_def, prov)
+    roc = ROContainer()
+    roc.init(session, dict(owner=user.id, name="provenance"))
+
+    data = [dict(id=uuid1().hex, type="int", value=1),
+            dict(id=uuid1().hex, type="int", value=10),
+            dict(id=uuid1().hex, type="str", value="Killroy was here")
+            ]
+
+    prov_def = dict(name="sample_provenance",
+                    description="trying some stuff",
+                    author=user.id,
+                    workflow=row.id,
+                    time_init=10,
+                    time_end=11,
+                    data=data,
+                    parameters=[dict(node=0, port="in1", data=data[0]['id']),
+                                dict(node=0, port="in2", data=data[2]['id'])
+                                ],
+                    executions=[
+                        dict(node=0, time_init=10, time_end=11,
+                             inputs=[
+                                 {"port": "in1", "data": data[0]['id']},
+                                 {"port": "in2", "data": data[2]['id']}
+                             ],
+                             outputs=[
+                                 {"port": "ret", "data": data[1]['id']}
+                             ]),
+                        dict(node=1, time_init=10, time_end=11,
+                             inputs=[
+                                 {"port": "in1", "data": data[0]['id']}
+                             ],
+                             outputs=[
+                                 {"port": "ret", "data": data[1]['id']}
+                             ])
+                    ]
+                    )
+
+    rop = ROWorkflowProv()
+    rop.init(session, prov_def)
+    ROLink.connect(session, roc.id, rop.id, "contains")

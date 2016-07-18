@@ -49,5 +49,8 @@ class ROWorkflowProv(ResearchObject):
         ResearchObject.init(self, session, loc_def)
 
         # link to workflow associated to this provenance
+        ROLink.connect(session, self.id, ro_def['workflow'], 'use')
+
         # link to workflow nodes associated with each process?
+
         # link to data produced

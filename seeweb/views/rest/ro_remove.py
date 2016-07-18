@@ -8,7 +8,7 @@ from seeweb.models.research_object import ResearchObject
 def view(request):
     session = DBSession()
     uid = request.params["uid"]
-    delete_recursive = request.params["recursive"]
+    delete_recursive = request.params["recursive"] == "True"
     ro = ResearchObject.get(session, uid)
     if ro.owner == request.unauthenticated_userid:
         ResearchObject.remove(session, ro, delete_recursive)

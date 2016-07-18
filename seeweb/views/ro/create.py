@@ -1,4 +1,5 @@
 from datetime import datetime
+from dateutil.parser import parse
 from os.path import dirname
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
@@ -6,8 +7,7 @@ from uuid import uuid1
 
 from seeweb.io import rmtree, upload_file
 from seeweb.models import DBSession
-from seeweb.models.research_object import ResearchObject
-from seeweb.ro.explore import create_from_file
+from seeweb.ro.explore import create_from_file, register
 
 
 @view_config(route_name='ro_create',
@@ -16,18 +16,25 @@ def view(request):
     if "new_ro" in request.params:
         session = DBSession()
         uid = request.params["ro_id"]
-        owner = request.params["owner"]
-        created = request.params["created"]
-        version = request.params["version"]
+        created = parse(request.params["created"])
         name = request.params["name"]
         ro_type = request.params["ro_type"]
 
         # do some checking
-        print uid, owner, name, ro_type
+        assert len(uid) == 32
+
+        print uid, created, name, ro_type, "\n" * 10
+
+        # gather data
+        data = dict(id=uid,
+                    owner=request.unauthenticated_userid,
+                    created=created,
+                    name=name,
+                    version=0)
 
         # create RO
-        if ResearchObject.create(session, uid, owner, name):
-            return HTTPFound(location=request.route_url("ro_view_home", uid=uid))
+        ro = register(session, ro_type, data)
+        return HTTPFound(location=request.route_url("ro_view_home", uid=ro.id))
     elif "submit_upload" in request.params:
         field_storage = request.params["upload_file"]
         if field_storage == "":
@@ -46,10 +53,8 @@ def view(request):
                 return HTTPFound(location=request.route_url("ro_view_home", uid=ro.id))
 
     uid = uuid1().hex
-    owner = request.unauthenticated_userid  # TODO test first
     created = datetime.now()
-    version = 0
 
     ro_types = ["plain", "container", "article"]
 
-    return dict(uid=uid, owner=owner, created=created, version=version, ro_types=ro_types)
+    return dict(uid=uid, created=created, ro_types=ro_types)

@@ -51,6 +51,26 @@ def validate(pth):
         return None
 
 
+def register(session, ro_type, ro_def):
+    """
+
+    Args:
+        session (DBSession):
+        ro_type (str): type of RO to register
+        ro_def (dict): json def of RO
+
+    Returns:
+        (ResearchObject): or one of its subclass
+    """
+    if ro_type not in ro_factory:
+        raise UserWarning("unrecognized RO type '%s'" % ro_type)
+
+    ro = ro_factory[ro_type]()
+    ro.init(session, ro_def)
+
+    return ro
+
+
 def create(session, pth, ro_type):
     """Create a RO from content of file in pth
 
@@ -62,17 +82,11 @@ def create(session, pth, ro_type):
     Returns:
         (ResearchObject): or one of its subclass
     """
-    if ro_type not in ro_factory:
-        raise UserWarning("unrecognized RO type '%s'" % ro_type)
-
     with open(pth, 'r') as f:
         data = json.load(f)
         data["created"] = parse(data["created"])
 
-    ro = ro_factory[ro_type]()
-    ro.init(session, data)
-
-    return ro
+    return register(session, ro_type, data)
 
 
 def create_from_file(session, pth, user):

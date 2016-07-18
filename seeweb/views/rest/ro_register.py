@@ -1,4 +1,5 @@
 from dateutil.parser import parse
+import json
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -9,15 +10,15 @@ from seeweb.ro.explore import register
 def view(request):
     session = DBSession()
 
-    # gather data
-    data = dict(request.params)
-    ro_type = data.pop("ro_type")
-    data["owner"] = request.unauthenticated_userid
+    ro_type = request.params["ro_type"]
+    ro_def = json.loads(request.params["ro_def"])
 
-    if "created" in data:
-        data["created"] = parse(data["created"])
+    ro_def["owner"] = request.unauthenticated_userid
+
+    if "created" in ro_def:
+        ro_def["created"] = parse(ro_def["created"])
 
     # create RO
-    ro = register(session, ro_type, data)
+    ro = register(session, ro_type, ro_def)
 
     return ro.id

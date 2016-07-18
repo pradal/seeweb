@@ -1,3 +1,4 @@
+import json
 from uuid import uuid1
 
 from seeweb.models.ro_link import ROLink
@@ -120,6 +121,9 @@ def main(session, user):
                              ])
                     ]
                     )
+
+    with open("../prov.wkf", 'w') as f:
+        json.dump(prov_def, f)
 
     rop = ROWorkflowProv()
     rop.init(session, prov_def)

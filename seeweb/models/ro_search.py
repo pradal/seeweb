@@ -3,14 +3,14 @@ from seeweb.models.ro_link import ROLink
 
 
 def search(session, params):
-    """Perform a query for ROContainer objects
+    """Perform a query for RO objects
 
     Args:
         session (DBSession):
         params (dict): extra parameters for search
 
     Returns:
-        (list of str): list of ids of ROContainers matching query
+        (list of str): list of ids of RO matching query
     """
     if 'name' in params:
         # search all RO whose title starts with something similar

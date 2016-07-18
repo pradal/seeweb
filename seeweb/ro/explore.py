@@ -15,8 +15,9 @@ from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
 from seeweb.ro.interface.models.ro_interface import ROInterface
 from seeweb.ro.scene3d.models.ro_scene3d import ROScene3d
-from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.ro.workflow.models.ro_workflow import ROWorkflow
+from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
+from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
 
 
 ro_factory = dict(ro=ResearchObject,
@@ -24,8 +25,9 @@ ro_factory = dict(ro=ResearchObject,
                   container=ROContainer,
                   interface=ROInterface,
                   scene3d=ROScene3d,
+                  workflow=ROWorkflow,
                   workflow_node=ROWorkflowNode,
-                  workflow=ROWorkflow)
+                  workflow_prov=ROWorkflowProv)
 
 
 def validate(pth):

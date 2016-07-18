@@ -36,6 +36,25 @@ class ROInterface(ResearchObject):
         """
         return get_by_id(session, ROInterface, uid)
 
+    def init(self, session, ro_def):
+        """Initialize this RO with a set of attributes
+
+        Args:
+            session (DBSession):
+            ro_def (dict): set of properties to initialize this RO
+
+        Returns:
+            None
+        """
+        # remove attributes locally stored
+        loc_def = dict(ro_def)
+        schema = loc_def.pop('schema', "{}")
+        ancestors = loc_def.pop('ancestors', "[]")
+
+        ResearchObject.init(self, session, loc_def)
+        self.schema = schema
+        self.ancestors = ancestors
+
     def repr_json(self, full=False):
         """Create a json representation of this object
 
@@ -47,7 +66,9 @@ class ROInterface(ResearchObject):
             dict
         """
         d = ResearchObject.repr_json(self, full=full)
-        d['schema'] = json.loads(self.schema)
-        d['ancestors'] = json.loads(self.ancestors)
+
+        if full:
+            d['schema'] = json.loads(self.schema)
+            d['ancestors'] = json.loads(self.ancestors)
 
         return d

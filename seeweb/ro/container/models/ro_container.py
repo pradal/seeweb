@@ -47,8 +47,27 @@ class ROContainer(ResearchObject):
         # remove attributes locally stored
         loc_def = dict(ro_def)
         contents = loc_def.pop('contents', [])
+        ctype = loc_def.pop('ctype', "project")
 
         ResearchObject.init(self, session, loc_def)
+        self.ctype = ctype
 
         for ro in contents:
             ROLink.connect(session, self.id, ro.id, "contains")
+
+    def repr_json(self, full=False):
+        """Create a json representation of this object
+
+        Args:
+            full (bool): if True, also add all properties stored in definition
+                         default False
+
+        Returns:
+            dict
+        """
+        d = ResearchObject.repr_json(self, full=full)
+
+        if full:
+            d['ctype'] = self.ctype
+
+        return d

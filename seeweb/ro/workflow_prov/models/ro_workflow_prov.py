@@ -12,6 +12,7 @@ class ROWorkflowProv(ResearchObject):
     __tablename__ = 'ro_workflow_provs'
 
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
+    workflow = Column(String(255), ForeignKey('ro_workflows.id'))
 
     __mapper_args__ = {
         'polymorphic_identity': 'workflow_prov',
@@ -45,12 +46,31 @@ class ROWorkflowProv(ResearchObject):
             None
         """
         loc_def = dict(ro_def)
+        wkf = loc_def.pop('workflow')
 
         ResearchObject.init(self, session, loc_def)
+        self.workflow = wkf
 
         # link to workflow associated to this provenance
-        ROLink.connect(session, self.id, ro_def['workflow'], 'use')
+        ROLink.connect(session, self.id, wkf, 'use')
 
         # link to workflow nodes associated with each process?
 
         # link to data produced
+
+    def repr_json(self, full=False):
+        """Create a json representation of this object
+
+        Args:
+            full (bool): if True, also add all properties stored in definition
+                         default False
+
+        Returns:
+            dict
+        """
+        d = ResearchObject.repr_json(self, full=full)
+
+        if full:
+            d['workflow'] = self.workflow
+
+        return d

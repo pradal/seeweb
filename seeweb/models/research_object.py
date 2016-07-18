@@ -56,27 +56,27 @@ class ResearchObject(Base, Described, Authorized):
         Returns:
             None
         """
-        if "id" in ro_def:
-            self.id = ro_def['id']
+        loc_def = dict(ro_def)
+        if "id" in loc_def:
+            self.id = loc_def.pop('id')
         else:
             self.id = uuid1().hex
 
-        self.owner = ro_def.get("owner", "unknown")
-        if "created" in ro_def:
-            self.created = ro_def['created']
+        self.owner = loc_def.pop("owner", "unknown")
+        if "created" in loc_def:
+            self.created = loc_def.pop('created')
         else:
             self.created = datetime.now()
 
         self.version = 0
 
-        self.name = ro_def.get('name', "no name")
+        self.name = loc_def.pop('name', "no name")
 
-        self.remote = ro_def.get('remote', "")
+        self.remote = loc_def.pop('remote', "")
 
-        if 'description' in ro_def:
-            self.store_description(ro_def['description'])
+        self.store_description(loc_def.pop('description', ""))
 
-        self.store_definition(ro_def)
+        self.store_definition(loc_def)
 
         # add RO to database
         session.add(self)
@@ -218,11 +218,11 @@ class ResearchObject(Base, Described, Authorized):
             None
         """
         loc_def = dict(ro_def)
-        for key in ('id', 'type',
-                    'owner', 'created',
-                    'version', 'name',
-                    'remote'):
-            loc_def.pop(key, None)
+        # for key in ('id', 'type',
+        #             'owner', 'created',
+        #             'version', 'name',
+        #             'remote'):
+        #     loc_def.pop(key, None)
 
         self.definition = json.dumps(loc_def, sort_keys=True)
 
@@ -253,7 +253,8 @@ class ResearchObject(Base, Described, Authorized):
                  created=self.created.isoformat(),
                  version=self.version,
                  name=self.name,
-                 remote=self.remote)
+                 remote=self.remote,
+                 description=self.description)
 
         if full:
             d.update(self.load_definition())

@@ -43,7 +43,7 @@ def main(session, user):
     for i in range(3):
         node_def = dict(name="read%d" % i,
                         description="toto was here",
-                        author=user.id,
+                        owner=user.id,
                         function="testio:read",
                         inputs=[dict(name="in1", interface=itrans["IInt"],
                                      default="0", description="counter"),
@@ -64,7 +64,7 @@ def main(session, user):
 
     workflow_def = dict(name="sample_workflow",
                         description="trying some stuff",
-                        author="revesansparole",
+                        owner="revesansparole",
                         nodes=[dict(id=ndefs[0].id, label="node1",
                                     x=-50, y=-80),
                                dict(id=ndefs[1].id, label=None,
@@ -95,7 +95,7 @@ def main(session, user):
 
     prov_def = dict(name="sample_provenance",
                     description="trying some stuff",
-                    author=user.id,
+                    owner=user.id,
                     workflow=row.id,
                     time_init=10,
                     time_end=11,

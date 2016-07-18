@@ -4,7 +4,7 @@ from seeweb.models import DBSession
 from seeweb.models.ro_link import ROLink
 
 
-@view_config(route_name='ro_rest_link', renderer='json')
+@view_config(route_name='ro_rest_connect', renderer='json')
 def view(request):
     session = DBSession()
 
@@ -19,4 +19,4 @@ def view(request):
     # create link
     link = ROLink.connect(session, src, tgt, link_type)
 
-    return link.id
+    return True

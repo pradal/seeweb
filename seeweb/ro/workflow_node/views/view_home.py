@@ -29,7 +29,6 @@ def view(request):
         if iface is None:
             pass
         else:
-            print "stored", iid, "\n" * 10
             store[iid] = iface.repr_json(full=True)
             store[iid]['url'] = request.route_url('ro_view_home', uid=iid)
 

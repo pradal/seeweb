@@ -68,7 +68,7 @@ class ResearchObject(Base, Described, Authorized):
         else:
             self.created = datetime.now()
 
-        self.version = 0
+        self.version = loc_def.pop('version', 0)
 
         self.name = loc_def.pop('name', "no name")
 

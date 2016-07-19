@@ -57,6 +57,9 @@ class ROWorkflowProv(ResearchObject):
         # link to workflow nodes associated with each process?
 
         # link to data produced
+        for data_obj in loc_def["data"]:
+            if data_obj["type"] == "$ref":
+                ROLink.connect(session, self.id, data_obj["value"], 'produce')
 
     def repr_json(self, full=False):
         """Create a json representation of this object

@@ -1,3 +1,4 @@
+import base64
 from itertools import chain
 import json
 from jinja2 import Markup
@@ -39,7 +40,7 @@ def view(request):
                 store[nid]['url'] = request.route_url('ro_view_home', uid=nid)
 
         for nid, node in store.items():
-            for port in node['inputs'] + node['outputs']:
+            for port in chain(node['inputs'], node['outputs']):
                 iid = port['interface']
                 iface = ROInterface.get(session, iid)
                 if iface is None:
@@ -57,7 +58,10 @@ def view(request):
         fmt_data = {}
         for data_obj in prov['data']:
             dtype = data_obj['type']
-            if dtype == 'int':
+            if dtype == "$ref":  # internally used to reference another RO
+                url = request.route_url('ro_view_home', uid=data_obj["value"])
+                val = '<p><a href="%s">link to RO</a></p>' % url
+            elif dtype == "int":
                 val = "<p>%d</p>" % data_obj["value"]
             elif dtype == "str":
                 val = "<p>%s</p>" % data_obj["value"]

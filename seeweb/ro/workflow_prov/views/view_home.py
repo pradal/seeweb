@@ -77,12 +77,14 @@ def view(request):
         for pexec in prov['executions']:
             nid = pexec['node']
             for port in pexec['inputs']:
-                key = "wkf_node_%d_input_%s" % (nid, port['port'])
-                data[key] = fmt_data[port['data']]
+                if port['data'] is not None:
+                    key = "wkf_node_%d_input_%s" % (nid, port['port'])
+                    data[key] = fmt_data[port['data']]
 
             for port in pexec['outputs']:
-                key = "wkf_node_%d_output_%s" % (nid, port['port'])
-                data[key] = fmt_data[port['data']]
+                if port['data'] is not None:
+                    key = "wkf_node_%d_output_%s" % (nid, port['port'])
+                    data[key] = fmt_data[port['data']]
 
     view_params['wkf_data'] = data
 

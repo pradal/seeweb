@@ -18,7 +18,7 @@
 {%- endblock %}
 
 
-{% block ro_content_js -%}
+{% block ro_view_js -%}
     <script type="text/javascript" src="{{ request.static_url('seeweb:ro/scene3d/static/three.min.js') }}"></script>
     <script type="text/javascript" src="{{ request.static_url('seeweb:ro/scene3d/static/TrackballControls.js') }}"></script>
 
@@ -72,7 +72,7 @@
             scene.add( light );
 
             var loader = new THREE.ObjectLoader();
-            var mesh = loader.parse({{ scene|safe }});
+            var mesh = loader.parse({{ scene }});
             if (mesh.type == "Scene") {
                 for (i in mesh.children) {
                     scene.add(mesh.children[i]);

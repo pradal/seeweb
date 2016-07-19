@@ -1,3 +1,4 @@
+from jinja2 import Markup
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -14,6 +15,6 @@ def view(request):
     session = DBSession()
     ro, view_params = view_init_min(request, session)
 
-    view_params['scene'] = ro.load_definition()['scene']
+    view_params['scene'] = Markup(ro.load_definition()['scene'])
 
     return view_params

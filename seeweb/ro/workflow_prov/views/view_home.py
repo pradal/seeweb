@@ -39,16 +39,16 @@ def view(request):
                 store[nid] = wnode.repr_json(full=True)
                 store[nid]['url'] = request.route_url('ro_view_home', uid=nid)
 
-        for nid, node in store.items():
-            for port in chain(node['inputs'], node['outputs']):
-                iid = port['interface']
-                iface = ROInterface.get(session, iid)
-                if iface is None:
-                    pass
-                else:
-                    store[iid] = iface.repr_json(full=True)
-                    store[iid]['url'] = request.route_url('ro_view_home',
-                                                          uid=iid)
+        # for nid, node in store.items():
+        #     for port in chain(node['inputs'], node['outputs']):
+        #         iid = port['interface']
+        #         iface = ROInterface.get(session, iid)
+        #         if iface is None:
+        #             pass
+        #         else:
+        #             store[iid] = iface.repr_json(full=True)
+        #             store[iid]['url'] = request.route_url('ro_view_home',
+        #                                                   uid=iid)
 
         txt, viewbox = svg.export_workflow(workflow_def, store, (800, 600))
         view_params['svg_repr'] = txt

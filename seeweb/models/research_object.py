@@ -58,7 +58,10 @@ class ResearchObject(Base, Described, Authorized):
         """
         loc_def = dict(ro_def)
         if "id" in loc_def:
-            self.id = loc_def.pop('id')
+            uid = loc_def.pop('id')
+            if ResearchObject.get(session, uid) is not None:
+                raise KeyError("RO with same id '%s' already exists" % uid)
+            self.id = uid
         else:
             self.id = uuid1().hex
 

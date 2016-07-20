@@ -19,6 +19,19 @@ def view(request):
         ro_def["created"] = parse(ro_def["created"])
 
     # create RO
-    ro = register(session, ro_type, ro_def)
+    try:
+        ro = register(session, ro_type, ro_def)
+        status = "success"
+        msg = ""
+        res = ro.id
+    except KeyError as e:
+        status = "KeyError"
+        msg = e.message
+        res = None
+    except UserWarning as e:
+        status = "UserWarning"
+        msg = e.message
+        res = None
 
-    return ro.id
+    ans = dict(status=status, msg=msg, res=res)
+    return ans

@@ -8,6 +8,7 @@
 <div class="row">
     <a class="btn btn-warning pull-right" href="{{ request.route_url('ro_create') }}">Create</a>
     <a class="btn btn-default" href="{{ request.route_url('ro_list') }}">All</a>
+    <a class="btn btn-default" href="{{ request.route_url('ro_list', _query={'type': 'container', 'toplevel': 'yes'}) }}">Top</a>
     <a class="btn btn-default" href="{{ request.route_url('ro_list', _query={'type': 'container'}) }}">Containers</a>
     <a class="btn btn-default" href="{{ request.route_url('ro_list', _query={'type': 'article'}) }}">Articles</a>
 </div>

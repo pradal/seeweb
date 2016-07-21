@@ -70,7 +70,6 @@ def view_init_min(request, session):
 
     # find containers
     uids = fetch_containers(session, ro)
-    print "uids", uids, "\n" * 10
     containers = [(uid, ResearchObject.get(session, uid).name) for uid in uids]
 
     # allow edition

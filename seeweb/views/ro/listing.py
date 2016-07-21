@@ -15,8 +15,12 @@ def view(request):
 
     query = query.order_by(ResearchObject.name)
 
+    res = query.all()
+    if "toplevel" in request.params:
+        res = [ro for ro in res if ro.is_lonely()]
+
     ros = []
-    for ro in query.all():
+    for ro in res:
         role = ro.access_role(session, request.unauthenticated_userid)
         if role is None:
             print "\n"*10, ro.id, None, "\n"*10

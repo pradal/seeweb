@@ -10,7 +10,15 @@ from seeweb.ro.container.models.ro_container import ROContainer
 from init_users import users, teams
 
 
+containers = []
+
+
 def main(session):
+    ro_top = ROContainer()
+    ro_top.init(session, dict(owner=users[0].id,
+                           name="sample"))
+    containers.append(ro_top)
+
     ro1 = ResearchObject()
     ro1.init(session, dict(owner=users[0].id, name="RO one"))
 
@@ -36,6 +44,7 @@ def main(session):
                            name="myproject",
                            remote="https://github.com/revesansparole/roc",
                            contents=ros))
+    ROLink.connect(session, ro_top.id, roc.id, 'contains')
 
     ros = []
     for i in range(5):
@@ -52,6 +61,7 @@ def main(session):
     roc2.init(session, dict(owner=users[2].id,
                             name="CPproject",
                             contents=ros))
+    ROLink.connect(session, ro_top.id, roc2.id, 'contains')
 
     roa = ROArticle()
     roa.init(session, dict(owner=users[0].id, name="test article"))

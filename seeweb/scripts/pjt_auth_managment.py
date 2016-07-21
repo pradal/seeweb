@@ -9,12 +9,13 @@ from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
 
 
-def main(session, user):
+def main(session, user, container):
     """Create ROs to test auth policies.
 
     Args:
         session (DBSession):
         user (User): default user
+        container (ROContainer): top level container
 
     Returns:
         None
@@ -43,6 +44,7 @@ def main(session, user):
     roc.init(session, dict(owner=other.id,
                            name="other project",
                            contents=[roa, road]))
+    ROLink.connect(session, container.id, roc.id, 'contains')
 
     # access granted to ROs through their container policy
     roa = ROArticle()
@@ -54,12 +56,14 @@ def main(session, user):
                            name="other 'denied' project",
                            contents=[roa]))
     roc.add_policy(session, user, Role.denied)
+    ROLink.connect(session, container.id, roc.id, 'contains')
 
     roc = ROContainer()
     roc.init(session, dict(owner=other.id,
                            name="other project",
                            contents=[roa]))
     roc.add_policy(session, user, Role.edit)
+    ROLink.connect(session, container.id, roc.id, 'contains')
 
     # public container
     roa = ROArticle()
@@ -76,3 +80,4 @@ def main(session, user):
                            name="other 'public' project",
                            contents=[roa, road]))
     roc.public = True
+    ROLink.connect(session, container.id, roc.id, 'contains')

@@ -15,6 +15,7 @@ import pjt_auth_managment
 import pjt_data
 import pjt_workflow
 import init_sample
+from init_sample import containers
 import init_users
 from init_users import users
 
@@ -86,6 +87,6 @@ def main(argv=sys.argv):
         init_users.main(session)
         init_sample.main(session)
 
-        pjt_auth_managment.main(session, users[0])
-        pjt_workflow.main(session, users[0])
-        pjt_data.main(session, users[0])
+        pjt_auth_managment.main(session, users[0], containers[0])
+        pjt_workflow.main(session, users[0], containers[0])
+        pjt_data.main(session, users[0], containers[0])

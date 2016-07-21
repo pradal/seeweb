@@ -1,6 +1,4 @@
-import base64
 import json
-import os
 from uuid import uuid1
 
 from seeweb.models.ro_link import ROLink
@@ -11,12 +9,13 @@ from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
 
 
-def main(session, user):
+def main(session, user, container):
     """Create workflow related projects.
 
     Args:
         session (DBSession):
         user (User): owner of created project
+        container (ROContainer): top level container
 
     Returns:
         None
@@ -40,6 +39,7 @@ def main(session, user):
 
     roc = ROContainer()
     roc.init(session, dict(owner=user.id, name="nodelib"))
+    ROLink.connect(session, container.id, roc.id, 'contains')
 
     ndefs = []
     for i in range(3):
@@ -89,6 +89,7 @@ def main(session, user):
 
     roc = ROContainer()
     roc.init(session, dict(owner=user.id, name="provenance"))
+    ROLink.connect(session, container.id, roc.id, 'contains')
 
     data = [dict(id=uuid1().hex, type="int", value=1),
             dict(id=uuid1().hex, type="int", value=10),

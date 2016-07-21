@@ -16,7 +16,7 @@ def search(session, params):
         # search all RO whose title starts with something similar
         name = params['name']
         query = session.query(ROContainer.id)
-        query = query.filter(ROContainer.name.like("%s%%" % name))
+        query = query.filter(ROContainer.name == name)
         return [uid for uid, in query.all()]
     elif 'contains' in params or 'use' in params:
         res = ro_search(session, params)

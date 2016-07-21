@@ -3,6 +3,7 @@ import transaction
 
 from seeweb.models.auth import Role
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_link import ROLink
 from seeweb.models.user import User
 
 
@@ -30,6 +31,23 @@ def fetch_ro(request, session):
     return uid, ro
 
 
+def fetch_containers(session, ro):
+    """Retrieve ids of all containers holding this RO
+
+    Args:
+        session (DBSession):
+        ro (ResearchObject):
+
+    Returns:
+        (list of str)
+    """
+    query = session.query(ROLink.source)
+    query = query.filter(ROLink.type == 'contains')
+    query = query.filter(ROLink.target == ro.id)
+
+    return [uid for uid, in query.all()]
+
+
 def view_init_min(request, session):
     """Common init for all 'view' parts.
 
@@ -50,10 +68,16 @@ def view_init_min(request, session):
                               'warning')
         raise HTTPFound(location=request.route_url('home'))
 
+    # find containers
+    uids = fetch_containers(session, ro)
+    print "uids", uids, "\n" * 10
+    containers = [(uid, ResearchObject.get(session, uid).name) for uid in uids]
+
     # allow edition
     allow_edit = (current_uid is not None and role == Role.edit)
 
     view_params = {"ro": ro,
+                   "containers": containers,
                    "allow_edit": allow_edit,
                    "minimized": True}
 

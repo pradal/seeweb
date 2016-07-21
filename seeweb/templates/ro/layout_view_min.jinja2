@@ -13,16 +13,18 @@
 
 <div id="content" class="row">
     <div class="col-md-2">
-            {% if allow_edit %}
-                <a class="btn btn-default pull-right" href="{{ request.route_url('ro_edit_home', uid=ro.id) }}">
-                  <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-                  Edit
-                </a>
-            {% endif %}
+        {% if allow_edit %}
+            <a class="btn btn-default pull-right" href="{{ request.route_url('ro_edit_home', uid=ro.id) }}">
+              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
+              Edit
+            </a>
+        {% endif %}
         <div class="row">
             <a href="{{ request.route_url('ro_view_home', uid=ro.id) }}">
                 <img class="img-rounded" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % ro.id) }}" />
             </a>
+        </div>
+        <div class="row">
             {{ ro.name }}
         </div>
         <div class="row">
@@ -32,15 +34,25 @@
             {% endif %}
             <p>remote:{% if ro.remote|length == 0 %}unknown{% else %}<a href="{{ ro.remote }}">&lt{{ ro.remote[:15] }}&gt</a>{% endif %}</p>
         </div>
+        {% if tabs|length > 0 %}
         <div class="row">
-            {% if tabs|length > 0 %}
-                <ul class="nav nav-pills nav-stacked nav-sidebar">
-                    {% for tab_title, tab_id in tabs %}
-                        <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_view_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            <ul class="nav nav-pills nav-stacked nav-sidebar">
+                {% for tab_title, tab_id in tabs %}
+                    <li role="presentation" {% if tab_id == tab %}class="active"{% endif %}><a href="{{ request.route_url('user_view_%s' % tab_id, uid=user.id) }}">{{ tab_title }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
+        {% endif %}
+        {% if containers|length > 0 %}
+        <div class="row">
+            <p>Containers</p>
+            <ul class="nav nav-pills nav-stacked nav-sidebar">
+                {% for uid, name in containers %}
+                    <li role="presentation"><a href="{{ request.route_url('ro_view_home', uid=uid) }}">{{ name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
     <div class="col-md-10">
         {% block ro_view_body %}

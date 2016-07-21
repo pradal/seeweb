@@ -14,7 +14,7 @@ class ROLink(Base):
     type = Column(String(50), default="use")
 
     def __repr__(self):
-        return "<ROLink(id='%s', source='%s', target='%d')>" % (self.id,
+        return "<ROLink(id='%d', source='%s', target='%s')>" % (self.id,
                                                                 self.source,
                                                                 self.target)
 

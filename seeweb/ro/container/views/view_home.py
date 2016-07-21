@@ -74,7 +74,7 @@ def view(request):
     for link in ro.out_links:
         if link.type == "contains":
             ro = ResearchObject.get(session, link.target)
-            content.append((ro.name, ro))
+            content.append((ro.name.lower(), ro))
 
     content.sort()
     view_params['content'] = [ro for name, ro in content]

@@ -17,6 +17,7 @@ def main(session):
     ro_top = ROContainer()
     ro_top.init(session, dict(owner=users[0].id,
                            name="sample"))
+    ro_top.public = True
     containers.append(ro_top)
 
     ro1 = ResearchObject()

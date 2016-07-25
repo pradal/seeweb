@@ -8,6 +8,8 @@ from seeweb.models.research_object import ResearchObject
 @view_config(route_name='ro_list',
              renderer='templates/ro/listing.jinja2')
 def view(request):
+    allow_edit = request.unauthenticated_userid is not None
+
     session = DBSession()
     query = session.query(ResearchObject)
     if "type" in request.params:
@@ -27,4 +29,4 @@ def view(request):
         elif role != Role.denied:
             ros.append((Role.to_str(role), ro))
 
-    return {'ros': ros}
+    return {'allow_edit': allow_edit, 'ros': ros}

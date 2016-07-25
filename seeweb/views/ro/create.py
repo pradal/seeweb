@@ -13,6 +13,11 @@ from seeweb.ro.explore import create_from_file, register
 @view_config(route_name='ro_create',
              renderer='templates/ro/create.jinja2')
 def view(request):
+    if request.unauthenticated_userid is None:
+        msg = "Operation non authorized for anonymous users"
+        request.session.flash(msg, 'warning')
+        return HTTPFound(location=request.route_url("home"))
+
     if "new_ro" in request.params:
         session = DBSession()
         uid = request.params["ro_id"]

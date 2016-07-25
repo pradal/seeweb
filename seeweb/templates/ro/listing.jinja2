@@ -6,7 +6,9 @@
 {% block ro_body %}
 
 <div class="row">
+    {% if allow_edit %}
     <a class="btn btn-warning pull-right" href="{{ request.route_url('ro_create') }}">Create</a>
+    {% endif %}
     <a class="btn btn-default" href="{{ request.route_url('ro_list') }}">All</a>
     <a class="btn btn-default" href="{{ request.route_url('ro_list', _query={'type': 'container', 'toplevel': 'yes'}) }}">Top</a>
     <a class="btn btn-default" href="{{ request.route_url('ro_list', _query={'type': 'container'}) }}">Containers</a>

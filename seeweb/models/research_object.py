@@ -21,7 +21,7 @@ class ResearchObject(Base, Described, Authorized):
     id = Column(String(32), nullable=False, primary_key=True)
     type = Column(String(50))
 
-    owner = Column(String(255), ForeignKey("users.id"))
+    owner = Column(String(255), ForeignKey("users.id"), nullable=False)
     created = Column(DateTime, nullable=False)
 
     version = Column(Integer, nullable=False)

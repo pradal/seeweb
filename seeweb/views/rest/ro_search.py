@@ -29,8 +29,11 @@ def view(request):
         # try to dispatch by type
         if 'type' in request.GET:
             ro_type = request.GET['type']
-            mod = import_module("seeweb.ro.%s.search" % ro_type)
-            res = mod.search(session, request.GET)
+            if ro_type == 'ro':
+                res = search(session, request.GET)
+            else:
+                mod = import_module("seeweb.ro.%s.search" % ro_type)
+                res = mod.search(session, request.GET)
         else:
             res = search(session, request.GET)
 

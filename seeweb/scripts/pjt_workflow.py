@@ -24,6 +24,9 @@ def main(session, user, container):
     roa = ROContainer()
     roa.init(session, dict(owner=user.id, name="openalea.interfaces"))
 
+    top = ROContainer()
+    top.init(session, dict(owner=user.id, name="openalea", contents=[roa]))
+
     itrans = {}
     for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",

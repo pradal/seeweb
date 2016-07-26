@@ -28,7 +28,7 @@ def main(session, user, container):
     for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",
                   "IEnumStr", "IFileStr", "IFloat",
-                  "IFunction", "IInt", "IRGBColor",
+                  "IFunction", "IImage", "IInt", "IRGBColor",
                   "ISequence", "ISlice", "IStr", "ITextStr",
                   "ITuple", "ITuple3"):
         roi = ROInterface()

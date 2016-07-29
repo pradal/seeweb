@@ -1,3 +1,5 @@
+{% from 'macro.jinja2' import roid with context %}
+
 {% extends "layout.jinja2" %}
 
 {% block ro_body -%}
@@ -58,8 +60,6 @@
 <!-- Modal transfer ownership -->
 <div id="transfer_ownership" class="modal fade" role="dialog" data-keyboard="true">
   <div class="modal-dialog">
-
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -83,21 +83,40 @@
 <!-- Modal Delete -->
 <div id="confirm_delete" class="modal fade" role="dialog" data-keyboard="true">
   <div class="modal-dialog">
-
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">About to remove {{ ro.name }}</h4>
       </div>
       <div class="modal-body">
-        <p>Are you sure?</p>
+        {% if error_links|length > 0 %}
+            <p>Action non authorized because of these links<p>
+            <ul>
+            {% for link in error_links %}
+                <li>{{ roid(link.source) }}: {{ link.type }}: self</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Are you sure?</p>
+            <ul>
+                {% if warn_links|length > 0 %}
+                    <p>This RO is still linked to these other ROs<p>
+                    <ul>
+                    {% for link in warn_links %}
+                        <li>self: {{ link.type }}: {{ roid(link.source) }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </ul>
+        {% endif %}
       </div>
       <div class="modal-footer">
-        {% if ro.type == 'container' %}
-            <button type="submit" class="btn btn-danger" name="confirm_delete_recursive">Delete recursively</a>
+        {% if error_links|length == 0 %}
+            {% if ro.type == 'container' %}
+                <button type="submit" class="btn btn-danger" name="confirm_delete_recursive">Delete recursively</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary" name="confirm_delete">Delete</a>
         {% endif %}
-        <button type="submit" class="btn btn-primary" name="confirm_delete">Delete</a>
         <button type="button" class="btn btn-default" data-dismiss="modal" name="cancel_delete">Cancel</button>
       </div>
     </div>

@@ -116,6 +116,11 @@ def edit_init(request, session, tab):
     """
     ro, view_params = view_init(request, session, tab)
 
+    warn_links = [link for link in ro.out_links if link.type == 'produce']
+    error_links = [link for link in ro.in_links if link.type != 'contains']
+    view_params["warn_links"] = warn_links
+    view_params["error_links"] = error_links
+
     if not view_params["allow_edit"]:
         msg = "Access to %s edition not granted for you" % ro.id
         request.session.flash(msg, 'warning')

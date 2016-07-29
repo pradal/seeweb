@@ -233,7 +233,9 @@ def generate_default_ro_avatar(ro):
     root = dirname(__file__)
     pth = join(root, 'ro', ro.type, 'static', 'default_avatar.png')
     if not exists(pth):
-        pth = join(root, "static", "ro_avatar.png")
+        pth = join(root, 'rodata', ro.type, 'static', 'default_avatar.png')
+        if not exists(pth):
+            pth = join(root, "static", "ro_avatar.png")
     img = Image.open(pth)
     _upload_avatar(img, ro, 'ro')
 

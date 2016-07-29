@@ -6,6 +6,14 @@ from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
 
 
+def get_data_def(pdef, did):
+    for data in pdef['data']:
+        if data['id'] == did:
+            return data
+
+    raise KeyError("no data recorded with this id")
+
+
 class ROWorkflowProv(ResearchObject):
     """Research Object that contains execution provenance of a workflow
     """
@@ -56,10 +64,37 @@ class ROWorkflowProv(ResearchObject):
 
         # link to workflow nodes associated with each process?
 
-        # link to data produced
-        for data_obj in loc_def["data"]:
-            if data_obj["type"] == "$ref":
-                ROLink.connect(session, self.id, data_obj["value"], 'produce')
+        # link to external data consumed
+        input_data = set()
+        for pexec in ro_def["executions"]:
+            for port in pexec['inputs']:
+                if port['data'] is not None:
+                    input_data.add(port['data'])
+
+        input_ref = set()
+        for did in input_data:
+            ddef = get_data_def(ro_def, did)
+            if ddef['type'] == 'ref':
+                input_ref.add(ddef['value'])
+
+        for did in input_ref:
+            ROLink.connect(session, self.id, did, 'consume')
+
+        # link to external data produced
+        output_data = set()
+        for pexec in ro_def["executions"]:
+            for port in pexec['outputs']:
+                if port['data'] is not None:
+                    output_data.add(port['data'])
+
+        output_ref = set()
+        for did in output_data:
+            ddef = get_data_def(ro_def, did)
+            if ddef['type'] == 'ref':
+                output_ref.add(ddef['value'])
+
+        for did in output_ref:
+            ROLink.connect(session, self.id, did, 'produce')
 
     def repr_json(self, full=False):
         """Create a json representation of this object

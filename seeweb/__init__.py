@@ -126,6 +126,23 @@ def main(global_config, **settings):
                 mod = import_module(modname)
                 config.add_route(mod.route_name, mod.route_url)
 
+    # RO data objects
+    for dname in glob("seeweb/rodata/*/"):
+        dname = dname.replace("\\", "/")
+        ro_type = basename(dirname(dname))
+        static_pth = dname + "static"
+        if exists(static_pth):
+            config.add_static_view(name='static_%s' % ro_type,
+                                   path='seeweb:%s' % static_pth[7:],
+                                   cache_max_age=3600)
+
+        for view_pth in glob(dname + "views/*.py"):
+            view_name = splitext(basename(view_pth))[0]
+            if view_name != "__init__":
+                modname = splitext(view_pth)[0].replace("/", ".")
+                mod = import_module(modname)
+                config.add_route(mod.route_name, mod.route_url)
+
     # REST server
     for action in ("connect", "disconnect", "register", "remove", "search"):
         config.add_route('ro_rest_%s' % action, 'rest/ro/%s' % action)

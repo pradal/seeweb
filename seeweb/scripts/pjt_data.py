@@ -1,6 +1,6 @@
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.container.models.ro_container import ROContainer
-from seeweb.ro.scene3d.models.ro_scene3d import ROScene3d
+from seeweb.rodata.scene3d.models.ro_scene3d import ROScene3d
 
 
 def main(session, user, container):

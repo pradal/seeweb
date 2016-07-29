@@ -14,10 +14,10 @@ from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
 from seeweb.ro.interface.models.ro_interface import ROInterface
-from seeweb.ro.scene3d.models.ro_scene3d import ROScene3d
 from seeweb.ro.workflow.models.ro_workflow import ROWorkflow
 from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
+from seeweb.rodata.scene3d.models.ro_scene3d import ROScene3d
 
 
 ro_factory = dict(ro=ResearchObject,

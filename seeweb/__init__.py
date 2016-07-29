@@ -126,11 +126,9 @@ def main(global_config, **settings):
                 mod = import_module(modname)
                 config.add_route(mod.route_name, mod.route_url)
 
-    config.add_route('ro_rest_connect', 'rest/ro/connect')
-    config.add_route('ro_rest_disconnect', 'rest/ro/disconnect')
-    config.add_route('ro_rest_register', 'rest/ro/register')
-    config.add_route('ro_rest_remove', 'rest/ro/remove')
-    config.add_route('ro_rest_search', 'rest/ro/search')
+    # REST server
+    for action in ("connect", "disconnect", "register", "remove", "search"):
+        config.add_route('ro_rest_%s' % action, 'rest/ro/%s' % action)
 
     config.scan()
 

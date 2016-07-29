@@ -1,6 +1,7 @@
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.data.models.ro_data import ROData
+from seeweb.rodata.image.models.ro_image import ROImage
 from seeweb.rodata.scene3d.models.ro_scene3d import ROScene3d
 
 
@@ -26,6 +27,14 @@ def main(session, user, container):
     rod = ROData()
     rod.init(session, dict(owner=user.id, name="test data", value=value))
     ROLink.connect(session, roc.id, rod.id, "contains")
+
+    # image
+    with open("seeweb/rodata/image/static/default_avatar.png", 'rb') as f:
+        value = f.read()
+
+    roi = ROImage()
+    roi.init(session, dict(owner=user.id, name="test image", value=value))
+    ROLink.connect(session, roc.id, roi.id, "contains")
 
     # scene3D
     with open("seeweb/scripts/scene.json", 'r') as f:

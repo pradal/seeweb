@@ -17,12 +17,14 @@ from seeweb.ro.interface.models.ro_interface import ROInterface
 from seeweb.ro.workflow.models.ro_workflow import ROWorkflow
 from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
+from seeweb.rodata.image.models.ro_image import ROImage
 from seeweb.rodata.scene3d.models.ro_scene3d import ROScene3d
 
 
 ro_factory = dict(ro=ResearchObject,
                   article=ROArticle,
                   container=ROContainer,
+                  image=ROImage,
                   interface=ROInterface,
                   scene3d=ROScene3d,
                   workflow=ROWorkflow,

@@ -18,21 +18,33 @@ class ResearchObject(Base, Described, Authorized):
     """
     __tablename__ = 'ros'
 
+    # unique id used to differentiate ROs
     id = Column(String(32), nullable=False, primary_key=True)
+
+    # type of RO
     type = Column(String(50))
 
+    # creation attributes
     owner = Column(String(255), ForeignKey("users.id"), nullable=False)
     created = Column(DateTime, nullable=False)
 
     version = Column(Integer, nullable=False)
+
+    # common name associated with this RO, not necessarily unique
     name = Column(Text, default="")
 
+    # remote url, path or object that was used to produce this RO
     remote = Column(Text, default="")
+
+    # all attributes that are not necessary when performing a search
+    # in SEE database
     definition = Column(Text, default="{}")
 
+    # View, Edit policy attributes
     public = Column(Boolean, default=False)
     auth = relationship("ROPolicy")
 
+    # links to other ROs
     out_links = relationship("ROLink",
                              foreign_keys="ROLink.source",
                              order_by="ROLink.id")

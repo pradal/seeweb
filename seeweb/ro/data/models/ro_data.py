@@ -6,7 +6,8 @@ from seeweb.models.research_object import ResearchObject
 
 
 class ROData(ResearchObject):
-    """Research Object base class for all ROs that have a binary content
+    """Research Object base class for all ROs that associate a value
+    to a given type (or interface).
     """
     __tablename__ = 'ro_datas'
 

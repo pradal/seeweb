@@ -1,4 +1,5 @@
 from jinja2 import Markup
+import json
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -17,6 +18,6 @@ def view(request):
 
     view_params['description'] = Markup(ro.html_description())
 
-    view_params['value'] = ro.value
+    view_params['value'] = json.loads(ro.value)
 
     return view_params

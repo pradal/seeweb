@@ -5,7 +5,7 @@ from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
 
-any_uid = "87b0e17658cc11e6afb6d4bed973e64a"
+any_uid = u"87b0e17658cc11e6afb6d4bed973e64a"
 
 
 class ROInterface(ResearchObject):

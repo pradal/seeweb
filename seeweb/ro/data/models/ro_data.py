@@ -1,3 +1,4 @@
+import json
 from sqlalchemy import Column, ForeignKey, String, Text
 
 from seeweb.models.models import get_by_id
@@ -48,12 +49,12 @@ class ROData(ResearchObject):
         """
         loc_def = dict(ro_def)
         interface = loc_def.pop('interface', any_uid)
-        value = loc_def.pop('value', "null")
+        value = loc_def.pop('value', None)
 
         ResearchObject.init(self, session, loc_def)
 
         self.interface = interface
-        self.value = value
+        self.value = json.dumps(value)
 
     def repr_json(self, full=False):
         """Create a json representation of this object
@@ -69,6 +70,6 @@ class ROData(ResearchObject):
 
         if full:
             d['interface'] = self.interface
-            d['value'] = self.value
+            d['value'] = json.loads(self.value)
 
         return d

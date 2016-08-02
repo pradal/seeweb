@@ -1,3 +1,5 @@
+{% from 'templates/ro/macro.jinja2' import roid with context %}
+
 {% extends "templates/ro/layout_view_min.jinja2" %}
 
 {% block ro_view_body -%}
@@ -19,11 +21,43 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Content</h3>
+        <h3 class="panel-title">Ancestors</h3>
     </div>
     <div class="panel-body">
-
+        {% if ancestors|length == 0 %}
+        <p>No ancestors</p>
+        {% else %}
+            <ul>
+            {% for ancestor in ancestors %}
+                <li>{{ roid(ancestor.id) }} ({{ ancestor.name }})</ul>
+            {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Schema</h3>
+    </div>
+    <div class="panel-body">
+        <div id="ro_schema" class="well">
+        </div>
+    </div>
+</div>
+
+{%- endblock %}
+
+{% block ro_view_js -%}
+
+<script>
+    //obj to render.
+    var obj = {{ ro.schema|safe }};
+
+    var node = new PrettyJSON.view.Node({
+      el:$('#ro_schema'),
+      data:obj
+    });
+</script>
 
 {%- endblock %}

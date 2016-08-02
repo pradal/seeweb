@@ -33,8 +33,12 @@ class ResearchObject(Base, Described, Authorized):
     public = Column(Boolean, default=False)
     auth = relationship("ROPolicy")
 
-    out_links = relationship("ROLink", foreign_keys="ROLink.source")
-    in_links = relationship("ROLink", foreign_keys="ROLink.target")
+    out_links = relationship("ROLink",
+                             foreign_keys="ROLink.source",
+                             order_by="ROLink.id")
+    in_links = relationship("ROLink",
+                            foreign_keys="ROLink.target",
+                            order_by="ROLink.id")
 
     __mapper_args__ = {
         'polymorphic_on': type,
@@ -78,6 +82,8 @@ class ResearchObject(Base, Described, Authorized):
         self.remote = loc_def.pop('remote', "")
 
         self.store_description(loc_def.pop('description', ""))
+
+        self.public = loc_def.pop('public', False)
 
         self.store_definition(loc_def)
 

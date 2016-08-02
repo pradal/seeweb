@@ -47,7 +47,7 @@ class ROContainer(ResearchObject):
         # remove attributes locally stored
         loc_def = dict(ro_def)
         contents = loc_def.pop('contents', [])
-        ctype = loc_def.pop('ctype', "project")
+        ctype = loc_def.pop('ctype', "container")
 
         ResearchObject.init(self, session, loc_def)
         self.ctype = ctype

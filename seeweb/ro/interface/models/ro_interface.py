@@ -3,6 +3,7 @@ from sqlalchemy import Column, ForeignKey, String, Text
 
 from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
+from seeweb.models.ro_link import ROLink
 
 
 class ROInterface(ResearchObject):
@@ -13,7 +14,6 @@ class ROInterface(ResearchObject):
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
 
     schema = Column(Text, default="{}")
-    ancestors = Column(Text, default="[]")
 
     __mapper_args__ = {
         'polymorphic_identity': 'interface',
@@ -49,11 +49,12 @@ class ROInterface(ResearchObject):
         # remove attributes locally stored
         loc_def = dict(ro_def)
         schema = loc_def.pop('schema', "{}")
-        ancestors = loc_def.pop('ancestors', "[]")
+        ancestors = loc_def.pop('ancestors', [])
 
         ResearchObject.init(self, session, loc_def)
         self.schema = schema
-        self.ancestors = ancestors
+        for ancestor in ancestors:
+            ROLink.connect(session, ancestor, self.id, 'is_ancestor_of')
 
     def repr_json(self, full=False):
         """Create a json representation of this object

@@ -59,7 +59,6 @@ class ROData(ResearchObject):
         Returns:
             dict
         """
-        print "JSON\n" * 10, full
         d = ResearchObject.repr_json(self, full=full)
 
         if full:

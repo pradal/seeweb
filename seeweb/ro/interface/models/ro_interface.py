@@ -70,6 +70,7 @@ class ROInterface(ResearchObject):
 
         if full:
             d['schema'] = json.loads(self.schema)
-            d['ancestors'] = json.loads(self.ancestors)
+            d['ancestors'] = [link.source for link in self.in_links
+                              if link.type == 'is_ancestor_of']
 
         return d

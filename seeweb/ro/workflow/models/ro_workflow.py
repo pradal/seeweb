@@ -5,6 +5,9 @@ from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
 
 
+__all__ = ["ROWorkflow"]
+
+
 class ROWorkflow(ResearchObject):
     """Research Object that contains node for workflows
     """

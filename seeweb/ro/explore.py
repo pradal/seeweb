@@ -1,4 +1,6 @@
 from dateutil.parser import parse
+from glob import glob
+from importlib import import_module
 import json
 from os import remove
 from os.path import join as pj
@@ -8,28 +10,27 @@ from zipfile import BadZipfile, ZipFile
 
 from seeweb.avatar import upload_ro_avatar
 from seeweb.io import find_files
-from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
-from seeweb.ro.article.models.ro_article import ROArticle
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
-from seeweb.ro.interface.models.ro_interface import ROInterface
-from seeweb.ro.workflow.models.ro_workflow import ROWorkflow
-from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
-from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
-from seeweb.rodata.image.models.ro_image import ROImage
-from seeweb.rodata.scene3d.models.ro_scene3d import ROScene3d
 
+# construct RO factory
+ro_factory = {}
 
-ro_factory = dict(ro=ResearchObject,
-                  article=ROArticle,
-                  container=ROContainer,
-                  image=ROImage,
-                  interface=ROInterface,
-                  scene3d=ROScene3d,
-                  workflow=ROWorkflow,
-                  workflow_node=ROWorkflowNode,
-                  workflow_prov=ROWorkflowProv)
+for dname in ("ro", "rodata"):
+    for dname in glob("seeweb/%s/*/" % dname):
+        dname = dname.replace("\\", "/")
+
+        for model_pth in glob(dname + "models/*.py"):
+            filename = splitext(basename(model_pth))[0]
+            if filename != "__init__":
+                modname = splitext(model_pth)[0].replace("/", ".")
+                mod = import_module(modname)
+                if hasattr(mod, "__all__"):
+                    for name in mod.__all__:
+                        RO = getattr(mod, name)
+                        ro_type = RO.__mapper_args__['polymorphic_identity']
+                        ro_factory[ro_type] = RO
 
 
 def validate(pth):

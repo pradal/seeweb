@@ -7,6 +7,9 @@ from seeweb.models.research_object import ResearchObject
 from seeweb.ro.interface.models.ro_interface import any_uid
 
 
+__all__ = ["ROData"]
+
+
 class ROData(ResearchObject):
     """Research Object base class for all ROs that associate a value
     to a given type (or interface).

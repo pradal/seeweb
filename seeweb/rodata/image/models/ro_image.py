@@ -4,6 +4,9 @@ from seeweb.models.models import get_by_id
 from seeweb.ro.data.models.ro_data import ROData
 
 
+__all__ = ["ROImage"]
+
+
 class ROImage(ROData):
     """Research Object of type png image
     """

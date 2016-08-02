@@ -1,9 +1,11 @@
-from itertools import chain
 from sqlalchemy import Column, ForeignKey, String
 
 from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
+
+
+__all__ = ["ROWorkflowProv"]
 
 
 def get_data_def(pdef, did):

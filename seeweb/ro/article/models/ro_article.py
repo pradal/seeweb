@@ -4,6 +4,9 @@ from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
 
 
+__all__ = ["ROArticle"]
+
+
 class ROArticle(ResearchObject):
     """Research Object that contains reference to an article
     """

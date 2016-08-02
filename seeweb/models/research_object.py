@@ -13,6 +13,9 @@ from .described import Described
 from .models import Base, get_by_id
 
 
+__all__ = ["ResearchObject"]
+
+
 class ResearchObject(Base, Described, Authorized):
     """Base class for all research objects
     """

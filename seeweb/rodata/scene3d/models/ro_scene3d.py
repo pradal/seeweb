@@ -4,6 +4,9 @@ from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
 
 
+__all__ = ["ROScene3d"]
+
+
 class ROScene3d(ResearchObject):
     """Research Object to display 3D stuff
     """

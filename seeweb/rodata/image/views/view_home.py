@@ -1,4 +1,3 @@
-from base64 import b64encode
 from jinja2 import Markup
 from pyramid.view import view_config
 
@@ -18,6 +17,6 @@ def view(request):
 
     view_params['description'] = Markup(ro.html_description())
 
-    view_params['value'] = b64encode(ro.value)
+    view_params['value'] = ro.value
 
     return view_params

@@ -28,7 +28,7 @@ def main(session, user, container):
     top.init(session, dict(owner=user.id, name="openalea", contents=[roa]))
 
     itrans = {}
-    for iname in ("any", "IBool", "ICodeStr", "IColor", "IData", "IDateTime",
+    for iname in ("IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",
                   "IEnumStr", "IFileStr", "IFloat",
                   "IFunction", "IImage", "IInt", "IRGBColor",

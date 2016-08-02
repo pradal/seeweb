@@ -1,10 +1,11 @@
+from base64 import b64encode
 import json
 
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.data.models.ro_data import ROData
 from seeweb.rodata.image.models.ro_image import ROImage
-from seeweb.ro.interface.models.ro_interface import ROInterface
+from seeweb.ro.interface.models.ro_interface import any_uid, ROInterface
 from seeweb.rodata.scene3d.models.ro_scene3d import ROScene3d
 
 
@@ -35,7 +36,15 @@ def main(session, user, container):
     # register common data interfaces
     roc = ROContainer()
     roc.init(session, dict(id="81c69a8558a311e6afb6d4bed973e64a",
-                           owner=user.id, name="interfaces", public=True))
+                           owner=user.id, name="interfaces", public=True,
+                           description="Store commonly used interfaces"))
+
+    roi = ROInterface()
+    roi.init(session, dict(id=any_uid,
+                           owner=user.id, name="any", public=True,
+                           description="Interface used for data that don't "
+                                       "have a specific interface"))
+    ROLink.connect(session, roc.id, roi.id, 'contains')
 
     ropy = ROInterface()
     ropy.init(session, dict(id="dc5b10c858a611e6afb6d4bed973e64a",
@@ -110,7 +119,7 @@ def main(session, user, container):
 
     # raw data
     with open("seeweb/ro/data/static/default_avatar.png", 'rb') as f:
-        value = f.read()
+        value = b64encode(f.read())
 
     rod = ROData()
     rod.init(session, dict(owner=user.id, name="test data", value=value))
@@ -118,7 +127,7 @@ def main(session, user, container):
 
     # image
     with open("seeweb/ro/data/static/default_avatar.png", 'rb') as f:
-        value = f.read()
+        value = b64encode(f.read())
 
     roi = ROImage()
     roi.init(session, dict(id="03faa88158bb11e6afb6d4bed973e64a",

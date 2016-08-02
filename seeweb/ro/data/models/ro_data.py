@@ -1,8 +1,9 @@
-from base64 import b64encode
-from sqlalchemy import Column, ForeignKey, LargeBinary, String
+from sqlalchemy import Column, ForeignKey, String, Text
 
 from seeweb.models.models import get_by_id
 from seeweb.models.research_object import ResearchObject
+
+from seeweb.ro.interface.models.ro_interface import any_uid
 
 
 class ROData(ResearchObject):
@@ -12,7 +13,8 @@ class ROData(ResearchObject):
     __tablename__ = 'ro_datas'
 
     id = Column(String(255), ForeignKey('ros.id'), primary_key=True)
-    value = Column(LargeBinary(), default="")
+    interface = Column(String(255), ForeignKey('ro_interfaces.id'))
+    value = Column(Text(), default="null")
 
     __mapper_args__ = {
         'polymorphic_identity': 'data',
@@ -45,9 +47,12 @@ class ROData(ResearchObject):
             None
         """
         loc_def = dict(ro_def)
-        value = loc_def.pop('value', "")
+        interface = loc_def.pop('interface', any_uid)
+        value = loc_def.pop('value', "null")
 
         ResearchObject.init(self, session, loc_def)
+
+        self.interface = interface
         self.value = value
 
     def repr_json(self, full=False):
@@ -63,6 +68,7 @@ class ROData(ResearchObject):
         d = ResearchObject.repr_json(self, full=full)
 
         if full:
-            d['value'] = b64encode(self.value)
+            d['interface'] = self.interface
+            d['value'] = self.value
 
         return d

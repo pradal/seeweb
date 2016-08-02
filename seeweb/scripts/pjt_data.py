@@ -117,11 +117,13 @@ def main(session, user, container):
     ROLink.connect(session, roc.id, rod.id, "contains")
 
     # image
-    with open("seeweb/rodata/image/static/default_avatar.png", 'rb') as f:
+    with open("seeweb/ro/data/static/default_avatar.png", 'rb') as f:
         value = f.read()
 
     roi = ROImage()
-    roi.init(session, dict(owner=user.id, name="test image", value=value))
+    roi.init(session, dict(id="03faa88158bb11e6afb6d4bed973e64a",
+                           owner=user.id, name="test image", value=value,
+                           description="Sample image for testing purpose"))
     ROLink.connect(session, roc.id, roi.id, "contains")
 
     # scene3D

@@ -1,4 +1,4 @@
-from base64 import b64encode, b64decode
+from base64 import b64encode
 from sqlalchemy import Column, ForeignKey, LargeBinary, String
 
 from seeweb.models.models import get_by_id
@@ -47,7 +47,7 @@ class ROData(ResearchObject):
         value = loc_def.pop('value', "")
 
         ResearchObject.init(self, session, loc_def)
-        self.value = b64decode(value)
+        self.value = value
 
     def repr_json(self, full=False):
         """Create a json representation of this object

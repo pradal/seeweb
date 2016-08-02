@@ -1,3 +1,4 @@
+from base64 import b64decode
 from dateutil.parser import parse
 import json
 from os import remove
@@ -69,8 +70,12 @@ def register(session, ro_type, ro_def):
     if ro_type not in ro_factory:
         raise UserWarning("unrecognized RO type '%s'" % ro_type)
 
+    loc_def = dict(ro_def)
+    if 'value' in loc_def:
+        loc_def['value'] = b64decode(loc_def['value'])
+
     ro = ro_factory[ro_type]()
-    ro.init(session, ro_def)
+    ro.init(session, loc_def)
 
     return ro
 

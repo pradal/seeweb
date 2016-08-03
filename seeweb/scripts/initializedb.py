@@ -88,5 +88,5 @@ def main(argv=sys.argv):
         init_sample.main(session)
 
         pjt_auth_managment.main(session, users[0], containers[0])
-        pjt_workflow.main(session, users[0], containers[0])
         pjt_data.main(session, users[0], containers[0])
+        pjt_workflow.main(session, users[0], containers[0])

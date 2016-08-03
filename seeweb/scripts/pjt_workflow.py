@@ -10,6 +10,30 @@ from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.ro.workflow_prov.models.ro_workflow_prov import ROWorkflowProv
 
 
+def get_interface_by_name(session, name):
+    """Fetch id of unique RO with given name
+
+    Raises: UserWarning if name is not unique
+            KeyError if name does not exists
+
+    Args:
+        session (DBSession): an opened session
+        name (str): name associated with RO
+
+    Returns:
+        (str): id of RO
+    """
+    items = session.query(ROInterface).filter(ROInterface.name == name).all()
+
+    if len(items) == 0:
+        return None
+
+    if len(items) > 1:
+        return None
+
+    return items[0]
+
+
 def main(session, user, container):
     """Create workflow related projects.
 
@@ -35,8 +59,14 @@ def main(session, user, container):
                   "IFunction", "IImage", "IInt", "IRGBColor",
                   "ISequence", "ISlice", "IStr", "ITextStr",
                   "ITuple", "ITuple3"):
+        standard_interface = get_interface_by_name(session, iname[1:].lower())
+        if standard_interface is not None:
+            ancestors = [standard_interface.id]
+        else:
+            ancestors = []
+
         roi = ROInterface()
-        roi.init(session, dict(owner=user.id, name=iname))
+        roi.init(session, dict(owner=user.id, name=iname, ancestors=ancestors))
 
         ROLink.connect(session, roa.id, roi.id, "contains")
         itrans[iname] = roi.id

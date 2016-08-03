@@ -53,7 +53,7 @@ def view(request):
                 val = "<p>%s</p>" % data_obj["value"]
             elif dtype == "url":
                 val = "<p>%s</p>" % data_obj["value"]
-            elif dtype == "image":
+            elif dtype in ("image", "IImage"):
                 img_data = data_obj["value"].replace("\n", "")
                 val = '<img src="data:image/png;base64,%s" />' % img_data
             else:

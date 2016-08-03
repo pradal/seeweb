@@ -136,8 +136,8 @@ def main(session, user, container):
                              ]),
                         dict(node=2, time_init=12, time_end=13,
                              inputs=[
-                                 {"port": "in1", "data": data[0]['id']},
-                                 {"port": "in2", "data": data[0]['id']}
+                                 {"port": "in1", "data": data[1]['id']},
+                                 {"port": "in2", "data": data[3]['id']}
                              ],
                              outputs=[
                                  {"port": "ret", "data": data[4]['id']}

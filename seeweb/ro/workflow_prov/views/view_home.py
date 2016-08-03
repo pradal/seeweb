@@ -1,12 +1,9 @@
-import base64
-from itertools import chain
 import json
 from jinja2 import Markup
 from openalea.wlformat.convert import svg
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
-from seeweb.ro.interface.models.ro_interface import ROInterface
 from seeweb.ro.workflow.models.ro_workflow import ROWorkflow
 from seeweb.ro.workflow_node.models.ro_workflow_node import ROWorkflowNode
 from seeweb.views.ro.commons import view_init_min
@@ -38,17 +35,6 @@ def view(request):
             else:
                 store[nid] = wnode.repr_json(full=True)
                 store[nid]['url'] = request.route_url('ro_view_home', uid=nid)
-
-        # for nid, node in store.items():
-        #     for port in chain(node['inputs'], node['outputs']):
-        #         iid = port['interface']
-        #         iface = ROInterface.get(session, iid)
-        #         if iface is None:
-        #             pass
-        #         else:
-        #             store[iid] = iface.repr_json(full=True)
-        #             store[iid]['url'] = request.route_url('ro_view_home',
-        #                                                   uid=iid)
 
         txt, viewbox = svg.export_workflow(workflow_def, store, (800, 600))
         view_params['svg_repr'] = txt

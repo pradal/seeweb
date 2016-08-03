@@ -103,7 +103,7 @@
                     <p>This RO is still linked to these other ROs<p>
                     <ul>
                     {% for link in warn_links %}
-                        <li>self: {{ link.type }}: {{ roid(link.source) }}</li>
+                        <li>self: {{ link.type }}: {{ roid(link.target) }}</li>
                     {% endfor %}
                     </ul>
                 {% endif %}

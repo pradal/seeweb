@@ -24,6 +24,8 @@ class ROData(ResearchObject):
         'polymorphic_identity': 'data',
     }
 
+    implements = any_uid
+
     def __repr__(self):
         return "<ROData(id='%s'')>" % self.id
 
@@ -51,7 +53,7 @@ class ROData(ResearchObject):
             None
         """
         loc_def = dict(ro_def)
-        interface = loc_def.pop('interface', any_uid)
+        interface = loc_def.pop('interface', self.implements)
         value = loc_def.pop('value', None)
 
         ResearchObject.init(self, session, loc_def)

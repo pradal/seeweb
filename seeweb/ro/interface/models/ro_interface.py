@@ -28,6 +28,15 @@ class ROInterface(ResearchObject):
         return "<ROInterface(id='%s', name='%s')>" % (self.id,
                                                       self.name)
 
+    def ancestors(self):
+        """Fetch ancestors of this interface
+
+        Returns:
+            (list of str): list of ancestors ids
+        """
+        return [link.source for link in self.in_links
+                if link.type == 'is_ancestor_of']
+
     @staticmethod
     def get(session, uid):
         """Fetch a given RO in the database.
@@ -75,7 +84,6 @@ class ROInterface(ResearchObject):
 
         if full:
             d['schema'] = json.loads(self.schema)
-            d['ancestors'] = [link.source for link in self.in_links
-                              if link.type == 'is_ancestor_of']
+            d['ancestors'] = self.ancestors()
 
         return d

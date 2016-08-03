@@ -101,7 +101,7 @@ def main(session, user, container):
     data = [dict(id=uuid1().hex, type="int", value=1),
             dict(id=uuid1().hex, type="int", value=10),
             dict(id=uuid1().hex, type="str", value="Killroy was here"),
-            dict(id=uuid1().hex, type="png", value=graph_pulse)
+            dict(id=uuid1().hex, type="image", value=graph_pulse)
             ]
 
     prov_def = dict(name="sample_provenance",

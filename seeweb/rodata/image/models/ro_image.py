@@ -18,6 +18,8 @@ class ROImage(ROData):
         'polymorphic_identity': 'image',
     }
 
+    implements = "a58b6a3d58d311e6afb6d4bed973e64a"
+
     def __repr__(self):
         return "<ROImage(id='%s'')>" % self.id
 

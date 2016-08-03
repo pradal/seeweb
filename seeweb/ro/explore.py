@@ -10,12 +10,15 @@ from zipfile import BadZipfile, ZipFile
 
 from seeweb.avatar import upload_ro_avatar
 from seeweb.io import find_files
+from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
 from seeweb.ro.container.models.ro_container import ROContainer
 from seeweb.ro.explore_sources import fetch_avatar, fetch_readme
+from seeweb.ro.interface.models.ro_interface import ROInterface
+
 
 # construct RO factory
-ro_factory = {}
+ro_factory = dict(ro=ResearchObject)
 
 for dname in ("ro", "rodata"):
     for dname in glob("seeweb/%s/*/" % dname):
@@ -29,8 +32,55 @@ for dname in ("ro", "rodata"):
                 if hasattr(mod, "__all__"):
                     for name in mod.__all__:
                         RO = getattr(mod, name)
-                        ro_type = RO.__mapper_args__['polymorphic_identity']
-                        ro_factory[ro_type] = RO
+                        typ = RO.__mapper_args__['polymorphic_identity']
+                        ro_factory[typ] = RO
+
+
+# construct Interface factory
+data_factory = {}
+
+for dname in ("ro", "rodata"):
+    for dname in glob("seeweb/%s/*/" % dname):
+        dname = dname.replace("\\", "/")
+
+        for model_pth in glob(dname + "models/*.py"):
+            filename = splitext(basename(model_pth))[0]
+            if filename != "__init__":
+                modname = splitext(model_pth)[0].replace("/", ".")
+                mod = import_module(modname)
+                if hasattr(mod, "__all__"):
+                    for name in mod.__all__:
+                        RO = getattr(mod, name)
+                        try:
+                            typ = RO.__mapper_args__['polymorphic_identity']
+                            data_factory[RO.implements] = typ
+                        except AttributeError:
+                            pass
+
+
+def data_type(session, interface):
+    """Find a RO type that implements this interface
+    or its closest ancestor.
+
+    Notes: default to 'data'
+
+    Args:
+        session (Session): previously open session
+        interface (str): uid of interface
+
+    Returns:
+        (str): name of RO type
+    """
+    front = [interface]
+    while len(front) > 0:
+        uid = front.pop(0)
+        if uid in data_factory:
+            return data_factory[uid]
+
+        roi = ROInterface.get(session, uid)
+        front.extend(roi.ancestors())
+
+    return 'data'
 
 
 def validate(pth):
@@ -57,7 +107,7 @@ def validate(pth):
 
 
 def register(session, ro_type, ro_def):
-    """
+    """Register a new RO in the database
 
     Args:
         session (DBSession):
@@ -70,6 +120,28 @@ def register(session, ro_type, ro_def):
     if ro_type not in ro_factory:
         raise UserWarning("unrecognized RO type '%s'" % ro_type)
 
+    ro = ro_factory[ro_type]()
+    ro.init(session, ro_def)
+
+    return ro
+
+
+def register_data(session, ro_def):
+    """Register a new RO data in the database
+
+    Args:
+        session (DBSession):
+        ro_def (dict): json def of RO
+
+    Returns:
+        (ROData): or one of its subclass
+    """
+    # get RO type that implement this interface
+    ro_type = data_type(session, ro_def['interface'])
+    print "fac", data_factory, "\n" * 10
+    print "ro_type", ro_type, "\n" * 10
+
+    # create RO data
     ro = ro_factory[ro_type]()
     ro.init(session, ro_def)
 

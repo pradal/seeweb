@@ -1,4 +1,3 @@
-from base64 import b64encode
 from jinja2 import Markup
 from pyramid.view import view_config
 
@@ -20,7 +19,7 @@ def view(request):
 
     value = ""
     for i in range(10):
-        value += b64encode(ro.value[(i * 50):((i + 1) * 50)])
+        value += ro.value[(i * 50):((i + 1) * 50)]
         value += "\n"
 
     if len(ro.value) > 500:

@@ -138,8 +138,6 @@ def register_data(session, ro_def):
     """
     # get RO type that implement this interface
     ro_type = data_type(session, ro_def['interface'])
-    print "fac", data_factory, "\n" * 10
-    print "ro_type", ro_type, "\n" * 10
 
     # create RO data
     ro = ro_factory[ro_type]()

@@ -12,110 +12,126 @@
 <div id="scene3d_canvas">
 </div>
 
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Scene definition</h3>
+    </div>
+    <div class="panel-body">
+        <div id="scene_def" class="well">
+        </div>
+    </div>
+</div>
+
 {%- endblock %}
 
 
 {% block ro_view_js -%}
-    <script type="text/javascript" src="{{ request.static_url('seeweb:rodata/scene3d/static/three.min.js') }}"></script>
-    <script type="text/javascript" src="{{ request.static_url('seeweb:rodata/scene3d/static/TrackballControls.js') }}"></script>
 
-    <script>
-        var container;
-        var camera, controls, scene, renderer;
+<script>
+    //obj to render.
+    var obj = {{ scene }};
 
-        $(function() {
-            $('#toggle_mouse_capture').change(function() {
-                if ($('#toggle_mouse_capture').prop('checked')) {
-                    window.addEventListener('DOMMouseScroll',wheel,false);
-                    controls.addEventListener( 'change', render );
-                } else {
-                    window.removeEventListener('DOMMouseScroll', wheel);
-                    controls.removeEventListener( 'change', render );
-                }
-            })
-          })
+    var node = new PrettyJSON.view.Node({
+      el:$('#scene_def'),
+      data:obj
+    });
+</script>
 
+<script type="text/javascript" src="{{ request.static_url('seeweb:rodata/scene3d/static/three.min.js') }}"></script>
+<script type="text/javascript" src="{{ request.static_url('seeweb:rodata/scene3d/static/TrackballControls.js') }}"></script>
 
-        init();
-        animate();
+<script>
+    var container;
+    var camera, controls, scene, renderer;
+    var mesh;
 
-        function init() {
-            container = document.getElementById('scene3d_canvas');
-            container.style.width = '800px';
-            container.style.height = '600px';
-
-            camera = new THREE.PerspectiveCamera( 70, 800 / 600, 1, 10000 );
-            camera.position.z = 50;
-
-            controls = new THREE.TrackballControls( camera );
-
-            controls.rotateSpeed = 1.0;
-            controls.zoomSpeed = 1.2;
-            controls.panSpeed = 0.8;
-
-            controls.noZoom = false;
-            controls.noPan = false;
-
-            controls.staticMoving = true;
-            controls.dynamicDampingFactor = 0.3;
-
-            controls.keys = [ 65, 83, 68 ];
-
-
-            scene = new THREE.Scene();
-
-            var light = new THREE.DirectionalLight( 0xffffff, 1 );
-            light.position.set( 1, 1, 1 ).normalize();
-            scene.add( light );
-
-            var loader = new THREE.ObjectLoader();
-            var mesh = loader.parse({{ scene }});
-            if (mesh.type == "Scene") {
-                for (i in mesh.children) {
-                    scene.add(mesh.children[i]);
-                }
+    $(function() {
+        $('#toggle_mouse_capture').change(function() {
+            if ($('#toggle_mouse_capture').prop('checked')) {
+                window.addEventListener('DOMMouseScroll',wheel,false);
+                controls.addEventListener( 'change', render );
             } else {
-                scene.add(mesh);
+                window.removeEventListener('DOMMouseScroll', wheel);
+                controls.removeEventListener( 'change', render );
             }
+        })
+      })
 
-            renderer = new THREE.WebGLRenderer();
-            renderer.setClearColor( 0xf0f0f0 );
-            renderer.setPixelRatio( window.devicePixelRatio );
+
+    init();
+    animate();
+
+    function init() {
+        container = document.getElementById('scene3d_canvas');
+        container.style.width = '800px';
+        container.style.height = '600px';
+
+        camera = new THREE.PerspectiveCamera( 70, 800 / 600, 1, 10000 );
+        camera.position.z = 50;
+
+        controls = new THREE.TrackballControls( camera );
+
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.panSpeed = 0.8;
+
+        controls.noZoom = false;
+        controls.noPan = false;
+
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+
+        controls.keys = [ 65, 83, 68 ];
+
+
+        scene = new THREE.Scene();
+
+        var light = new THREE.DirectionalLight( 0xffffff, 1 );
+        light.position.set( 1, 1, 1 ).normalize();
+        scene.add( light );
+
+        var loader = new THREE.ObjectLoader();
+        mesh = loader.parse({{ scene }});
+        scene.add(mesh);
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor( 0xf0f0f0 );
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( 800, 600 );
+        renderer.sortObjects = false;
+        container.appendChild(renderer.domElement);
+
+
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        render();
+    }
+
+    function wheel(event)
+    {
+        event.preventDefault();
+        event.returnValue=false;
+    }
+
+    function onWindowResize() {
+            camera.aspect = 800 / 600.;
+            camera.updateProjectionMatrix();
+
             renderer.setSize( 800, 600 );
-            renderer.sortObjects = false;
-            container.appendChild(renderer.domElement);
 
-
-            window.addEventListener( 'resize', onWindowResize, false );
+            controls.handleResize();
 
             render();
         }
 
-        function wheel(event)
-        {
-            event.preventDefault();
-            event.returnValue=false;
-        }
+    function animate() {
+        requestAnimationFrame( animate );
+        controls.update();
+    }
 
-        function onWindowResize() {
-                camera.aspect = 800 / 600.;
-                camera.updateProjectionMatrix();
-
-                renderer.setSize( 800, 600 );
-
-                controls.handleResize();
-
-                render();
-            }
-
-        function animate() {
-            requestAnimationFrame( animate );
-            controls.update();
-        }
-
-        function render() {
-            renderer.render( scene, camera );
-        }
+    function render() {
+        renderer.render( scene, camera );
+    }
 </script>
 
 {%- endblock %}

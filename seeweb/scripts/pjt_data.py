@@ -112,12 +112,31 @@ def main(session, user, container):
                            schema=cvt_schema(schema), ancestors=[]))
     ROLink.connect(session, roc.id, roi.id, 'contains')
 
+    schema = dict(title="Interface for data of type 3D scenes",
+                  description="Json description of a 3D scene",
+                  type="array",
+                  minLength=1,
+                  items=dict(type="array",
+                             minLength=1,
+                             items=rgba_schema))
+
+    roi = ROInterface()
+    roi.init(session, dict(id=ROScene3d.implements,
+                           owner=user.id, name="scene3d", public=True,
+                           schema=cvt_schema(schema), ancestors=[]))
+    ROLink.connect(session, roc.id, roi.id, 'contains')
+
     # create a sample project with some common data examples
     roc = ROContainer()
-    roc.init(session, dict(owner=user.id, name="data", ctype="project"))
+    roc.init(session, dict(id="0a73ad11596111e6a3a6d4bed973e64a",
+                           owner=user.id, name="data", ctype="project"))
     ROLink.connect(session, container.id, roc.id, 'contains')
 
     # raw data
+    rod = ROData()
+    rod.init(session, dict(owner=user.id, name="test number", value=3.14159))
+    ROLink.connect(session, roc.id, rod.id, "contains")
+
     with open("seeweb/ro/data/static/default_avatar.png", 'rb') as f:
         value = b64encode(f.read())
 
@@ -137,8 +156,8 @@ def main(session, user, container):
 
     # scene3D
     with open("seeweb/scripts/scene.json", 'r') as f:
-        sc = f.read()
+        sc = json.load(f)
 
     rosc = ROScene3d()
-    rosc.init(session, dict(owner=user.id, name="test scene", scene=sc))
+    rosc.init(session, dict(owner=user.id, name="test scene", value=sc))
     ROLink.connect(session, roc.id, rosc.id, "contains")

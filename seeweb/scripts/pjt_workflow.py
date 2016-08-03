@@ -98,10 +98,14 @@ def main(session, user, container):
     with open("seeweb/scripts/gallery/graph_pulse.png", 'rb') as f:
         graph_pulse = b64encode(f.read())
 
+    with open("seeweb/scripts/sphere.json", 'r') as f:
+        sphere = json.load(f)
+
     data = [dict(id=uuid1().hex, type="int", value=1),
             dict(id=uuid1().hex, type="int", value=10),
             dict(id=uuid1().hex, type="str", value="Killroy was here"),
-            dict(id=uuid1().hex, type="image", value=graph_pulse)
+            dict(id=uuid1().hex, type="image", value=graph_pulse),
+            dict(id=uuid1().hex, type="scene3d", value=sphere)
             ]
 
     prov_def = dict(name="sample_provenance",
@@ -109,7 +113,7 @@ def main(session, user, container):
                     owner=user.id,
                     workflow=row.id,
                     time_init=10,
-                    time_end=11,
+                    time_end=14,
                     data=data,
                     parameters=[dict(node=0, port="in1", data=data[0]['id']),
                                 dict(node=0, port="in2", data=data[2]['id'])
@@ -129,6 +133,14 @@ def main(session, user, container):
                              ],
                              outputs=[
                                  {"port": "ret", "data": data[3]['id']}
+                             ]),
+                        dict(node=2, time_init=12, time_end=13,
+                             inputs=[
+                                 {"port": "in1", "data": data[0]['id']},
+                                 {"port": "in2", "data": data[0]['id']}
+                             ],
+                             outputs=[
+                                 {"port": "ret", "data": data[4]['id']}
                              ])
                     ]
                     )

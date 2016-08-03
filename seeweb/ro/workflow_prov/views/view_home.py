@@ -58,7 +58,7 @@ def view(request):
         fmt_data = {}
         for data_obj in prov['data']:
             dtype = data_obj['type']
-            if dtype == "$ref":  # internally used to reference another RO
+            if dtype == "ref":  # internally used to reference another RO
                 url = request.route_url('ro_view_home', uid=data_obj["value"])
                 val = '<p><a href="%s">link to RO</a></p>' % url
             elif dtype == "int":
@@ -67,11 +67,11 @@ def view(request):
                 val = "<p>%s</p>" % data_obj["value"]
             elif dtype == "url":
                 val = "<p>%s</p>" % data_obj["value"]
-            elif dtype == "png":
-                img_data = data_obj["value"].replace("\n", "")
+            elif dtype == "image":
+                img_data = data_obj["value"] #.replace("\n", "")
                 val = '<img src="data:image/png;base64,%s" />' % img_data
             else:
-                val = "<p>%s</p>" % data_obj["value"]
+                val = "<p>%s</p>" % json.dumps(data_obj["value"])
             fmt_data[data_obj['id']] = (dtype, val)
 
         for pexec in prov['executions']:

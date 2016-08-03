@@ -40,7 +40,7 @@ def main(session, user, container):
                            description="Store commonly used interfaces"))
 
     roi = ROInterface()
-    roi.init(session, dict(id=any_uid,
+    roi.init(session, dict(id=ROData.implements,
                            owner=user.id, name="any", public=True,
                            description="Interface used for data that don't "
                                        "have a specific interface"))
@@ -48,45 +48,45 @@ def main(session, user, container):
 
     ropy = ROInterface()
     ropy.init(session, dict(id="dc5b10c858a611e6afb6d4bed973e64a",
-                            owner=user.id, name="PythonObject", public=True))
+                            owner=user.id, name="pyobj", public=True))
     ROLink.connect(session, roc.id, ropy.id, 'contains')
 
-    schema = dict(title="Interface for data of type 'String'",
+    schema = dict(title="Interface for data of type 'string'",
                   description="Just a simple chain of characters",
                   type="string")
 
     roi = ROInterface()
     roi.init(session, dict(id="006bca4c58a311e6afb6d4bed973e64a",
-                           owner=user.id, name="String", public=True,
+                           owner=user.id, name="string", public=True,
                            schema=cvt_schema(schema), ancestors=[ropy.id]))
     ROLink.connect(session, roc.id, roi.id, 'contains')
 
     sid = roi.id
-    for name in ("Text", "Code", "Path", "DirPath"):
+    for name in ("text", "code", "path"):
         roi = ROInterface()
         roi.init(session, dict(owner=user.id, name=name, public=True,
                                ancestors=[sid]))
         ROLink.connect(session, roc.id, roi.id, 'contains')
 
-    schema = dict(title="Interface for data of type 'Number'",
+    schema = dict(title="Interface for data of type 'number'",
                   description="Just a simple number",
                   type="number")
 
     roi = ROInterface()
     roi.init(session, dict(id="c7f6a30a58a511e6afb6d4bed973e64a",
-                           owner=user.id, name="Number", public=True,
+                           owner=user.id, name="number", public=True,
                            schema=cvt_schema(schema), ancestors=[ropy.id]))
     ROLink.connect(session, roc.id, roi.id, 'contains')
 
     sid = roi.id
-    for name in ("Complex", "Int", "Float"):
+    for name in ("complex", "int", "float"):
         roi = ROInterface()
         roi.init(session, dict(owner=user.id, name=name, public=True,
                                ancestors=[sid]))
         ROLink.connect(session, roc.id, roi.id, 'contains')
 
-    rgba_schema = dict(title="Interface for color of type RGBA",
-                       description="Just a simple array of RGBA quadruplets",
+    rgba_schema = dict(title="Interface for color of type rgba",
+                       description="Just a simple array of rgba quadruplets",
                        type="array",
                        minLength=4,
                        maxLength=4,
@@ -94,12 +94,12 @@ def main(session, user, container):
 
     roi = ROInterface()
     roi.init(session, dict(id="256203e058b911e6afb6d4bed973e64a",
-                           owner=user.id, name="RGBA", public=True,
+                           owner=user.id, name="rgba", public=True,
                            schema=cvt_schema(rgba_schema), ancestors=[]))
     ROLink.connect(session, roc.id, roi.id, 'contains')
 
     schema = dict(title="Interface for data of type 2D images",
-                  description="Just a simple 2d array of RGBA quadruplets",
+                  description="Just a simple 2d array of rgba quadruplets",
                   type="array",
                   minLength=1,
                   items=dict(type="array",
@@ -107,8 +107,8 @@ def main(session, user, container):
                              items=rgba_schema))
 
     roi = ROInterface()
-    roi.init(session, dict(id="5e796fa558a811e6afb6d4bed973e64a",
-                           owner=user.id, name="Image", public=True,
+    roi.init(session, dict(id=ROImage.implements,
+                           owner=user.id, name="image", public=True,
                            schema=cvt_schema(schema), ancestors=[]))
     ROLink.connect(session, roc.id, roi.id, 'contains')
 

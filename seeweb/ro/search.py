@@ -40,7 +40,7 @@ def search(session, params):
     """
     # query on RO direct common attributes
     query = session.query(ResearchObject.id)
-    if "type" in params:
+    if "type" in params and params['type'] != 'ro':
         query = query.filter(ResearchObject.type == params["type"])
 
     if "owner" in params:

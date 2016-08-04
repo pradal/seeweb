@@ -25,23 +25,37 @@
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Create a project from scratch</h3>
+                <h3 class="panel-title">Create a Research Object from scratch</h3>
             </div>
             <div class="panel-body">
-                <p><a href="{{ request.route_url('user_login') }}">Log in</a>,
-                then in
-                {% if request.unauthenticated_userid != None %}
-                    <a href="{{ request.route_url('user_view_home', uid=request.unauthenticated_userid) }}">
-                {% endif %}
-                your home page on the project tab
-                {% if request.unauthenticated_userid != None %}
-                    </a>
-                {% endif %}
-                type the name of a new project to create. Click create and you'll
-                be redirected to the edit page of your new project where you'll
-                be able to add more information to describe your project, manage
-                the people you want to collaborate with and upload some sources
-                for other users to benefit from your work.</p>
+                <p><a href="{{ request.route_url('user_login') }}">Log in</a>
+                and <a href="{{ request.route_url('ro_create') }}">upload your file</a>.
+                Provided your file is recognized by the system (i.e. notebook, workflow)
+                we will extract some information from it to infer a relevant RO type.</p>
+                <ul>
+                    <li>Name of the RO will be the file name or title by default</li>
+                    <li>The first cells of the notebook or header of your file will
+                    be used for description.</li>
+                    <li>If your script produces an image as a result, this one will
+                    be used as an avatar of your RO.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">How can I avoid the mess of numerous ROs?</h3>
+            </div>
+            <div class="panel-body">
+                <p>We recommend to sort your ROs in a directory type of structure by project, experiment, ...</p>
+                <p>Simply <a href="{{ request.route_url('ro_create') }}">create a RO</a> of type 'container'
+                with a particular container type (like experiment, project, ...) if you like.</p>
+                <p>Then add some ROs to your container by copy pasting their id in the home page of the newly created
+                container</p>
+                <p>Containers are just virtual structures to help you sort your ROs.
+                So a single RO can be allocated to multiple containers without any issue.</p>
             </div>
         </div>
     </div>
@@ -62,27 +76,6 @@
                     exists in your repository</li>
                     <li>a gallery of images if your have a 'gallery' directory with pictures
                     in it</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Can I make a project with a single file?</h3>
-            </div>
-            <div class="panel-body">
-                <p>Sure! <a href="{{ request.route_url('user_login') }}">Log in</a>
-                and <a href="{{ request.route_url('ro_create') }}">upload your file</a>.
-                Provided your file is recognized by the system (i.e. notebook, workflow)
-                we will extract some information from it to create a relevant project.</p>
-                <ul>
-                    <li>Name of the project will be the file name or title by default</li>
-                    <li>The first cells of the notebook or header of your file will
-                    be used for description.</li>
-                    <li>If your script produces an image as a result, this one will
-                    be used as an avatar of your project.</li>
                 </ul>
             </div>
         </div>

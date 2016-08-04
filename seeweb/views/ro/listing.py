@@ -2,7 +2,7 @@ from pyramid.view import view_config
 
 from seeweb.models import DBSession
 from seeweb.models.auth import Role
-from seeweb.models.research_object import ResearchObject
+from seeweb.ro.search import search
 
 
 @view_config(route_name='ro_list',
@@ -11,22 +11,23 @@ def view(request):
     allow_edit = request.unauthenticated_userid is not None
 
     session = DBSession()
-    query = session.query(ResearchObject)
-    if "type" in request.params:
-        query = query.filter(ResearchObject.type == request.params["type"])
 
-    query = query.order_by(ResearchObject.name)
+    params = dict(request.params)
+    if 'main_search' in params:
+        groups = [gr.strip() for gr in params['main_search'].split(" ")
+                  if len(gr.strip()) > 0]
+        for gr in groups:
+            if ":" in gr:
+                k, v = gr.split(":")
+                params[k.strip()] = v.strip()
+            else:
+                params["name"] = gr
 
-    res = query.all()
-    if "toplevel" in request.params:
-        res = [ro for ro in res if ro.is_lonely()]
-
+    res = search(session, params)
     ros = []
     for ro in res:
         role = ro.access_role(session, request.unauthenticated_userid)
-        if role is None:
-            print "\n"*10, ro.id, None, "\n"*10
-        elif role != Role.denied:
+        if role != Role.denied:
             ros.append((Role.to_str(role), ro))
 
     return {'allow_edit': allow_edit, 'ros': ros}

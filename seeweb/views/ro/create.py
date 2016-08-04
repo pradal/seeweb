@@ -60,6 +60,6 @@ def view(request):
     uid = uuid1().hex
     created = datetime.now()
 
-    ro_types = ["plain", "container", "article"]
+    ro_types = ["container", "data", "ro", "article"]
 
     return dict(uid=uid, created=created, ro_types=ro_types)

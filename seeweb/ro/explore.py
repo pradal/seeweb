@@ -20,8 +20,8 @@ from seeweb.ro.interface.models.ro_interface import ROInterface
 # construct RO factory
 ro_factory = dict(ro=ResearchObject)
 
-for dname in ("ro", "rodata"):
-    for dname in glob("seeweb/%s/*/" % dname):
+for topdir in ("ro", "rodata"):
+    for dname in glob("seeweb/%s/*/" % topdir):
         dname = dname.replace("\\", "/")
 
         for model_pth in glob(dname + "models/*.py"):
@@ -39,8 +39,8 @@ for dname in ("ro", "rodata"):
 # construct Interface factory
 data_factory = {}
 
-for dname in ("ro", "rodata"):
-    for dname in glob("seeweb/%s/*/" % dname):
+for topdir in ("ro", "rodata"):
+    for dname in glob("seeweb/%s/*/" % topdir):
         dname = dname.replace("\\", "/")
 
         for model_pth in glob(dname + "models/*.py"):

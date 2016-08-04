@@ -1,4 +1,3 @@
-from importlib import import_module
 from pyramid.view import view_config
 
 from seeweb.models import DBSession
@@ -27,17 +26,5 @@ def view(request):
                 return ro.repr_json(full=True)
     else:
         ros = search(session, request.params)
-        # # try to dispatch by type
-        # if 'type' in request.GET:
-        #     ro_type = request.GET['type']
-        #     if ro_type == 'ro':
-        #         res = search(session, request.GET)
-        #     else:
-        #         mod = import_module("seeweb.ro.%s.search" % ro_type)
-        #         res = mod.search(session, request.GET)
-        # else:
-        #     res = search(session, request.GET)
-        #
-        # ros = [ResearchObject.get(session, uid) for uid in res]
         return [ro.id for ro in ros
                 if ro.access_role(session, user) != Role.denied]

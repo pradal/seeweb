@@ -131,7 +131,7 @@ def main(session, user, container):
     with open("seeweb/scripts/sphere.json", 'r') as f:
         sphere = json.load(f)
 
-    data = [dict(id=uuid1().hex, type="int", value=1),
+    data = [dict(id=uuid1().hex, type="ref", value=itrans["IInt"]),
             dict(id=uuid1().hex, type="int", value=10),
             dict(id=uuid1().hex, type="str", value="Killroy was here"),
             dict(id=uuid1().hex, type="image", value=graph_pulse),

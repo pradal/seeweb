@@ -2,14 +2,12 @@ from glob import glob
 from importlib import import_module
 from os.path import basename, exists, splitext
 
-
-from seeweb.models import ro_search
 from seeweb.models.research_object import ResearchObject
 from seeweb.models.ro_link import ROLink
 
 
 # construct RO factory
-search_factory = dict(ro=ro_search.search)
+search_factory = dict()
 
 for topdir in ("ro", "rodata"):
     for dname in glob("seeweb/%s/*/" % topdir):
@@ -80,6 +78,9 @@ def search(session, params):
         typ = params['type']
         if typ in search_factory:
             print "typed", typ, search_factory[typ], "\n" * 10
+            loc_uids = search_factory[typ](session, params)
+            if loc_uids is not None:
+                uids &= loc_uids
 
     # fetch ROs
     res = [ResearchObject.get(session, uid) for uid in uids]

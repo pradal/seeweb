@@ -1,5 +1,4 @@
-from seeweb.models.ro_search import search as ro_search
-from seeweb.ro.container.models.ro_container import ROContainer
+from seeweb.models.ro_link import ROLink
 
 
 def search(session, params):
@@ -12,15 +11,11 @@ def search(session, params):
     Returns:
         (list of str): list of ids of ROContainers matching query
     """
-    if 'name' in params:
-        # search all RO whose title starts with something similar
-        name = params['name']
-        query = session.query(ROContainer.id)
-        query = query.filter(ROContainer.name == name)
-        return [uid for uid, in query.all()]
-    elif 'contains' in params or 'use' in params:
-        res = ro_search(session, params)
-        ros = [ROContainer.get(session, uid) for uid in res]
-        return [ro.id for ro in ros if ro is not None]
-    else:
-        return []
+    res = None
+    if 'contains' in params:
+        uid = params['contains']
+        query = session.query(ROLink.source)
+        query = query.filter(ROLink.target == uid, ROLink.type == 'contains')
+        res = {uid for uid, in query.all()}
+
+    return res

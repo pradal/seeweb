@@ -58,6 +58,10 @@ def view_init_min(request, session):
     Returns:
         (ResearchObject, dict of (str: any)): ro, view_params
     """
+    if 'main_search' in request.params:
+        loc = request.route_url('ro_list', _query=dict(request.params))
+        raise HTTPFound(location=loc)
+
     uid, ro = fetch_ro(request, session)
 
     current_uid = request.unauthenticated_userid

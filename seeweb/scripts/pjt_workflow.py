@@ -56,7 +56,7 @@ def main(session, user, container):
     for iname in ("IBool", "ICodeStr", "IColor", "IData", "IDateTime",
                   "IDict", "IDirStr",
                   "IEnumStr", "IFileStr", "IFloat",
-                  "IFunction", "IImage", "IInt", "IRGBColor",
+                  "IFunction", "IImage", "IInt", "IRef", "IRGBColor",
                   "ISequence", "ISlice", "IStr", "ITextStr",
                   "ITuple", "ITuple3"):
         standard_interface = get_interface_by_name(session, iname[1:].lower())

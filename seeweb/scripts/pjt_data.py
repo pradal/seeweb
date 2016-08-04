@@ -62,7 +62,7 @@ def main(session, user, container):
     ROLink.connect(session, roc.id, roi.id, 'contains')
 
     sid = roi.id
-    for name in ("text", "code", "path"):
+    for name in ("code", "path", "ref", "text"):
         roi = ROInterface()
         roi.init(session, dict(owner=user.id, name=name, public=True,
                                ancestors=[sid]))

@@ -68,12 +68,12 @@ def view_init_min(request, session):
                               'warning')
         raise HTTPFound(location=request.route_url('home'))
 
+    # allow edition
+    allow_edit = (current_uid is not None and role == Role.edit)
+
     # find containers
     uids = fetch_containers(session, ro)
     containers = [(uid, ResearchObject.get(session, uid).name) for uid in uids]
-
-    # allow edition
-    allow_edit = (current_uid is not None and role == Role.edit)
 
     view_params = {"ro": ro,
                    "containers": containers,

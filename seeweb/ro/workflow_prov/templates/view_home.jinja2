@@ -1,3 +1,5 @@
+{% from 'templates/ro/macro.jinja2' import roid with context %}
+
 {% extends "templates/ro/layout_view_min.jinja2" %}
 
 {% block ro_view_css -%}
@@ -25,7 +27,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Associated workflow:<a href="{{ request.route_url('ro_view_home', uid=ro.workflow) }}">{{ ro.workflow }}</a></h3>
+        <h3 class="panel-title">Associated workflow: {{ roid(ro.workflow) }}</h3>
     </div>
 </div>
 

@@ -1,3 +1,6 @@
+{% from 'macro.jinja2' import roid with context %}
+{% from 'macro.jinja2' import reciprocate %}
+
 {% extends "layout.jinja2" %}
 
 {% block ro_css -%}
@@ -57,6 +60,21 @@
     <div class="col-md-10">
         {% block ro_view_body %}
         {% endblock %}
+        <div class="well">
+        {% if ro.in_links|length == 0 and ro.out_links|length == 0%}
+            <p>This RO is not linked to anything</p>
+        {% else %}
+            This RO:
+            <ul>
+            {% for link in ro.in_links %}
+                <li>{{ reciprocate(link.type) }} {{ roid(link.source) }}</li>
+            {% endfor %}
+            {% for link in ro.out_links %}
+                <li>{{ link.type }} {{ roid(link.target) }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        </div>
         <div id="cnt_debug" class="well debug">
         </div>
     </div>

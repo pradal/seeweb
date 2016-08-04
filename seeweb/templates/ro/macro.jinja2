@@ -6,3 +6,20 @@
 {% macro roicon(uid) -%}
 <img class="tiny" src="{{ request.static_url('seeweb:data/avatar/ro/%s_small.png' % uid) }}" />
 {%- endmacro %}
+
+
+{% macro reciprocate(verb) -%}
+{% if verb == 'consume' %}
+is consumed by
+{% elif verb == 'contains' %}
+is contained in
+{% elif verb == 'is_ancestor_of' %}
+has for ancestor
+{% elif verb == 'produce' %}
+is produced by
+{% elif verb == 'use' %}
+is used by
+{% else %}
+tugudu
+{% endif %}
+{%- endmacro %}

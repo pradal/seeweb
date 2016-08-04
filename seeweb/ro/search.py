@@ -77,7 +77,6 @@ def search(session, params):
     if "type" in params:
         typ = params['type']
         if typ in search_factory:
-            print "typed", typ, search_factory[typ], "\n" * 10
             loc_uids = search_factory[typ](session, params)
             if loc_uids is not None:
                 uids &= loc_uids

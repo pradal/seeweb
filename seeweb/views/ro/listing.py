@@ -13,8 +13,9 @@ def view(request):
     session = DBSession()
 
     params = dict(request.params)
-    if 'main_search' in params:
-        groups = [gr.strip() for gr in params['main_search'].split(" ")
+    main_search = params.pop('main_search', None)
+    if main_search is not None:
+        groups = [gr.strip() for gr in main_search.split(" ")
                   if len(gr.strip()) > 0]
         for gr in groups:
             if ":" in gr:
@@ -30,4 +31,6 @@ def view(request):
         if role != Role.denied:
             ros.append((Role.to_str(role), ro))
 
-    return {'allow_edit': allow_edit, 'ros': ros}
+    query = " ".join("%s:%s" % kv for kv in params.items())
+
+    return {'allow_edit': allow_edit, 'query': query, 'ros': ros}
